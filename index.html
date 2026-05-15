@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 <style>
 :root {
   --bg:#000000; --bg2:#0f0f0f; --bg3:#1a1a1a; --border:#2d2d2d;
-  --text:#ffffff; --muted:#888888; --dim:#444444;
+  --text:#ffffff; --muted:#ffffff; --dim:#cccccc;
   --red:#dc2626; --red-dim:rgba(220,38,38,.12);
   --ama:#0e2a2a;    --ama-b:#2dd4bf;
   --apertura:#2a0000; --apertura-b:#dc2626;
@@ -22,7 +22,7 @@
   --taller:#001a00; --taller-b:#22c55e;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;min-height:100vh;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;min-height:100vh;}
 
 /* NAV */
 .nav{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;height:50px;overflow-x:auto;}
@@ -33,7 +33,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 16px;border-left:1px solid var(--border);}
 .status-dot{width:11px;height:11px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.status-txt{font-size:14px;color:var(--muted);}
+.status-txt{font-size:14px;color:#ffffff;}
 
 /* TOOLBAR */
 .toolbar{padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--bg2);}
@@ -88,10 +88,10 @@ td.row-actions{width:40px;text-align:center;padding:2px;}
 .mv-row{color:#94a3b8;font-size:11px;padding:1px 4px;}.mv-row:hover{background:rgba(148,163,184,.15);}.mv-row:disabled{opacity:.2;cursor:default;}
 
 /* CELLS */
-select.cell-sel,input.cell-inp{width:100%;border:none;background:transparent;color:var(--text);padding:4px 5px;font-size:12px;cursor:pointer;outline:none;font-family:inherit;color-scheme:dark;box-sizing:border-box;}
+select.cell-sel,input
 select.cell-sel:focus,input.cell-inp:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);}
 select.cell-sel option{background:#1a1a1a;color:#fff;}
-input.cell-inp{cursor:text;}
+input
 
 /* TIPO */
 .tipo-col{min-width:80px;max-width:90px;}
@@ -1752,3 +1752,5 @@ init();
 </script>
 </body>
 </html>
+
+
