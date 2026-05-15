@@ -364,6 +364,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <div class="form-grid">
         <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="sp-nombre" placeholder="Nombre completo"></div>
         <div class="form-field"><label class="form-label">Tipo</label><select class="form-select" id="sp-tipo"><option value="speaker">Speaker</option><option value="moderador">Moderador</option><option value="empresa">Empresa</option><option value="sponsor">Sponsor</option></select></div>
+        <div class="form-field"><label class="form-label">Tier</label><select class="form-select" id="sp-tier"><option value="">— Sin tier —</option><option value="1" style="color:#22c55e">Nivel 1</option><option value="2" style="color:#eab308">Nivel 2</option><option value="3" style="color:#ef4444">Nivel 3</option></select></div>
         <div class="form-field"><label class="form-label">Mail</label><input class="form-input" id="sp-mail" placeholder="mail@ejemplo.com"></div>
         <div class="form-field"><label class="form-label">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="+54 9 …"></div>
         <div class="form-field"><label class="form-label">Telegram</label><input class="form-input" id="sp-telegram" placeholder="@usuario"></div>
@@ -387,7 +388,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
-          <th>Tipo</th><th>Nombre</th><th>Estado</th><th>Asignaciones</th><th>Tema(s)</th>
+          <th>Tipo</th><th>Tier</th><th>Nombre</th><th>Estado</th><th>Asignaciones</th><th>Tema(s)</th>
           <th style="border:2px solid #f97316;color:#f97316">Referido</th>
           <th>Mail</th><th>WhatsApp</th><th>Telegram</th><th>Signal</th><th>LinkedIn</th>
           <th>Empresa</th><th>Notas</th><th style="width:32px"></th>
@@ -1169,6 +1170,7 @@ function renderSpeakers(){
     const assignText=calcSpeakerAssignmentsText(s.nombre||'');
     rows+=`<tr>
       <td><select class="sp-tipo-sel" style="color:${tColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tOpts(tipo)}</select></td>
+      <td style="text-align:center">${(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const tl={1:'N1',2:'N2',3:'N3'};const t=s.tier||'';return t?`<select class="sp-tipo-sel" style="color:${tc[t]};font-weight:800;background:transparent;border:1px solid ${tc[t]};border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" ${t==='1'?'selected':''} style="color:#22c55e">Nivel 1</option><option value="2" ${t==='2'?'selected':''} style="color:#eab308">Nivel 2</option><option value="3" ${t==='3'?'selected':''} style="color:#ef4444">Nivel 3</option></select>`:`<select class="sp-tipo-sel" style="color:#666;background:transparent;border:1px solid #333;border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" style="color:#22c55e">Nivel 1</option><option value="2" style="color:#eab308">Nivel 2</option><option value="3" style="color:#ef4444">Nivel 3</option></select>`;})()} </td>
       <td style="font-weight:700;white-space:nowrap"><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakers')">${esc(s.nombre||'')}</span></td>
       <td>${estadoSelectHtml(ri,s.estado||'')}</td>
       <td style="font-size:14px;color:#ffffff">${esc(assignText)}</td>
@@ -1248,12 +1250,14 @@ function addSpeaker(){
     signal:document.getElementById('sp-signal').value.trim(),
     linkedin:document.getElementById('sp-linkedin').value.trim(),
     empresa:document.getElementById('sp-empresa').value.trim(),
+    tier:document.getElementById('sp-tier').value,
     temas:document.getElementById('sp-temas').value.trim(),
     referido:document.getElementById('sp-referido').value.trim(),
     notas:document.getElementById('sp-notas').value.trim(),
     estado:''
   });
   ['sp-nombre','sp-mail','sp-whatsapp','sp-telegram','sp-signal','sp-linkedin','sp-empresa','sp-temas','sp-referido','sp-notas'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sp-tier').value='';
   markDirty('speakers'); renderSpeakers(); toast('✅ Speaker agregado');
 }
 function updateSpeaker(ri,field,val){ if(state.speakers[ri]){pushHistory();state.speakers[ri][field]=val;} }
@@ -1299,9 +1303,9 @@ async function loadManualSpeakers(){
 
 async function saveSpeakers(){
   if(!(await checkVersion('Speakers')))return;
-  // Schema: nombre, tipo, mail, whatsapp, telegram, signal, linkedin, stages(calc), temas, referido, empresa, notas, estado
+  // Schema: nombre, tipo, tier, mail, whatsapp, telegram, signal, linkedin, stages(calc), temas, referido, empresa, notas, estado
   const data=state.speakers.map(s=>[
-    s.nombre,s.tipo||'speaker',s.mail||'',s.whatsapp||'',
+    s.nombre,s.tipo||'speaker',s.tier||'',s.mail||'',s.whatsapp||'',
     s.telegram||'',s.signal||'',s.linkedin||'',
     calcSpeakerAssignmentsText(s.nombre||''),
     s.temas||'',s.referido||'',s.empresa||'',s.notas||'',s.estado||''
