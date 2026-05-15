@@ -366,10 +366,10 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
         <div class="form-field"><label class="form-label">Tipo</label><select class="form-select" id="sp-tipo"><option value="speaker">Speaker</option><option value="moderador">Moderador</option><option value="empresa">Empresa</option><option value="sponsor">Sponsor</option></select></div>
         <div class="form-field"><label class="form-label">Tier</label><select class="form-select" id="sp-tier"><option value="">— Sin tier —</option><option value="1" style="color:#22c55e">Nivel 1</option><option value="2" style="color:#eab308">Nivel 2</option><option value="3" style="color:#ef4444">Nivel 3</option></select></div>
         <div class="form-field"><label class="form-label">Mail</label><input class="form-input" id="sp-mail" placeholder="mail@ejemplo.com"></div>
-        <div class="form-field"><label class="form-label">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="+54 9 …"></div>
-        <div class="form-field"><label class="form-label">Telegram</label><input class="form-input" id="sp-telegram" placeholder="@usuario"></div>
-        <div class="form-field"><label class="form-label">Signal</label><input class="form-input" id="sp-signal" placeholder="+54 9 …"></div>
-        <div class="form-field"><label class="form-label">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…"></div>
+        <div class="form-field"><label class="form-label" style="color:#25D366">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="+54 9 …" style="border-color:#25D366"></div>
+        <div class="form-field"><label class="form-label" style="color:#229ED9">Telegram</label><input class="form-input" id="sp-telegram" placeholder="@usuario" style="border-color:#229ED9"></div>
+        <div class="form-field"><label class="form-label" style="color:#3A76F0">Signal</label><input class="form-input" id="sp-signal" placeholder="+54 9 …" style="border-color:#3A76F0"></div>
+        <div class="form-field"><label class="form-label" style="color:#0A66C2">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…" style="border-color:#0A66C2"></div>
         <div class="form-field"><label class="form-label">Empresa</label><input class="form-input" id="sp-empresa" placeholder="Empresa o rol"></div>
         <div class="form-field"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning…"></div>
         <div class="form-field"><label class="form-label" style="color:#f97316">Referido <span style="font-weight:400;color:#ffffff;font-size:12px">(opcional)</span></label><input class="form-input" id="sp-referido" placeholder="¿Quién refiere?" style="border-color:#f97316"></div>
@@ -390,7 +390,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
         <thead><tr>
           <th>Tipo</th><th>Tier</th><th>Nombre</th><th>Estado</th><th>Asignaciones</th><th>Tema(s)</th>
           <th style="border:2px solid #f97316;color:#f97316">Referido</th>
-          <th>Mail</th><th>WhatsApp</th><th>Telegram</th><th>Signal</th><th>LinkedIn</th>
+          <th>Mail</th><th style="color:#25D366">WhatsApp</th><th style="color:#229ED9">Telegram</th><th style="color:#3A76F0">Signal</th><th style="color:#0A66C2">LinkedIn</th>
           <th>Empresa</th><th>Notas</th><th style="width:32px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
@@ -1177,10 +1177,10 @@ function renderSpeakers(){
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'temas',this.innerText.trim());markDirty('speakers')">${esc(s.temas||'')}</span></td>
       <td style="border:2px solid #f97316"><span class="sp-edit" style="color:#ffffff" contenteditable="true" onblur="updateSpeaker(${ri},'referido',this.innerText.trim());markDirty('speakers')" placeholder="¿Quién refiere?">${esc(s.referido||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'mail',this.innerText.trim());markDirty('speakers')">${esc(s.mail||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'signal',this.innerText.trim());markDirty('speakers')">${esc(s.signal||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'linkedin',this.innerText.trim());markDirty('speakers')">${esc(s.linkedin||'')}</span></td>
+      <td style="border-left:2px solid #25D366"><span class="sp-edit" style="color:#25D366" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></td>
+      <td style="border-left:2px solid #229ED9"><span class="sp-edit" style="color:#229ED9" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></td>
+      <td style="border-left:2px solid #3A76F0"><span class="sp-edit" style="color:#3A76F0" contenteditable="true" onblur="updateSpeaker(${ri},'signal',this.innerText.trim());markDirty('speakers')">${esc(s.signal||'')}</span></td>
+      <td style="border-left:2px solid #0A66C2"><span class="sp-edit" style="color:#0A66C2" contenteditable="true" onblur="updateSpeaker(${ri},'linkedin',this.innerText.trim());markDirty('speakers')">${esc(s.linkedin||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></td>
       <td><span class="sp-edit" style="color:#ffffff;font-size:14px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span></td>
       <td style="text-align:center"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
