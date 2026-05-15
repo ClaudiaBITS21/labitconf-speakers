@@ -20,6 +20,15 @@
   --premios:#1a0a00; --premios-b:#fb923c;
   --sorteo:#001a0a; --sorteo-b:#4ade80;
   --taller:#001a00; --taller-b:#22c55e;
+  --s1:#6366f1; --s1-dim:rgba(99,102,241,.15);
+  --s2:#0ea5e9; --s2-dim:rgba(14,165,233,.15);
+  --s3:#22c55e; --s3-dim:rgba(34,197,94,.15);
+  --s4:#f59e0b; --s4-dim:rgba(245,158,11,.15);
+  --s5:#ec4899; --s5-dim:rgba(236,72,153,.15);
+  --s6:#14b8a6; --s6-dim:rgba(20,184,166,.15);
+  --s7:#f97316; --s7-dim:rgba(249,115,22,.15);
+  --s8:#a78bfa; --s8-dim:rgba(167,139,250,.15);
+  --s9:#fb7185; --s9-dim:rgba(251,113,133,.15);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;min-height:100vh;}
@@ -463,6 +472,8 @@ const STAGE_KEYS = ['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
 const N_STAGES = 9;
 const TIPOS = ['AMA','Apertura','Break','Charla','Cierre','Concurso','Kahoot','Panel','Premios','Sorteo','Taller'];
 const TIPO_COLORS = {AMA:'#2dd4bf',Apertura:'#dc2626',Break:'#888',Charla:'#6366f1',Cierre:'#ef4444',Concurso:'#ec4899',Kahoot:'#c084fc',Panel:'#f87171',Premios:'#fb923c',Sorteo:'#4ade80',Taller:'#22c55e'};
+const STAGE_COLORS = ['#6366f1','#0ea5e9','#22c55e','#f59e0b','#ec4899','#14b8a6','#f97316','#a78bfa','#fb7185'];
+const STAGE_DIMS   = ['rgba(99,102,241,.15)','rgba(14,165,233,.15)','rgba(34,197,94,.15)','rgba(245,158,11,.15)','rgba(236,72,153,.15)','rgba(20,184,166,.15)','rgba(249,115,22,.15)','rgba(167,139,250,.15)','rgba(251,113,133,.15)'];
 const DUR_OPTIONS = [15,20,25,30,40];
 const DUR_COLORS = {15:'#22c55e',20:'#eab308',25:'#f97316',30:'#f9a8d4',40:'#a78bfa'};
 const ESTADO_ICON = {confirmado:'✅',pendiente:'⏳',invitado:'📩',no_aprobado:'❌',''  :''};
@@ -587,8 +598,10 @@ function buildTableHeaders(){
     th.className='stage-h stage-group-sep'+borderClass;
     th.style.minWidth='400px';
     th.style.textAlign='center';
+    th.style.color=STAGE_COLORS[i];
+    th.style.borderBottom=`2px solid ${STAGE_COLORS[i]}`;
     if(conflicts)th.classList.add('stage-h-warn');
-    th.innerHTML=`<input class="stage-inp" id="sname-${i}" value="${esc(stageNames[i])}" placeholder="Stage ${i+1}" oninput="saveStageNames()" style="text-align:center;font-size:15px"> ${conflicts?'<span style="color:#ef4444;font-size:16px">⚠️</span>':''}`;
+    th.innerHTML=`<input class="stage-inp" id="sname-${i}" value="${esc(stageNames[i])}" placeholder="Stage ${i+1}" oninput="saveStageNames()" style="text-align:center;font-size:15px;color:${STAGE_COLORS[i]}"> ${conflicts?'<span style="color:#ef4444;font-size:16px">⚠️</span>':''}`;
     r1.appendChild(th);
 
     // Row 2: 5 sub-headers
@@ -1633,11 +1646,12 @@ function buildStageSemaphore() {
   wrap.innerHTML = STAGE_KEYS.map((sk, i) => {
     const assigned = total ? state.principal.filter(r => (r.stages[sk]?.speaker || '').trim()).length : 0;
     const pct = total ? Math.round(assigned / total * 100) : 0;
-    const color = pct >= 80 ? '#22c55e' : pct >= 50 ? '#eab308' : '#ef4444';
-    const name = (stageNames[i] || ('Stage ' + (i + 1))).slice(0, 8);
-    return `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;padding:3px 6px;border-radius:6px;border:1px solid ${color}22;background:${color}11">
-      <span style="font-size:9px;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:50px">${esc(name)}</span>
-      <span style="font-size:14px;font-weight:700;color:${color}">${pct}%</span>
+    const color = STAGE_COLORS[i];
+    const bg = STAGE_DIMS[i];
+    const name = stageNames[i] || ('Stage ' + (i + 1));
+    return `<div style="flex:1;min-width:80px;max-width:140px;padding:6px 10px;border-radius:6px;border:1px solid ${color};background:${bg};text-align:center;cursor:default" title="${pct}% ocupado">
+      <div style="font-size:15px;font-weight:700;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
+      <div style="font-size:15px;font-weight:800;color:${color}">${pct}%</div>
     </div>`;
   }).join('');
 }
