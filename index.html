@@ -172,9 +172,9 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-flt.active{background:var(--red-dim);border-color:var(--red);color:var(--red);}
 .sp-table{border-collapse:collapse;width:100%;}
 .sp-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 8px;text-align:left;font-size:15px;font-weight:700;color:#ffffff;white-space:nowrap;position:sticky;top:0;z-index:10;}
-.sp-table tbody td{border:1px solid var(--border);padding:5px 7px;vertical-align:middle;font-size:16px;}
+.sp-table tbody td{border:1px solid var(--border);padding:5px 7px;vertical-align:middle;font-size:16px;max-width:260px;overflow-wrap:break-word;word-break:break-word;}
 .sp-table tbody tr:hover{background:var(--red-dim);}
-.sp-edit{display:block;width:100%;outline:none;background:transparent;font-family:inherit;font-size:inherit;color:inherit;border:none;padding:2px 3px;resize:none;min-width:60px;}
+.sp-edit{display:block;width:100%;outline:none;background:transparent;font-family:inherit;font-size:inherit;color:inherit;border:none;padding:2px 3px;resize:none;min-width:60px;white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;overflow:hidden;}
 .sp-edit:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);border-radius:3px;}
 .sp-tipo-sel{background:transparent;border:none;color:inherit;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;outline:none;padding:0 2px;}
 .sp-tipo-sel:focus{background:var(--red-dim);}
@@ -372,7 +372,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
         <div class="form-field"><label class="form-label" style="color:#3A76F0">Signal</label><input class="form-input" id="sp-signal" placeholder="+54 9 …" style="border-color:#3A76F0"></div>
         <div class="form-field"><label class="form-label" style="color:#0A66C2">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…" style="border-color:#0A66C2"></div>
         <div class="form-field"><label class="form-label">Empresa</label><input class="form-input" id="sp-empresa" placeholder="Empresa o rol"></div>
-        <div class="form-field"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning…"></div>
+        <div class="form-field" style="grid-column:span 2"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning…"></div>
         <div class="form-field"><label class="form-label" style="color:#f97316">Referido <span style="font-weight:400;color:#ffffff;font-size:12px">(opcional)</span></label><input class="form-input" id="sp-referido" placeholder="¿Quién refiere?" style="border-color:#f97316"></div>
         <div class="form-field" style="grid-column:1/-1"><label class="form-label">Notas</label><textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones…"></textarea></div>
       </div>
