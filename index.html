@@ -385,12 +385,13 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <button class="btn sp-flt" onclick="setSpFilter('empresa')" data-flt="empresa" style="color:#ec4899">Empresa</button>
       <button class="btn sp-flt" onclick="setSpFilter('sponsor')" data-flt="sponsor" style="color:#a78bfa">Sponsor</button>
       <button class="btn sp-flt" onclick="setSpFilter('manual')" data-flt="manual">⚠️ Manuales</button>
+      <input type="text" id="spSearchInput" placeholder="Buscar en todos los campos…" oninput="spSearchVal=this.value;renderSpeakers()" style="margin-left:10px;padding:4px 10px;font-size:15px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#ffffff;font-family:inherit;outline:none;width:240px">
     </div>
     <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
-          <th>Tipo</th><th>Tier</th><th>Nombre</th><th>Estado</th><th>Asignaciones</th><th>Tema(s)</th>
-          <th style="border:2px solid #f97316;color:#f97316">Referido</th>
+          <th onclick="setSortSp('tipo')" style="cursor:pointer;user-select:none">Tipo <span id="srt-tipo"></span></th><th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th><th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th><th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th><th>Asignaciones</th><th onclick="setSortSp('temas')" style="cursor:pointer;user-select:none">Tema(s) <span id="srt-temas"></span></th>
+          <th onclick="setSortSp('referido')" style="border:2px solid #f97316;color:#f97316;cursor:pointer;user-select:none">Referido <span id="srt-referido"></span></th>
           <th>Mail</th><th style="color:#25D366">WhatsApp</th><th style="color:#229ED9">Telegram</th><th style="color:#3A76F0">Signal</th><th style="color:#0A66C2">LinkedIn</th>
           <th>Empresa</th><th>Notas</th><th style="width:32px"></th>
         </tr></thead>
@@ -496,6 +497,9 @@ let state = { principal:[], speakers:[], speakersManual:[], ideas:[] };
 let stageNames = JSON.parse(localStorage.getItem('labitconf_stages') || 'null') ||
   ['Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6','Stage 7','Stage 8','Stage 9'];
 let spFilterVal = 'all';
+let spSortField = '';
+let spSortDir = 1;
+let spSearchVal = '';
 let dirty = {principal:false,speakers:false,speakersManual:false,ideas:false};
 let writeKey = localStorage.getItem('labitconf_write_key') || '';
 let versions = {Principal:'0',Speakers:'0',SpeakerManual:'0',Ideas:'0'};
@@ -1144,6 +1148,11 @@ function setSpFilter(val){
   document.querySelectorAll('[data-flt]').forEach(b=>b.classList.toggle('active',b.dataset.flt===val));
   renderSpeakers();
 }
+function setSortSp(field){
+  if(spSortField===field) spSortDir*=-1;
+  else { spSortField=field; spSortDir=1; }
+  renderSpeakers();
+}
 
 function estadoSelectHtml(ri,val,isManual=false){
   const cls=val?'est-'+val:'est-empty';
@@ -1173,6 +1182,30 @@ function renderSpeakers(){
     return;
   }
   if(spFilterVal!=='all')list=list.filter(s=>(s.tipo||'speaker')===spFilterVal);
+
+  // search across all text fields
+  if(spSearchVal.trim()){
+    const q=spSearchVal.trim().toLowerCase();
+    list=list.filter(s=>['nombre','tipo','tier','estado','temas','referido','mail','whatsapp','telegram','signal','linkedin','empresa','notas'].some(f=>String(s[f]||'').toLowerCase().includes(q)));
+  }
+
+  // sort
+  if(spSortField){
+    const tierOrder={'1':1,'2':2,'3':3,'':99};
+    list=[...list].sort((a,b)=>{
+      let va=String(a[spSortField]||'').toLowerCase();
+      let vb=String(b[spSortField]||'').toLowerCase();
+      if(spSortField==='tier'){va=tierOrder[a.tier||'']||99;vb=tierOrder[b.tier||'']||99;return(va-vb)*spSortDir;}
+      if(va<vb)return -spSortDir; if(va>vb)return spSortDir; return 0;
+    });
+  }
+
+  // update sort indicators
+  ['tipo','tier','nombre','estado','temas','referido'].forEach(f=>{
+    const el=document.getElementById('srt-'+f);
+    if(el)el.textContent=spSortField===f?(spSortDir===1?'↑':'↓'):'';
+  });
+
   if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
 
   list.forEach(s=>{
