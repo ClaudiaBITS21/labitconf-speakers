@@ -262,7 +262,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn active" data-tab="principal" onclick="switchTab('principal')">📋 Agenda</button>
   <button class="tab-btn" data-tab="speakers" onclick="switchTab('speakers')">🎙️ Speakers</button>
   <button class="tab-btn" data-tab="resumen" onclick="switchTab('resumen')">📊 Resumen</button>
-  <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">💡 Ideas</button>
+  <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">❓ Ideas</button>
   <button class="tab-btn" data-tab="kanban" onclick="switchTab('kanban')">🗂️ Kanban</button>
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
   <div class="nav-right">
@@ -1161,7 +1161,7 @@ function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.sp
 
 function renderSpeakers(){
   const tbody=document.getElementById('speakersTableBody'); if(!tbody)return;
-  const tColor={speaker:'#eab308',moderador:'#ec4899',empresa:'#06b6d4',sponsor:'#ef4444'};
+  const tColor={speaker:'#eab308',moderador:'#06b6d4',empresa:'#eab308',sponsor:'#a78bfa'};
   const tOpts=cur=>['speaker','moderador','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
 
   let rows='';
