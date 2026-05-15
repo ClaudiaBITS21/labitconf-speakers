@@ -1151,7 +1151,7 @@ function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.sp
 
 function renderSpeakers(){
   const tbody=document.getElementById('speakersTableBody'); if(!tbody)return;
-  const tColor={speaker:'var(--red)',moderador:'#a78bfa',empresa:'#facc15',sponsor:'#06b6d4'};
+  const tColor={speaker:'#eab308',moderador:'#ec4899',empresa:'#06b6d4',sponsor:'#ef4444'};
   const tOpts=cur=>['speaker','moderador','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
 
   let rows='';
