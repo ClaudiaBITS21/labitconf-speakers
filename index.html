@@ -386,6 +386,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <table class="sp-table">
         <thead><tr>
           <th>Tipo</th><th>Nombre</th><th>Estado</th><th>Asignaciones</th><th>Tema(s)</th>
+          <th style="border:2px solid #f97316;color:#f97316">Referido</th>
           <th>Mail</th><th>WhatsApp</th><th>Telegram</th><th>Signal</th><th>LinkedIn</th>
           <th>Empresa</th><th>Notas</th><th style="width:32px"></th>
         </tr></thead>
@@ -1170,6 +1171,7 @@ function renderSpeakers(){
       <td>${estadoSelectHtml(ri,s.estado||'')}</td>
       <td style="font-size:14px;color:#ffffff">${esc(assignText)}</td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'temas',this.innerText.trim());markDirty('speakers')">${esc(s.temas||'')}</span></td>
+      <td style="border:2px solid #f97316"><span class="sp-edit" style="color:#ffffff" contenteditable="true" onblur="updateSpeaker(${ri},'referido',this.innerText.trim());markDirty('speakers')" placeholder="¿Quién refiere?">${esc(s.referido||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'mail',this.innerText.trim());markDirty('speakers')">${esc(s.mail||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></td>
@@ -1294,12 +1296,12 @@ async function loadManualSpeakers(){
 
 async function saveSpeakers(){
   if(!(await checkVersion('Speakers')))return;
-  // Schema: nombre, tipo, mail, whatsapp, telegram, signal, linkedin, stages(calc), temas, empresa, notas, estado
+  // Schema: nombre, tipo, mail, whatsapp, telegram, signal, linkedin, stages(calc), temas, referido, empresa, notas, estado
   const data=state.speakers.map(s=>[
     s.nombre,s.tipo||'speaker',s.mail||'',s.whatsapp||'',
     s.telegram||'',s.signal||'',s.linkedin||'',
     calcSpeakerAssignmentsText(s.nombre||''),
-    s.temas||'',s.empresa||'',s.notas||'',s.estado||''
+    s.temas||'',s.referido||'',s.empresa||'',s.notas||'',s.estado||''
   ]);
   await gasPost('Speakers','replace_all',data);
   // Also save manual if dirty
@@ -1506,7 +1508,7 @@ async function loadPrincipalDay() {
 
 // ── EXPORT CSV ────────────────────────────────────────────────────────
 function exportCSV() {
-  const headers = ['Nombre','Tipo','Estado','Stage','Temas','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas'];
+  const headers = ['Nombre','Tipo','Estado','Stage','Temas','Referido','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas'];
   const rows = state.speakers.map(s =>
     [s.nombre, s.tipo, s.estado||'', calcSpeakerAssignmentsText(s.nombre||''), s.temas||'', s.mail||'', s.whatsapp||'', s.telegram||'', s.signal||'', s.linkedin||'', s.empresa||'', s.notas||'']
     .map(v => `"${String(v||'').replace(/"/g,'""')}"`)
