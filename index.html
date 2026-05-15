@@ -371,6 +371,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
         <div class="form-field"><label class="form-label">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…"></div>
         <div class="form-field"><label class="form-label">Empresa</label><input class="form-input" id="sp-empresa" placeholder="Empresa o rol"></div>
         <div class="form-field"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning…"></div>
+        <div class="form-field"><label class="form-label" style="color:#f97316">Referido <span style="font-weight:400;color:#ffffff;font-size:12px">(opcional)</span></label><input class="form-input" id="sp-referido" placeholder="¿Quién refiere?" style="border-color:#f97316"></div>
         <div class="form-field" style="grid-column:1/-1"><label class="form-label">Notas</label><textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones…"></textarea></div>
       </div>
       <button class="form-btn" onclick="addSpeaker()">Agregar</button>
@@ -1248,10 +1249,11 @@ function addSpeaker(){
     linkedin:document.getElementById('sp-linkedin').value.trim(),
     empresa:document.getElementById('sp-empresa').value.trim(),
     temas:document.getElementById('sp-temas').value.trim(),
+    referido:document.getElementById('sp-referido').value.trim(),
     notas:document.getElementById('sp-notas').value.trim(),
     estado:''
   });
-  ['sp-nombre','sp-mail','sp-whatsapp','sp-telegram','sp-signal','sp-linkedin','sp-empresa','sp-temas','sp-notas'].forEach(id=>document.getElementById(id).value='');
+  ['sp-nombre','sp-mail','sp-whatsapp','sp-telegram','sp-signal','sp-linkedin','sp-empresa','sp-temas','sp-referido','sp-notas'].forEach(id=>document.getElementById(id).value='');
   markDirty('speakers'); renderSpeakers(); toast('✅ Speaker agregado');
 }
 function updateSpeaker(ri,field,val){ if(state.speakers[ri]){pushHistory();state.speakers[ri][field]=val;} }
