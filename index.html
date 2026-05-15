@@ -380,10 +380,10 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     </div>
     <div class="sp-filter-bar">
       <button class="btn sp-flt active" onclick="setSpFilter('all')" data-flt="all">Todos</button>
-      <button class="btn sp-flt" onclick="setSpFilter('speaker')" data-flt="speaker">Speaker</button>
-      <button class="btn sp-flt" onclick="setSpFilter('moderador')" data-flt="moderador" style="color:#a78bfa">Moderador</button>
-      <button class="btn sp-flt" onclick="setSpFilter('empresa')" data-flt="empresa">Empresa</button>
-      <button class="btn sp-flt" onclick="setSpFilter('sponsor')" data-flt="sponsor">Sponsor</button>
+      <button class="btn sp-flt" onclick="setSpFilter('speaker')" data-flt="speaker" style="color:#eab308">Speaker</button>
+      <button class="btn sp-flt" onclick="setSpFilter('moderador')" data-flt="moderador" style="color:#06b6d4">Moderador</button>
+      <button class="btn sp-flt" onclick="setSpFilter('empresa')" data-flt="empresa" style="color:#ec4899">Empresa</button>
+      <button class="btn sp-flt" onclick="setSpFilter('sponsor')" data-flt="sponsor" style="color:#a78bfa">Sponsor</button>
       <button class="btn sp-flt" onclick="setSpFilter('manual')" data-flt="manual">⚠️ Manuales</button>
     </div>
     <div style="overflow:auto">
@@ -1161,7 +1161,7 @@ function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.sp
 
 function renderSpeakers(){
   const tbody=document.getElementById('speakersTableBody'); if(!tbody)return;
-  const tColor={speaker:'#eab308',moderador:'#06b6d4',empresa:'#eab308',sponsor:'#a78bfa'};
+  const tColor={speaker:'#eab308',moderador:'#06b6d4',empresa:'#ec4899',sponsor:'#a78bfa'};
   const tOpts=cur=>['speaker','moderador','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
 
   let rows='';
@@ -1757,7 +1757,7 @@ function renderTiers() {
   board.innerHTML = TIER_COLS.map(col => {
     const color = TIER_COLORS[col];
     const cards = (groups[col]||[]).map(({s,i}) => {
-      const tColor2 = {speaker:'#eab308',moderador:'#ec4899',empresa:'#06b6d4',sponsor:'#ef4444'};
+      const tColor2 = {speaker:'#eab308',moderador:'#06b6d4',empresa:'#ec4899',sponsor:'#a78bfa'};
       const tipoCol = tColor2[s.tipo||'speaker']||'#ffffff';
       const assign  = calcSpeakerAssignmentsText(s.nombre||'');
       return `<div draggable="true"
