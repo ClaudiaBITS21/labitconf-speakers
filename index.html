@@ -9,7 +9,6 @@
   --bg:#000000; --bg2:#0f0f0f; --bg3:#1a1a1a; --border:#2d2d2d;
   --text:#ffffff; --muted:#888888; --dim:#444444;
   --red:#dc2626; --red-dim:rgba(220,38,38,.12);
-  /* Tipos */
   --ama:#0e2a2a;    --ama-b:#2dd4bf;
   --apertura:#2a0000; --apertura-b:#dc2626;
   --break:#1a1a1a;  --break-b:#888888;
@@ -21,17 +20,13 @@
   --premios:#1a0a00; --premios-b:#fb923c;
   --sorteo:#001a0a; --sorteo-b:#4ade80;
   --taller:#001a00; --taller-b:#22c55e;
-  --dur15:#052005; --dur15-b:#22c55e;
-  --dur20:#202000; --dur20-b:#eab308;
-  --dur25:#201000; --dur25-b:#f97316;
-  --dur30:#200000; --dur30-b:#ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;min-height:100vh;}
 
-/* ── NAV ── */
+/* NAV */
 .nav{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;height:50px;overflow-x:auto;}
-.nav-brand{font-weight:800;font-size:16px;color:var(--red);padding:0 20px;white-space:nowrap;border-right:1px solid var(--border);}
+.nav-brand{font-weight:800;font-size:16px;color:#ffffff;padding:0 20px;white-space:nowrap;border-right:1px solid var(--border);}
 .tab-btn{padding:0 18px;height:50px;border:none;background:none;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--red);border-bottom-color:var(--red);}
@@ -40,266 +35,303 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .status-txt{font-size:14px;color:var(--muted);}
 
-/* ── TOOLBAR ── */
+/* TOOLBAR */
 .toolbar{padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--bg2);}
 .btn{padding:5px 14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--text);transition:all .15s;white-space:nowrap;}
 .btn:hover{border-color:var(--red);color:var(--red);}
 .btn.save{background:var(--red-dim);border-color:var(--red);color:var(--red);}
-.btn.danger{border-color:#ef4444;color:#ef4444;}
+.btn.dirty{animation:pulse-save 1.5s infinite;border-color:#f97316;color:#f97316;}
+@keyframes pulse-save{0%,100%{opacity:1}50%{opacity:.5}}
 .toolbar-sep{width:1px;height:24px;background:var(--border);margin:0 4px;}
 
-/* ── CONTENT ── */
-.tab-content{display:none;padding:20px;}
+/* CONTENT */
+.tab-content{display:none;}
 .tab-content.active{display:block;}
 
-/* ── CONFIG BAR ── */
+/* CONFIG BAR */
 .config-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 20px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.config-label{font-size:15px;color:var(--muted);font-weight:700;}
+.config-label{font-size:13px;color:var(--muted);font-weight:700;}
 .time-input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-size:13px;font-weight:700;width:80px;text-align:center;}
 .time-input.green{border-color:#22c55e;color:#22c55e;}
 .time-input.red{border-color:#ef4444;color:#ef4444;}
 
-/* ── PROGRESS BAR ── */
-.progress-wrap{padding:10px 20px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.progress-header{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:6px;}
-.progress-bar{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;}
-.progress-fill{height:100%;background:linear-gradient(90deg,#22c55e,var(--red));border-radius:4px;transition:width .4s;}
+/* STAGE PROGRESS BARS */
+.stage-progress-wrap{padding:8px 20px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;}
+.stage-progress-row{display:flex;gap:8px;min-width:max-content;}
+.stage-prog-item{display:flex;flex-direction:column;gap:3px;min-width:100px;}
+.stage-prog-label{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stage-prog-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.stage-prog-fill{height:100%;border-radius:3px;transition:width .4s;}
+.stage-prog-fill.full{background:#22c55e;}
+.stage-prog-fill.low{background:#f97316;}
+.stage-prog-fill.mid{background:#eab308;}
 
-/* ── TABLE ── */
-.table-wrap{overflow:auto;max-height:calc(100vh - 110px);}
-table{border-collapse:collapse;width:100%;min-width:900px;}
-thead th{background:var(--bg3);border:1px solid var(--border);padding:8px 10px;text-align:left;font-size:13px;font-weight:700;color:var(--muted);position:sticky;top:0;z-index:10;white-space:nowrap;}
-thead th.stage-h{color:var(--red);}
+/* TABLE */
+.table-wrap{overflow:auto;max-height:calc(100vh - 165px);}
+table{border-collapse:collapse;table-layout:auto;}
+thead th{background:var(--bg3);border:1px solid var(--border);padding:5px 6px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);position:sticky;top:0;z-index:10;white-space:nowrap;}
+thead th.stage-h{color:var(--red);background:#0d0d0d;}
+thead th.sub-h{color:#777;background:#111;font-size:10px;font-weight:600;padding:3px 5px;}
 .col-stk{position:sticky;z-index:3;background:var(--bg);}
 thead .col-stk{z-index:11;background:var(--bg3);}
 .col-stk-sep{box-shadow:3px 0 8px rgba(0,0,0,.5);}
-.stage-inp{background:transparent;border:none;color:var(--red);font-size:13px;font-weight:700;width:100%;outline:none;padding:2px 4px;cursor:text;}
+.stage-inp{background:transparent;border:none;color:var(--red);font-size:12px;font-weight:700;width:100%;outline:none;padding:2px 4px;cursor:text;}
 .stage-inp:focus{background:var(--red-dim);border-radius:4px;}
-tr.fecha-row th{padding:4px 6px;}
-tbody tr{transition:opacity .1s;}
-tbody tr:hover{opacity:.9;}
+tbody tr:hover{background:rgba(255,255,255,.015);}
 td{border:1px solid var(--border);padding:0;vertical-align:middle;}
-td.row-actions{width:44px;text-align:center;padding:2px;}
-.row-act-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2px;align-items:center;justify-items:center;}
-.del-row,.ins-row,.mv-row{background:none;border:none;cursor:pointer;font-size:15px;padding:3px 7px;border-radius:4px;line-height:1;font-weight:700;}
+td.row-actions{width:40px;text-align:center;padding:2px;}
+.row-act-wrap{display:flex;flex-direction:column;gap:1px;align-items:center;}
+.row-act-wrap2{display:flex;gap:1px;}
+.del-row,.ins-row,.mv-row{background:none;border:none;cursor:pointer;font-size:13px;padding:2px 5px;border-radius:3px;line-height:1;}
 .del-row{color:#ef4444;}.del-row:hover{background:rgba(239,68,68,.15);}
 .ins-row{color:#4ade80;}.ins-row:hover{background:rgba(74,222,128,.15);}
-.mv-row{color:#94a3b8;font-size:13px;padding:1px 6px;}.mv-row:hover{background:rgba(148,163,184,.15);}.mv-row:disabled{opacity:.2;cursor:default;}
+.mv-row{color:#94a3b8;font-size:11px;padding:1px 4px;}.mv-row:hover{background:rgba(148,163,184,.15);}.mv-row:disabled{opacity:.2;cursor:default;}
 
-/* ── CELLS ── */
-select.cell-sel,input.cell-inp{width:100%;border:none;background:transparent;color:var(--text);padding:6px 6px;font-size:14px;cursor:pointer;outline:none;font-family:inherit;color-scheme:dark;box-sizing:border-box;}
-select.cell-sel:focus,input.cell-inp:focus{background:var(--red-dim);box-shadow:inset 0 0 0 2px var(--red);}
-select.cell-sel option{background:#1a1a1a;color:#ffffff;}
+/* CELLS */
+select.cell-sel,input.cell-inp{width:100%;border:none;background:transparent;color:var(--text);padding:4px 5px;font-size:12px;cursor:pointer;outline:none;font-family:inherit;color-scheme:dark;box-sizing:border-box;}
+select.cell-sel:focus,input.cell-inp:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);}
+select.cell-sel option{background:#1a1a1a;color:#fff;}
 input.cell-inp{cursor:text;}
-textarea.cell-ta{width:100%;border:none;background:transparent;color:var(--text);padding:7px 9px;font-size:14px;resize:vertical;min-height:40px;outline:none;font-family:inherit;line-height:1.5;}
-textarea.cell-ta:focus{background:var(--red-dim);box-shadow:inset 0 0 0 2px var(--red);}
-textarea.cell-ta-auto{overflow:hidden;resize:none;}
-.fin-progress{position:absolute;bottom:0;left:0;height:3px;background:var(--red);transition:width .3s;border-radius:0 2px 0 0;}
 
-/* ── TIPO BADGE ── */
-.tipo-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
-.t-ama{background:var(--ama);color:var(--ama-b);}
-.t-apertura{background:var(--apertura);color:var(--apertura-b);}
-.t-break{background:var(--break);color:var(--break-b);}
-.t-charla{background:var(--charla);color:var(--charla-b);}
-.t-cierre{background:var(--cierre);color:var(--cierre-b);}
-.t-concurso{background:var(--concurso);color:var(--concurso-b);}
-.t-kahoot{background:var(--kahoot);color:var(--kahoot-b);}
-.t-panel{background:var(--panel);color:var(--panel-b);}
-.t-premios{background:var(--premios);color:var(--premios-b);}
-.t-sorteo{background:var(--sorteo);color:var(--sorteo-b);}
-.t-taller{background:var(--taller);color:var(--taller-b);}
-.dur-15{background:var(--dur15);color:var(--dur15-b);}
-.dur-20{background:var(--dur20);color:var(--dur20-b);}
-.dur-25{background:var(--dur25);color:var(--dur25-b);}
-.dur-30{background:var(--dur30);color:var(--dur30-b);}
-.time-start{color:#22c55e;font-weight:700;}
-.time-end{color:#ef4444;font-weight:700;}
+/* TIPO */
+.tipo-col{min-width:80px;max-width:90px;}
+td.tipo-td select.cell-sel{font-weight:700;font-size:11px;}
 
-/* ── ADD ROW ── */
-.add-row-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1px dashed var(--border);border-top:none;background:none;color:var(--dim);font-size:13px;cursor:pointer;transition:all .15s;}
+/* STAGE CELL GROUP */
+.stage-cell-group{display:flex;gap:0;}
+.sc-speaker{min-width:110px;width:120px;border-right:1px solid var(--border);}
+.sc-tema{min-width:130px;width:150px;border-right:1px solid var(--border);}
+.sc-dur{width:60px;min-width:60px;border-right:1px solid var(--border);text-align:center;}
+.sc-inicio{width:52px;min-width:52px;border-right:1px solid var(--border);text-align:center;}
+.sc-fin{width:52px;min-width:52px;text-align:center;}
+.stage-group-sep{border-left:2px solid #333;}
+
+/* SPEAKER PICKER in table */
+.sp-picker{position:relative;width:100%;height:100%;}
+.sp-cell{padding:4px 6px;min-height:32px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;height:100%;}
+.sp-cell:hover{background:var(--red-dim);}
+.sp-cell-name{font-size:11px;font-weight:700;color:var(--red);line-height:1.3;}
+.sp-cell-badge{font-size:9px;color:#f97316;margin-top:1px;}
+.sp-cell-empty{font-size:11px;color:var(--dim);}
+.sp-conflict-same{outline:2px solid #ef4444;outline-offset:-1px;}
+.sp-conflict-consec{outline:2px solid #f97316;outline-offset:-1px;}
+
+/* SPEAKER DROPDOWN */
+.sp-drop{display:none;position:fixed;min-width:220px;background:var(--bg3);border:1px solid var(--red);z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.85);max-height:260px;flex-direction:column;}
+.sp-drop.open{display:flex;}
+.sp-drop-search{padding:6px 8px;border-bottom:1px solid var(--border);}
+.sp-drop-search input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:4px;font-size:12px;outline:none;}
+.sp-drop-search input:focus{border-color:var(--red);}
+.sp-drop-list{overflow-y:auto;flex:1;}
+.sp-section-lbl{padding:4px 8px;font-size:10px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);}
+.sp-item{padding:6px 10px;cursor:pointer;border-bottom:1px solid var(--border);}
+.sp-item:last-child{border-bottom:none;}
+.sp-item:hover{background:var(--red-dim);}
+.sp-item-name{font-size:12px;font-weight:700;color:var(--red);}
+.sp-item-tema{font-size:10px;color:var(--muted);margin-top:1px;}
+.sp-item-assign{font-size:10px;color:#f97316;margin-top:1px;}
+.sp-item-manual{border-left:2px solid #eab308;}
+
+/* TEMA INPUT in grid */
+.tema-inp{width:100%;background:transparent;border:none;color:#d4d4d8;font-size:11px;padding:4px 5px;outline:none;font-family:inherit;resize:none;min-height:30px;}
+.tema-inp:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);}
+
+/* DUR CELL */
+.dur-sel{width:100%;border:none;background:transparent;font-size:11px;font-weight:700;padding:3px 2px;outline:none;font-family:inherit;cursor:pointer;text-align:center;color-scheme:dark;}
+.dur-sel:focus{background:var(--red-dim);}
+.dur-sel option{background:#1a1a1a;}
+.dur-ext-inp{width:100%;background:transparent;border:none;border-top:1px solid #333;color:#eab308;font-size:10px;padding:2px 3px;text-align:center;outline:none;font-family:inherit;}
+.dur-ext-inp:focus{background:rgba(234,179,8,.1);}
+.dur-ext-active{outline:2px solid #eab308;outline-offset:-1px;}
+
+/* TIME cells */
+.time-start{color:#22c55e;font-weight:700;font-size:11px;}
+.time-end{color:#ef4444;font-weight:700;font-size:11px;}
+.time-ext-mark{color:#eab308;}
+
+/* CELL move buttons */
+.cell-mv-wrap{display:flex;flex-direction:column;gap:0;}
+.cell-mv-btn{background:none;border:none;cursor:pointer;color:#555;font-size:9px;padding:1px 2px;line-height:1;}
+.cell-mv-btn:hover{color:#fff;}
+
+/* ADD ROW */
+.add-row-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;border:1px dashed var(--border);border-top:none;background:none;color:var(--dim);font-size:12px;cursor:pointer;transition:all .15s;}
 .add-row-btn:hover{color:var(--red);border-color:var(--red);background:var(--red-dim);}
 
-/* ── SPEAKERS ── */
-.sp-filter-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:12px 0 16px;}
+/* SPEAKERS TAB */
+.sp-filter-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 0 14px;}
 .sp-flt.active{background:var(--red-dim);border-color:var(--red);color:var(--red);}
 .sp-table{border-collapse:collapse;width:100%;}
-.sp-table thead th{background:var(--bg3);border:1px solid var(--border);padding:8px 10px;text-align:left;font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;position:sticky;top:0;z-index:10;}
-.sp-table tbody td{border:1px solid var(--border);padding:6px 8px;vertical-align:middle;font-size:14px;}
+.sp-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 8px;text-align:left;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;position:sticky;top:0;z-index:10;}
+.sp-table tbody td{border:1px solid var(--border);padding:5px 7px;vertical-align:middle;font-size:13px;}
 .sp-table tbody tr:hover{background:var(--red-dim);}
 .sp-edit{display:block;width:100%;outline:none;background:transparent;font-family:inherit;font-size:inherit;color:inherit;border:none;padding:2px 3px;resize:none;min-width:60px;}
 .sp-edit:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);border-radius:3px;}
-.sp-tipo-sel{background:transparent;border:none;color:inherit;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;outline:none;padding:0 2px;}
+.sp-tipo-sel{background:transparent;border:none;color:inherit;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;outline:none;padding:0 2px;}
 .sp-tipo-sel:focus{background:var(--red-dim);}
-.sp-aprobado{width:17px;height:17px;cursor:pointer;accent-color:var(--red);}
-
-/* ── SPEAKER PICKER (Principal) ── */
-.sp-picker{position:relative;width:100%;}
-.sp-cell{padding:5px 7px;min-height:38px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;}
-.sp-cell:hover{background:var(--red-dim);}
-.sp-cell-name{font-size:12px;font-weight:700;color:var(--red);line-height:1.3;}
-.sp-cell-empty{font-size:12px;color:var(--dim);}
-.sp-drop{display:none;position:fixed;min-width:180px;background:var(--bg3);border:1px solid var(--red);z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.7);max-height:200px;overflow-y:auto;}
-.sp-drop.open{display:block;}
-.sp-item{padding:7px 10px;cursor:pointer;border-bottom:1px solid var(--border);}
-.sp-item:last-child{border-bottom:none;}
-.sp-item:hover{background:var(--red-dim);}
-.sp-item-name{font-size:13px;font-weight:700;color:var(--red);}
-.sp-item-tema{font-size:11px;color:var(--muted);margin-top:1px;}
-
-/* ── FORM ── */
-.form-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;}
-.form-card h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--red);}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
-.form-field{display:flex;flex-direction:column;gap:4px;}
-.form-label{font-size:14px;font-weight:700;color:var(--muted);}
-.form-input,.form-select,.form-ta{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:14px;font-family:inherit;width:100%;outline:none;transition:border-color .15s;color-scheme:dark;}
-.form-input:focus,.form-select:focus,.form-ta:focus{border-color:var(--red);}
-.form-input option,.form-select option{background:#1a1a1a;}
-.form-ta{resize:vertical;min-height:70px;}
-.form-btn{margin-top:14px;padding:8px 20px;background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
-.form-btn:hover{background:var(--red);color:#fff;}
-
-/* ── TIMELINE ── */
-.tl-section-title{font-size:15px;font-weight:800;color:var(--red);margin:0 0 14px;display:flex;align-items:center;gap:8px;}
-.tl-stage-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:28px;}
-.tl-stage-card{background:var(--bg2);border-radius:12px;padding:16px 18px;border:2px solid var(--red);}
-.tl-stage-name{font-size:18px;font-weight:700;margin-bottom:12px;color:#fff;}
-.tl-stat-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);font-size:14px;}
-.tl-stat-row:last-of-type{border-bottom:none;}
-.tl-stat-label{color:var(--muted);}
-.tl-stat-val{font-weight:700;color:var(--text);}
-.tl-stat-val.warn{color:#f97316;}
-.tl-stat-val.ok{color:#22c55e;}
-.tl-conflict-wrap{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:16px 18px;}
-.tl-conflict-table{border-collapse:collapse;width:100%;margin-top:10px;}
-.tl-conflict-table th{background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.25);padding:7px 12px;text-align:left;font-size:13px;font-weight:700;color:var(--red);}
-.tl-conflict-table td{border:1px solid rgba(220,38,38,.2);padding:7px 12px;font-size:14px;vertical-align:middle;}
-.tl-no-conflict{display:flex;align-items:center;gap:8px;padding:10px 0;font-size:15px;color:#22c55e;font-weight:600;}
-
-/* ── IDEAS ── */
-.ideas-table{border-collapse:collapse;width:100%;}
-.ideas-table thead th{background:var(--bg3);border:1px solid var(--border);padding:8px 12px;text-align:left;font-size:13px;font-weight:700;color:var(--muted);position:sticky;top:0;z-index:10;}
-.ideas-table tbody td{border:1px solid var(--border);padding:10px 12px;vertical-align:top;font-size:14px;}
-.ideas-table tbody tr:hover{background:var(--red-dim);}
-.idea-del{background:none;border:none;color:var(--dim);cursor:pointer;font-size:14px;padding:4px;}
-.idea-del:hover{color:#ef4444;}
-
-/* ── TOAST ── */
-#toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid #22c55e;color:#22c55e;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:999;}
-#toast.show{opacity:1;}
-#toast.err{border-color:#ef4444;color:#ef4444;}
-
-/* ── EMPTY ── */
-.empty{text-align:center;padding:60px 20px;color:var(--dim);}
-.empty-icon{font-size:36px;margin-bottom:12px;}
-
-@media(max-width:700px){
-  thead th:nth-child(n+8){display:none;}
-  td:nth-child(n+8){display:none;}
-  textarea.cell-ta-auto{overflow:hidden;resize:none;}
-}
-
-/* ── DIRTY ── */
-.btn.save.dirty{animation:pulse-save 1.5s infinite;border-color:#f97316;color:#f97316;}
-@keyframes pulse-save{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* ── MODAL CLAVE ── */
-#claveModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;}
-#claveModal.show{display:flex;}
-#claveBox{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 32px;width:320px;text-align:center;}
-#claveBox h3{margin:0 0 8px;font-size:17px;color:var(--text);}
-#claveBox p{margin:0 0 16px;font-size:14px;color:var(--muted);}
-#claveInput{width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:16px;text-align:center;letter-spacing:.1em;margin-bottom:12px;}
-#claveError{color:#ef4444;font-size:13px;margin-bottom:10px;min-height:18px;}
-#claveConfirm{background:var(--red);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:15px;width:100%;}
-
-/* ── ESTADO SELECT ── */
-.sp-estado-sel{border:none;border-radius:4px;font-size:12px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;width:100%;}
+.sp-estado-sel{border:none;border-radius:4px;font-size:11px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;width:100%;}
 .sp-estado-sel.est-empty{background:var(--bg3);color:var(--muted);}
 .sp-estado-sel.est-invitado{background:rgba(59,130,246,.2);color:#3b82f6;}
 .sp-estado-sel.est-pendiente{background:rgba(234,179,8,.2);color:#eab308;}
 .sp-estado-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
 .sp-estado-sel.est-no_aprobado{background:rgba(239,68,68,.2);color:#ef4444;}
+.sp-manual-row{background:rgba(234,179,8,.04);}
+.sp-manual-badge{display:inline-block;background:rgba(234,179,8,.2);color:#eab308;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;}
+.sp-fuzzy-row td{background:rgba(59,130,246,.04);border-top:none;padding:4px 8px;font-size:11px;color:#3b82f6;cursor:pointer;}
+.sp-fuzzy-row td:hover{background:rgba(59,130,246,.1);}
+
+/* FORM */
+.form-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:18px;}
+.form-card h3{font-size:16px;font-weight:700;margin-bottom:12px;color:var(--red);}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
+.form-field{display:flex;flex-direction:column;gap:3px;}
+.form-label{font-size:12px;font-weight:700;color:var(--muted);}
+.form-input,.form-select,.form-ta{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-size:13px;font-family:inherit;width:100%;outline:none;transition:border-color .15s;color-scheme:dark;}
+.form-input:focus,.form-select:focus,.form-ta:focus{border-color:var(--red);}
+.form-ta{resize:vertical;min-height:60px;}
+.form-btn{margin-top:12px;padding:7px 18px;background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;}
+.form-btn:hover{background:var(--red);color:#fff;}
+
+/* RESUMEN */
+.tl-section-title{font-size:15px;font-weight:800;color:var(--red);margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+.tl-stage-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:24px;}
+.tl-stage-card{background:var(--bg2);border-radius:10px;padding:14px 16px;border:2px solid var(--red);}
+.tl-stage-name{font-size:16px;font-weight:700;margin-bottom:10px;color:#fff;}
+.tl-stat-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.tl-stat-row:last-of-type{border-bottom:none;}
+.tl-stat-label{color:var(--muted);}
+.tl-stat-val{font-weight:700;color:var(--text);}
+.tl-stat-val.warn{color:#f97316;}
+.tl-stat-val.ok{color:#22c55e;}
+.tl-conflict-wrap{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:14px 16px;margin-bottom:20px;}
+.tl-conflict-table{border-collapse:collapse;width:100%;margin-top:8px;}
+.tl-conflict-table th{background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.25);padding:6px 10px;text-align:left;font-size:12px;font-weight:700;color:var(--red);}
+.tl-conflict-table td{border:1px solid rgba(220,38,38,.2);padding:6px 10px;font-size:13px;vertical-align:middle;}
+.tl-no-conflict{display:flex;align-items:center;gap:8px;padding:10px 0;font-size:14px;color:#22c55e;font-weight:600;}
+.tl-high-load{border-collapse:collapse;width:100%;margin-top:8px;}
+.tl-high-load th{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.25);padding:6px 10px;font-size:12px;font-weight:700;color:#c084fc;}
+.tl-high-load td{border:1px solid rgba(168,85,247,.2);padding:6px 10px;font-size:13px;}
+
+/* IDEAS */
+.ideas-table{border-collapse:collapse;width:100%;}
+.ideas-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 10px;text-align:left;font-size:12px;font-weight:700;color:var(--muted);position:sticky;top:0;z-index:10;}
+.ideas-table tbody td{border:1px solid var(--border);padding:8px 10px;vertical-align:top;font-size:13px;}
+.ideas-table tbody tr:hover{background:var(--red-dim);}
+.idea-del{background:none;border:none;color:var(--dim);cursor:pointer;font-size:13px;padding:3px;}
+.idea-del:hover{color:#ef4444;}
+
+/* TOAST */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid #22c55e;color:#22c55e;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
+#toast.show{opacity:1;}
+#toast.err{border-color:#ef4444;color:#ef4444;}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(--dim);}
+.empty-icon{font-size:32px;margin-bottom:10px;}
+
+/* MODAL CLAVE */
+#claveModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;}
+#claveModal.show{display:flex;}
+#claveBox{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:26px 30px;width:300px;text-align:center;}
+#claveBox h3{margin:0 0 8px;font-size:16px;color:var(--text);}
+#claveBox p{margin:0 0 14px;font-size:13px;color:var(--muted);}
+#claveInput{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 11px;border-radius:7px;font-size:15px;text-align:center;letter-spacing:.1em;margin-bottom:10px;}
+#claveError{color:#ef4444;font-size:12px;margin-bottom:8px;min-height:16px;}
+#claveConfirm{background:var(--red);color:#fff;border:none;padding:9px 22px;border-radius:7px;font-weight:700;cursor:pointer;font-size:14px;width:100%;}
+
+/* Stage header conflict indicator */
+.stage-h-warn{color:#ef4444 !important;}
+.stage-h-full{border-bottom:2px solid #22c55e !important;}
+.stage-h-low{border-bottom:2px solid #f97316 !important;}
 </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
+<!-- NAV -->
 <div class="nav">
-  <div class="nav-brand">🎙️ LABITCONF 2026</div>
-  <button class="tab-btn active" onclick="switchTab('principal')">📋 Agenda</button>
-  <button class="tab-btn" onclick="switchTab('speakers')">🎙️ Speakers</button>
-  <button class="tab-btn" onclick="switchTab('resumen')">📊 Resumen</button>
-  <button class="tab-btn" onclick="switchTab('ideas')">💡 Ideas</button>
+  <div class="nav-brand">LABITCONF 26'</div>
+  <button class="tab-btn active" data-tab="principal" onclick="switchTab('principal')">📋 Agenda</button>
+  <button class="tab-btn" data-tab="speakers" onclick="switchTab('speakers')">🎙️ Speakers</button>
+  <button class="tab-btn" data-tab="resumen" onclick="switchTab('resumen')">📊 Resumen</button>
+  <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">💡 Ideas</button>
+  <button class="tab-btn" data-tab="kanban" onclick="switchTab('kanban')">🗂️ Kanban</button>
   <div class="nav-right">
-    <span class="status-txt" id="lastSaveTxt" style="font-size:12px;color:var(--dim);display:none"></span>
+    <span style="font-size:11px;color:var(--muted);font-weight:700;margin-right:2px">Día:</span>
+    <button id="dayBtn1" class="btn" style="padding:3px 10px;font-size:12px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(1)">1</button>
+    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:12px" onclick="switchDay(2)">2</button>
+    <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:12px" onclick="switchDay(3)">3</button>
+    <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+    <button class="btn" style="padding:3px 10px;font-size:12px" onclick="openCommandPalette()" title="Ctrl+K">🔍</button>
+    <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+    <button class="btn" style="padding:3px 10px;font-size:12px" onclick="undo()" title="Ctrl+Z">↩️</button>
+    <button class="btn" style="padding:3px 10px;font-size:12px" onclick="redo()" title="Ctrl+Y">↪️</button>
+    <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+    <span id="lastSaveTxt" style="font-size:11px;color:var(--dim);display:none"></span>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
     <div class="status-dot" id="statusDot"></div>
     <span class="status-txt" id="statusTxt">Conectando…</span>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     TAB: AGENDA (Principal)
-══════════════════════════════════════════════════ -->
+<!-- TAB AGENDA -->
 <div class="tab-content active" id="tab-principal">
   <div class="config-bar">
-    <span class="config-label">Inicio</span>
-    <input type="text" class="time-input green" id="horaApertura" value="09:00" placeholder="HH:MM" oninput="recalcTimes()">
-    <span class="config-label">Fin</span>
+    <span class="config-label">Apertura</span>
+    <input type="text" class="time-input green" id="horaApertura" value="09:00" placeholder="HH:MM" oninput="recalcAllTimes()">
+    <span class="config-label">Cierre</span>
     <input type="text" class="time-input red" id="horaCierre" value="20:00" placeholder="HH:MM">
-    <span style="color:var(--dim);font-size:13px" id="totalMin">—</span>
-    <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn" onclick="addPrincipalRow()">+ Agregar fila</button>
+    <span style="color:var(--dim);font-size:12px" id="totalMin">—</span>
+    <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;">
+      <button class="btn" onclick="addPrincipalRow()">+ Fila</button>
       <button class="btn save" id="saveBtnPrincipal" onclick="savePrincipal()">💾 Guardar</button>
       <button class="btn" onclick="loadPrincipal()">🔄 Actualizar</button>
+      <button class="btn" onclick="exportICal()">📅 iCal</button>
     </div>
   </div>
-  <div class="progress-wrap">
-    <div class="progress-header">
-      <span id="progLabel">Cargando…</span>
-      <span id="progPct"></span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  <!-- Agenda filter bar -->
+  <div style="padding:6px 20px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <button class="btn" style="padding:3px 10px;font-size:12px" onclick="toggleAgendaFilters()">🔍 Filtros</button>
   </div>
-  <div class="table-wrap">
-    <table>
+  <div id="agendaFilterBar" style="display:none;padding:8px 20px;background:var(--bg2);border-bottom:1px solid var(--border);align-items:center;gap:10px;flex-wrap:wrap;">
+    <label style="font-size:12px;color:var(--muted);font-weight:700">Tipo:</label>
+    <select id="afTipo" class="form-select" style="width:120px;padding:4px 8px;font-size:12px" onchange="applyAgendaFilters()">
+      <option value="">Todos</option>
+    </select>
+    <label style="font-size:12px;color:var(--muted);font-weight:700">Texto:</label>
+    <input id="afQ" type="text" class="form-input" style="width:180px;padding:4px 8px;font-size:12px" placeholder="Buscar tema, speaker…" oninput="applyAgendaFilters()">
+    <button class="btn" style="padding:3px 10px;font-size:12px" onclick="clearAgendaFilters()">✕ Limpiar</button>
+  </div>
+  <!-- Coverage semaphore (9 stage pills) -->
+  <div id="stageSemaphoreWrap" style="display:flex;gap:6px;flex-wrap:wrap;padding:8px 20px;background:var(--bg2);border-bottom:1px solid var(--border);align-items:center;">
+    <span style="font-size:11px;color:var(--muted);font-weight:700;margin-right:4px">Cobertura:</span>
+    <div id="stageSemaphoreRow" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+  </div>
+  <div class="stage-progress-wrap">
+    <div class="stage-progress-row" id="stageProgressRow"></div>
+  </div>
+  <!-- Heatmap -->
+  <div style="padding:6px 20px 6px;background:var(--bg2);border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:10px;color:var(--muted);font-weight:700;white-space:nowrap">Ocupación horaria:</span>
+      <div id="heatmapRow" style="display:flex;gap:2px;flex:1;"></div>
+    </div>
+  </div>
+  <div class="table-wrap" id="principalTableWrap">
+    <table id="principalTable">
       <thead>
-        <tr class="fecha-row">
-          <th class="col-stk" style="left:0;width:44px"></th>
-          <th class="col-stk" style="left:44px;width:81px"><input class="stage-inp" id="custom-tipo" placeholder="+ Tipo custom" style="color:var(--muted)" onkeydown="addCustomTipo(event,this)"></th>
-          <th class="col-stk" colspan="2" style="left:125px;width:106px"></th>
-          <th class="col-stk col-stk-sep" style="left:231px;width:55px;text-align:center;padding:4px 6px"><span id="totalHorasUsadas" style="color:var(--red);font-weight:700;font-size:13px">00:00</span></th>
-          <th colspan="3"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-0" placeholder="Stage 1" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-1" placeholder="Stage 2" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-2" placeholder="Stage 3" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-3" placeholder="Stage 4" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-4" placeholder="Stage 5" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-5" placeholder="Stage 6" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-6" placeholder="Stage 7" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-7" placeholder="Stage 8" oninput="saveStageNames()"></th>
-          <th class="stage-h" style="font-weight:400"><input class="stage-inp" id="sname-8" placeholder="Stage 9" oninput="saveStageNames()"></th>
+        <!-- Row 1: stage name inputs + fixed col headers -->
+        <tr id="headerRow1">
+          <th class="col-stk" style="left:0;width:40px;z-index:12"></th>
+          <th class="col-stk col-stk-sep" style="left:40px;width:88px;z-index:12">
+            <input class="stage-inp" id="custom-tipo" placeholder="+ Tipo" style="color:var(--muted);font-size:11px" onkeydown="addCustomTipo(event,this)">
+          </th>
+          <!-- Stage name headers injected by JS -->
         </tr>
-        <tr>
-          <th class="col-stk" style="left:0;width:44px"></th>
-          <th class="col-stk" style="left:44px;width:81px">Tipo</th>
-          <th class="col-stk" style="left:125px;width:38px;text-align:center">Tiempo</th>
-          <th class="col-stk" style="left:163px;width:55px;text-align:center">Inicio</th>
-          <th class="col-stk col-stk-sep" style="left:218px;width:55px;text-align:center">Fin</th>
-          <th style="width:180px">Tema</th>
-          <th style="width:180px;color:#facc15">Bajada</th>
-          <th style="width:200px">Detalle</th>
-          <th class="stage-h" style="width:160px" id="th-s0">Stage 1</th>
-          <th class="stage-h" style="width:160px" id="th-s1">Stage 2</th>
-          <th class="stage-h" style="width:160px" id="th-s2">Stage 3</th>
-          <th class="stage-h" style="width:160px" id="th-s3">Stage 4</th>
-          <th class="stage-h" style="width:160px" id="th-s4">Stage 5</th>
-          <th class="stage-h" style="width:160px" id="th-s5">Stage 6</th>
-          <th class="stage-h" style="width:160px" id="th-s6">Stage 7</th>
-          <th class="stage-h" style="width:160px" id="th-s7">Stage 8</th>
-          <th class="stage-h" style="width:160px" id="th-s8">Stage 9</th>
+        <!-- Row 2: sub-column headers -->
+        <tr id="headerRow2">
+          <th class="col-stk sub-h" style="left:0;width:40px;z-index:12">Acc.</th>
+          <th class="col-stk col-stk-sep sub-h" style="left:40px;width:88px;z-index:12">Tipo</th>
+          <!-- Sub-headers injected by JS -->
         </tr>
       </thead>
       <tbody id="principalTbody"></tbody>
@@ -308,141 +340,109 @@ textarea.cell-ta-auto{overflow:hidden;resize:none;}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     TAB: SPEAKERS
-══════════════════════════════════════════════════ -->
+<!-- TAB SPEAKERS -->
 <div class="tab-content" id="tab-speakers">
   <div class="toolbar">
     <button class="btn save" id="saveBtnSpeakers" onclick="saveSpeakers()">💾 Guardar</button>
-    <button class="btn" onclick="loadSpeakers()">🔄 Actualizar</button>
+    <button class="btn" onclick="loadAll()">🔄 Actualizar</button>
     <div class="toolbar-sep"></div>
-    <button class="btn" onclick="importarDelForm()" title="Importa respuestas nuevas del Google Form">📥 Importar del Form</button>
+    <button class="btn" onclick="importarDelForm()">📥 Importar Form</button>
+    <button class="btn" onclick="exportCSV()">📥 CSV</button>
   </div>
-  <div style="padding:20px">
+  <div style="padding:18px">
     <div class="form-card">
       <h3>+ Agregar Speaker</h3>
       <div class="form-grid">
-        <div class="form-field">
-          <label class="form-label">Nombre</label>
-          <input class="form-input" id="sp-nombre" placeholder="Nombre completo">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Tipo</label>
-          <select class="form-select" id="sp-tipo">
-            <option value="speaker">Speaker</option>
-            <option value="empresa">Empresa</option>
-            <option value="sponsor">Sponsor</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Contacto (mail / móvil)</label>
-          <input class="form-input" id="sp-contacto" placeholder="mail@ejemplo.com / +54 9 …">
-        </div>
-        <div class="form-field">
-          <label class="form-label">X (Twitter)</label>
-          <input class="form-input" id="sp-x" placeholder="@usuario">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Instagram</label>
-          <input class="form-input" id="sp-ig" placeholder="@usuario">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Empresa / Referencia</label>
-          <input class="form-input" id="sp-empresa" placeholder="Empresa o rol actual">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Stage(s)</label>
-          <input class="form-input" id="sp-stages" placeholder="Stage 1, Stage 3…">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Tema(s)</label>
-          <input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning, DeFi…">
-        </div>
-        <div class="form-field" style="grid-column:1/-1">
-          <label class="form-label">Notas</label>
-          <textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones, info adicional…"></textarea>
-        </div>
+        <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="sp-nombre" placeholder="Nombre completo"></div>
+        <div class="form-field"><label class="form-label">Tipo</label><select class="form-select" id="sp-tipo"><option value="speaker">Speaker</option><option value="empresa">Empresa</option><option value="sponsor">Sponsor</option></select></div>
+        <div class="form-field"><label class="form-label">Mail</label><input class="form-input" id="sp-mail" placeholder="mail@ejemplo.com"></div>
+        <div class="form-field"><label class="form-label">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="+54 9 …"></div>
+        <div class="form-field"><label class="form-label">Telegram</label><input class="form-input" id="sp-telegram" placeholder="@usuario"></div>
+        <div class="form-field"><label class="form-label">Signal</label><input class="form-input" id="sp-signal" placeholder="+54 9 …"></div>
+        <div class="form-field"><label class="form-label">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…"></div>
+        <div class="form-field"><label class="form-label">Empresa</label><input class="form-input" id="sp-empresa" placeholder="Empresa o rol"></div>
+        <div class="form-field"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning…"></div>
+        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Notas</label><textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones…"></textarea></div>
       </div>
       <button class="form-btn" onclick="addSpeaker()">Agregar</button>
     </div>
-
     <div class="sp-filter-bar">
-      <button class="btn sp-flt active" onclick="setSpFilter('tipo','all')" data-filter-tipo="all">Todos</button>
-      <button class="btn sp-flt" onclick="setSpFilter('tipo','speaker')" data-filter-tipo="speaker">Speaker</button>
-      <button class="btn sp-flt" onclick="setSpFilter('tipo','empresa')" data-filter-tipo="empresa">Empresa</button>
-      <button class="btn sp-flt" onclick="setSpFilter('tipo','sponsor')" data-filter-tipo="sponsor">Sponsor</button>
+      <button class="btn sp-flt active" onclick="setSpFilter('all')" data-flt="all">Todos</button>
+      <button class="btn sp-flt" onclick="setSpFilter('speaker')" data-flt="speaker">Speaker</button>
+      <button class="btn sp-flt" onclick="setSpFilter('empresa')" data-flt="empresa">Empresa</button>
+      <button class="btn sp-flt" onclick="setSpFilter('sponsor')" data-flt="sponsor">Sponsor</button>
+      <button class="btn sp-flt" onclick="setSpFilter('manual')" data-flt="manual">⚠️ Manuales</button>
     </div>
-    <div class="table-wrap">
+    <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
-          <th>Tipo</th>
-          <th>Nombre</th>
-          <th>Estado</th>
-          <th>Stage(s)</th>
-          <th>Tema(s)</th>
-          <th>Contacto</th>
-          <th>X</th>
-          <th>IG</th>
-          <th>Empresa/Ref</th>
-          <th>Notas</th>
-          <th style="width:36px"></th>
+          <th>Tipo</th><th>Nombre</th><th>Estado</th><th>Asignaciones</th><th>Tema(s)</th>
+          <th>Mail</th><th>WhatsApp</th><th>Telegram</th><th>Signal</th><th>LinkedIn</th>
+          <th>Empresa</th><th>Notas</th><th style="width:32px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
-          <tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers cargados aún.</td></tr>
+          <tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers aún.</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     TAB: RESUMEN
-══════════════════════════════════════════════════ -->
+<!-- TAB RESUMEN -->
 <div class="tab-content" id="tab-resumen">
   <div class="toolbar">
-    <span style="font-size:14px;color:var(--muted)">Vista derivada de Agenda + Speakers.</span>
+    <span style="font-size:13px;color:var(--muted)">Vista derivada de Agenda + Speakers.</span>
     <button class="btn" style="margin-left:auto" onclick="buildResumen()">🔄 Recalcular</button>
   </div>
-  <div style="padding:20px" id="resumenWrap">
-    <div class="empty"><div class="empty-icon">📊</div>Cargá datos en Agenda y Speakers primero.</div>
+  <div style="padding:18px" id="resumenWrap">
+    <div class="empty"><div class="empty-icon">📊</div>Cargá datos primero.</div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     TAB: IDEAS
-══════════════════════════════════════════════════ -->
+<!-- TAB IDEAS -->
 <div class="tab-content" id="tab-ideas">
   <div class="toolbar">
     <button class="btn save" id="saveBtnIdeas" onclick="saveIdeas()">💾 Guardar</button>
     <button class="btn" onclick="loadIdeas()">🔄 Actualizar</button>
   </div>
-  <div style="padding:20px">
+  <div style="padding:18px">
     <div class="form-card">
       <h3>+ Nueva Idea</h3>
       <div class="form-grid">
-        <div class="form-field">
-          <label class="form-label">Idea</label>
-          <input class="form-input" id="idea-titulo" placeholder="Título de la idea">
-        </div>
-        <div class="form-field">
-          <label class="form-label">¿Quién la propone?</label>
-          <input class="form-input" id="idea-prop" placeholder="—">
-        </div>
-        <div class="form-field" style="grid-column:1/-1">
-          <label class="form-label">Detalle</label>
-          <textarea class="form-ta" id="idea-detalle" placeholder="Descripción, contexto, beneficio esperado…"></textarea>
-        </div>
+        <div class="form-field"><label class="form-label">Idea</label><input class="form-input" id="idea-titulo" placeholder="Título"></div>
+        <div class="form-field"><label class="form-label">¿Quién propone?</label><input class="form-input" id="idea-prop" placeholder="—"></div>
+        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Detalle</label><textarea class="form-ta" id="idea-detalle" placeholder="Descripción, contexto…"></textarea></div>
       </div>
       <button class="form-btn" onclick="addIdea()">Agregar idea</button>
     </div>
-    <div id="ideasList">
-      <div class="empty"><div class="empty-icon">💡</div>No hay ideas aún.</div>
-    </div>
+    <div id="ideasList"><div class="empty"><div class="empty-icon">💡</div>No hay ideas aún.</div></div>
   </div>
 </div>
 
-<div id="spDropdown" class="sp-drop"></div>
+<!-- TAB KANBAN -->
+<div class="tab-content" id="tab-kanban">
+  <div class="toolbar">
+    <span style="font-size:13px;color:var(--muted)">Arrastrá las tarjetas para cambiar el estado.</span>
+    <button class="btn" style="margin-left:auto" onclick="renderKanban()">🔄 Recalcular</button>
+  </div>
+  <div id="kanbanBoard" style="display:flex;gap:16px;padding:18px;overflow-x:auto;min-height:calc(100vh - 120px)"></div>
+</div>
+
+<!-- SPEAKER DROPDOWN (shared, positioned via JS) -->
+<div id="spDropdown" class="sp-drop">
+  <div class="sp-drop-search"><input type="text" id="spDropSearch" placeholder="Buscar speaker…" oninput="filterSpDrop(this.value)"></div>
+  <div class="sp-drop-list" id="spDropList"></div>
+</div>
+
 <div id="toast"></div>
+
+<!-- COMMAND PALETTE -->
+<div id="cmdPalette" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:flex-start;justify-content:center;padding-top:80px;">
+  <div style="background:#1a1a1a;border:1px solid #dc2626;border-radius:12px;width:560px;max-width:95vw;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);">
+    <input id="cmdInput" type="text" placeholder="Buscar speaker, tema, horario…" style="width:100%;background:transparent;border:none;border-bottom:1px solid #2d2d2d;padding:16px 20px;font-size:16px;color:#fff;outline:none;" oninput="filterCmd(this.value)">
+    <div id="cmdResults" style="max-height:360px;overflow-y:auto;padding:8px 0;"></div>
+  </div>
+</div>
 
 <div id="claveModal">
   <div id="claveBox">
@@ -455,81 +455,63 @@ textarea.cell-ta-auto{overflow:hidden;resize:none;}
 </div>
 
 <script>
+'use strict';
 const GAS_URL = 'REEMPLAZAR_CON_URL_DEL_APPS_SCRIPT';
 
-// ── STAGES ────────────────────────────────────────────────────────
+// ── CONSTANTS ─────────────────────────────────────────────────────────
 const STAGE_KEYS = ['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+const N_STAGES = 9;
+const TIPOS = ['AMA','Apertura','Break','Charla','Cierre','Concurso','Kahoot','Panel','Premios','Sorteo','Taller'];
+const TIPO_COLORS = {AMA:'#2dd4bf',Apertura:'#dc2626',Break:'#888',Charla:'#6366f1',Cierre:'#ef4444',Concurso:'#ec4899',Kahoot:'#c084fc',Panel:'#f87171',Premios:'#fb923c',Sorteo:'#4ade80',Taller:'#22c55e'};
+const DUR_OPTIONS = [15,20,25,30,40];
+const DUR_COLORS = {15:'#22c55e',20:'#eab308',25:'#f97316',30:'#f9a8d4',40:'#a78bfa'};
+const ESTADO_ICON = {confirmado:'✅',pendiente:'⏳',invitado:'📩',no_aprobado:'❌',''  :''};
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let state = { principal:[], speakers:[], speakersManual:[], ideas:[] };
 let stageNames = JSON.parse(localStorage.getItem('labitconf_stages') || 'null') ||
   ['Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6','Stage 7','Stage 8','Stage 9'];
-
-function saveStageNames() {
-  stageNames = STAGE_KEYS.map((_,i) => document.getElementById('sname-'+i)?.value.trim() || ('Stage '+(i+1)));
-  localStorage.setItem('labitconf_stages', JSON.stringify(stageNames));
-  STAGE_KEYS.forEach((_,i) => {
-    const th = document.getElementById('th-s'+i);
-    if (th) th.textContent = stageNames[i];
-  });
-}
-
-function loadStageNames() {
-  STAGE_KEYS.forEach((_,i) => {
-    const inp = document.getElementById('sname-'+i);
-    if (inp) inp.value = stageNames[i];
-    const th = document.getElementById('th-s'+i);
-    if (th) th.textContent = stageNames[i];
-  });
-}
-
-// ── ESTADO ────────────────────────────────────────────────────────
-let state = { principal:[], speakers:[], ideas:[] };
-let spFilter = { tipo:'all' };
-let dirty = { principal:false, speakers:false, ideas:false };
+let spFilterVal = 'all';
+let dirty = {principal:false,speakers:false,speakersManual:false,ideas:false};
 let writeKey = localStorage.getItem('labitconf_write_key') || '';
-let versions = { Principal:'0', Speakers:'0', Ideas:'0' };
+let versions = {Principal:'0',Speakers:'0',SpeakerManual:'0',Ideas:'0'};
 
-// ── UTILS ─────────────────────────────────────────────────────────
+// Active dropdown context
+let _spDropCtx = {idx:null,sk:null};
+
+// ── UTILS ─────────────────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function toast(msg, err=false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'show' + (err?' err':'');
-  clearTimeout(t._t); t._t = setTimeout(()=>t.className='', 3000);
-}
-function timeToMin(t){ if(!t)return 0; const [h,m]=String(t).split(':').map(Number); return (h||0)*60+(m||0); }
-function minToTime(m){ const h=Math.floor(m/60),mm=m%60; return `${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}`; }
-function durVal(d){ const n=parseInt(d); return isNaN(n)?0:n; }
-
-const TIPOS = ['AMA','Apertura','Break','Charla','Cierre','Concurso','Kahoot','Panel','Premios','Sorteo','Taller'];
-const TIPO_COLORS = { AMA:'#2dd4bf',Apertura:'#dc2626',Break:'#888',Charla:'#6366f1',Cierre:'#ef4444',Concurso:'#ec4899',Kahoot:'#c084fc',Panel:'#f87171',Premios:'#fb923c',Sorteo:'#4ade80',Taller:'#22c55e' };
-const DURS = [15,20,25,30,45];
-const DUR_STD = new Set([15,20,25,30,45]);
-const ESTADO_ICON = { confirmado:'✅', pendiente:'⏳', invitado:'📩', no_aprobado:'❌', '':'' };
-
-function tipoOpts(sel='Charla'){ return TIPOS.map(t=>`<option value="${t}" ${t===sel?'selected':''}>${t}</option>`).join(''); }
-function durColor(d){ if(d===15)return'#4ade80';if(d===20)return'#fde047';if(d===25)return'#fb923c';if(d===30)return'#f9a8d4';if(d===45)return'#f87171';return'#fff'; }
-function durOpts(sel=30){
-  const DC={15:'#22c55e',20:'#eab308',25:'#f97316',30:'#f9a8d4',45:'#f87171'};
-  const opts=DURS.map(d=>`<option value="${d}" ${d===sel?'selected':''} style="color:${DC[d]};background:#111">${minToTime(d)}</option>`).join('');
-  const custom=!DUR_STD.has(sel)&&sel>0?`<option value="${sel}" selected style="color:#fff;background:#111">${minToTime(sel)}</option>`:'';
-  return opts+custom;
-}
+function toast(msg,err=false){ const t=document.getElementById('toast'); t.textContent=msg; t.className='show'+(err?' err':''); clearTimeout(t._t); t._t=setTimeout(()=>t.className='',3200); }
+function timeToMin(t){ if(!t)return 0; const[h,m]=String(t).split(':').map(Number); return(h||0)*60+(m||0); }
+function minToTime(m){ const h=Math.floor(Math.max(0,m)/60),mm=Math.max(0,m)%60; return `${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}`; }
 function parseDur(v){ const s=String(v).trim(); if(s.includes(':'))return timeToMin(s); const n=parseInt(s); return isNaN(n)?0:n; }
+function durColor(d){ return DUR_COLORS[d]||'#ffffff'; }
 
-// ── TABS ──────────────────────────────────────────────────────────
-function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    b.classList.toggle('active',['principal','speakers','resumen','ideas'][i]===name);
+function levenshtein(a,b){
+  const m=a.length,n=b.length,dp=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++)dp[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+function fuzzyMatch(a,b){ const la=a.toLowerCase(),lb=b.toLowerCase(); const dist=levenshtein(la,lb); const sim=1-dist/Math.max(la.length,lb.length,1); return sim; }
+
+// ── TABS ──────────────────────────────────────────────────────────────
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab===name);
   });
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  const el=document.getElementById('tab-'+name);
+  if(el) el.classList.add('active');
   if(name==='resumen') buildResumen();
+  if(name==='kanban') renderKanban();
 }
 
-// ── CLAVE ─────────────────────────────────────────────────────────
-function pedirClave(motivo) {
-  return new Promise(resolve => {
-    const modal=document.getElementById('claveModal'), input=document.getElementById('claveInput');
-    const msg=document.getElementById('claveMsg'), err=document.getElementById('claveError');
-    const btn=document.getElementById('claveConfirm');
+// ── CLAVE ─────────────────────────────────────────────────────────────
+function pedirClave(motivo){
+  return new Promise(resolve=>{
+    const modal=document.getElementById('claveModal'),input=document.getElementById('claveInput');
+    const msg=document.getElementById('claveMsg'),err=document.getElementById('claveError'),btn=document.getElementById('claveConfirm');
     msg.textContent=motivo||'Ingresá la clave para guardar cambios.';
     err.textContent=''; input.value=''; modal.classList.add('show'); input.focus();
     function confirmar(){ const k=input.value.trim(); if(!k){err.textContent='La clave no puede estar vacía.';return;} writeKey=k; localStorage.setItem('labitconf_write_key',k); modal.classList.remove('show'); btn.removeEventListener('click',confirmar); input.removeEventListener('keydown',onEnter); resolve(true); }
@@ -538,353 +520,1232 @@ function pedirClave(motivo) {
   });
 }
 
-// ── DIRTY ─────────────────────────────────────────────────────────
-function markDirty(s){ dirty[s]=true; const b=document.getElementById({principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'}[s]); if(b)b.classList.add('dirty'); }
-function markClean(s){ dirty[s]=false; const b=document.getElementById({principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'}[s]); if(b)b.classList.remove('dirty'); const el=document.getElementById('lastSaveTxt'); if(el){const now=new Date(); el.textContent=`Guardado ${now.toLocaleDateString('es-AR')} ${now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}`; el.style.display='';} }
+// ── DIRTY ─────────────────────────────────────────────────────────────
+function markDirty(s){ dirty[s]=true; const map={principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'}; const b=document.getElementById(map[s]||''); if(b)b.classList.add('dirty'); }
+function markClean(s){ dirty[s]=false; const map={principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'}; const b=document.getElementById(map[s]||''); if(b)b.classList.remove('dirty'); const el=document.getElementById('lastSaveTxt'); if(el){const now=new Date(); el.textContent=`Guardado ${now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}`; el.style.display='';} }
 
-// ── GAS ───────────────────────────────────────────────────────────
-async function gasGet(sheet) {
+// ── GAS ───────────────────────────────────────────────────────────────
+async function gasGet(sheet){
   const r=await fetch(`${GAS_URL}?sheet=${sheet}`); const j=await r.json();
-  if(j._version) versions[sheet]=j._version;
+  if(j.version)versions[sheet]=j.version;
   return j.data||j;
 }
-async function checkVersion(sheet) {
-  try { const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheet}`); const j=await r.json(); if(j.version&&j.version!=='0'&&j.version!==versions[sheet]){toast('⚠️ Hay cambios de otro usuario. Actualizá antes de guardar.',true);return false;} return true; } catch{ return true; }
+async function checkVersion(sheet){
+  try{ const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheet}`); const j=await r.json(); if(j.version&&j.version!=='0'&&j.version!==versions[sheet]){toast('⚠️ Hay cambios de otro usuario. Actualizá antes de guardar.',true);return false;} return true; }catch{return true;}
 }
-async function gasPost(sheet,action,data) {
-  if(!writeKey) await pedirClave();
+async function gasPost(sheet,action,data){
+  if(!writeKey)await pedirClave();
   const r=await fetch(GAS_URL,{method:'POST',body:JSON.stringify({sheet,action,data,key:writeKey})});
   const j=await r.json();
   if(j.error&&j.code===401){writeKey='';localStorage.removeItem('labitconf_write_key');toast('❌ Clave incorrecta',true);throw new Error('401');}
-  if(j.version) versions[sheet]=j.version;
+  if(j.version)versions[sheet]=j.version;
   return j;
 }
 
-// ── AUTO-EXPAND ───────────────────────────────────────────────────
-function autoExpand(ta){ ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; }
-function autoExpandAll(){ document.querySelectorAll('textarea.cell-ta-auto').forEach(autoExpand); }
-
-// ══════════════════════════════════════════════════════════════════
-// PRINCIPAL
-// ══════════════════════════════════════════════════════════════════
-function addCustomTipo(e,inp){ if(e.key!=='Enter')return; const v=inp.value.trim(); if(!v||TIPOS.includes(v)){inp.value='';return;} TIPOS.push(v); TIPOS.sort(); inp.value=''; renderPrincipal(); }
-
-function renderPrincipal() {
-  const tbody=document.getElementById('principalTbody');
-  tbody.innerHTML=''; recalcTimes();
-  state.principal.forEach((row,i)=>tbody.appendChild(makePrincipalRow(row,i)));
-  updateProgress(); autoExpandAll();
+// ── STAGE NAMES ───────────────────────────────────────────────────────
+function saveStageNames(){
+  STAGE_KEYS.forEach((_,i)=>{
+    const inp=document.getElementById('sname-'+i);
+    if(inp)stageNames[i]=inp.value.trim()||('Stage '+(i+1));
+  });
+  localStorage.setItem('labitconf_stages',JSON.stringify(stageNames));
+  updateStageHeaders();
 }
 
-function makePrincipalRow(row,idx) {
+function updateStageHeaders(){
+  STAGE_KEYS.forEach((_,i)=>{
+    const inp=document.getElementById('sname-'+i);
+    if(inp)inp.value=stageNames[i];
+    const th=document.getElementById('stageH-'+i);
+    if(th){
+      const inp2=th.querySelector('.stage-inp');
+      if(inp2&&inp2.value!==stageNames[i])inp2.value=stageNames[i];
+    }
+  });
+}
+
+// ── BUILD HEADERS ─────────────────────────────────────────────────────
+function buildTableHeaders(){
+  const r1=document.getElementById('headerRow1');
+  const r2=document.getElementById('headerRow2');
+  // Remove old stage headers
+  while(r1.children.length>2)r1.removeChild(r1.lastChild);
+  while(r2.children.length>2)r2.removeChild(r2.lastChild);
+
+  STAGE_KEYS.forEach((sk,i)=>{
+    const conflicts=detectConflictsForStage(i);
+    const assignPct=calcStageAssignPct(i);
+    let borderClass='';
+    if(assignPct>=90)borderClass=' stage-h-full';
+    else if(assignPct<30&&state.principal.length>0)borderClass=' stage-h-low';
+    const warnIcon=conflicts?'⚠️ ':'';
+
+    // Row 1: stage name spanning 5 cols
+    const th=document.createElement('th');
+    th.id='stageH-'+i;
+    th.colSpan=5;
+    th.className='stage-h stage-group-sep'+borderClass;
+    th.style.minWidth='400px';
+    th.style.textAlign='center';
+    if(conflicts)th.classList.add('stage-h-warn');
+    th.innerHTML=`<input class="stage-inp" id="sname-${i}" value="${esc(stageNames[i])}" placeholder="Stage ${i+1}" oninput="saveStageNames()" style="text-align:center;font-size:12px"> ${conflicts?'<span style="color:#ef4444;font-size:10px">⚠️</span>':''}`;
+    r1.appendChild(th);
+
+    // Row 2: 5 sub-headers
+    const subLabels=['Speaker','Tema','Dur','Inicio','Fin'];
+    subLabels.forEach((lbl,si)=>{
+      const th2=document.createElement('th');
+      th2.className='sub-h'+(si===0?' stage-group-sep':'');
+      th2.textContent=lbl;
+      if(lbl==='Speaker')th2.style.minWidth='110px';
+      else if(lbl==='Tema')th2.style.minWidth='130px';
+      else{th2.style.width='60px';th2.style.minWidth='52px';}
+      r2.appendChild(th2);
+    });
+  });
+}
+
+function detectConflictsForStage(stageIdx){
+  const sk=STAGE_KEYS[stageIdx];
+  for(let i=0;i<state.principal.length;i++){
+    const row=state.principal[i];
+    const sp=(row.stages[sk]?.speaker||'').trim();
+    if(!sp)continue;
+    // Same row conflict with other stages
+    for(let j=0;j<STAGE_KEYS.length;j++){
+      if(j===stageIdx)continue;
+      if((state.principal[i].stages[STAGE_KEYS[j]]?.speaker||'').trim()===sp)return true;
+    }
+    // Consecutive row conflict
+    if(i+1<state.principal.length){
+      for(let j=0;j<STAGE_KEYS.length;j++){
+        if((state.principal[i+1].stages[STAGE_KEYS[j]]?.speaker||'').trim()===sp)return true;
+      }
+    }
+  }
+  return false;
+}
+
+function calcStageAssignPct(stageIdx){
+  if(!state.principal.length)return 0;
+  const sk=STAGE_KEYS[stageIdx];
+  const assigned=state.principal.filter(r=>(r.stages[sk]?.speaker||'').trim()).length;
+  return Math.round(assigned/state.principal.length*100);
+}
+
+// ── NEW ROW MODEL ─────────────────────────────────────────────────────
+function newStageData(inicio='09:00',dur=30){
+  return {speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0};
+}
+function newRow(inicio='09:00'){
+  const stages={};
+  STAGE_KEYS.forEach(sk=>stages[sk]=newStageData(inicio));
+  return {tipo:'Charla',stages};
+}
+
+// ── RENDER PRINCIPAL ──────────────────────────────────────────────────
+function renderPrincipal(){
+  buildTableHeaders();
+  const tbody=document.getElementById('principalTbody');
+  tbody.innerHTML='';
+  recalcAllTimes();
+  let rows=state.principal;
+  if(agendaFilters.tipo) rows=rows.filter(r=>r.tipo===agendaFilters.tipo);
+  if(agendaFilters.q){const q=agendaFilters.q; rows=rows.filter(r=>JSON.stringify(r).toLowerCase().includes(q));}
+  rows.forEach((row,i)=>{
+    const realIdx=state.principal.indexOf(row);
+    tbody.appendChild(makePrincipalRow(row,realIdx));
+  });
+  buildStageProgressBars();
+  buildHeatmap();
+  buildStageSemaphore();
+  // Populate tipo filter dropdown
+  const afTipo=document.getElementById('afTipo');
+  if(afTipo){
+    const cur=afTipo.value;
+    afTipo.innerHTML='<option value="">Todos</option>'+TIPOS.map(t=>`<option value="${t}"${t===cur?' selected':''}>${t}</option>`).join('');
+  }
+}
+
+function makePrincipalRow(row,idx){
   const tr=document.createElement('tr');
   tr.dataset.idx=idx;
-  const dc=durColor(row.dur);
-  const tipoColor=TIPO_COLORS[row.tipo]||'#6366f1';
-  const tipoBg=tipoColor+'28';
+  const tipo=row.tipo||'Charla';
+  const tc=TIPO_COLORS[tipo]||'#6366f1';
+  const tipoBg=tc+'22';
 
-  const stageCells = STAGE_KEYS.map(k =>
-    `<td style="min-width:160px">${renderSpPicker(idx,k,row[k]||'')}</td>`
-  ).join('');
+  // Actions cell
+  const tdAct=document.createElement('td');
+  tdAct.className='row-actions col-stk';
+  tdAct.style.left='0';
+  tdAct.innerHTML=`<div class="row-act-wrap">
+    <div class="row-act-wrap2">
+      <button class="mv-row" onclick="movePrincipalRow(${idx},-1)" ${idx===0?'disabled':''} title="Subir">▲</button>
+      <button class="mv-row" onclick="movePrincipalRow(${idx},1)" ${idx===state.principal.length-1?'disabled':''} title="Bajar">▼</button>
+    </div>
+    <div class="row-act-wrap2">
+      <button class="del-row" onclick="delPrincipalRow(${idx})" title="Eliminar">✕</button>
+      <button class="ins-row" onclick="insertPrincipalRow(${idx})" title="Insertar abajo">+</button>
+    </div>
+  </div>`;
+  tr.appendChild(tdAct);
 
-  tr.innerHTML=`
-    <td class="row-actions col-stk" style="left:0"><div class="row-act-wrap"><button class="mv-row" onclick="movePrincipalRow(${idx},-1)" ${idx===0?'disabled':''}>▲</button><button class="del-row" onclick="delPrincipalRow(${idx})">✕</button><button class="mv-row" onclick="movePrincipalRow(${idx},1)" ${idx===state.principal.length-1?'disabled':''}>▼</button><button class="ins-row" onclick="insertPrincipalRow(${idx})">+</button></div></td>
-    <td class="col-stk" style="left:44px;background:${tipoBg}"><select class="cell-sel" style="color:${tipoColor};font-weight:700" onchange="updatePrincipal(${idx},'tipo',this.value);renderPrincipal()">${tipoOpts(row.tipo)}</select></td>
-    <td id="durtd-${idx}" class="col-stk" style="left:125px;text-align:center;width:51px;max-width:51px;overflow:hidden;padding:0">
-      <select id="dursel-${idx}" class="cell-sel" style="color:${dc};font-weight:700;font-size:12px;width:100%;background:transparent;border:none;padding:2px 0;text-align:center;cursor:pointer"
-        onchange="(function(sel){if(sel.value==='__custom__'){const cur=minToTime(state.principal[${idx}]?.dur||30);const raw=prompt('Tiempo (ej: 00:22 o 22):',cur);if(raw===null){sel.value=state.principal[${idx}]?.dur||30;return;}const m=parseDur(raw);if(m>0){updatePrincipal(${idx},'dur',m);recalcTimes();updateProgress();renderPrincipal();}else sel.value=state.principal[${idx}]?.dur||30;return;}const m=parseDur(sel.value);sel.style.color=durColor(m);updatePrincipal(${idx},'dur',m);recalcTimes();updateProgress();})(this)">
-        ${durOpts(row.dur)}<option value="__custom__" style="color:#fff;background:#111">00:00</option>
-      </select>
-    </td>
-    <td class="col-stk" style="left:163px;width:55px;max-width:55px;overflow:hidden"><input class="cell-inp time-start" id="inicio-${idx}" style="text-align:center" value="${row.inicio||''}" oninput="updatePrincipal(${idx},'inicio',this.value);recalcTimesFrom(${idx})"></td>
-    <td class="col-stk col-stk-sep" style="left:218px;width:55px;max-width:55px;overflow:hidden"><div style="position:relative"><input class="cell-inp time-end" id="fin-${idx}" style="text-align:center" value="${row.fin||''}" oninput="updatePrincipal(${idx},'fin',this.value)"><div class="fin-progress" id="finprog-${idx}" style="width:0%"></div></div></td>
-    <td style="min-width:180px"><textarea class="cell-ta cell-ta-auto" style="font-size:14px;color:#ffffff;resize:none;min-height:38px" oninput="updatePrincipal(${idx},'tema',this.value);autoExpand(this)" placeholder="Tema…">${esc(row.tema||'')}</textarea></td>
-    <td style="min-width:180px"><textarea class="cell-ta cell-ta-auto" style="font-size:14px;color:#facc15;resize:none;min-height:38px" oninput="updatePrincipal(${idx},'bajada',this.value);autoExpand(this)" placeholder="Bajada…">${esc(row.bajada||'')}</textarea></td>
-    <td style="min-width:200px"><textarea class="cell-ta cell-ta-auto" style="font-size:14px" oninput="updatePrincipal(${idx},'detalle',this.value);autoExpand(this)" placeholder="Detalle…">${esc(row.detalle||'')}</textarea></td>
-    ${stageCells}
-  `;
+  // Tipo cell
+  const tdTipo=document.createElement('td');
+  tdTipo.className='col-stk col-stk-sep tipo-td';
+  tdTipo.style.left='40px';
+  tdTipo.style.background=tipoBg;
+  const tipoOpts=TIPOS.map(t=>`<option value="${t}"${t===tipo?' selected':''}>${t}</option>`).join('');
+  tdTipo.innerHTML=`<select class="cell-sel" style="color:${tc};font-weight:700;font-size:11px" onchange="updateRowTipo(${idx},this.value)">${tipoOpts}</select>`;
+  tr.appendChild(tdTipo);
+
+  // Stage cells (5 sub-cols each)
+  STAGE_KEYS.forEach((sk,si)=>{
+    const sd=row.stages[sk]||newStageData();
+    const conflictClass=getConflictClass(idx,sk);
+
+    // Speaker
+    const tdSp=document.createElement('td');
+    tdSp.className='sc-speaker'+(si===0?' stage-group-sep':'');
+    tdSp.style.padding='0';
+    if(conflictClass)tdSp.classList.add(conflictClass);
+    tdSp.innerHTML=renderSpCell(idx,sk,sd.speaker);
+    tr.appendChild(tdSp);
+
+    // Tema
+    const tdTema=document.createElement('td');
+    tdTema.className='sc-tema';
+    tdTema.style.padding='0';
+    const tema=esc(sd.tema||'');
+    tdTema.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateStageField(${idx},'${sk}','tema',this.value);markDirty('principal')" placeholder="Tema…">${tema}</textarea>`;
+    tr.appendChild(tdTema);
+
+    // Dur (dropdown + ext)
+    const tdDur=document.createElement('td');
+    tdDur.className='sc-dur';
+    const dur=sd.dur||30;
+    const durC=durColor(dur);
+    const extVal=sd.durExt||0;
+    const extClass=extVal>0?' dur-ext-active':'';
+    const durOpts2=DUR_OPTIONS.map(d=>`<option value="${d}"${d===dur?' selected':''} style="color:${DUR_COLORS[d]||'#fff'}">${minToTime(d)}</option>`).join('');
+    const customOpt=!DUR_OPTIONS.includes(dur)&&dur>0?`<option value="${dur}" selected style="color:#fff">${minToTime(dur)}</option>`:'';
+    tdDur.innerHTML=`<div class="${extClass}">
+      <select class="dur-sel" style="color:${durC}" onchange="onDurChange(${idx},'${sk}',this)">${durOpts2}${customOpt}<option value="__custom__" style="color:#fff">…</option></select>
+      <input class="dur-ext-inp" type="text" value="${extVal>0?minToTime(extVal):''}" placeholder="+ext" title="Tiempo extendido (no modifica fin oficial)" onchange="updateStageField(${idx},'${sk}','durExt',parseDur(this.value)||0);markDirty('principal')">
+    </div>`;
+    tr.appendChild(tdDur);
+
+    // Inicio
+    const tdIni=document.createElement('td');
+    tdIni.className='sc-inicio';
+    const extMark=extVal>0?`<span class="time-ext-mark">'</span>`:'';
+    tdIni.innerHTML=`<div style="padding:4px 5px;text-align:center" class="time-start" id="ini-${idx}-${sk}">${esc(sd.inicio||'')}${extMark}</div>`;
+    tr.appendChild(tdIni);
+
+    // Fin
+    const tdFin=document.createElement('td');
+    tdFin.className='sc-fin';
+    tdFin.innerHTML=`<div style="padding:4px 5px;text-align:center" class="time-end" id="fin-${idx}-${sk}">${esc(sd.fin||'')}</div>`;
+    tr.appendChild(tdFin);
+  });
+
   return tr;
 }
 
-function updatePrincipal(idx,key,val){ if(state.principal[idx]){state.principal[idx][key]=val;markDirty('principal');} }
-
-function addPrincipalRow() {
-  const last=state.principal[state.principal.length-1];
-  const inicio=last?(last.fin||'09:00'):(document.getElementById('horaApertura').value||'09:00');
-  const dur=30, fin=minToTime(timeToMin(inicio)+dur);
-  const row={tipo:'Charla',dur,inicio,fin,tema:'',bajada:'',detalle:''};
-  STAGE_KEYS.forEach(k=>row[k]='');
-  state.principal.push(row); markDirty('principal'); renderPrincipal();
+function getConflictClass(idx,sk){
+  const sp=(state.principal[idx]?.stages[sk]?.speaker||'').trim();
+  if(!sp)return '';
+  // Same slot: speaker in 2+ stages in same row
+  for(const sk2 of STAGE_KEYS){
+    if(sk2===sk)continue;
+    if((state.principal[idx]?.stages[sk2]?.speaker||'').trim()===sp)return 'sp-conflict-same';
+  }
+  // Consecutive: speaker in prev or next row
+  if(idx>0){
+    for(const sk2 of STAGE_KEYS){
+      if((state.principal[idx-1]?.stages[sk2]?.speaker||'').trim()===sp)return 'sp-conflict-consec';
+    }
+  }
+  if(idx<state.principal.length-1){
+    for(const sk2 of STAGE_KEYS){
+      if((state.principal[idx+1]?.stages[sk2]?.speaker||'').trim()===sp)return 'sp-conflict-consec';
+    }
+  }
+  return '';
 }
 
-function movePrincipalRow(idx,dir){ const t=idx+dir; if(t<0||t>=state.principal.length)return; [state.principal[idx],state.principal[t]]=[state.principal[t],state.principal[idx]]; markDirty('principal'); renderPrincipal(); }
-function delPrincipalRow(idx){ if(!confirm('¿Eliminar este bloque?'))return; state.principal.splice(idx,1); markDirty('principal'); renderPrincipal(); }
-function insertPrincipalRow(idx){ const dur=30, prev=state.principal[idx], inicio=prev?(prev.fin||'09:00'):'09:00', fin=minToTime(timeToMin(inicio)+dur); const row={tipo:'Charla',dur,inicio,fin,tema:'',bajada:'',detalle:''}; STAGE_KEYS.forEach(k=>row[k]=''); state.principal.splice(idx+1,0,row); renderPrincipal(); }
-
-function recalcTimes() {
-  let cur=timeToMin(document.getElementById('horaApertura').value||'09:00');
-  state.principal.forEach((row,i)=>{ row.inicio=minToTime(cur); const d=durVal(row.dur); cur+=d||0; row.fin=minToTime(cur); const ini=document.getElementById('inicio-'+i),fin=document.getElementById('fin-'+i); if(ini)ini.value=row.inicio; if(fin)fin.value=row.fin; });
-  updateProgress();
-}
-function recalcTimesFrom(idx) {
-  const row=state.principal[idx]; if(!row)return;
-  let cur=timeToMin(row.inicio||'09:00');
-  for(let i=idx;i<state.principal.length;i++){ state.principal[i].inicio=minToTime(cur); const d=durVal(state.principal[i].dur); cur+=d||0; state.principal[i].fin=minToTime(cur); const ini=document.getElementById('inicio-'+i),fin=document.getElementById('fin-'+i); if(ini)ini.value=state.principal[i].inicio; if(fin)fin.value=state.principal[i].fin; }
-  updateProgress();
-}
-function updateProgress() {
-  const ap=timeToMin(document.getElementById('horaApertura').value||'09:00');
-  const cl=timeToMin(document.getElementById('horaCierre').value||'20:00');
-  const total=cl-ap; let used=0;
-  state.principal.forEach(r=>used+=durVal(r.dur)||0);
-  const pct=total>0?Math.min(100,Math.round(used/total*100)):0;
-  document.getElementById('progFill').style.width=pct+'%';
-  document.getElementById('progLabel').textContent=`${minToTime(used)} usadas (${pct}%)`;
-  const hrs=(total/60).toFixed(1).replace(/\.0$/,'');
-  document.getElementById('totalMin').textContent=`${hrs} hs disponibles`;
-  const thEl=document.getElementById('totalHorasUsadas'); if(thEl)thEl.textContent=minToTime(used);
-  if(!total)return;
-  state.principal.forEach((row,i)=>{ const el=document.getElementById('finprog-'+i); if(!el)return; const finMin=timeToMin(row.fin||'09:00'); el.style.width=Math.min(100,Math.max(0,Math.round((finMin-ap)/total*100)))+'%'; });
+function renderSpCell(idx,sk,selected){
+  if(selected){
+    const assign=getSpeakerAssignments(selected).filter(a=>!(a.rowIdx===idx&&a.sk===sk));
+    const badgeHtml=assign.length?`<div class="sp-cell-badge">📍 ${assign.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ')}</div>`:'';
+    return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-name">${esc(selected)}</div>${badgeHtml}</div></div>`;
+  }
+  return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-empty">—</div></div></div>`;
 }
 
-// ── SPEAKER PICKER ────────────────────────────────────────────────
-function speakersForStage(stageKey) {
-  const stageName=(stageNames[STAGE_KEYS.indexOf(stageKey)]||'').toLowerCase();
-  return state.speakers.filter(s=>(s.stages||'').toLowerCase().includes(stageName)||!(s.stages||'').trim());
+function getSpeakerAssignments(name){
+  const res=[];
+  state.principal.forEach((row,rowIdx)=>{
+    STAGE_KEYS.forEach(sk=>{
+      if((row.stages[sk]?.speaker||'').trim()===name.trim())
+        res.push({rowIdx,sk,inicio:row.stages[sk].inicio||''});
+    });
+  });
+  return res;
 }
 
-function renderSpPicker(idx,stageKey,selected) {
-  const cellHtml=selected
-    ?`<div class="sp-cell-name">${esc(selected)}</div>`
-    :`<div class="sp-cell-empty">—</div>`;
-  return `<div class="sp-picker" id="spp-${idx}-${stageKey}"><div class="sp-cell" onclick="openSpDrop(${idx},'${stageKey}',event)">${cellHtml}</div></div>`;
-}
-
-let _spDrop={idx:null,stage:null};
-function openSpDrop(idx,stageKey,e) {
+// ── SPEAKER DROPDOWN ──────────────────────────────────────────────────
+function openSpDrop(idx,sk,e){
   e.stopPropagation();
   const dd=document.getElementById('spDropdown');
-  if(_spDrop.idx===idx&&_spDrop.stage===stageKey&&dd.classList.contains('open')){closeAllSpDrops();return;}
-  _spDrop={idx,stage:stageKey};
-  const cell=document.getElementById(`spp-${idx}-${stageKey}`).querySelector('.sp-cell');
+  if(_spDropCtx.idx===idx&&_spDropCtx.sk===sk&&dd.classList.contains('open')){closeSpDrop();return;}
+  _spDropCtx={idx,sk};
+  const cell=e.currentTarget.closest('.sp-picker').querySelector('.sp-cell');
   const r=cell.getBoundingClientRect();
-  const spList=state.speakers.filter(s=>s.nombre);
-  dd.innerHTML=[
-    `<div class="sp-item" data-idx="${idx}" data-stage="${stageKey}" data-name=""><span style="color:var(--dim);font-size:12px">— Sin aplicar —</span></div>`,
-    ...spList.map(s=>`<div class="sp-item" data-idx="${idx}" data-stage="${stageKey}" data-name="${esc(s.nombre)}"><div class="sp-item-name">${ESTADO_ICON[s.estado||'']||''} ${esc(s.nombre)}</div><div class="sp-item-tema">${esc(s.temas||'')}</div></div>`)
-  ].join('');
-  dd.style.top=r.bottom+'px'; dd.style.left=r.left+'px'; dd.style.width=Math.max(r.width,180)+'px';
+  dd.style.top=(r.bottom+2)+'px';
+  dd.style.left=r.left+'px';
+  dd.style.width=Math.max(r.width,240)+'px';
   dd.classList.add('open');
+  const search=document.getElementById('spDropSearch');
+  search.value='';
+  populateSpDrop('');
+  search.focus();
 }
-function closeAllSpDrops(){ document.getElementById('spDropdown').classList.remove('open'); _spDrop={idx:null,stage:null}; }
-document.addEventListener('click', closeAllSpDrops);
-document.getElementById('spDropdown').addEventListener('click',e=>{
-  const item=e.target.closest('.sp-item'); if(!item)return;
-  const idx=+item.dataset.idx, stageKey=item.dataset.stage, name=item.dataset.name;
-  updatePrincipal(idx,stageKey,name);
-  const cell=document.getElementById(`spp-${idx}-${stageKey}`);
-  if(cell) cell.querySelector('.sp-cell').innerHTML=name?`<div class="sp-cell-name">${esc(name)}</div>`:`<div class="sp-cell-empty">—</div>`;
-  closeAllSpDrops();
+
+function closeSpDrop(){
+  document.getElementById('spDropdown').classList.remove('open');
+  _spDropCtx={idx:null,sk:null};
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#spDropdown')&&!e.target.closest('.sp-picker'))closeSpDrop();
 });
 
-// ── LOAD / SAVE Principal ─────────────────────────────────────────
-async function loadPrincipal() {
-  try {
-    const raw=await gasGet('Principal');
-    if(!raw||raw.length<2)return false;
-    if(raw._version)versions.Principal=raw._version;
-    const[,...rows]=raw;
-    state.principal=rows.map(r=>{
-      const row={tipo:r[0]||'Charla',dur:+r[1]||30,inicio:r[2]||'',fin:r[3]||'',tema:r[4]||'',bajada:r[5]||'',detalle:r[6]||''};
-      STAGE_KEYS.forEach((k,i)=>row[k]=r[7+i]||'');
-      return row;
+function filterSpDrop(q){ populateSpDrop(q); }
+
+function populateSpDrop(q){
+  const list=document.getElementById('spDropList');
+  const qLow=(q||'').toLowerCase().trim();
+  let html='';
+
+  // Sin asignar
+  html+=`<div class="sp-item" data-name="" onclick="selectSpeaker('')"><span style="color:var(--dim);font-size:11px">— Sin asignar —</span></div>`;
+
+  // Speakers del sheet
+  const spMatch=state.speakers.filter(s=>s.nombre&&(!qLow||s.nombre.toLowerCase().includes(qLow)||( s.temas||'').toLowerCase().includes(qLow)));
+  if(spMatch.length){
+    html+=`<div class="sp-section-lbl">Speakers</div>`;
+    spMatch.forEach(s=>{
+      const icon=ESTADO_ICON[s.estado||'']||'';
+      const assigns=getSpeakerAssignments(s.nombre).filter(a=>!(a.rowIdx===_spDropCtx.idx&&a.sk===_spDropCtx.sk));
+      const assignTxt=assigns.length?`<div class="sp-item-assign">📍 ${assigns.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ')}</div>`:'';
+      html+=`<div class="sp-item" onclick="selectSpeaker('${esc(s.nombre).replace(/'/g,"\\'")}')">
+        <div class="sp-item-name">${icon} ${esc(s.nombre)}</div>
+        <div class="sp-item-tema">${esc(s.temas||'')}</div>
+        ${assignTxt}
+      </div>`;
     });
-    renderPrincipal(); return true;
-  } catch(e){ toast('⚠️ Error al cargar: '+e.message,true); return false; }
+  }
+
+  // Speakers manuales
+  const manMatch=state.speakersManual.filter(s=>s.nombre&&(!qLow||s.nombre.toLowerCase().includes(qLow)));
+  if(manMatch.length){
+    html+=`<div class="sp-section-lbl">⚠️ Manuales</div>`;
+    manMatch.forEach(s=>{
+      html+=`<div class="sp-item sp-item-manual" onclick="selectSpeaker('${esc(s.nombre).replace(/'/g,"\\'")}')">
+        <div class="sp-item-name" style="color:#eab308">${esc(s.nombre)}</div>
+        <div class="sp-item-tema" style="color:#888">Datos incompletos</div>
+      </div>`;
+    });
+  }
+
+  // Escritura libre: si hay búsqueda y no coincide exactamente
+  if(qLow&&![...state.speakers,...state.speakersManual].some(s=>s.nombre&&s.nombre.toLowerCase()===qLow)){
+    html+=`<div class="sp-item" style="border-top:1px solid #333" onclick="selectSpeakerManual('${esc(q).replace(/'/g,"\\'")}')">
+      <div class="sp-item-name" style="color:#888">+ Agregar "<span style="color:#fff">${esc(q)}</span>"</div>
+      <div class="sp-item-tema">Se guarda como manual</div>
+    </div>`;
+  }
+
+  list.innerHTML=html;
 }
 
-async function savePrincipal() {
+function selectSpeaker(name){
+  const {idx,sk}=_spDropCtx;
+  if(idx===null)return;
+  updateStageField(idx,sk,'speaker',name);
+  markDirty('principal');
+  // Update cell in DOM without full re-render
+  const row=document.querySelector(`tr[data-idx="${idx}"]`);
+  if(row){
+    const cells=row.querySelectorAll('.sc-speaker');
+    const si=STAGE_KEYS.indexOf(sk);
+    if(cells[si]){
+      cells[si].innerHTML=renderSpCell(idx,sk,name);
+      const conflictClass=getConflictClass(idx,sk);
+      cells[si].className='sc-speaker'+(si===0?' stage-group-sep':'')+(conflictClass?' '+conflictClass:'');
+    }
+  }
+  closeSpDrop();
+}
+
+async function selectSpeakerManual(name){
+  const n=name.trim(); if(!n)return;
+  // Add to speakersManual if not exists
+  if(!state.speakersManual.some(s=>s.nombre.toLowerCase()===n.toLowerCase())){
+    const fecha=new Date().toISOString().slice(0,10);
+    state.speakersManual.push({nombre:n,notas:'',fecha});
+    markDirty('speakersManual');
+    // Auto-save manual speakers
+    try{ await gasPost('SpeakerManual','replace_all',state.speakersManual.map(s=>[s.nombre,s.notas||'',s.fecha||''])); }
+    catch(err){ toast('⚠️ No se pudo guardar speaker manual',true); }
+  }
+  selectSpeaker(n);
+}
+
+// ── UPDATE HELPERS ────────────────────────────────────────────────────
+function updateStageField(idx,sk,field,val){
+  if(!state.principal[idx])return;
+  if(!state.principal[idx].stages[sk])state.principal[idx].stages[sk]=newStageData();
+  pushHistory();
+  state.principal[idx].stages[sk][field]=val;
+  if(field==='dur'){
+    recalcStageTimesFrom(sk,idx);
+    // Update dur select color in DOM
+    const row=document.querySelector(`tr[data-idx="${idx}"]`);
+    if(row){
+      const si=STAGE_KEYS.indexOf(sk);
+      const sels=row.querySelectorAll('.dur-sel');
+      if(sels[si])sels[si].style.color=durColor(val);
+    }
+  }
+}
+
+function updateRowTipo(idx,val){
+  if(state.principal[idx])state.principal[idx].tipo=val;
+  markDirty('principal');
+  renderPrincipal();
+}
+
+function onDurChange(idx,sk,sel){
+  if(sel.value==='__custom__'){
+    const cur=minToTime(state.principal[idx]?.stages[sk]?.dur||30);
+    const raw=prompt('Duración (ej: 00:22 o 22 minutos):',cur);
+    if(raw===null){sel.value=state.principal[idx]?.stages[sk]?.dur||30;return;}
+    const m=parseDur(raw);
+    if(m>0){updateStageField(idx,sk,'dur',m);sel.value=m;sel.style.color=durColor(m);markDirty('principal');}
+    else sel.value=state.principal[idx]?.stages[sk]?.dur||30;
+    return;
+  }
+  const m=parseDur(sel.value);
+  sel.style.color=durColor(m);
+  updateStageField(idx,sk,'dur',m);
+  markDirty('principal');
+}
+
+// ── MOVE CELLS ────────────────────────────────────────────────────────
+// Move row up/down
+function movePrincipalRow(idx,dir){
+  const t=idx+dir; if(t<0||t>=state.principal.length)return;
+  [state.principal[idx],state.principal[t]]=[state.principal[t],state.principal[idx]];
+  markDirty('principal'); renderPrincipal();
+}
+
+// Move stage cell up/down (swap with adjacent row, same stage)
+function moveStageCell(idx,sk,dir){
+  const t=idx+dir; if(t<0||t>=state.principal.length)return;
+  const a=state.principal[idx].stages[sk], b=state.principal[t].stages[sk];
+  state.principal[idx].stages[sk]={...b,inicio:a.inicio,fin:a.fin};
+  state.principal[t].stages[sk]={...a,inicio:b.inicio,fin:b.fin};
+  markDirty('principal'); renderPrincipal();
+}
+
+// Move stage cell left/right (swap with adjacent stage in same row)
+function moveStageHoriz(idx,sk,dir){
+  const si=STAGE_KEYS.indexOf(sk); const ti=si+dir;
+  if(ti<0||ti>=STAGE_KEYS.length)return;
+  const tsk=STAGE_KEYS[ti];
+  const a=state.principal[idx].stages[sk], b=state.principal[idx].stages[tsk];
+  // Swap speaker+tema+dur, keep timing
+  const tmpSp=a.speaker,tmpT=a.tema,tmpD=a.dur,tmpExt=a.durExt;
+  state.principal[idx].stages[sk].speaker=b.speaker; state.principal[idx].stages[sk].tema=b.tema; state.principal[idx].stages[sk].dur=b.dur; state.principal[idx].stages[sk].durExt=b.durExt||0;
+  state.principal[idx].stages[tsk].speaker=tmpSp; state.principal[idx].stages[tsk].tema=tmpT; state.principal[idx].stages[tsk].dur=tmpD; state.principal[idx].stages[tsk].durExt=tmpExt||0;
+  markDirty('principal'); renderPrincipal();
+}
+
+function delPrincipalRow(idx){ if(!confirm('¿Eliminar esta fila?'))return; state.principal.splice(idx,1); markDirty('principal'); renderPrincipal(); }
+
+function insertPrincipalRow(idx){
+  const prev=state.principal[idx];
+  const inicio=prev?(prev.stages[STAGE_KEYS[0]]?.fin||'09:00'):'09:00';
+  state.principal.splice(idx+1,0,newRow(inicio));
+  markDirty('principal'); renderPrincipal();
+}
+
+function addPrincipalRow(){
+  const last=state.principal[state.principal.length-1];
+  let inicio=document.getElementById('horaApertura').value||'09:00';
+  if(last){
+    // Use max fin of all stages in last row
+    let maxFin=0;
+    STAGE_KEYS.forEach(sk=>{ const f=timeToMin(last.stages[sk]?.fin||''); if(f>maxFin)maxFin=f; });
+    if(maxFin>0)inicio=minToTime(maxFin);
+  }
+  state.principal.push(newRow(inicio));
+  markDirty('principal'); renderPrincipal();
+}
+
+// ── TIME RECALC ───────────────────────────────────────────────────────
+function recalcAllTimes(){
+  const apertura=timeToMin(document.getElementById('horaApertura').value||'09:00');
+  STAGE_KEYS.forEach(sk=>{
+    let cur=apertura;
+    state.principal.forEach((row,i)=>{
+      const sd=row.stages[sk]||newStageData();
+      sd.inicio=minToTime(cur);
+      const dur=sd.dur||30;
+      cur+=dur;
+      sd.fin=minToTime(cur);
+      row.stages[sk]=sd;
+      // Update DOM if exists
+      const iniEl=document.getElementById(`ini-${i}-${sk}`);
+      const finEl=document.getElementById(`fin-${i}-${sk}`);
+      if(iniEl)iniEl.textContent=sd.inicio;
+      if(finEl)finEl.textContent=sd.fin;
+    });
+  });
+  updateGlobalProgress();
+}
+
+function recalcStageTimesFrom(sk,fromIdx){
+  let cur=fromIdx>0?timeToMin(state.principal[fromIdx-1]?.stages[sk]?.fin||'09:00'):timeToMin(document.getElementById('horaApertura').value||'09:00');
+  for(let i=fromIdx;i<state.principal.length;i++){
+    const sd=state.principal[i].stages[sk]||newStageData();
+    sd.inicio=minToTime(cur);
+    const dur=sd.dur||30;
+    cur+=dur;
+    sd.fin=minToTime(cur);
+    state.principal[i].stages[sk]=sd;
+    const iniEl=document.getElementById(`ini-${i}-${sk}`);
+    const finEl=document.getElementById(`fin-${i}-${sk}`);
+    if(iniEl)iniEl.textContent=sd.inicio;
+    if(finEl)finEl.textContent=sd.fin;
+  }
+  updateGlobalProgress();
+}
+
+function updateGlobalProgress(){
+  const ap=timeToMin(document.getElementById('horaApertura').value||'09:00');
+  const cl=timeToMin(document.getElementById('horaCierre').value||'20:00');
+  const total=cl-ap;
+  const hrs=(total/60).toFixed(1).replace(/\.0$/,'');
+  document.getElementById('totalMin').textContent=`${hrs} hs disponibles`;
+  buildStageProgressBars();
+}
+
+function buildStageProgressBars(){
+  const wrap=document.getElementById('stageProgressRow');
+  wrap.innerHTML='';
+  STAGE_KEYS.forEach((sk,i)=>{
+    const pct=calcStageAssignPct(i);
+    const fillClass=pct>=90?'full':pct<30&&state.principal.length>0?'low':'mid';
+    const div=document.createElement('div');
+    div.className='stage-prog-item';
+    div.innerHTML=`<div class="stage-prog-label">${esc(stageNames[i])}</div>
+      <div class="stage-prog-bar"><div class="stage-prog-fill ${fillClass}" style="width:${pct}%"></div></div>`;
+    wrap.appendChild(div);
+  });
+}
+
+// ── LOAD / SAVE PRINCIPAL ─────────────────────────────────────────────
+async function loadPrincipal(){
+  try{
+    const raw=await gasGet('Principal');
+    if(!raw||raw.length<2){state.principal=[];renderPrincipal();return;}
+    const[,...rows]=raw;
+    state.principal=rows.map(r=>{
+      const tipo=String(r[0]||'Charla');
+      const stages={};
+      STAGE_KEYS.forEach((sk,i)=>{
+        const base=1+i*6;
+        stages[sk]={
+          speaker:String(r[base]||''),
+          tema:String(r[base+1]||''),
+          dur:parseInt(r[base+2])||30,
+          inicio:String(r[base+3]||''),
+          fin:String(r[base+4]||''),
+          durExt:parseInt(r[base+5])||0
+        };
+      });
+      return {tipo,stages};
+    });
+    renderPrincipal(); return true;
+  }catch(e){toast('⚠️ Error al cargar: '+e.message,true);return false;}
+}
+
+async function savePrincipal(){
   if(!(await checkVersion('Principal')))return;
   const data=state.principal.map(r=>{
-    const row=[r.tipo,r.dur,r.inicio,r.fin,r.tema,r.bajada||'',r.detalle||''];
-    STAGE_KEYS.forEach(k=>row.push(r[k]||''));
+    const row=[r.tipo];
+    STAGE_KEYS.forEach(sk=>{
+      const sd=r.stages[sk]||newStageData();
+      row.push(sd.speaker||'',sd.tema||'',sd.dur||30,sd.inicio||'',sd.fin||'',sd.durExt||0);
+    });
     return row;
   });
   await gasPost('Principal','replace_all',data);
-  toast('✅ Agenda guardada'); markClean('principal'); refreshAll();
+  toast('✅ Agenda guardada'); markClean('principal');
 }
 
-// ══════════════════════════════════════════════════════════════════
-// SPEAKERS
-// ══════════════════════════════════════════════════════════════════
-function setSpFilter(key,val){
-  spFilter[key]=val;
-  document.querySelectorAll(`[data-filter-${key}]`).forEach(b=>{ const attr='filter'+key.charAt(0).toUpperCase()+key.slice(1); b.classList.toggle('active',b.dataset[attr]===val); });
+// ── CUSTOM TIPO ───────────────────────────────────────────────────────
+function addCustomTipo(e,inp){
+  if(e.key!=='Enter')return;
+  const v=inp.value.trim();
+  if(!v||TIPOS.includes(v)){inp.value='';return;}
+  TIPOS.push(v); TIPOS.sort(); inp.value='';
+  renderPrincipal();
+}
+
+// ── SPEAKERS ──────────────────────────────────────────────────────────
+function calcSpeakerAssignmentsText(nombre){
+  const assigns=getSpeakerAssignments(nombre);
+  if(!assigns.length)return '';
+  return assigns.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ');
+}
+
+function setSpFilter(val){
+  spFilterVal=val;
+  document.querySelectorAll('[data-flt]').forEach(b=>b.classList.toggle('active',b.dataset.flt===val));
   renderSpeakers();
 }
 
-function estadoSelectHtml(ri,val){
+function estadoSelectHtml(ri,val,isManual=false){
   const cls=val?'est-'+val:'est-empty';
-  return `<select class="sp-estado-sel ${cls}" onchange="updateSpeakerEstado(${ri},this.value)">
-    <option value="" ${val===''?'selected':''}>—</option>
-    <option value="invitado" ${val==='invitado'?'selected':''}>📩 Invitado</option>
-    <option value="pendiente" ${val==='pendiente'?'selected':''}>⏳ Pendiente</option>
-    <option value="confirmado" ${val==='confirmado'?'selected':''}>✅ Confirmado</option>
-    <option value="no_aprobado" ${val==='no_aprobado'?'selected':''}>❌ No aprobado</option>
+  const fn=isManual?`updateManualSpeaker`:`updateSpeakerEstado`;
+  return `<select class="sp-estado-sel ${cls}" onchange="${fn}(${ri},'estado',this.value)">
+    <option value=""${val===''?' selected':''}>—</option>
+    <option value="invitado"${val==='invitado'?' selected':''}>📩 Invitado</option>
+    <option value="pendiente"${val==='pendiente'?' selected':''}>⏳ Pendiente</option>
+    <option value="confirmado"${val==='confirmado'?' selected':''}>✅ Confirmado</option>
+    <option value="no_aprobado"${val==='no_aprobado'?' selected':''}>❌ No aprobado</option>
   </select>`;
 }
-function updateSpeakerEstado(ri,val){ if(state.speakers[ri]){state.speakers[ri].estado=val;markDirty('speakers');}renderSpeakers(); }
+function updateSpeakerEstado(ri,field,val){ if(state.speakers[ri])state.speakers[ri][field]=val; markDirty('speakers'); renderSpeakers(); }
+function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.speakersManual[ri][field]=val; markDirty('speakersManual'); }
 
-function renderSpeakers() {
+function renderSpeakers(){
   const tbody=document.getElementById('speakersTableBody'); if(!tbody)return;
+  const tColor={speaker:'var(--red)',empresa:'#facc15',sponsor:'#06b6d4'};
+  const tOpts=cur=>['speaker','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
+
+  let rows='';
   let list=state.speakers;
-  if(spFilter.tipo!=='all') list=list.filter(s=>(s.tipo||'speaker')===spFilter.tipo);
-  if(!list.length){ tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers${spFilter.tipo!=='all'?' con ese filtro':' cargados aún'}.</td></tr>`; return; }
-  const tipoColor={speaker:'var(--red)',empresa:'#facc15',sponsor:'#06b6d4'};
-  const tipoOpts2=cur=>['speaker','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
-  tbody.innerHTML=list.map(s=>{
+  if(spFilterVal==='manual'){
+    // Show only manual speakers
+    rows+=renderManualSpeakersRows();
+    tbody.innerHTML=rows||`<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers manuales.</td></tr>`;
+    return;
+  }
+  if(spFilterVal!=='all')list=list.filter(s=>(s.tipo||'speaker')===spFilterVal);
+  if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
+
+  list.forEach(s=>{
     const ri=state.speakers.indexOf(s), tipo=s.tipo||'speaker';
-    return `<tr>
-      <td><select class="sp-tipo-sel" style="color:${tipoColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tipoOpts2(tipo)}</select></td>
+    const assignText=calcSpeakerAssignmentsText(s.nombre||'');
+    rows+=`<tr>
+      <td><select class="sp-tipo-sel" style="color:${tColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tOpts(tipo)}</select></td>
       <td style="font-weight:700;white-space:nowrap"><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakers')">${esc(s.nombre||'')}</span></td>
       <td>${estadoSelectHtml(ri,s.estado||'')}</td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'stages',this.innerText.trim());markDirty('speakers')">${esc(s.stages||'')}</span></td>
+      <td style="font-size:11px;color:#888">${esc(assignText)}</td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'temas',this.innerText.trim());markDirty('speakers')">${esc(s.temas||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'contacto',this.innerText.trim());markDirty('speakers')">${esc(s.contacto||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'x',this.innerText.trim());markDirty('speakers')">${esc(s.x||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'ig',this.innerText.trim());markDirty('speakers')">${esc(s.ig||'')}</span></td>
+      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'mail',this.innerText.trim());markDirty('speakers')">${esc(s.mail||'')}</span></td>
+      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></td>
+      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></td>
+      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'signal',this.innerText.trim());markDirty('speakers')">${esc(s.signal||'')}</span></td>
+      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'linkedin',this.innerText.trim());markDirty('speakers')">${esc(s.linkedin||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></td>
-      <td><span class="sp-edit" style="color:var(--muted);font-size:12px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span></td>
+      <td><span class="sp-edit" style="color:var(--muted);font-size:11px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span></td>
       <td style="text-align:center"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
     </tr>`;
-  }).join('');
+  });
+
+  // Manual speakers section (only in 'all' view)
+  if(spFilterVal==='all'&&state.speakersManual.length){
+    rows+=`<tr><td colspan="13" style="padding:6px 8px;background:#111;font-size:11px;color:#eab308;font-weight:700">⚠️ Speakers manuales (datos incompletos)</td></tr>`;
+    rows+=renderManualSpeakersRows();
+  }
+
+  tbody.innerHTML=rows||`<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`;
 }
 
-function addSpeaker() {
+function renderManualSpeakersRows(){
+  let rows='';
+  state.speakersManual.forEach((s,ri)=>{
+    // Fuzzy match suggestion
+    let fuzzyRow='';
+    if(state.speakers.length){
+      let best=null,bestScore=0;
+      state.speakers.forEach(sp=>{
+        const sc=fuzzyMatch(s.nombre||'',sp.nombre||'');
+        if(sc>bestScore){bestScore=sc;best=sp;}
+      });
+      if(bestScore>=0.7&&best){
+        fuzzyRow=`<tr class="sp-fuzzy-row" onclick="mergeManualSpeaker(${ri},'${esc(best.nombre).replace(/'/g,"\\'")}')"><td colspan="13">→ ¿Es "${esc(best.nombre)}"? (${Math.round(bestScore*100)}% similitud) — Clic para relacionar</td></tr>`;
+      }
+    }
+    rows+=`<tr class="sp-manual-row">
+      <td><span style="color:#eab308;font-size:11px;font-weight:700">Manual</span></td>
+      <td style="font-weight:700;white-space:nowrap">
+        <span class="sp-edit" contenteditable="true" onblur="updateManualSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakersManual')">${esc(s.nombre||'')}</span>
+        <span class="sp-manual-badge">⚠️ Incompleto</span>
+      </td>
+      <td>—</td>
+      <td style="font-size:11px;color:#888">${esc(calcSpeakerAssignmentsText(s.nombre||''))}</td>
+      <td colspan="7"><span class="sp-edit" style="color:#888;font-size:11px" contenteditable="true" onblur="updateManualSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakersManual')">${esc(s.notas||'')}</span></td>
+      <td style="text-align:center"><button class="del-row" onclick="delManualSpeaker(${ri})">✕</button></td>
+    </tr>${fuzzyRow}`;
+  });
+  return rows;
+}
+
+function mergeManualSpeaker(ri,targetName){
+  if(!confirm(`¿Relacionar "${state.speakersManual[ri]?.nombre}" con "${targetName}"?\nSe elimina el speaker manual y los slots quedan asignados al speaker del sheet.`))return;
+  const oldName=state.speakersManual[ri].nombre;
+  // Replace in principal
+  state.principal.forEach(row=>STAGE_KEYS.forEach(sk=>{
+    if((row.stages[sk]?.speaker||'').trim()===oldName.trim())row.stages[sk].speaker=targetName;
+  }));
+  state.speakersManual.splice(ri,1);
+  markDirty('principal'); markDirty('speakersManual');
+  renderSpeakers(); renderPrincipal();
+  toast('✅ Speaker relacionado');
+}
+
+function addSpeaker(){
   const nombre=document.getElementById('sp-nombre').value.trim();
   if(!nombre){toast('⚠️ Nombre requerido',true);return;}
-  state.speakers.push({ nombre, tipo:document.getElementById('sp-tipo').value, contacto:document.getElementById('sp-contacto').value.trim(), x:document.getElementById('sp-x').value.trim(), ig:document.getElementById('sp-ig').value.trim(), empresa:document.getElementById('sp-empresa').value.trim(), stages:document.getElementById('sp-stages').value.trim(), temas:document.getElementById('sp-temas').value.trim(), notas:document.getElementById('sp-notas').value.trim(), estado:'' });
-  ['sp-nombre','sp-contacto','sp-x','sp-ig','sp-empresa','sp-stages','sp-temas','sp-notas'].forEach(id=>document.getElementById(id).value='');
+  state.speakers.push({
+    nombre, tipo:document.getElementById('sp-tipo').value,
+    mail:document.getElementById('sp-mail').value.trim(),
+    whatsapp:document.getElementById('sp-whatsapp').value.trim(),
+    telegram:document.getElementById('sp-telegram').value.trim(),
+    signal:document.getElementById('sp-signal').value.trim(),
+    linkedin:document.getElementById('sp-linkedin').value.trim(),
+    empresa:document.getElementById('sp-empresa').value.trim(),
+    temas:document.getElementById('sp-temas').value.trim(),
+    notas:document.getElementById('sp-notas').value.trim(),
+    estado:''
+  });
+  ['sp-nombre','sp-mail','sp-whatsapp','sp-telegram','sp-signal','sp-linkedin','sp-empresa','sp-temas','sp-notas'].forEach(id=>document.getElementById(id).value='');
   markDirty('speakers'); renderSpeakers(); toast('✅ Speaker agregado');
 }
-function updateSpeaker(ri,field,val){ if(state.speakers[ri])state.speakers[ri][field]=val; }
+function updateSpeaker(ri,field,val){ if(state.speakers[ri]){pushHistory();state.speakers[ri][field]=val;} }
 function delSpeaker(i){ if(!confirm('¿Eliminar este speaker?'))return; state.speakers.splice(i,1); markDirty('speakers'); renderSpeakers(); }
+function delManualSpeaker(i){ if(!confirm('¿Eliminar este speaker manual?'))return; state.speakersManual.splice(i,1); markDirty('speakersManual'); renderSpeakers(); }
 
-async function importarDelForm() {
+async function importarDelForm(){
   toast('⏳ Importando respuestas del Form…');
-  try {
-    const res=await fetch(GAS_URL+'?action=import_form_speakers');
-    const json=await res.json();
+  try{
+    const res=await fetch(GAS_URL+'?action=import_form_speakers'); const json=await res.json();
     if(!json.ok){toast('⚠️ '+(json.error||'Error al importar'),true);return;}
     toast(json.msg||'✅ Importación completa');
     if(json.imported>0){await loadSpeakers();markDirty('speakers');}
-  } catch(e){toast('⚠️ Error: '+e.message,true);}
+  }catch(e){toast('⚠️ Error: '+e.message,true);}
 }
 
-async function loadSpeakers() {
-  try {
+async function loadSpeakers(){
+  try{
     const raw=await gasGet('Speakers');
     if(!raw||raw.length<2){state.speakers=[];renderSpeakers();return;}
-    if(raw._version)versions.Speakers=raw._version;
     const[,...rows]=raw;
-    state.speakers=rows.map(r=>({ nombre:r[0]||'',tipo:r[1]||'speaker',contacto:r[2]||'',stages:r[3]||'',temas:r[4]||'',notas:r[5]||'',x:r[6]||'',ig:r[7]||'',empresa:r[8]||'',estado:r[9]||'' }));
+    // New schema: nombre, tipo, mail, whatsapp, telegram, signal, linkedin, stages, temas, empresa, notas, estado
+    state.speakers=rows.map(r=>({
+      nombre:String(r[0]||''),tipo:String(r[1]||'speaker'),
+      mail:String(r[2]||''),whatsapp:String(r[3]||''),
+      telegram:String(r[4]||''),signal:String(r[5]||''),
+      linkedin:String(r[6]||''),temas:String(r[8]||''),
+      empresa:String(r[9]||''),notas:String(r[10]||''),estado:String(r[11]||'')
+    }));
+    await loadManualSpeakers();
     renderSpeakers(); toast('✅ Speakers actualizados');
-  } catch(e){toast('⚠️ Error: '+e.message,true);}
+  }catch(e){toast('⚠️ Error speakers: '+e.message,true);}
 }
 
-async function saveSpeakers() {
+async function loadManualSpeakers(){
+  try{
+    const raw=await gasGet('SpeakerManual');
+    if(!raw||raw.length<2){state.speakersManual=[];return;}
+    const[,...rows]=raw;
+    state.speakersManual=rows.map(r=>({nombre:String(r[0]||''),notas:String(r[1]||''),fecha:String(r[2]||'')}));
+  }catch(e){ state.speakersManual=[]; }
+}
+
+async function saveSpeakers(){
   if(!(await checkVersion('Speakers')))return;
-  const data=state.speakers.map(s=>[s.nombre,s.tipo,s.contacto,s.stages||'',s.temas,s.notas,s.x||'',s.ig||'',s.empresa||'',s.estado||'']);
+  // Schema: nombre, tipo, mail, whatsapp, telegram, signal, linkedin, stages(calc), temas, empresa, notas, estado
+  const data=state.speakers.map(s=>[
+    s.nombre,s.tipo||'speaker',s.mail||'',s.whatsapp||'',
+    s.telegram||'',s.signal||'',s.linkedin||'',
+    calcSpeakerAssignmentsText(s.nombre||''),
+    s.temas||'',s.empresa||'',s.notas||'',s.estado||''
+  ]);
   await gasPost('Speakers','replace_all',data);
-  toast('✅ Speakers guardados'); markClean('speakers'); refreshAll();
+  // Also save manual if dirty
+  if(dirty.speakersManual){
+    await gasPost('SpeakerManual','replace_all',state.speakersManual.map(s=>[s.nombre,s.notas||'',s.fecha||'']));
+    markClean('speakersManual');
+  }
+  toast('✅ Speakers guardados'); markClean('speakers');
 }
 
-// ══════════════════════════════════════════════════════════════════
-// RESUMEN
-// ══════════════════════════════════════════════════════════════════
-function buildResumen() {
+// ── RESUMEN ───────────────────────────────────────────────────────────
+function buildResumen(){
   const wrap=document.getElementById('resumenWrap');
   if(!state.principal.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">📊</div>Cargá datos en Agenda primero.</div>';return;}
-  const ap=timeToMin(document.getElementById('horaApertura').value||'09:00');
-  const cl=timeToMin(document.getElementById('horaCierre').value||'20:00');
-  const totalDay=cl-ap;
 
-  let html=`<div class="tl-section-title">📊 Resumen por Stage — 1 Nov 2026</div><div class="tl-stage-cards">`;
-
-  STAGE_KEYS.forEach((k,i)=>{
+  let html=`<div class="tl-section-title">📊 Resumen por Stage</div><div class="tl-stage-cards">`;
+  STAGE_KEYS.forEach((sk,i)=>{
     const sname=stageNames[i]||('Stage '+(i+1));
-    let asignados=0,libres=0,minUsados=0;
-    state.principal.forEach(r=>{ minUsados+=durVal(r.dur)||0; if((r[k]||'').trim())asignados++;else libres++; });
-    const spEnStage=state.speakers.filter(s=>(s.stages||'').toLowerCase().includes(sname.toLowerCase()));
-    const confirmados=spEnStage.filter(s=>s.estado==='confirmado').length;
-    const pendientes=spEnStage.filter(s=>s.estado==='pendiente').length;
-    const pct=totalDay>0?Math.min(100,Math.round(asignados/Math.max(state.principal.length,1)*100)):0;
-    html+=`<div class="tl-stage-card">
-      <div class="tl-stage-name">${esc(sname)}</div>
-      <div class="tl-stat-row"><span class="tl-stat-label">Bloques totales</span><span class="tl-stat-val">${state.principal.length}</span></div>
-      <div class="tl-stat-row"><span class="tl-stat-label">Ocupados</span><span class="tl-stat-val ok">${asignados}</span></div>
-      <div class="tl-stat-row"><span class="tl-stat-label">Libres</span><span class="tl-stat-val ${libres>0?'warn':'ok'}">${libres}</span></div>
+    let assigned=0;
+    state.principal.forEach(r=>{ if((r.stages[sk]?.speaker||'').trim())assigned++; });
+    const libre=state.principal.length-assigned;
+    const pct=state.principal.length>0?Math.round(assigned/state.principal.length*100):0;
+    const spEnStage=state.speakers.filter(s=>(calcSpeakerAssignmentsText(s.nombre||'')).includes(sname));
+    const confirmados=state.speakers.filter(s=>s.estado==='confirmado'&&getSpeakerAssignments(s.nombre||'').some(a=>a.sk===sk)).length;
+    const pendientes=state.speakers.filter(s=>s.estado==='pendiente'&&getSpeakerAssignments(s.nombre||'').some(a=>a.sk===sk)).length;
+    const hasConflict=detectConflictsForStage(i);
+    html+=`<div class="tl-stage-card"${pct>=90?' style="border-color:#22c55e"':pct<30&&state.principal.length>0?' style="border-color:#f97316"':''}>
+      <div class="tl-stage-name">${hasConflict?'⚠️ ':''} ${esc(sname)}</div>
+      <div class="tl-stat-row"><span class="tl-stat-label">Total bloques</span><span class="tl-stat-val">${state.principal.length}</span></div>
+      <div class="tl-stat-row"><span class="tl-stat-label">Ocupados</span><span class="tl-stat-val ok">${assigned}</span></div>
+      <div class="tl-stat-row"><span class="tl-stat-label">Libres</span><span class="tl-stat-val ${libre>0?'warn':'ok'}">${libre}</span></div>
       <div class="tl-stat-row"><span class="tl-stat-label">✅ Confirmados</span><span class="tl-stat-val ok">${confirmados}</span></div>
       <div class="tl-stat-row"><span class="tl-stat-label">⏳ Pendientes</span><span class="tl-stat-val ${pendientes>0?'warn':''}">${pendientes}</span></div>
+      <div class="tl-stat-row"><span class="tl-stat-label">Ocupación</span><span class="tl-stat-val">${pct}%</span></div>
     </div>`;
   });
   html+='</div>';
 
-  // Conflictos: mismo speaker en 2+ stages en el mismo horario
-  const conflicts=[];
-  state.principal.forEach(r=>{
+  // Conflictos mismo slot
+  const conflictsSame=[];
+  state.principal.forEach((r,ri)=>{
     const spMap={};
-    STAGE_KEYS.forEach((k,i)=>{ const sp=(r[k]||'').trim(); if(!sp)return; if(!spMap[sp])spMap[sp]=[]; spMap[sp].push(stageNames[i]); });
-    Object.entries(spMap).forEach(([sp,stages])=>{ if(stages.length>=2)conflicts.push({horario:`${r.inicio||'—'} → ${r.fin||'—'}`,tema:r.tema||'(sin tema)',speaker:sp,stages:stages.join(', ')}); });
+    STAGE_KEYS.forEach((sk,i)=>{ const sp=(r.stages[sk]?.speaker||'').trim(); if(!sp)return; if(!spMap[sp])spMap[sp]=[]; spMap[sp].push({sk,sname:stageNames[i]}); });
+    Object.entries(spMap).forEach(([sp,entries])=>{ if(entries.length>=2)conflictsSame.push({horario:`${r.stages[STAGE_KEYS[0]]?.inicio||'—'}`,speaker:sp,stages:entries.map(e=>e.sname).join(', ')}); });
   });
 
-  html+=`<div class="tl-section-title" style="margin-top:8px">⚠️ Conflictos de speakers</div><div class="tl-conflict-wrap">`;
-  if(!conflicts.length){
-    html+=`<div class="tl-no-conflict">✅ Sin conflictos detectados</div>`;
-  } else {
-    html+=`<table class="tl-conflict-table"><thead><tr><th>Horario</th><th>Tema</th><th>Speaker</th><th>Stages en conflicto</th></tr></thead><tbody>
-      ${conflicts.map(c=>`<tr><td style="white-space:nowrap;font-weight:700;color:#ef4444">${esc(c.horario)}</td><td>${esc(c.tema)}</td><td style="font-weight:700;color:var(--red)">${esc(c.speaker)}</td><td style="color:#ef4444">${esc(c.stages)}</td></tr>`).join('')}
-    </tbody></table>`;
+  // Conflictos consecutivos
+  const conflictsConsec=[];
+  for(let i=0;i<state.principal.length-1;i++){
+    const rowA=state.principal[i], rowB=state.principal[i+1];
+    const spA=new Set(STAGE_KEYS.map(sk=>(rowA.stages[sk]?.speaker||'').trim()).filter(Boolean));
+    STAGE_KEYS.forEach(sk=>{ const sp=(rowB.stages[sk]?.speaker||'').trim(); if(sp&&spA.has(sp))conflictsConsec.push({row1:i+1,row2:i+2,speaker:sp,hora:rowA.stages[sk]?.fin||'—'}); });
   }
+
+  html+=`<div class="tl-section-title" style="margin-top:12px">⚠️ Conflictos — Mismo slot</div><div class="tl-conflict-wrap">`;
+  if(!conflictsSame.length)html+=`<div class="tl-no-conflict">✅ Sin conflictos de mismo slot</div>`;
+  else html+=`<table class="tl-conflict-table"><thead><tr><th>Hora</th><th>Speaker</th><th>Stages en conflicto</th></tr></thead><tbody>${conflictsSame.map(c=>`<tr><td style="white-space:nowrap;color:#ef4444;font-weight:700">${esc(c.horario)}</td><td style="color:var(--red);font-weight:700">${esc(c.speaker)}</td><td style="color:#ef4444">${esc(c.stages)}</td></tr>`).join('')}</tbody></table>`;
   html+='</div>';
+
+  html+=`<div class="tl-section-title" style="margin-top:12px">🟠 Conflictos — Slots consecutivos</div><div class="tl-conflict-wrap">`;
+  if(!conflictsConsec.length)html+=`<div class="tl-no-conflict">✅ Sin conflictos consecutivos</div>`;
+  else html+=`<table class="tl-conflict-table"><thead><tr><th>Filas</th><th>Speaker</th><th>Sin tiempo de traslado</th></tr></thead><tbody>${conflictsConsec.map(c=>`<tr><td style="color:#f97316;font-weight:700">Fila ${c.row1}→${c.row2}</td><td style="color:var(--red);font-weight:700">${esc(c.speaker)}</td><td style="color:#f97316">⚠️ Fin ~${esc(c.hora)}</td></tr>`).join('')}</tbody></table>`;
+  html+='</div>';
+
+  // Alta carga (más de 1 asignación)
+  const highLoad=[];
+  const allSpeakers=[...new Set([...state.speakers.map(s=>s.nombre),...state.speakersManual.map(s=>s.nombre)].filter(Boolean))];
+  allSpeakers.forEach(nombre=>{
+    const a=getSpeakerAssignments(nombre);
+    if(a.length>1)highLoad.push({nombre,count:a.length,assigns:a.map(x=>`${stageNames[STAGE_KEYS.indexOf(x.sk)]||x.sk} ${x.inicio}`).join(', ')});
+  });
+  highLoad.sort((a,b)=>b.count-a.count);
+
+  html+=`<div class="tl-section-title" style="margin-top:12px">📍 Alta carga (más de 1 asignación)</div>`;
+  if(!highLoad.length)html+=`<div class="tl-no-conflict">✅ Sin speakers con múltiples asignaciones</div>`;
+  else html+=`<div style="overflow:auto"><table class="tl-high-load"><thead><tr><th>Speaker</th><th>Asignaciones</th><th>Detalle</th></tr></thead><tbody>${highLoad.map(h=>`<tr><td style="font-weight:700">${esc(h.nombre)}</td><td style="text-align:center;font-weight:700;color:#c084fc">${h.count}</td><td style="font-size:12px;color:#888">${esc(h.assigns)}</td></tr>`).join('')}</tbody></table></div>`;
+
   wrap.innerHTML=html;
 }
 
-// ══════════════════════════════════════════════════════════════════
-// IDEAS
-// ══════════════════════════════════════════════════════════════════
-function renderIdeas() {
+// ── IDEAS ─────────────────────────────────────────────────────────────
+function renderIdeas(){
   const wrap=document.getElementById('ideasList');
   if(!state.ideas.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">💡</div>No hay ideas aún.</div>';return;}
-  wrap.innerHTML=`<table class="ideas-table"><thead><tr><th>Idea</th><th>Quién</th><th>Detalle</th><th style="width:36px"></th></tr></thead><tbody>
-    ${state.ideas.map((idea,i)=>`<tr><td style="font-weight:700;white-space:nowrap">${esc(idea.titulo)}</td><td style="white-space:nowrap;color:var(--red)">${esc(idea.prop||'—')}</td><td style="color:var(--muted)">${esc(idea.detalle||'')}</td><td><button class="idea-del" onclick="delIdea(${i})">✕</button></td></tr>`).join('')}
+  wrap.innerHTML=`<table class="ideas-table"><thead><tr><th>Idea</th><th>Quién</th><th>Detalle</th><th style="width:32px"></th></tr></thead><tbody>
+    ${state.ideas.map((idea,i)=>`<tr>
+      <td style="font-weight:700;white-space:nowrap">${esc(idea.titulo)}</td>
+      <td style="white-space:nowrap;color:var(--red)">${esc(idea.prop||'—')}</td>
+      <td style="color:var(--muted)">${esc(idea.detalle||'')}</td>
+      <td><button class="idea-del" onclick="delIdea(${i})">✕</button></td>
+    </tr>`).join('')}
   </tbody></table>`;
 }
 function addIdea(){ const t=document.getElementById('idea-titulo').value.trim(); if(!t){toast('⚠️ Título requerido',true);return;} state.ideas.push({titulo:t,prop:document.getElementById('idea-prop').value.trim(),detalle:document.getElementById('idea-detalle').value.trim()}); ['idea-titulo','idea-prop','idea-detalle'].forEach(id=>document.getElementById(id).value=''); markDirty('ideas');renderIdeas();toast('✅ Idea agregada'); }
 function delIdea(i){ state.ideas.splice(i,1);markDirty('ideas');renderIdeas(); }
 
-async function loadIdeas() {
-  try { const raw=await gasGet('Ideas'); if(!raw||raw.length<2){state.ideas=[];renderIdeas();return;} if(raw._version)versions.Ideas=raw._version; const[,...rows]=raw; state.ideas=rows.map(r=>({titulo:r[0]||'',prop:r[1]||'',detalle:r[2]||''})); renderIdeas(); } catch(e){toast('⚠️ Error: '+e.message,true);}
+async function loadIdeas(){
+  try{ const raw=await gasGet('Ideas'); if(!raw||raw.length<2){state.ideas=[];renderIdeas();return;} const[,...rows]=raw; state.ideas=rows.map(r=>({titulo:String(r[0]||''),prop:String(r[1]||''),detalle:String(r[2]||'')})); renderIdeas(); }
+  catch(e){toast('⚠️ Error ideas: '+e.message,true);}
 }
-async function saveIdeas() {
+async function saveIdeas(){
   if(!(await checkVersion('Ideas')))return;
   await gasPost('Ideas','replace_all',state.ideas.map(i=>[i.titulo,i.prop||'',i.detalle||'']));
-  toast('✅ Ideas guardadas');markClean('ideas');
+  toast('✅ Ideas guardadas'); markClean('ideas');
 }
 
-// ══════════════════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════════════════
+// ── STATUS ────────────────────────────────────────────────────────────
 function setStatus(ok){ document.getElementById('statusDot').style.background=ok?'#22c55e':'#ef4444'; document.getElementById('statusTxt').textContent=ok?'En línea':'Sin conexión'; }
-function refreshAll(){ renderPrincipal();renderSpeakers();renderIdeas(); if(document.getElementById('tab-resumen').classList.contains('active'))buildResumen(); }
 
-async function init() {
-  loadStageNames();
+// ── LOAD ALL ──────────────────────────────────────────────────────────
+async function loadAll(){
   setStatus(false);
-  try {
-    const[okP,okS,okI]=await Promise.all([loadPrincipal(),loadSpeakers().then(()=>true).catch(()=>false),loadIdeas().then(()=>true).catch(()=>false)]);
+  try{
+    await Promise.all([loadPrincipal(),loadSpeakers(),loadIdeas()]);
     setStatus(true);
-  } catch(e){ setStatus(false); toast('⚠️ Sin conexión al servidor',true); renderPrincipal();renderSpeakers();renderIdeas(); }
+  }catch(e){
+    setStatus(false); toast('⚠️ Sin conexión al servidor',true);
+    renderPrincipal(); renderSpeakers(); renderIdeas();
+  }
+}
+
+// ── UNDO / REDO ───────────────────────────────────────────────────────
+let _history = [], _histIdx = -1;
+function pushHistory() {
+  _history = _history.slice(0, _histIdx + 1);
+  _history.push(JSON.stringify(state));
+  if (_history.length > 20) _history.shift();
+  _histIdx = _history.length - 1;
+}
+function refreshAll() {
+  renderPrincipal();
+  renderSpeakers();
+  renderIdeas();
+  renderKanban();
+}
+function undo() {
+  if (_histIdx <= 0) { toast('Nada que deshacer'); return; }
+  _histIdx--;
+  state = JSON.parse(_history[_histIdx]);
+  refreshAll(); toast('↩️ Deshecho');
+}
+function redo() {
+  if (_histIdx >= _history.length - 1) { toast('Nada que rehacer'); return; }
+  _histIdx++;
+  state = JSON.parse(_history[_histIdx]);
+  refreshAll(); toast('↪️ Rehecho');
+}
+
+// ── MULTI-DÍA ─────────────────────────────────────────────────────────
+let currentDay = 1;
+function switchDay(d) {
+  if (d === currentDay) return;
+  if (dirty.principal && !confirm('Hay cambios sin guardar en la agenda. ¿Guardar antes de cambiar de día?')) {
+    // save first
+    savePrincipal().then(() => _doSwitchDay(d));
+    return;
+  }
+  _doSwitchDay(d);
+}
+function _doSwitchDay(d) {
+  currentDay = d;
+  [1,2,3].forEach(n => {
+    const b = document.getElementById('dayBtn' + n);
+    if (!b) return;
+    if (n === d) {
+      b.style.background = 'var(--red-dim)';
+      b.style.borderColor = 'var(--red)';
+      b.style.color = 'var(--red)';
+    } else {
+      b.style.background = 'var(--bg3)';
+      b.style.borderColor = 'var(--border)';
+      b.style.color = 'var(--text)';
+    }
+  });
+  loadPrincipalDay();
+}
+async function loadPrincipalDay() {
+  const sheetName = currentDay === 1 ? 'Principal' : `Principal_D${currentDay}`;
+  toast(`⏳ Cargando Día ${currentDay}…`);
+  try {
+    const raw = await gasGet(sheetName);
+    if (!raw || raw.length < 2) { state.principal = []; renderPrincipal(); toast(`Día ${currentDay}: sin datos`); return; }
+    const [,...rows] = raw;
+    state.principal = rows.map(r => {
+      const tipo = String(r[0] || 'Charla');
+      const stages = {};
+      STAGE_KEYS.forEach((sk, i) => {
+        const base = 1 + i * 6;
+        stages[sk] = {
+          speaker: String(r[base] || ''),
+          tema: String(r[base+1] || ''),
+          dur: parseInt(r[base+2]) || 30,
+          inicio: String(r[base+3] || ''),
+          fin: String(r[base+4] || ''),
+          durExt: parseInt(r[base+5]) || 0
+        };
+      });
+      return { tipo, stages };
+    });
+    renderPrincipal();
+    toast(`✅ Día ${currentDay} cargado`);
+  } catch(e) { toast('⚠️ Error al cargar día: ' + e.message, true); }
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────────────
+function exportCSV() {
+  const headers = ['Nombre','Tipo','Estado','Stage','Temas','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas'];
+  const rows = state.speakers.map(s =>
+    [s.nombre, s.tipo, s.estado||'', calcSpeakerAssignmentsText(s.nombre||''), s.temas||'', s.mail||'', s.whatsapp||'', s.telegram||'', s.signal||'', s.linkedin||'', s.empresa||'', s.notas||'']
+    .map(v => `"${String(v||'').replace(/"/g,'""')}"`)
+  );
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,﻿' + encodeURIComponent(csv);
+  a.download = 'speakers_labitconf2026.csv';
+  a.click();
+}
+
+// ── EXPORT ICAL ───────────────────────────────────────────────────────
+function exportICal() {
+  const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//LABITCONF 2026//ES'];
+  state.principal.forEach((row) => {
+    STAGE_KEYS.forEach((k, si) => {
+      const sd = row.stages && row.stages[k];
+      const speaker = sd ? (sd.speaker || '') : '';
+      if (!speaker) return;
+      const tema = sd.tema || '';
+      const inicio = sd.inicio || '09:00';
+      const fin = sd.fin || '09:30';
+      const stageName = stageNames[si] || ('Stage ' + (si + 1));
+      lines.push('BEGIN:VEVENT');
+      lines.push('SUMMARY:' + speaker + (tema ? ' — ' + tema : ''));
+      lines.push('LOCATION:' + stageName);
+      lines.push('DESCRIPTION:' + (row.tipo || ''));
+      lines.push('DTSTART:20261101T' + inicio.replace(':', '') + '00');
+      lines.push('DTEND:20261101T' + fin.replace(':', '') + '00');
+      lines.push('END:VEVENT');
+    });
+  });
+  lines.push('END:VCALENDAR');
+  const a = document.createElement('a');
+  a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(lines.join('\r\n'));
+  a.download = 'labitconf2026.ics';
+  a.click();
+}
+
+// ── COMMAND PALETTE ───────────────────────────────────────────────────
+function openCommandPalette() {
+  const p = document.getElementById('cmdPalette');
+  p.style.display = 'flex';
+  document.getElementById('cmdInput').value = '';
+  filterCmd('');
+  setTimeout(() => document.getElementById('cmdInput').focus(), 50);
+}
+document.getElementById('cmdPalette').addEventListener('click', e => {
+  if (e.target === document.getElementById('cmdPalette')) document.getElementById('cmdPalette').style.display = 'none';
+});
+function filterCmd(q) {
+  q = (q || '').toLowerCase().trim();
+  const res = [];
+  state.speakers.filter(s => !q || [s.nombre, s.temas, s.empresa].join(' ').toLowerCase().includes(q)).slice(0, 8).forEach(s => {
+    res.push(`<div onclick="switchTab('speakers');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
+      <span style="color:#dc2626;font-weight:700">🎙️</span>
+      <div><div style="font-weight:700;color:#fff">${esc(s.nombre)}</div><div style="font-size:12px;color:#888">${esc(s.temas||'')}</div></div>
+    </div>`);
+  });
+  state.principal.forEach(row => {
+    const tema = row.stages && row.stages.s1 ? (row.stages.s1.tema || '') : '';
+    if (!q || tema.toLowerCase().includes(q) || (row.tipo||'').toLowerCase().includes(q)) {
+      const inicio = row.stages && row.stages.s1 ? (row.stages.s1.inicio || '') : '';
+      const fin2 = row.stages && row.stages.s1 ? (row.stages.s1.fin || '') : '';
+      res.push(`<div onclick="switchTab('principal');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
+        <span style="color:#6366f1;font-weight:700">📋</span>
+        <div><div style="font-weight:700;color:#fff">${esc(tema||'(sin tema)')}</div><div style="font-size:12px;color:#888">${esc(row.tipo||'')} · ${esc(inicio)} → ${esc(fin2)}</div></div>
+      </div>`);
+    }
+  });
+  if (!res.length) res.push(`<div style="padding:20px;text-align:center;color:#444">Sin resultados</div>`);
+  document.getElementById('cmdResults').innerHTML = res.slice(0, 12).join('');
+}
+
+// ── AGENDA FILTERS ────────────────────────────────────────────────────
+let agendaFilters = { tipo: '', stage: '', q: '' };
+let _agendaFiltersVisible = false;
+
+function toggleAgendaFilters() {
+  _agendaFiltersVisible = !_agendaFiltersVisible;
+  const el = document.getElementById('agendaFilterBar');
+  if (el) el.style.display = _agendaFiltersVisible ? 'flex' : 'none';
+}
+
+function applyAgendaFilters() {
+  agendaFilters.tipo = document.getElementById('afTipo')?.value || '';
+  agendaFilters.q = (document.getElementById('afQ')?.value || '').toLowerCase().trim();
+  renderPrincipal();
+}
+
+function clearAgendaFilters() {
+  agendaFilters = { tipo: '', stage: '', q: '' };
+  const t = document.getElementById('afTipo'); if (t) t.value = '';
+  const q = document.getElementById('afQ'); if (q) q.value = '';
+  renderPrincipal();
+}
+
+// ── HEATMAP ───────────────────────────────────────────────────────────
+function buildHeatmap() {
+  const ap = timeToMin(document.getElementById('horaApertura')?.value || '09:00');
+  const cl = timeToMin(document.getElementById('horaCierre')?.value || '20:00');
+  const slots = Math.ceil((cl - ap) / 30);
+  if (slots <= 0) return;
+  const counts = Array(slots).fill(0);
+  state.principal.forEach(row => {
+    const ini = timeToMin(row.stages?.s1?.inicio || '09:00');
+    const fin = timeToMin(row.stages?.s1?.fin || '09:30');
+    const stagesWithSpeaker = STAGE_KEYS.filter(k => {
+      const v = row.stages && row.stages[k];
+      return v && (v.speaker || '');
+    }).length;
+    for (let s = 0; s < slots; s++) {
+      const slotStart = ap + s * 30, slotEnd = slotStart + 30;
+      if (ini < slotEnd && fin > slotStart) {
+        counts[s] = Math.max(counts[s], stagesWithSpeaker);
+      }
+    }
+  });
+  const max = 9;
+  const html = counts.map((c, i) => {
+    const pct = c / max;
+    const g = Math.round(34 + pct * 168);
+    const r = Math.round(pct * 220);
+    const color = `rgb(${r},${g},34)`;
+    const time = minToTime(ap + i * 30);
+    return `<div title="${time}: ${c}/9 stages" style="flex:1;min-width:6px;height:20px;background:${c ? color : '#111'};border-radius:2px;cursor:default"></div>`;
+  }).join('');
+  const el = document.getElementById('heatmapRow');
+  if (el) el.innerHTML = html;
+}
+
+// ── STAGE SEMAPHORE ───────────────────────────────────────────────────
+function buildStageSemaphore() {
+  const wrap = document.getElementById('stageSemaphoreRow');
+  if (!wrap) return;
+  const total = state.principal.length;
+  wrap.innerHTML = STAGE_KEYS.map((sk, i) => {
+    const assigned = total ? state.principal.filter(r => (r.stages[sk]?.speaker || '').trim()).length : 0;
+    const pct = total ? Math.round(assigned / total * 100) : 0;
+    const color = pct >= 80 ? '#22c55e' : pct >= 50 ? '#eab308' : '#ef4444';
+    const name = (stageNames[i] || ('Stage ' + (i + 1))).slice(0, 8);
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;padding:3px 6px;border-radius:6px;border:1px solid ${color}22;background:${color}11">
+      <span style="font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:50px">${esc(name)}</span>
+      <span style="font-size:11px;font-weight:700;color:${color}">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+// ── KANBAN ────────────────────────────────────────────────────────────
+const KANBAN_COLS = ['invitado','pendiente','confirmado','listo'];
+const KANBAN_LABELS = { invitado:'📩 Invitado', pendiente:'⏳ Pendiente', confirmado:'✅ Confirmado', listo:'🟢 Listo/Briefeado' };
+const KANBAN_COLORS = { invitado:'#3b82f6', pendiente:'#eab308', confirmado:'#22c55e', listo:'#a78bfa' };
+
+function renderKanban() {
+  const board = document.getElementById('kanbanBoard');
+  if (!board) return;
+  // Group speakers by estado
+  const groups = {};
+  KANBAN_COLS.forEach(c => groups[c] = []);
+  state.speakers.forEach((s, i) => {
+    const est = s.estado === 'no_aprobado' ? null : (s.estado || 'invitado');
+    if (est && groups[est]) groups[est].push({ s, i });
+    else if (!est) groups['invitado'].push({ s, i });
+  });
+
+  board.innerHTML = KANBAN_COLS.map(col => {
+    const color = KANBAN_COLORS[col];
+    const cards = (groups[col] || []).map(({ s, i }) => {
+      const temas = (s.temas || '').split(',').filter(Boolean).map(t =>
+        `<span style="display:inline-block;background:${color}22;color:${color};border-radius:4px;padding:1px 6px;font-size:10px;margin:1px">${esc(t.trim())}</span>`
+      ).join('');
+      const assign = calcSpeakerAssignmentsText(s.nombre || '');
+      return `<div draggable="true"
+        ondragstart="kanbanDragStart(event,${i})"
+        style="background:#1a1a1a;border:1px solid ${color}44;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;user-select:none">
+        <div style="font-weight:700;color:#fff;margin-bottom:3px">${esc(s.nombre || '')}</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">${esc(s.tipo || 'speaker')}</div>
+        ${temas ? `<div style="margin-bottom:4px">${temas}</div>` : ''}
+        ${assign ? `<div style="font-size:10px;color:#f97316">📍 ${esc(assign)}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    return `<div style="flex:1;min-width:200px;max-width:280px;display:flex;flex-direction:column;"
+      ondragover="event.preventDefault()"
+      ondrop="kanbanDrop(event,'${col}')">
+      <div style="font-weight:700;font-size:13px;color:${color};margin-bottom:10px;padding:6px 10px;background:${color}18;border-radius:8px;border:1px solid ${color}44">
+        ${KANBAN_LABELS[col]} <span style="float:right;opacity:.7">${(groups[col]||[]).length}</span>
+      </div>
+      <div style="flex:1;min-height:80px;padding:4px;background:#0a0a0a;border-radius:8px;border:1px dashed #2d2d2d">
+        ${cards || '<div style="color:#444;font-size:12px;text-align:center;padding:20px">Vacío</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let _kanbanDragIdx = null;
+function kanbanDragStart(e, idx) {
+  _kanbanDragIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+}
+function kanbanDrop(e, newEstado) {
+  e.preventDefault();
+  if (_kanbanDragIdx === null) return;
+  const map = { listo: 'confirmado' }; // 'listo' stored as 'confirmado' variant — use as-is
+  state.speakers[_kanbanDragIdx].estado = newEstado === 'listo' ? 'listo' : newEstado;
+  markDirty('speakers');
+  _kanbanDragIdx = null;
+  renderKanban();
+  renderSpeakers();
+  toast('✅ Estado actualizado');
+}
+
+// ── CLOSE ALL DROPS ───────────────────────────────────────────────────
+function closeAllSpDrops() { closeSpDrop(); }
+
+// ── AUTO-SAVE ─────────────────────────────────────────────────────────
+setInterval(() => {
+  if (dirty.principal) savePrincipal();
+  if (dirty.speakers) saveSpeakers();
+  if (dirty.ideas) saveIdeas();
+}, 3 * 60 * 1000);
+
+// ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') return;
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    const activeTab = document.querySelector('.tab-btn.active')?.dataset?.tab;
+    if (activeTab === 'principal') savePrincipal();
+    else if (activeTab === 'speakers') saveSpeakers();
+    else if (activeTab === 'ideas') saveIdeas();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openCommandPalette(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === '1') { e.preventDefault(); switchTab('principal'); }
+  if ((e.ctrlKey || e.metaKey) && e.key === '2') { e.preventDefault(); switchTab('speakers'); }
+  if ((e.ctrlKey || e.metaKey) && e.key === '3') { e.preventDefault(); switchTab('resumen'); }
+  if ((e.ctrlKey || e.metaKey) && e.key === '4') { e.preventDefault(); switchTab('ideas'); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'z'))) { e.preventDefault(); redo(); }
+  if (e.key === 'Escape') {
+    closeAllSpDrops();
+    document.getElementById('cmdPalette').style.display = 'none';
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────
+async function init(){
+  buildTableHeaders();
+  buildStageProgressBars();
+  renderPrincipal();
+  pushHistory();
+  await loadAll();
 }
 
 init();

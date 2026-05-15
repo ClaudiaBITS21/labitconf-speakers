@@ -11,7 +11,7 @@
  * Para importar al LABITCONF Sheet: botón "📥 Importar del Form" en la pestaña Speakers.
  */
 
-const LAB_SHEET_ID = 'REEMPLAZAR_CON_ID_DEL_SHEET';
+const LAB_SHEET_ID = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
 
 // Tipos que NO son charlas (se excluyen del desplegable de temas)
 const TIPOS_EXCLUIDOS = ['Kahoot', 'Break', 'Almuerzo', 'Apertura', 'Cierre', 'Premios', 'Sorteo', 'Concurso'];
