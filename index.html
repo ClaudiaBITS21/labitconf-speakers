@@ -363,7 +363,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <h3>+ Agregar Speaker</h3>
       <div class="form-grid">
         <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="sp-nombre" placeholder="Nombre completo"></div>
-        <div class="form-field"><label class="form-label">Tipo</label><select class="form-select" id="sp-tipo"><option value="speaker">Speaker</option><option value="empresa">Empresa</option><option value="sponsor">Sponsor</option></select></div>
+        <div class="form-field"><label class="form-label">Tipo</label><select class="form-select" id="sp-tipo"><option value="speaker">Speaker</option><option value="moderador">Moderador</option><option value="empresa">Empresa</option><option value="sponsor">Sponsor</option></select></div>
         <div class="form-field"><label class="form-label">Mail</label><input class="form-input" id="sp-mail" placeholder="mail@ejemplo.com"></div>
         <div class="form-field"><label class="form-label">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="+54 9 …"></div>
         <div class="form-field"><label class="form-label">Telegram</label><input class="form-input" id="sp-telegram" placeholder="@usuario"></div>
@@ -378,6 +378,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div class="sp-filter-bar">
       <button class="btn sp-flt active" onclick="setSpFilter('all')" data-flt="all">Todos</button>
       <button class="btn sp-flt" onclick="setSpFilter('speaker')" data-flt="speaker">Speaker</button>
+      <button class="btn sp-flt" onclick="setSpFilter('moderador')" data-flt="moderador" style="color:#a78bfa">Moderador</button>
       <button class="btn sp-flt" onclick="setSpFilter('empresa')" data-flt="empresa">Empresa</button>
       <button class="btn sp-flt" onclick="setSpFilter('sponsor')" data-flt="sponsor">Sponsor</button>
       <button class="btn sp-flt" onclick="setSpFilter('manual')" data-flt="manual">⚠️ Manuales</button>
@@ -1148,8 +1149,8 @@ function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.sp
 
 function renderSpeakers(){
   const tbody=document.getElementById('speakersTableBody'); if(!tbody)return;
-  const tColor={speaker:'var(--red)',empresa:'#facc15',sponsor:'#06b6d4'};
-  const tOpts=cur=>['speaker','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
+  const tColor={speaker:'var(--red)',moderador:'#a78bfa',empresa:'#facc15',sponsor:'#06b6d4'};
+  const tOpts=cur=>['speaker','moderador','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
 
   let rows='';
   let list=state.speakers;
