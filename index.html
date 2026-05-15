@@ -264,6 +264,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="resumen" onclick="switchTab('resumen')">📊 Resumen</button>
   <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">💡 Ideas</button>
   <button class="tab-btn" data-tab="kanban" onclick="switchTab('kanban')">🗂️ Kanban</button>
+  <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
     <button id="dayBtn1" class="btn" style="padding:3px 10px;font-size:15px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(1)">1</button>
@@ -441,6 +442,14 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <div id="kanbanBoard" style="display:flex;gap:16px;padding:18px;overflow-x:auto;min-height:calc(100vh - 120px)"></div>
 </div>
 
+<div class="tab-content" id="tab-tiers">
+  <div class="toolbar">
+    <span style="font-size:16px;color:#ffffff">Arrastrá los speakers para asignar su Tier. La columna gris muestra los sin asignar.</span>
+    <button class="btn" style="margin-left:auto" onclick="renderTiers()">🔄 Recalcular</button>
+  </div>
+  <div id="tiersBoard" style="display:flex;gap:16px;padding:18px;overflow-x:auto;min-height:calc(100vh - 120px)"></div>
+</div>
+
 <!-- SPEAKER DROPDOWN (shared, positioned via JS) -->
 <div id="spDropdown" class="sp-drop">
   <div class="sp-drop-search"><input type="text" id="spDropSearch" placeholder="Buscar speaker…" oninput="filterSpDrop(this.value)"></div>
@@ -520,6 +529,7 @@ function switchTab(name){
   if(el) el.classList.add('active');
   if(name==='resumen') buildResumen();
   if(name==='kanban') renderKanban();
+  if(name==='tiers') renderTiers();
 }
 
 // ── CLAVE ─────────────────────────────────────────────────────────────
@@ -1727,6 +1737,66 @@ function kanbanDrop(e, newEstado) {
   renderKanban();
   renderSpeakers();
   toast('✅ Estado actualizado');
+}
+
+// ── TIERS KANBAN ──────────────────────────────────────────────────────
+const TIER_COLS   = ['1','2','3',''];
+const TIER_LABELS = { '1':'🟢 Nivel 1', '2':'🟡 Nivel 2', '3':'🔴 Nivel 3', '':'⬜ Sin Tier' };
+const TIER_COLORS = { '1':'#22c55e', '2':'#eab308', '3':'#ef4444', '':'#6b7280' };
+
+function renderTiers() {
+  const board = document.getElementById('tiersBoard');
+  if (!board) return;
+  const groups = { '1':[], '2':[], '3':[], '':[] };
+  state.speakers.forEach((s, i) => {
+    const t = (s.tier||'').toString().trim();
+    if (groups[t] !== undefined) groups[t].push({s,i});
+    else groups[''].push({s,i});
+  });
+
+  board.innerHTML = TIER_COLS.map(col => {
+    const color = TIER_COLORS[col];
+    const cards = (groups[col]||[]).map(({s,i}) => {
+      const tColor2 = {speaker:'#eab308',moderador:'#ec4899',empresa:'#06b6d4',sponsor:'#ef4444'};
+      const tipoCol = tColor2[s.tipo||'speaker']||'#ffffff';
+      const assign  = calcSpeakerAssignmentsText(s.nombre||'');
+      return `<div draggable="true"
+        ondragstart="tiersDragStart(event,${i})"
+        style="background:#1a1a1a;border:1px solid ${color}55;border-left:4px solid ${color};border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;user-select:none">
+        <div style="font-weight:700;color:#fff;margin-bottom:3px">${esc(s.nombre||'')}</div>
+        <div style="font-size:14px;color:${tipoCol};margin-bottom:4px;text-transform:capitalize">${esc(s.tipo||'speaker')}</div>
+        ${s.empresa ? `<div style="font-size:14px;color:#94a3b8;margin-bottom:3px">🏢 ${esc(s.empresa)}</div>` : ''}
+        ${assign ? `<div style="font-size:14px;color:#f97316">📍 ${esc(assign)}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    return `<div style="flex:1;min-width:210px;max-width:290px;display:flex;flex-direction:column;"
+      ondragover="event.preventDefault()"
+      ondrop="tiersDrop(event,'${col}')">
+      <div style="font-weight:700;font-size:16px;color:${color};margin-bottom:10px;padding:8px 12px;background:${color}18;border-radius:8px;border:1px solid ${color}44">
+        ${TIER_LABELS[col]} <span style="float:right;opacity:.7">${(groups[col]||[]).length}</span>
+      </div>
+      <div style="flex:1;min-height:80px;padding:4px;background:#0a0a0a;border-radius:8px;border:1px dashed ${col===''?'#3d3d3d':''+color+'33'}">
+        ${cards||`<div style="color:#444;font-size:15px;text-align:center;padding:20px">${col===''?'Todos asignados ✅':'Vacío'}</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let _tiersDragIdx = null;
+function tiersDragStart(e, idx) {
+  _tiersDragIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+}
+function tiersDrop(e, newTier) {
+  e.preventDefault();
+  if (_tiersDragIdx === null) return;
+  state.speakers[_tiersDragIdx].tier = newTier;
+  markDirty('speakers');
+  _tiersDragIdx = null;
+  renderTiers();
+  renderSpeakers();
+  toast('✅ Tier actualizado');
 }
 
 // ── CLOSE ALL DROPS ───────────────────────────────────────────────────
