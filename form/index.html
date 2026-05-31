@@ -61,14 +61,14 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
 /* CHECKBOX GROUP */
 .check-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
-.check-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:4px 10px;border-radius:20px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:600;}
+.check-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:700;}
 .check-chip input[type=checkbox]{display:none;}
-.check-chip:hover{border-color:var(--orange);}
+.check-chip:hover{border-color:var(--dim);}
 .check-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
 
 /* RADIO GROUP */
 .radio-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
-.radio-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:4px 12px;border-radius:20px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:600;}
+.radio-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:700;}
 .radio-chip input[type=radio]{display:none;}
 .radio-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
 
@@ -210,11 +210,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         <div class="field" id="f-idioma">
           <label class="label" id="l-idioma">¿En qué idioma podés presentar? <span class="req">*</span></label>
           <div class="check-group" id="idiomaGroup">
-            <label class="check-chip" style="--c:#ffffff" onclick="toggleChip(this,'idioma','es')">
-              <input type="checkbox" value="es"> 🌎 Español
+            <label class="check-chip" style="--c:#ffffff">
+              <input type="checkbox" value="es" onchange="syncChip(this)"> Español (ES)
             </label>
-            <label class="check-chip" style="--c:#60a5fa" onclick="toggleChip(this,'idioma','en')">
-              <input type="checkbox" value="en"> 🌍 English
+            <label class="check-chip" style="--c:#60a5fa">
+              <input type="checkbox" value="en" onchange="syncChip(this)"> English (EN)
             </label>
           </div>
         </div>
@@ -236,18 +236,18 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
           <div class="field">
             <label class="label" id="l-dias">Días que asistís al evento</label>
-            <div class="check-group">
-              <label class="check-chip" style="--c:#f59e0b" onclick="toggleChip(this,'dias','oct29')">
-                <input type="checkbox" value="oct29"> Oct 29
+            <div class="check-group" id="diasGroup">
+              <label class="check-chip" style="--c:#f59e0b">
+                <input type="checkbox" value="oct29" onchange="syncChip(this)"> Oct 29
               </label>
-              <label class="check-chip" style="--c:#E84010" onclick="toggleChip(this,'dias','oct30')">
-                <input type="checkbox" value="oct30"> Oct 30
+              <label class="check-chip" style="--c:#E84010">
+                <input type="checkbox" value="oct30" onchange="syncChip(this)"> Oct 30
               </label>
-              <label class="check-chip" style="--c:#E84010" onclick="toggleChip(this,'dias','oct31')">
-                <input type="checkbox" value="oct31"> Oct 31
+              <label class="check-chip" style="--c:#E84010">
+                <input type="checkbox" value="oct31" onchange="syncChip(this)"> Oct 31
               </label>
-              <label class="check-chip" style="--c:#f59e0b" onclick="toggleChip(this,'dias','nov1')">
-                <input type="checkbox" value="nov1"> Nov 1
+              <label class="check-chip" style="--c:#f59e0b">
+                <input type="checkbox" value="nov1" onchange="syncChip(this)"> Nov 1
               </label>
             </div>
           </div>
@@ -280,11 +280,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <div class="field">
             <label class="label" id="l-primera">¿Primera vez en LABITCONF?</label>
             <div class="radio-group" id="primeraGroup">
-              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'primera','si')">
-                <input type="radio" name="primera" value="si"> Sí
+              <label class="radio-chip" style="--c:#22c55e">
+                <input type="radio" name="primera" value="si" onchange="syncRadio(this)"> Sí
               </label>
-              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'primera','no')">
-                <input type="radio" name="primera" value="no"> No
+              <label class="radio-chip" style="--c:#E84010">
+                <input type="radio" name="primera" value="no" onchange="syncRadio(this)"> No
               </label>
             </div>
           </div>
@@ -292,11 +292,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <div class="field">
             <label class="label" id="l-moderador">¿Aceptás ser Moderador de panel?</label>
             <div class="radio-group" id="moderadorGroup">
-              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'moderador','si')">
-                <input type="radio" name="moderador" value="si"> Sí
+              <label class="radio-chip" style="--c:#22c55e">
+                <input type="radio" name="moderador" value="si" onchange="syncRadio(this)"> Sí
               </label>
-              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'moderador','no')">
-                <input type="radio" name="moderador" value="no"> No
+              <label class="radio-chip" style="--c:#E84010">
+                <input type="radio" name="moderador" value="no" onchange="syncRadio(this)"> No
               </label>
             </div>
           </div>
@@ -304,11 +304,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <div class="field">
             <label class="label" id="l-podcast">¿Disponible para entrevista | podcast del evento?</label>
             <div class="radio-group" id="podcastGroup">
-              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'podcast','si')">
-                <input type="radio" name="podcast" value="si"> Sí
+              <label class="radio-chip" style="--c:#22c55e">
+                <input type="radio" name="podcast" value="si" onchange="syncRadio(this)"> Sí
               </label>
-              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'podcast','no')">
-                <input type="radio" name="podcast" value="no"> No
+              <label class="radio-chip" style="--c:#E84010">
+                <input type="radio" name="podcast" value="no" onchange="syncRadio(this)"> No
               </label>
             </div>
           </div>
@@ -316,11 +316,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <div class="field">
             <label class="label" id="l-empresa-presenta">¿Traés empresa | proyecto que presentás?</label>
             <div class="radio-group" id="empresaPresentaGroup">
-              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'empresaPresenta','si')">
-                <input type="radio" name="empresaPresenta" value="si"> Sí
+              <label class="radio-chip" style="--c:#22c55e">
+                <input type="radio" name="empresaPresenta" value="si" onchange="syncRadio(this)"> Sí
               </label>
-              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'empresaPresenta','no')">
-                <input type="radio" name="empresaPresenta" value="no"> No
+              <label class="radio-chip" style="--c:#E84010">
+                <input type="radio" name="empresaPresenta" value="no" onchange="syncRadio(this)"> No
               </label>
             </div>
           </div>
@@ -436,21 +436,20 @@ const T = {
 let lang = 'es';
 let temaCount = 0;
 
-// ── CHIP TOGGLES ────────────────────────────────────────────────────
-function toggleChip(label, group, val) {
-  label.classList.toggle('checked');
+// ── CHIP HANDLERS ───────────────────────────────────────────────────
+function syncChip(input) {
+  input.closest('.check-chip').classList.toggle('checked', input.checked);
 }
-function setRadio(label, group, val) {
-  // Deselect all in same group
-  label.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l => l.classList.remove('checked'));
-  label.classList.add('checked');
+function syncRadio(input) {
+  input.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l => l.classList.remove('checked'));
+  input.closest('.radio-chip').classList.add('checked');
 }
 function getChecked(groupId) {
-  return [...document.getElementById(groupId).querySelectorAll('.check-chip.checked')]
+  return [...(document.getElementById(groupId)?.querySelectorAll('.check-chip.checked') || [])]
     .map(l => l.querySelector('input').value);
 }
 function getRadio(groupId) {
-  const checked = document.getElementById(groupId).querySelector('.radio-chip.checked');
+  const checked = document.getElementById(groupId)?.querySelector('.radio-chip.checked');
   return checked ? checked.querySelector('input').value : '';
 }
 
@@ -537,16 +536,16 @@ function setAttr(id, attr, val) {
 
 // ── TEMAS ───────────────────────────────────────────────────────────
 const FORMATO_OPTS = [
-  { val:'charla',    label:'Charla',    color:'#E84010' },
-  { val:'panel',     label:'Panel',     color:'#ec4899' },
-  { val:'taller',    label:'Taller',    color:'#eab308' },
-  { val:'ama',       label:'AMA',       color:'#ffffff' },
-  { val:'moderador', label:'Moderador', color:'#ef4444' },
+  { val:'charla',    label:'Charla',    color:'#ffffff' },
+  { val:'panel',     label:'Panel',     color:'#ef4444' },
+  { val:'taller',    label:'Taller',    color:'#ec4899' },
+  { val:'ama',       label:'AMA',       color:'#E84010' },
+  { val:'moderador', label:'Moderador', color:'#eab308' },
 ];
 const NIVEL_OPTS = [
-  { val:'basico',      label:'Básico',      color:'#ffffff' },
-  { val:'intermedio',  label:'Intermedio',  color:'#E84010' },
-  { val:'avanzado',    label:'Avanzado',    color:'#ef4444' },
+  { val:'basico',      label:'Básico',      color:'#22c55e' },
+  { val:'intermedio',  label:'Intermedio',  color:'#eab308' },
+  { val:'avanzado',    label:'Avanzado',    color:'#E84010' },
 ];
 const DUR_OPTS = [15, 20, 30, 45, 60];
 
@@ -558,15 +557,15 @@ function addTema() {
   const isFirst = n === 1;
 
   const nivelesHtml = NIVEL_OPTS.map(o =>
-    `<label class="radio-chip" style="--c:${o.color}" onclick="setRadio(this,'nivel-${n}','${o.val}')">
-      <input type="radio" name="nivel-${n}" value="${o.val}">
+    `<label class="radio-chip" style="--c:${o.color}">
+      <input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)">
       ${o.label}
     </label>`
   ).join('');
 
   const formatosHtml = FORMATO_OPTS.map(o =>
-    `<label class="check-chip" style="--c:${o.color}" onclick="toggleChip(this,'formato-${n}','${o.val}')">
-      <input type="checkbox" value="${o.val}">
+    `<label class="check-chip" style="--c:${o.color}">
+      <input type="checkbox" value="${o.val}" onchange="syncChip(this)">
       ${o.label}
     </label>`
   ).join('');
