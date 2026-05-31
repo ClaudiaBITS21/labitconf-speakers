@@ -36,7 +36,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
 /* SECTION */
 .section{margin-bottom:28px;}
-.section-title{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.section-title{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--orange);margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border);}
 
 /* GRID */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -165,7 +165,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
           <div class="field">
             <label class="label">Signal</label>
-            <input class="inp" id="signal" type="tel" placeholder="+54 11 1234-5678">
+            <input class="inp" id="signal" type="text" placeholder="@alias">
           </div>
           <div class="field">
             <label class="label">LinkedIn</label>
@@ -206,7 +206,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
           <div class="field">
             <label class="label" id="l-eventos">Eventos anteriores</label>
-            <textarea class="ta" id="eventos" maxlength="400" placeholder="¿En qué eventos hablaste antes?"></textarea>
+            <textarea class="ta" id="eventos" maxlength="100" oninput="updateCounter('eventos','eventos-cnt',100)"></textarea>
+            <div class="counter"><span id="eventos-cnt">0</span>/100</div>
           </div>
         </div>
       </div>
@@ -234,19 +235,19 @@ const T = {
     sec2:         'Contacto',
     sec3:         'Propuesta(s)',
     sec4:         'Perfil',
-    lNombre:      'Nombre completo',
-    lApodo:       'Apodo / Nombre artístico',
+    lNombre:      'Nombre Completo',
+    lApodo:       'Apodo (Alias)',
     lTipo:        'Tipo',
     lPais:        'País de origen',
     lIdioma:      'Idioma de presentación',
     lMail:        'Mail',
     lWhatsapp:    'WhatsApp',
     lEmpresa:     'Empresa / Referencia',
-    lBio:         'Biografía corta',
-    lEventos:     'Eventos anteriores',
+    lBio:         'Biografía Corta',
+    lEventos:     'Eventos Anteriores',
     temaNum:      n => `Tema ${n}`,
-    temaTitle:    'Título del tema',
-    temaDesc:     'Descripción / Keywords',
+    temaTitle:    'Título del Tema',
+    temaDesc:     'Descripción | Keywords',
     temaDescHint: 'Describí brevemente tu propuesta. Las palabras clave ayudan a agrupar por temáticas.',
     addTema:      'Agregar otro tema',
     submitBtn:    'Enviar inscripción',
@@ -257,7 +258,7 @@ const T = {
     errMail:      'Mail inválido',
     errTema:      'Ingresá al menos un tema',
     toastError:   'Error al enviar. Intentá de nuevo.',
-    placeholderEventos: '¿En qué eventos hablaste antes?',
+    placeholderEventos: '¿En qué eventos hablaste antes? (ej: BTC Miami, Satoshi Summit)',
   },
   en: {
     pageTitle:    'Speaker Registration',
@@ -266,19 +267,19 @@ const T = {
     sec2:         'Contact',
     sec3:         'Proposal(s)',
     sec4:         'Profile',
-    lNombre:      'Full name',
-    lApodo:       'Nickname / Stage name',
+    lNombre:      'Full Name',
+    lApodo:       'Alias (Nickname)',
     lTipo:        'Type',
     lPais:        'Country of origin',
     lIdioma:      'Presentation language',
     lMail:        'Email',
     lWhatsapp:    'WhatsApp',
     lEmpresa:     'Company / Reference',
-    lBio:         'Short bio',
-    lEventos:     'Previous events',
+    lBio:         'Short Bio',
+    lEventos:     'Previous Events',
     temaNum:      n => `Topic ${n}`,
-    temaTitle:    'Topic title',
-    temaDesc:     'Description / Keywords',
+    temaTitle:    'Topic Title',
+    temaDesc:     'Description | Keywords',
     temaDescHint: 'Briefly describe your proposal. Keywords help group by theme.',
     addTema:      'Add another topic',
     submitBtn:    'Submit registration',
@@ -289,7 +290,7 @@ const T = {
     errMail:      'Invalid email',
     errTema:      'Enter at least one topic',
     toastError:   'Error sending. Please try again.',
-    placeholderEventos: 'Which events have you spoken at before?',
+    placeholderEventos: 'Which events have you spoken at before? (e.g. BTC Miami, Satoshi Summit)',
   }
 };
 
