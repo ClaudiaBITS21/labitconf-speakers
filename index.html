@@ -180,9 +180,14 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-tipo-sel:focus{background:var(--red-dim);}
 .sp-estado-sel{border:none;border-radius:4px;font-size:14px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;width:100%;}
 .sp-estado-sel.est-empty{background:var(--bg3);color:#ffffff;}
+.sp-estado-sel.est-disponible{background:rgba(255,255,255,.06);color:#ffffff;border:1px solid #444;}
+.sp-estado-sel.est-rechazado{background:rgba(220,38,38,.2);color:#ef4444;}
+.sp-estado-sel.est-revisar{background:rgba(234,179,8,.2);color:#eab308;}
+.sp-estado-sel.est-manual{background:rgba(6,182,212,.2);color:#06b6d4;}
+.sp-estado-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
+/* compat legacy */
 .sp-estado-sel.est-invitado{background:rgba(59,130,246,.2);color:#3b82f6;}
 .sp-estado-sel.est-pendiente{background:rgba(234,179,8,.2);color:#eab308;}
-.sp-estado-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
 .sp-estado-sel.est-no_aprobado{background:rgba(239,68,68,.2);color:#ef4444;}
 .sp-manual-row{background:rgba(234,179,8,.04);}
 .sp-manual-badge{display:inline-block;background:rgba(234,179,8,.2);color:#eab308;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;}
@@ -267,9 +272,10 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
-    <button id="dayBtn1" class="btn" style="padding:3px 10px;font-size:15px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(1)">1</button>
-    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:15px" onclick="switchDay(2)">2</button>
-    <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:15px" onclick="switchDay(3)">3</button>
+    <button id="dayBtn1" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(1)" title="Opening Party">Oct 29</button>
+    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(2)" title="LABITCONF Day 1">Oct 30</button>
+    <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(3)" title="LABITCONF Day 2">Oct 31</button>
+    <button id="dayBtn4" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(4)" title="Experience Day">Nov 1</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
     <button class="btn" style="padding:3px 10px;font-size:15px" onclick="openCommandPalette()" title="Ctrl+K">🔍</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
@@ -382,6 +388,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <button class="btn sp-flt active" onclick="setSpFilter('all')" data-flt="all">Todos</button>
       <button class="btn sp-flt" onclick="setSpFilter('speaker')" data-flt="speaker" style="color:#FFF200">Speaker</button>
       <button class="btn sp-flt" onclick="setSpFilter('moderador')" data-flt="moderador" style="color:#00FFF4">Moderador</button>
+      <button class="btn sp-flt" onclick="setSpFilter('panelista')" data-flt="panelista" style="color:#f97316">Panelista</button>
       <button class="btn sp-flt" onclick="setSpFilter('empresa')" data-flt="empresa" style="color:#ec4899">Empresa</button>
       <button class="btn sp-flt" onclick="setSpFilter('sponsor')" data-flt="sponsor" style="color:#a78bfa">Sponsor</button>
       <button class="btn sp-flt" onclick="setSpFilter('manual')" data-flt="manual">⚠️ Manuales</button>
@@ -390,10 +397,18 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
-          <th onclick="setSortSp('tipo')" style="cursor:pointer;user-select:none">Tipo <span id="srt-tipo"></span></th><th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th><th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th><th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th><th>Repartos</th><th onclick="setSortSp('temas')" style="cursor:pointer;user-select:none">Tema(s) <span id="srt-temas"></span></th>
+          <th onclick="setSortSp('tipo')" style="cursor:pointer;user-select:none">Tipo <span id="srt-tipo"></span></th>
+          <th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th>
+          <th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th>
+          <th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th>
+          <th>Temas (estado)</th>
+          <th>Repartos</th>
           <th onclick="setSortSp('referido')" style="border:2px solid #f97316;color:#f97316;cursor:pointer;user-select:none">Referido <span id="srt-referido"></span></th>
+          <th>País</th><th>Idioma</th>
           <th>Mail</th><th style="color:#25D366">WhatsApp</th><th style="color:#229ED9">Telegram</th><th style="color:#3A76F0">Signal</th><th style="color:#0A66C2">LinkedIn</th>
-          <th>Empresa</th><th>Notas</th><th style="width:32px"></th>
+          <th>Empresa</th><th>Notas</th>
+          <th style="color:#f59e0b;font-size:12px">Oct 29</th><th style="color:#f59e0b;font-size:12px">Oct 30</th><th style="color:#f59e0b;font-size:12px">Oct 31</th><th style="color:#f59e0b;font-size:12px">Nov 1</th>
+          <th style="width:32px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
           <tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers aún.</td></tr>
@@ -453,7 +468,10 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <!-- SPEAKER DROPDOWN (shared, positioned via JS) -->
 <div id="spDropdown" class="sp-drop">
-  <div class="sp-drop-search"><input type="text" id="spDropSearch" placeholder="Buscar speaker…" oninput="filterSpDrop(this.value)"></div>
+  <div class="sp-drop-search" style="display:flex;flex-direction:column;gap:4px">
+    <input type="text" id="spDropSearch" placeholder="🔍 Speaker…" oninput="filterSpDrop()" style="width:100%">
+    <input type="text" id="spDropSearchTema" placeholder="🔍 Tema / keyword…" oninput="filterSpDrop()" style="width:100%">
+  </div>
   <div class="sp-drop-list" id="spDropList"></div>
 </div>
 
@@ -490,7 +508,7 @@ const STAGE_COLORS = ['#6366f1','#0ea5e9','#22c55e','#f59e0b','#ec4899','#14b8a6
 const STAGE_DIMS   = ['rgba(99,102,241,.15)','rgba(14,165,233,.15)','rgba(34,197,94,.15)','rgba(245,158,11,.15)','rgba(236,72,153,.15)','rgba(20,184,166,.15)','rgba(249,115,22,.15)','rgba(167,139,250,.15)','rgba(251,113,133,.15)'];
 const DUR_OPTIONS = [15,20,25,30,40];
 const DUR_COLORS = {15:'#22c55e',20:'#eab308',25:'#f97316',30:'#f9a8d4',40:'#a78bfa'};
-const ESTADO_ICON = {confirmado:'✅',pendiente:'⏳',invitado:'📩',no_aprobado:'❌',''  :''};
+const ESTADO_ICON = {disponible:'',rechazado:'❌',revisar:'🔍',manual:'📋',confirmado:'✅',pendiente:'⏳',invitado:'📩',no_aprobado:'❌',''  :''};
 
 // ── STATE ─────────────────────────────────────────────────────────────
 let state = { principal:[], speakers:[], speakersManual:[], ideas:[] };
@@ -851,48 +869,114 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('#spDropdown')&&!e.target.closest('.sp-picker'))closeSpDrop();
 });
 
-function filterSpDrop(q){ populateSpDrop(q); }
+function filterSpDrop(){ populateSpDrop(); }
 
-function populateSpDrop(q){
+// Tokenizer para matching de temas (stopwords ES+EN)
+const SP_STOPWORDS=new Set(['el','la','los','las','un','una','de','del','al','en','con','por','para','que','es','son','ser','estar','como','sobre','este','esta','sus','se','más','the','a','an','of','in','on','at','to','for','is','are','with','and','or','that','this','it','as','be','from','by','have','has']);
+function spTokenize(txt){return(txt||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!SP_STOPWORDS.has(w));}
+function spMatchScore(query,s){
+  if(!query)return 1;
+  const qToks=new Set(spTokenize(query));
+  if(!qToks.size)return 1;
+  let best=0;
+  s.temasArr.forEach((tema,ti)=>{
+    const det=s.detallesArr[ti]||'';
+    const sToks=new Set([...spTokenize(tema),...spTokenize(det)]);
+    const inter=[...qToks].filter(t=>sToks.has(t)).length;
+    const union=new Set([...qToks,...sToks]).size;
+    const score=union>0?inter/union:0;
+    const titleBonus=spTokenize(tema).filter(t=>qToks.has(t)).length*0.15;
+    best=Math.max(best,score+titleBonus);
+  });
+  return best;
+}
+
+function populateSpDrop(){
   const list=document.getElementById('spDropList');
-  const qLow=(q||'').toLowerCase().trim();
+  const qSp=(document.getElementById('spDropSearch')?.value||'').toLowerCase().trim();
+  const qTema=(document.getElementById('spDropSearchTema')?.value||'').trim();
+  const qTemaLow=qTema.toLowerCase();
   let html='';
 
   // Sin asignar
   html+=`<div class="sp-item" data-name="" onclick="selectSpeaker('')"><span style="color:var(--dim);font-size:14px">— Sin asignar —</span></div>`;
 
-  // Speakers del sheet
-  const spMatch=state.speakers.filter(s=>s.nombre&&(!qLow||s.nombre.toLowerCase().includes(qLow)||( s.temas||'').toLowerCase().includes(qLow)));
-  if(spMatch.length){
-    html+=`<div class="sp-section-lbl">Speakers</div>`;
-    spMatch.forEach(s=>{
-      const icon=ESTADO_ICON[s.estado||'']||'';
-      const assigns=getSpeakerAssignments(s.nombre).filter(a=>!(a.rowIdx===_spDropCtx.idx&&a.sk===_spDropCtx.sk));
-      const assignTxt=assigns.length?`<div class="sp-item-assign">📍 ${assigns.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ')}</div>`:'';
-      html+=`<div class="sp-item" onclick="selectSpeaker('${esc(s.nombre).replace(/'/g,"\\'")}')">
-        <div class="sp-item-name">${icon} ${esc(s.nombre)}</div>
-        <div class="sp-item-tema">${esc(s.temas||'')}</div>
-        ${assignTxt}
-      </div>`;
+  // Filtrar y puntuar speakers
+  let spList=state.speakers.filter(s=>{
+    if(!s.nombre)return false;
+    if(s.estado==='rechazado')return false;
+    // Filtro por nombre de speaker
+    if(qSp&&!s.nombre.toLowerCase().includes(qSp))return false;
+    return true;
+  });
+
+  // Expandir a items speaker+tema (uno por tema disponible)
+  const items=[];
+  spList.forEach(s=>{
+    const icon=ESTADO_ICON[s.estado||'']||'';
+    const assigns=getSpeakerAssignments(s.nombre).filter(a=>!(a.rowIdx===_spDropCtx.idx&&a.sk===_spDropCtx.sk));
+    const assignTxt=assigns.length?`<div class="sp-item-assign">📍 ${assigns.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ')}</div>`:'';
+    const temasArr=s.temasArr;
+    const temasEstado=s.temasEstadoArr;
+    // Verificar si el speaker ya está en la misma fila (mismo horario, otro stage)
+    const blockedRow=_spDropCtx.idx!==null&&STAGE_KEYS.some(sk2=>{
+      if(sk2===_spDropCtx.sk)return false;
+      return(state.principal[_spDropCtx.idx]?.stages[sk2]?.speaker||'').trim()===s.nombre.trim();
     });
+
+    if(temasArr.length===0){
+      // Speaker sin temas: mostrar como ítem simple
+      const score=qTema?spMatchScore(qTema,s):1;
+      if(qTema&&score<0.05)return;
+      items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','')">
+        <div class="sp-item-name">${icon} ${esc(s.nombre)} <span style="font-size:11px;color:#555">[sin temas]</span></div>
+        ${assignTxt}
+      </div>`});
+    } else {
+      temasArr.forEach((tema,ti)=>{
+        const est=temasEstado[ti]||'disponible';
+        if(est==='confirmado')return; // ya usado
+        // Filtro por tema keyword
+        if(qTemaLow&&!tema.toLowerCase().includes(qTemaLow)&&!(s.detallesArr[ti]||'').toLowerCase().includes(qTemaLow))return;
+        const score=qTema?spMatchScore(qTema,s):1;
+        const estBadge=est==='disponible'?'':` <span style="font-size:10px;color:#06b6d4">[${est}]</span>`;
+        const detalle=s.detallesArr[ti]?`<div style="font-size:11px;color:#555;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px">${esc(s.detallesArr[ti])}</div>`:'';
+        const scoreBadge=qTema&&score>0.1?`<span style="float:right;font-size:10px;color:#f7931a">${Math.round(score*100)}%</span>`:'';
+        items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','${esc(tema).replace(/'/g,"\\'")}')">
+          <div class="sp-item-name">${icon} ${esc(s.nombre)}${estBadge} ${scoreBadge}</div>
+          <div class="sp-item-tema">💬 ${esc(tema)}</div>
+          ${detalle}
+          ${assignTxt}
+        </div>`});
+      });
+    }
+  });
+
+  // Ordenar por score descendente
+  items.sort((a,b)=>b.score-a.score);
+
+  if(items.length){
+    html+=`<div class="sp-section-lbl">Speakers ${qTema?'(ordenados por relevancia)':''}</div>`;
+    html+=items.map(i=>i.html).join('');
   }
 
   // Speakers manuales
-  const manMatch=state.speakersManual.filter(s=>s.nombre&&(!qLow||s.nombre.toLowerCase().includes(qLow)));
+  const manMatch=state.speakersManual.filter(s=>s.nombre&&(!qSp||s.nombre.toLowerCase().includes(qSp)));
   if(manMatch.length){
     html+=`<div class="sp-section-lbl">⚠️ Manuales</div>`;
     manMatch.forEach(s=>{
-      html+=`<div class="sp-item sp-item-manual" onclick="selectSpeaker('${esc(s.nombre).replace(/'/g,"\\'")}')">
+      html+=`<div class="sp-item sp-item-manual" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','')">
         <div class="sp-item-name" style="color:#eab308">${esc(s.nombre)}</div>
         <div class="sp-item-tema" style="color:#ffffff">Datos incompletos</div>
       </div>`;
     });
   }
 
-  // Escritura libre: si hay búsqueda y no coincide exactamente
-  if(qLow&&![...state.speakers,...state.speakersManual].some(s=>s.nombre&&s.nombre.toLowerCase()===qLow)){
-    html+=`<div class="sp-item" style="border-top:1px solid #333" onclick="selectSpeakerManual('${esc(q).replace(/'/g,"\\'")}')">
-      <div class="sp-item-name" style="color:#ffffff">+ Agregar "<span style="color:#fff">${esc(q)}</span>"</div>
+  // Escritura libre
+  const qFree=(document.getElementById('spDropSearch')?.value||'').trim();
+  if(qFree&&![...state.speakers,...state.speakersManual].some(s=>s.nombre&&s.nombre.toLowerCase()===qFree.toLowerCase())){
+    html+=`<div class="sp-item" style="border-top:1px solid #333" onclick="selectSpeakerManual('${esc(qFree).replace(/'/g,"\\'")}')">
+      <div class="sp-item-name" style="color:#ffffff">+ Agregar "<span style="color:#fff">${esc(qFree)}</span>"</div>
       <div class="sp-item-tema">Se guarda como manual</div>
     </div>`;
   }
@@ -900,11 +984,34 @@ function populateSpDrop(q){
   list.innerHTML=html;
 }
 
-function selectSpeaker(name){
+function selectSpeaker(name){ selectSpeakerWithTema(name,''); }
+
+function selectSpeakerWithTema(name,tema){
   const {idx,sk}=_spDropCtx;
   if(idx===null)return;
   updateStageField(idx,sk,'speaker',name);
+  if(tema)updateStageField(idx,sk,'tema',tema);
   markDirty('principal');
+
+  // Auto-confirmación: marcar ese tema como confirmado en el speaker
+  if(name&&tema){
+    const sp=state.speakers.find(s=>s.nombre===name);
+    if(sp){
+      const tArr=sp.temasArr;
+      const ti=tArr.indexOf(tema);
+      if(ti>=0){
+        const estArr=sp.temasEstadoArr;
+        estArr[ti]='confirmado';
+        sp.temas_estado=estArr.join(',');
+        // Si todos los temas están confirmados → estado global confirmado
+        if(estArr.every(e=>e==='confirmado')&&sp.estado==='disponible'){
+          sp.estado='confirmado';
+        }
+        markDirty('speakers');
+      }
+    }
+  }
+
   // Update cell in DOM without full re-render
   const row=document.querySelector(`tr[data-idx="${idx}"]`);
   if(row){
@@ -1155,14 +1262,15 @@ function setSortSp(field){
 }
 
 function estadoSelectHtml(ri,val,isManual=false){
-  const cls=val?'est-'+val:'est-empty';
+  const cls=val?'est-'+val:'est-disponible';
   const fn=isManual?`updateManualSpeaker`:`updateSpeakerEstado`;
-  return `<select class="sp-estado-sel ${cls}" onchange="${fn}(${ri},'estado',this.value)">
-    <option value=""${val===''?' selected':''}>—</option>
-    <option value="invitado"${val==='invitado'?' selected':''}>📩 Invitado</option>
-    <option value="pendiente"${val==='pendiente'?' selected':''}>⏳ Pendiente</option>
-    <option value="confirmado"${val==='confirmado'?' selected':''}>✅ Confirmado</option>
-    <option value="no_aprobado"${val==='no_aprobado'?' selected':''}>❌ No aprobado</option>
+  const v=val||'disponible';
+  return `<select class="sp-estado-sel ${cls}" onchange="${fn}(${ri},'estado',this.value);this.className='sp-estado-sel est-'+this.value">
+    <option value="disponible"${v==='disponible'?' selected':''}>Disponible</option>
+    <option value="revisar"${v==='revisar'?' selected':''}>🔍 Revisar</option>
+    <option value="manual"${v==='manual'?' selected':''}>📋 Manual</option>
+    <option value="confirmado"${v==='confirmado'?' selected':''}>✅ Confirmado</option>
+    <option value="rechazado"${v==='rechazado'?' selected':''}>❌ Rechazado</option>
   </select>`;
 }
 function updateSpeakerEstado(ri,field,val){ if(state.speakers[ri])state.speakers[ri][field]=val; markDirty('speakers'); renderSpeakers(); }
@@ -1170,8 +1278,8 @@ function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.sp
 
 function renderSpeakers(){
   const tbody=document.getElementById('speakersTableBody'); if(!tbody)return;
-  const tColor={speaker:'#FFF200',moderador:'#00FFF4',empresa:'#ec4899',sponsor:'#a78bfa'};
-  const tOpts=cur=>['speaker','moderador','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
+  const tColor={speaker:'#FFF200',moderador:'#00FFF4',panelista:'#f97316',empresa:'#ec4899',sponsor:'#a78bfa'};
+  const tOpts=cur=>['speaker','moderador','panelista','empresa','sponsor'].map(t=>`<option value="${t}"${cur===t?' selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
 
   let rows='';
   let list=state.speakers;
@@ -1186,7 +1294,7 @@ function renderSpeakers(){
   // search across all text fields
   if(spSearchVal.trim()){
     const q=spSearchVal.trim().toLowerCase();
-    list=list.filter(s=>['nombre','tipo','tier','estado','temas','referido','mail','whatsapp','telegram','signal','linkedin','empresa','notas'].some(f=>String(s[f]||'').toLowerCase().includes(q)));
+    list=list.filter(s=>['nombre','tipo','apodo','pais','estado','tema1','tema2','tema3','tema4','detalle1','detalle2','detalle3','detalle4','referido','mail','whatsapp','empresa','notas'].some(f=>String(s[f]||'').toLowerCase().includes(q)));
   }
 
   // sort
@@ -1212,26 +1320,44 @@ function renderSpeakers(){
     const ri=state.speakers.indexOf(s), tipo=s.tipo||'speaker';
     const assigns=getSpeakerAssignments(s.nombre||'');
     const repartosHtml=assigns.length
-      ?assigns.map(a=>`<div style="white-space:nowrap;line-height:1.9;font-size:14px">${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} <span style="color:#94a3b8">${esc(a.inicio)}</span></div>`).join('')
+      ?assigns.map(a=>`<div style="white-space:nowrap;line-height:1.9;font-size:13px">${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} <span style="color:#94a3b8">${esc(a.inicio)}</span>${a.tema?` <span style="color:#f97316">${esc(a.tema)}</span>`:''}</div>`).join('')
       :'';
-    const temasHtml=assigns.length
-      ?assigns.map(a=>`<div style="line-height:1.9;font-size:14px;color:#e2e8f0">${esc(a.tema||'—')}</div>`).join('')
-      :`<span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'temas',this.innerText.trim());markDirty('speakers')">${esc(s.temas||'')}</span>`;
+    // Temas con estado individual por tema
+    const temasHtml=(()=>{
+      const tArr=s.temasArr;
+      if(!tArr.length)return `<span class="sp-edit" style="color:#555;font-size:13px" contenteditable="true" onblur="updateSpeaker(${ri},'tema1',this.innerText.trim());markDirty('speakers')">${esc(s.tema1||'')}</span>`;
+      const estArr=s.temasEstadoArr;
+      const estColor={disponible:'#6b7280',confirmado:'#22c55e',revisar:'#eab308',manual:'#06b6d4'};
+      return tArr.map((t,ti)=>{
+        const est=estArr[ti]||'disponible';
+        const col=estColor[est]||'#888';
+        return `<div style="display:flex;align-items:center;gap:4px;line-height:1.7;font-size:13px">
+          <span style="width:7px;height:7px;border-radius:50%;background:${col};flex-shrink:0;display:inline-block"></span>
+          <span>${esc(t)}</span>
+        </div>`;
+      }).join('');
+    })();
+    // Días de participación
+    const dayCell=d=>`<td style="text-align:center;padding:2px"><select class="sp-tipo-sel" style="font-size:12px;padding:1px 2px" onchange="updateSpeaker(${ri},'${d}',this.value);markDirty('speakers')"><option value=""${s[d]===''?' selected':''}>—</option><option value="si"${s[d]==='si'?' selected':''}>✓</option><option value="no"${s[d]==='no'?' selected':''}>✗</option></select></td>`;
     rows+=`<tr>
       <td><select class="sp-tipo-sel" style="color:${tColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tOpts(tipo)}</select></td>
-      <td style="text-align:center">${(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const tl={1:'N1',2:'N2',3:'N3'};const t=s.tier||'';return t?`<select class="sp-tipo-sel" style="color:${tc[t]};font-weight:800;background:transparent;border:1px solid ${tc[t]};border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" ${t==='1'?'selected':''} style="color:#22c55e">Nivel 1</option><option value="2" ${t==='2'?'selected':''} style="color:#eab308">Nivel 2</option><option value="3" ${t==='3'?'selected':''} style="color:#ef4444">Nivel 3</option></select>`:`<select class="sp-tipo-sel" style="color:#666;background:transparent;border:1px solid #333;border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" style="color:#22c55e">Nivel 1</option><option value="2" style="color:#eab308">Nivel 2</option><option value="3" style="color:#ef4444">Nivel 3</option></select>`;})()} </td>
-      <td style="font-weight:700;white-space:nowrap"><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakers')">${esc(s.nombre||'')}</span></td>
-      <td>${estadoSelectHtml(ri,s.estado||'')}</td>
+      <td style="text-align:center">${(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return t?`<select class="sp-tipo-sel" style="color:${tc[t]};font-weight:800;background:transparent;border:1px solid ${tc[t]};border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" ${t==='1'?'selected':''} style="color:#22c55e">N1</option><option value="2" ${t==='2'?'selected':''} style="color:#eab308">N2</option><option value="3" ${t==='3'?'selected':''} style="color:#ef4444">N3</option></select>`:`<select class="sp-tipo-sel" style="color:#666;background:transparent;border:1px solid #333;border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" style="color:#22c55e">N1</option><option value="2" style="color:#eab308">N2</option><option value="3" style="color:#ef4444">N3</option></select>`;})()} </td>
+      <td style="font-weight:700;white-space:nowrap"><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakers')">${esc(s.nombre||'')}</span>${s.apodo?`<div style="font-size:11px;color:#555">${esc(s.apodo)}</div>`:''}
+      </td>
+      <td>${estadoSelectHtml(ri,s.estado||'disponible')}</td>
+      <td style="vertical-align:top;min-width:120px">${temasHtml}</td>
       <td style="vertical-align:top">${repartosHtml}</td>
-      <td style="vertical-align:top">${temasHtml}</td>
-      <td style="border:2px solid #f97316"><span class="sp-edit" style="color:#ffffff" contenteditable="true" onblur="updateSpeaker(${ri},'referido',this.innerText.trim());markDirty('speakers')" placeholder="¿Quién refiere?">${esc(s.referido||'')}</span></td>
+      <td style="border:2px solid #f97316"><span class="sp-edit" style="color:#ffffff" contenteditable="true" onblur="updateSpeaker(${ri},'referido',this.innerText.trim());markDirty('speakers')">${esc(s.referido||'')}</span></td>
+      <td style="font-size:13px;color:#888">${esc(s.pais||'')}</td>
+      <td style="font-size:13px;color:#888;text-align:center">${s.idioma==='en'?'🌍 EN':'🌎 ES'}</td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'mail',this.innerText.trim());markDirty('speakers')">${esc(s.mail||'')}</span></td>
       <td style="border-left:2px solid #25D366"><span class="sp-edit" style="color:#25D366" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></td>
       <td style="border-left:2px solid #229ED9"><span class="sp-edit" style="color:#229ED9" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></td>
       <td style="border-left:2px solid #3A76F0"><span class="sp-edit" style="color:#3A76F0" contenteditable="true" onblur="updateSpeaker(${ri},'signal',this.innerText.trim());markDirty('speakers')">${esc(s.signal||'')}</span></td>
       <td style="border-left:2px solid #0A66C2"><span class="sp-edit" style="color:#0A66C2" contenteditable="true" onblur="updateSpeaker(${ri},'linkedin',this.innerText.trim());markDirty('speakers')">${esc(s.linkedin||'')}</span></td>
       <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></td>
-      <td><span class="sp-edit" style="color:#ffffff;font-size:14px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span></td>
+      <td><span class="sp-edit" style="color:#ffffff;font-size:13px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span></td>
+      ${dayCell('oct29')}${dayCell('oct30')}${dayCell('oct31')}${dayCell('nov1')}
       <td style="text-align:center"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
     </tr>`;
   });
@@ -1328,13 +1454,36 @@ async function loadSpeakers(){
     const raw=await gasGet('Speakers');
     if(!raw||raw.length<2){state.speakers=[];renderSpeakers();return;}
     const[,...rows]=raw;
-    // New schema: nombre, tipo, mail, whatsapp, telegram, signal, linkedin, stages, temas, empresa, notas, estado
+    // Schema (30 cols):
+    // [0]nombre [1]tipo [2]apodo [3]pais [4]idioma [5]mail [6]whatsapp [7]telegram [8]signal
+    // [9]linkedin [10]x [11]instagram [12]empresa [13]notas [14]bio [15]eventos_anteriores
+    // [16]tema1 [17]detalle1 [18]tema2 [19]detalle2 [20]tema3 [21]detalle3 [22]tema4 [23]detalle4
+    // [24]temas_estado [25]estado [26]oct29 [27]oct30 [28]oct31 [29]nov1
     state.speakers=rows.map(r=>({
       nombre:String(r[0]||''),tipo:String(r[1]||'speaker'),
-      mail:String(r[2]||''),whatsapp:String(r[3]||''),
-      telegram:String(r[4]||''),signal:String(r[5]||''),
-      linkedin:String(r[6]||''),temas:String(r[8]||''),
-      empresa:String(r[9]||''),notas:String(r[10]||''),estado:String(r[11]||'')
+      apodo:String(r[2]||''),pais:String(r[3]||''),idioma:String(r[4]||'es'),
+      mail:String(r[5]||''),whatsapp:String(r[6]||''),telegram:String(r[7]||''),
+      signal:String(r[8]||''),linkedin:String(r[9]||''),
+      x:String(r[10]||''),instagram:String(r[11]||''),
+      empresa:String(r[12]||''),notas:String(r[13]||''),
+      bio:String(r[14]||''),eventos_anteriores:String(r[15]||''),
+      tema1:String(r[16]||''),detalle1:String(r[17]||''),
+      tema2:String(r[18]||''),detalle2:String(r[19]||''),
+      tema3:String(r[20]||''),detalle3:String(r[21]||''),
+      tema4:String(r[22]||''),detalle4:String(r[23]||''),
+      temas_estado:String(r[24]||''),
+      estado:String(r[25]||'disponible'),
+      oct29:String(r[26]||''),oct30:String(r[27]||''),oct31:String(r[28]||''),nov1:String(r[29]||''),
+      // Derived helpers
+      get temas(){ return [this.tema1,this.tema2,this.tema3,this.tema4].filter(Boolean).join(', '); },
+      get temasArr(){ return [this.tema1,this.tema2,this.tema3,this.tema4].filter(Boolean); },
+      get detallesArr(){ return [this.detalle1,this.detalle2,this.detalle3,this.detalle4]; },
+      get temasEstadoArr(){
+        const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
+        const n=this.temasArr.length||1;
+        while(arr.length<n)arr.push('disponible');
+        return arr;
+      }
     }));
     await loadManualSpeakers();
     renderSpeakers(); toast('✅ Speakers actualizados');
@@ -1352,12 +1501,15 @@ async function loadManualSpeakers(){
 
 async function saveSpeakers(){
   if(!(await checkVersion('Speakers')))return;
-  // Schema: nombre, tipo, tier, mail, whatsapp, telegram, signal, linkedin, stages(calc), temas, referido, empresa, notas, estado
+  // Schema 30 cols
   const data=state.speakers.map(s=>[
-    s.nombre,s.tipo||'speaker',s.tier||'',s.mail||'',s.whatsapp||'',
-    s.telegram||'',s.signal||'',s.linkedin||'',
-    calcSpeakerAssignmentsText(s.nombre||''),
-    s.temas||'',s.referido||'',s.empresa||'',s.notas||'',s.estado||''
+    s.nombre||'',s.tipo||'speaker',s.apodo||'',s.pais||'',s.idioma||'es',
+    s.mail||'',s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',
+    s.x||'',s.instagram||'',s.empresa||'',s.notas||'',s.bio||'',s.eventos_anteriores||'',
+    s.tema1||'',s.detalle1||'',s.tema2||'',s.detalle2||'',
+    s.tema3||'',s.detalle3||'',s.tema4||'',s.detalle4||'',
+    s.temas_estado||'',s.estado||'disponible',
+    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||''
   ]);
   await gasPost('Speakers','replace_all',data);
   // Also save manual if dirty
@@ -1510,16 +1662,18 @@ function redo() {
 let currentDay = 1;
 function switchDay(d) {
   if (d === currentDay) return;
-  if (dirty.principal && !confirm('Hay cambios sin guardar en la agenda. ¿Guardar antes de cambiar de día?')) {
+  if (dirty.principal && !confirm(`Hay cambios sin guardar en ${DAY_LABELS[currentDay]||('Día '+currentDay)}. ¿Guardar antes de cambiar?`)) {
     // save first
     savePrincipal().then(() => _doSwitchDay(d));
     return;
   }
   _doSwitchDay(d);
 }
+const DAY_LABELS = {1:'Oct 29',2:'Oct 30',3:'Oct 31',4:'Nov 1'};
+const DAY_NAMES  = {1:'Opening Party',2:'LABITCONF Day 1',3:'LABITCONF Day 2',4:'Experience Day'};
 function _doSwitchDay(d) {
   currentDay = d;
-  [1,2,3].forEach(n => {
+  [1,2,3,4].forEach(n => {
     const b = document.getElementById('dayBtn' + n);
     if (!b) return;
     if (n === d) {
@@ -1536,7 +1690,7 @@ function _doSwitchDay(d) {
 }
 async function loadPrincipalDay() {
   const sheetName = currentDay === 1 ? 'Principal' : `Principal_D${currentDay}`;
-  toast(`⏳ Cargando Día ${currentDay}…`);
+  toast(`⏳ Cargando ${DAY_LABELS[currentDay]||('Día '+currentDay)} — ${DAY_NAMES[currentDay]||''}…`);
   try {
     const raw = await gasGet(sheetName);
     if (!raw || raw.length < 2) { state.principal = []; renderPrincipal(); toast(`Día ${currentDay}: sin datos`); return; }
@@ -1558,15 +1712,15 @@ async function loadPrincipalDay() {
       return { tipo, stages };
     });
     renderPrincipal();
-    toast(`✅ Día ${currentDay} cargado`);
+    toast(`✅ ${DAY_LABELS[currentDay]||('Día '+currentDay)} cargado`);
   } catch(e) { toast('⚠️ Error al cargar día: ' + e.message, true); }
 }
 
 // ── EXPORT CSV ────────────────────────────────────────────────────────
 function exportCSV() {
-  const headers = ['Nombre','Tipo','Estado','Stage','Temas','Referido','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas'];
+  const headers = ['Nombre','Apodo','Tipo','País','Idioma','Estado','Temas','Repartos','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas','Oct29','Oct30','Oct31','Nov1'];
   const rows = state.speakers.map(s =>
-    [s.nombre, s.tipo, s.estado||'', calcSpeakerAssignmentsText(s.nombre||''), s.temas||'', s.mail||'', s.whatsapp||'', s.telegram||'', s.signal||'', s.linkedin||'', s.empresa||'', s.notas||'']
+    [s.nombre,s.apodo||'',s.tipo,s.pais||'',s.idioma||'es',s.estado||'disponible',s.temas||'',calcSpeakerAssignmentsText(s.nombre||''),s.mail||'',s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',s.empresa||'',s.notas||'',s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'']
     .map(v => `"${String(v||'').replace(/"/g,'""')}"`)
   );
   const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -1715,9 +1869,9 @@ function buildStageSemaphore() {
 }
 
 // ── KANBAN ────────────────────────────────────────────────────────────
-const KANBAN_COLS = ['invitado','pendiente','confirmado','listo'];
-const KANBAN_LABELS = { invitado:'📩 Invitado', pendiente:'⏳ Pendiente', confirmado:'✅ Confirmado', listo:'🟢 Listo/Briefeado' };
-const KANBAN_COLORS = { invitado:'#3b82f6', pendiente:'#eab308', confirmado:'#22c55e', listo:'#a78bfa' };
+const KANBAN_COLS = ['disponible','revisar','manual','confirmado'];
+const KANBAN_LABELS = { disponible:'⬜ Disponible', revisar:'🔍 Revisar', manual:'📋 Manual', confirmado:'✅ Confirmado' };
+const KANBAN_COLORS = { disponible:'#6b7280', revisar:'#eab308', manual:'#06b6d4', confirmado:'#22c55e' };
 
 function renderKanban() {
   const board = document.getElementById('kanbanBoard');
@@ -1726,9 +1880,10 @@ function renderKanban() {
   const groups = {};
   KANBAN_COLS.forEach(c => groups[c] = []);
   state.speakers.forEach((s, i) => {
-    const est = s.estado === 'no_aprobado' ? null : (s.estado || 'invitado');
+    const est = s.estado === 'rechazado' ? null : (s.estado || 'disponible');
     if (est && groups[est]) groups[est].push({ s, i });
-    else if (!est) groups['invitado'].push({ s, i });
+    else if (!est) {} // rechazados no aparecen en kanban
+    else groups['disponible'].push({ s, i });
   });
 
   board.innerHTML = KANBAN_COLS.map(col => {
@@ -1769,8 +1924,7 @@ function kanbanDragStart(e, idx) {
 function kanbanDrop(e, newEstado) {
   e.preventDefault();
   if (_kanbanDragIdx === null) return;
-  const map = { listo: 'confirmado' }; // 'listo' stored as 'confirmado' variant — use as-is
-  state.speakers[_kanbanDragIdx].estado = newEstado === 'listo' ? 'listo' : newEstado;
+  state.speakers[_kanbanDragIdx].estado = newEstado;
   markDirty('speakers');
   _kanbanDragIdx = null;
   renderKanban();
