@@ -6,17 +6,16 @@
 <title>LABITCONF 2026 — Inscripción de Speakers</title>
 <style>
 :root {
-  --bg: #000000;
-  --bg2: #0f0f0f;
-  --bg3: #1a1a1a;
+  --bg:     #000000;
+  --bg2:    #0f0f0f;
+  --bg3:    #1a1a1a;
+  --bg4:    #222222;
   --border: #2d2d2d;
-  --text: #ffffff;
-  --dim: #888888;
+  --text:   #ffffff;
+  --dim:    #888888;
+  --dim2:   #555555;
   --orange: #E84010;
   --orange-dim: rgba(232,64,16,.15);
-  --red: #dc2626;
-  --green: #22c55e;
-  --error: #ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;min-height:100vh;}
@@ -27,62 +26,80 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .header-logo span{color:var(--orange);}
 .lang-toggle{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
 .lang-btn{padding:5px 14px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;background:var(--bg3);color:var(--dim);}
-.lang-btn.active{background:var(--orange);color:#000;}
+.lang-btn.active{background:var(--orange);color:#fff;}
 
 /* MAIN */
-.main{max-width:760px;margin:0 auto;padding:32px 20px 60px;}
-.page-title{font-size:26px;font-weight:900;margin-bottom:6px;color:var(--text);}
-.page-sub{font-size:15px;color:var(--dim);margin-bottom:32px;}
+.main{max-width:780px;margin:0 auto;padding:32px 20px 80px;}
+.page-title{font-size:26px;font-weight:900;margin-bottom:6px;}
+.page-sub{font-size:15px;color:var(--dim);margin-bottom:32px;line-height:1.5;}
 
 /* SECTION */
-.section{margin-bottom:28px;}
-.section-title{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--orange);margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.section{margin-bottom:30px;}
+.section-title{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--orange);margin-bottom:16px;padding-bottom:7px;border-bottom:1px solid var(--border);}
 
 /* GRID */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .grid-1{display:grid;grid-template-columns:1fr;gap:14px;}
-@media(max-width:560px){.grid-2{grid-template-columns:1fr;}}
+@media(max-width:580px){.grid-2,.grid-3{grid-template-columns:1fr;}}
 
 /* FIELD */
-.field{display:flex;flex-direction:column;gap:5px;}
+.field{display:flex;flex-direction:column;gap:6px;}
 .label{font-size:13px;font-weight:700;color:var(--dim);}
 .label .req{color:var(--orange);}
 .inp,.sel,.ta{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:15px;font-family:inherit;width:100%;outline:none;transition:border-color .15s;}
-.inp::placeholder,.ta::placeholder{color:#444;}
+.inp::placeholder,.ta::placeholder{color:var(--dim2);}
 .inp:focus,.sel:focus,.ta:focus{border-color:var(--orange);}
 .sel{cursor:pointer;color-scheme:dark;}
 .sel option{background:#1a1a1a;}
 .ta{resize:vertical;min-height:72px;}
-.counter{font-size:12px;color:#444;text-align:right;margin-top:2px;}
-.field-error .inp,.field-error .sel,.field-error .ta{border-color:var(--error);}
-.field-error .label{color:var(--error);}
-.err-msg{font-size:12px;color:var(--error);margin-top:2px;}
+.counter{font-size:11px;color:var(--dim2);text-align:right;}
+.field-error .inp,.field-error .sel,.field-error .ta,.field-error .check-group{border-color:#ef4444 !important;outline:1px solid #ef4444;}
+.field-error .label{color:#ef4444;}
+.err-msg{font-size:12px;color:#ef4444;}
+.hint{font-size:12px;color:var(--dim2);line-height:1.4;}
+
+/* CHECKBOX GROUP */
+.check-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
+.check-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:4px 10px;border-radius:20px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:600;}
+.check-chip input[type=checkbox]{display:none;}
+.check-chip:hover{border-color:var(--orange);}
+.check-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
+
+/* RADIO GROUP */
+.radio-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
+.radio-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:4px 12px;border-radius:20px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:600;}
+.radio-chip input[type=radio]{display:none;}
+.radio-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
 
 /* TEMA CARD */
-.tema-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;position:relative;}
-.tema-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.tema-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;}
+.tema-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .tema-num{font-size:13px;font-weight:800;color:var(--orange);}
-.tema-remove{background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;}
-.tema-remove:hover{color:var(--error);background:rgba(239,68,68,.1);}
-.add-tema-btn{display:flex;align-items:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--dim);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;}
+.tema-remove{background:none;border:none;color:var(--dim2);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;}
+.tema-remove:hover{color:#ef4444;background:rgba(239,68,68,.1);}
+.add-tema-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--dim);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:4px;}
 .add-tema-btn:hover{color:var(--orange);border-color:var(--orange);background:var(--orange-dim);}
 
 /* SUBMIT */
-.submit-btn{width:100%;padding:14px;background:var(--orange);color:#000;border:none;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:8px;}
-.submit-btn:hover:not(:disabled){background:#ff9f1a;transform:translateY(-1px);}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
+.submit-btn{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:8px;letter-spacing:.02em;}
+.submit-btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px);}
+.submit-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* SUCCESS */
-.success-screen{text-align:center;padding:60px 20px;display:none;}
-.success-icon{font-size:56px;margin-bottom:18px;}
-.success-title{font-size:24px;font-weight:900;color:var(--green);margin-bottom:10px;}
-.success-sub{font-size:15px;color:var(--dim);line-height:1.6;}
+.success-screen{text-align:center;padding:70px 20px;display:none;}
+.success-icon{font-size:60px;margin-bottom:20px;}
+.success-title{font-size:24px;font-weight:900;color:#22c55e;margin-bottom:10px;}
+.success-sub{font-size:15px;color:var(--dim);line-height:1.7;}
 
 /* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--error);color:var(--error);padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid #ef4444;color:#ef4444;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
 #toast.show{opacity:1;}
+
+/* DIVIDER */
+.sep{height:1px;background:var(--border);margin:6px 0 14px;}
 </style>
 </head>
 <body>
@@ -96,7 +113,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </div>
 
 <div class="main">
-  <!-- SUCCESS SCREEN -->
+
+  <!-- SUCCESS -->
   <div class="success-screen" id="successScreen">
     <div class="success-icon">₿</div>
     <div class="success-title" id="successTitle">¡Gracias por inscribirte!</div>
@@ -110,18 +128,21 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
     <form id="speakerForm" onsubmit="handleSubmit(event)" novalidate>
 
-      <!-- DATOS PERSONALES -->
+      <!-- ── DATOS PERSONALES ── -->
       <div class="section">
         <div class="section-title" id="sec1Title">Datos Personales</div>
         <div class="grid-2">
+
           <div class="field" id="f-nombre">
-            <label class="label" id="l-nombre">Nombre completo <span class="req">*</span></label>
+            <label class="label" id="l-nombre">Nombre Completo <span class="req">*</span></label>
             <input class="inp" id="nombre" type="text" autocomplete="name" maxlength="120">
           </div>
-          <div class="field" id="f-apodo">
-            <label class="label" id="l-apodo">Apodo / Nombre artístico</label>
+
+          <div class="field">
+            <label class="label" id="l-apodo">Apodo (Alias)</label>
             <input class="inp" id="apodo" type="text" maxlength="80">
           </div>
+
           <div class="field" id="f-tipo">
             <label class="label" id="l-tipo">Tipo <span class="req">*</span></label>
             <select class="sel" id="tipo">
@@ -133,30 +154,31 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
               <option value="sponsor">Sponsor</option>
             </select>
           </div>
+
           <div class="field" id="f-pais">
-            <label class="label" id="l-pais">País de origen <span class="req">*</span></label>
+            <label class="label" id="l-pais">País de Origen <span class="req">*</span></label>
             <input class="inp" id="pais" type="text" maxlength="60">
           </div>
-          <div class="field" id="f-idioma">
-            <label class="label" id="l-idioma">Idioma de presentación <span class="req">*</span></label>
-            <select class="sel" id="idioma">
-              <option value="es">Español</option>
-              <option value="en">English</option>
-            </select>
-          </div>
+
           <div class="field" id="f-mail">
             <label class="label" id="l-mail">Mail <span class="req">*</span></label>
             <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
           </div>
+
+          <div class="field">
+            <label class="label" id="l-empresa">Empresa | Referencia</label>
+            <input class="inp" id="empresa" type="text" maxlength="120">
+          </div>
+
         </div>
       </div>
 
-      <!-- CONTACTO -->
+      <!-- ── CONTACTO ── -->
       <div class="section">
         <div class="section-title" id="sec2Title">Contacto</div>
         <div class="grid-2">
           <div class="field">
-            <label class="label" id="l-whatsapp">WhatsApp</label>
+            <label class="label">WhatsApp</label>
             <input class="inp" id="whatsapp" type="tel" placeholder="+54 11 1234-5678">
           </div>
           <div class="field">
@@ -172,49 +194,144 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <input class="inp" id="linkedin" type="url" placeholder="linkedin.com/in/usuario">
           </div>
           <div class="field">
-            <label class="label">X / Twitter</label>
+            <label class="label">X | Twitter</label>
             <input class="inp" id="x" type="text" placeholder="@handle">
           </div>
           <div class="field">
             <label class="label">Instagram</label>
             <input class="inp" id="instagram" type="text" placeholder="@handle">
           </div>
-          <div class="field" style="grid-column:1/-1" id="f-empresa">
-            <label class="label" id="l-empresa">Empresa / Referencia</label>
-            <input class="inp" id="empresa" type="text" maxlength="120">
+        </div>
+      </div>
+
+      <!-- ── IDIOMA ── -->
+      <div class="section">
+        <div class="section-title" id="sec-idiomaTitle">Idioma de Presentación</div>
+        <div class="field" id="f-idioma">
+          <label class="label" id="l-idioma">¿En qué idioma podés presentar? <span class="req">*</span></label>
+          <div class="check-group" id="idiomaGroup">
+            <label class="check-chip" style="--c:#ffffff" onclick="toggleChip(this,'idioma','es')">
+              <input type="checkbox" value="es"> 🌎 Español
+            </label>
+            <label class="check-chip" style="--c:#60a5fa" onclick="toggleChip(this,'idioma','en')">
+              <input type="checkbox" value="en"> 🌍 English
+            </label>
           </div>
         </div>
       </div>
 
-      <!-- PROPUESTA(S) -->
+      <!-- ── PROPUESTA(S) ── -->
       <div class="section">
         <div class="section-title" id="sec3Title">Propuesta(s)</div>
         <div id="temasWrap"></div>
         <button type="button" class="add-tema-btn" id="addTemaBtn" onclick="addTema()">
-          <span>+</span> <span id="addTemaLabel">Agregar otro tema</span>
+          + <span id="addTemaLabel">Agregar otro tema</span>
         </button>
       </div>
 
-      <!-- PERFIL -->
+      <!-- ── LOGÍSTICA ── -->
       <div class="section">
-        <div class="section-title" id="sec4Title">Perfil</div>
+        <div class="section-title" id="sec4Title">Logística</div>
+        <div class="grid-1">
+
+          <div class="field">
+            <label class="label" id="l-dias">Días que asistís al evento</label>
+            <div class="check-group">
+              <label class="check-chip" style="--c:#f59e0b" onclick="toggleChip(this,'dias','oct29')">
+                <input type="checkbox" value="oct29"> Oct 29
+              </label>
+              <label class="check-chip" style="--c:#E84010" onclick="toggleChip(this,'dias','oct30')">
+                <input type="checkbox" value="oct30"> Oct 30
+              </label>
+              <label class="check-chip" style="--c:#E84010" onclick="toggleChip(this,'dias','oct31')">
+                <input type="checkbox" value="oct31"> Oct 31
+              </label>
+              <label class="check-chip" style="--c:#f59e0b" onclick="toggleChip(this,'dias','nov1')">
+                <input type="checkbox" value="nov1"> Nov 1
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── PERFIL ── -->
+      <div class="section">
+        <div class="section-title" id="sec5Title">Perfil</div>
         <div class="grid-1">
           <div class="field">
-            <label class="label" id="l-bio">Biografía corta</label>
+            <label class="label" id="l-bio">Biografía Corta</label>
             <textarea class="ta" id="bio" maxlength="200" oninput="updateCounter('bio','bio-cnt',200)"></textarea>
-            <div class="counter"><span id="bio-cnt">0</span>/200</div>
+            <div class="counter"><span id="bio-cnt">0</span> / 200</div>
           </div>
           <div class="field">
-            <label class="label" id="l-eventos">Eventos anteriores</label>
-            <textarea class="ta" id="eventos" maxlength="100" oninput="updateCounter('eventos','eventos-cnt',100)"></textarea>
-            <div class="counter"><span id="eventos-cnt">0</span>/100</div>
+            <label class="label" id="l-eventos">Eventos Anteriores</label>
+            <textarea class="ta" id="eventos" maxlength="100" oninput="updateCounter('eventos','eventos-cnt',100)" style="min-height:52px"></textarea>
+            <div class="counter"><span id="eventos-cnt">0</span> / 100</div>
           </div>
+        </div>
+      </div>
+
+      <!-- ── PARTICIPACIÓN ── -->
+      <div class="section">
+        <div class="section-title" id="sec6Title">Participación</div>
+        <div class="grid-2">
+
+          <div class="field">
+            <label class="label" id="l-primera">¿Primera vez en LABITCONF?</label>
+            <div class="radio-group" id="primeraGroup">
+              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'primera','si')">
+                <input type="radio" name="primera" value="si"> Sí
+              </label>
+              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'primera','no')">
+                <input type="radio" name="primera" value="no"> No
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" id="l-moderador">¿Aceptás ser Moderador de panel?</label>
+            <div class="radio-group" id="moderadorGroup">
+              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'moderador','si')">
+                <input type="radio" name="moderador" value="si"> Sí
+              </label>
+              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'moderador','no')">
+                <input type="radio" name="moderador" value="no"> No
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" id="l-podcast">¿Disponible para entrevista | podcast del evento?</label>
+            <div class="radio-group" id="podcastGroup">
+              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'podcast','si')">
+                <input type="radio" name="podcast" value="si"> Sí
+              </label>
+              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'podcast','no')">
+                <input type="radio" name="podcast" value="no"> No
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" id="l-empresa-presenta">¿Traés empresa | proyecto que presentás?</label>
+            <div class="radio-group" id="empresaPresentaGroup">
+              <label class="radio-chip" style="--c:#22c55e" onclick="setRadio(this,'empresaPresenta','si')">
+                <input type="radio" name="empresaPresenta" value="si"> Sí
+              </label>
+              <label class="radio-chip" style="--c:#E84010" onclick="setRadio(this,'empresaPresenta','no')">
+                <input type="radio" name="empresaPresenta" value="no"> No
+              </label>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">
         <span id="submitTxt">Enviar inscripción</span>
       </button>
+
     </form>
   </div>
 </div>
@@ -229,75 +346,115 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqQHn5o9xxS-wmMGgJews-
 // ── TRADUCCIONES ───────────────────────────────────────────────────
 const T = {
   es: {
-    pageTitle:    'Inscripción de Speakers',
-    pageSub:      'Completá el formulario para proponer tu participación en LABITCONF 2026.',
-    sec1:         'Datos Personales',
-    sec2:         'Contacto',
-    sec3:         'Propuesta(s)',
-    sec4:         'Perfil',
-    lNombre:      'Nombre Completo',
-    lApodo:       'Apodo (Alias)',
-    lTipo:        'Tipo',
-    lPais:        'País de origen',
-    lIdioma:      'Idioma de presentación',
-    lMail:        'Mail',
-    lWhatsapp:    'WhatsApp',
-    lEmpresa:     'Empresa / Referencia',
-    lBio:         'Biografía Corta',
-    lEventos:     'Eventos Anteriores',
-    temaNum:      n => `Tema ${n}`,
-    temaTitle:    'Título del Tema',
-    temaDesc:     'Descripción | Keywords',
-    temaDescHint: 'Describí brevemente tu propuesta. Las palabras clave ayudan a agrupar por temáticas.',
-    addTema:      'Agregar otro tema',
-    submitBtn:    'Enviar inscripción',
-    sending:      'Enviando…',
-    successTitle: '¡Gracias por inscribirte!',
-    successSub:   'Revisaremos tu propuesta y te contactaremos pronto.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1',
-    errRequired:  'Este campo es requerido',
-    errMail:      'Mail inválido',
-    errTema:      'Ingresá al menos un tema',
-    toastError:   'Error al enviar. Intentá de nuevo.',
+    pageTitle:      'Inscripción de Speakers',
+    pageSub:        'Completá el formulario para proponer tu participación en LABITCONF 2026.',
+    sec1:           'Datos Personales',
+    sec2:           'Contacto',
+    secIdioma:      'Idioma de Presentación',
+    sec3:           'Propuesta(s)',
+    sec4:           'Logística',
+    sec5:           'Perfil',
+    sec6:           'Participación',
+    lNombre:        'Nombre Completo',
+    lApodo:         'Apodo (Alias)',
+    lTipo:          'Tipo',
+    lPais:          'País de Origen',
+    lMail:          'Mail',
+    lEmpresa:       'Empresa | Referencia',
+    lIdioma:        '¿En qué idioma podés presentar?',
+    lDias:          'Días que asistís al evento',
+    lBio:           'Biografía Corta',
+    lEventos:       'Eventos Anteriores',
+    lPrimera:       '¿Primera vez en LABITCONF?',
+    lModerador:     '¿Aceptás ser Moderador de panel?',
+    lPodcast:       '¿Disponible para entrevista | podcast del evento?',
+    lEmpresaPres:   '¿Traés empresa | proyecto que presentás?',
+    temaNum:        n => `Tema ${n}`,
+    temaLevel:      'Nivel',
+    temaFormato:    'Formato Preferido',
+    temaDur:        'Duración Ideal',
+    temaTitle:      'Título del Tema',
+    temaDesc:       'Descripción | Keywords',
+    temaDescHint:   'Describí brevemente tu propuesta. Las palabras clave ayudan a agrupar por temáticas.',
+    addTema:        'Agregar otro tema',
+    submitBtn:      'Enviar inscripción',
+    sending:        'Enviando…',
+    successTitle:   '¡Gracias por inscribirte!',
+    successSub:     'Revisaremos tu propuesta y te contactaremos pronto.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1',
+    errRequired:    'Este campo es requerido',
+    errMail:        'Mail inválido',
+    errIdioma:      'Seleccioná al menos un idioma',
+    toastError:     'Error al enviar. Intentá de nuevo.',
     placeholderEventos: '¿En qué eventos hablaste antes? (ej: BTC Miami, Satoshi Summit)',
+    si: 'Sí', no: 'No',
   },
   en: {
-    pageTitle:    'Speaker Registration',
-    pageSub:      'Fill in the form to propose your participation at LABITCONF 2026.',
-    sec1:         'Personal Info',
-    sec2:         'Contact',
-    sec3:         'Proposal(s)',
-    sec4:         'Profile',
-    lNombre:      'Full Name',
-    lApodo:       'Alias (Nickname)',
-    lTipo:        'Type',
-    lPais:        'Country of origin',
-    lIdioma:      'Presentation language',
-    lMail:        'Email',
-    lWhatsapp:    'WhatsApp',
-    lEmpresa:     'Company / Reference',
-    lBio:         'Short Bio',
-    lEventos:     'Previous Events',
-    temaNum:      n => `Topic ${n}`,
-    temaTitle:    'Topic Title',
-    temaDesc:     'Description | Keywords',
-    temaDescHint: 'Briefly describe your proposal. Keywords help group by theme.',
-    addTema:      'Add another topic',
-    submitBtn:    'Submit registration',
-    sending:      'Sending…',
-    successTitle: 'Thank you for registering!',
-    successSub:   "We'll review your proposal and contact you soon.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1",
-    errRequired:  'This field is required',
-    errMail:      'Invalid email',
-    errTema:      'Enter at least one topic',
-    toastError:   'Error sending. Please try again.',
+    pageTitle:      'Speaker Registration',
+    pageSub:        'Fill in the form to propose your participation at LABITCONF 2026.',
+    sec1:           'Personal Info',
+    sec2:           'Contact',
+    secIdioma:      'Presentation Language',
+    sec3:           'Proposal(s)',
+    sec4:           'Logistics',
+    sec5:           'Profile',
+    sec6:           'Participation',
+    lNombre:        'Full Name',
+    lApodo:         'Alias (Nickname)',
+    lTipo:          'Type',
+    lPais:          'Country of Origin',
+    lMail:          'Email',
+    lEmpresa:       'Company | Reference',
+    lIdioma:        'Which language(s) can you present in?',
+    lDias:          'Days you will attend the event',
+    lBio:           'Short Bio',
+    lEventos:       'Previous Events',
+    lPrimera:       'First time at LABITCONF?',
+    lModerador:     'Open to moderate a panel?',
+    lPodcast:       'Available for event interview | podcast?',
+    lEmpresaPres:   'Are you bringing a company | project to present?',
+    temaNum:        n => `Topic ${n}`,
+    temaLevel:      'Level',
+    temaFormato:    'Preferred Format',
+    temaDur:        'Ideal Duration',
+    temaTitle:      'Topic Title',
+    temaDesc:       'Description | Keywords',
+    temaDescHint:   'Briefly describe your proposal. Keywords help group by theme.',
+    addTema:        'Add another topic',
+    submitBtn:      'Submit registration',
+    sending:        'Sending…',
+    successTitle:   'Thank you for registering!',
+    successSub:     "We'll review your proposal and contact you soon.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1",
+    errRequired:    'This field is required',
+    errMail:        'Invalid email',
+    errIdioma:      'Select at least one language',
+    toastError:     'Error sending. Please try again.',
     placeholderEventos: 'Which events have you spoken at before? (e.g. BTC Miami, Satoshi Summit)',
+    si: 'Yes', no: 'No',
   }
 };
 
 let lang = 'es';
 let temaCount = 0;
 
-// ── LANG ───────────────────────────────────────────────────────────
+// ── CHIP TOGGLES ────────────────────────────────────────────────────
+function toggleChip(label, group, val) {
+  label.classList.toggle('checked');
+}
+function setRadio(label, group, val) {
+  // Deselect all in same group
+  label.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l => l.classList.remove('checked'));
+  label.classList.add('checked');
+}
+function getChecked(groupId) {
+  return [...document.getElementById(groupId).querySelectorAll('.check-chip.checked')]
+    .map(l => l.querySelector('input').value);
+}
+function getRadio(groupId) {
+  const checked = document.getElementById(groupId).querySelector('.radio-chip.checked');
+  return checked ? checked.querySelector('input').value : '';
+}
+
+// ── LANG ────────────────────────────────────────────────────────────
 function setLang(l) {
   lang = l;
   document.getElementById('btnES').classList.toggle('active', l === 'es');
@@ -308,87 +465,170 @@ function setLang(l) {
 
 function applyTranslations() {
   const t = T[lang];
-  setText('pageTitle',   t.pageTitle);
-  setText('pageSub',     t.pageSub);
-  setText('sec1Title',   t.sec1);
-  setText('sec2Title',   t.sec2);
-  setText('sec3Title',   t.sec3);
-  setText('sec4Title',   t.sec4);
-  setText('l-nombre',    t.lNombre + ' ★');
-  setText('l-apodo',     t.lApodo);
-  setText('l-tipo',      t.lTipo + ' ★');
-  setText('l-pais',      t.lPais + ' ★');
-  setText('l-idioma',    t.lIdioma + ' ★');
-  setText('l-mail',      t.lMail + ' ★');
-  setText('l-whatsapp',  t.lWhatsapp);
-  setText('l-empresa',   t.lEmpresa);
-  setText('l-bio',       t.lBio);
-  setText('l-eventos',   t.lEventos);
-  setText('addTemaLabel', t.addTema);
-  setText('submitTxt',   t.submitBtn);
-  setText('successTitle', t.successTitle);
+  setText('pageTitle',      t.pageTitle);
+  setText('pageSub',        t.pageSub);
+  setText('sec1Title',      t.sec1);
+  setText('sec2Title',      t.sec2);
+  setText('sec-idiomaTitle',t.secIdioma);
+  setText('sec3Title',      t.sec3);
+  setText('sec4Title',      t.sec4);
+  setText('sec5Title',      t.sec5);
+  setText('sec6Title',      t.sec6);
+  setLabelReq('l-nombre',   t.lNombre, true);
+  setLabel('l-apodo',       t.lApodo);
+  setLabelReq('l-tipo',     t.lTipo, true);
+  setLabelReq('l-pais',     t.lPais, true);
+  setLabelReq('l-mail',     t.lMail, true);
+  setLabel('l-empresa',     t.lEmpresa);
+  setLabelReq('l-idioma',   t.lIdioma, true);
+  setLabel('l-dias',        t.lDias);
+  setLabel('l-bio',         t.lBio);
+  setLabel('l-eventos',     t.lEventos);
+  setLabel('l-primera',     t.lPrimera);
+  setLabel('l-moderador',   t.lModerador);
+  setLabel('l-podcast',     t.lPodcast);
+  setLabel('l-empresa-presenta', t.lEmpresaPres);
+  setText('addTemaLabel',   t.addTema);
+  setText('submitTxt',      t.submitBtn);
+  setText('successTitle',   t.successTitle);
   const subEl = document.getElementById('successSub');
-  if (subEl) subEl.innerHTML = t.successSub.replace(/\n/g, '<br>');
+  if (subEl) subEl.innerHTML = t.successSub.replace(/\n/g,'<br>');
   setAttr('eventos', 'placeholder', t.placeholderEventos);
+  // Sí/No chips
+  document.querySelectorAll('[data-si]').forEach(el => el.textContent = t.si);
+  document.querySelectorAll('[data-no]').forEach(el => el.textContent = t.no);
   // Temas
   document.querySelectorAll('.tema-card').forEach((card, i) => {
-    const num = card.dataset.num;
-    const lbl = card.querySelector('.tema-num');
-    if (lbl) lbl.textContent = t.temaNum(num);
-    const lt = card.querySelector('.tema-title-lbl');
-    if (lt) lt.textContent = t.temaTitle + (i === 0 ? ' ★' : '');
-    const ld = card.querySelector('.tema-desc-lbl');
-    if (ld) ld.textContent = t.temaDesc + (i === 0 ? ' ★' : '');
-    const ta = card.querySelector('textarea');
-    if (ta) ta.placeholder = t.temaDescHint;
+    const n = card.dataset.num;
+    const isFirst = i === 0;
+    const lNum = card.querySelector('.tema-num');
+    if (lNum) lNum.textContent = t.temaNum(n);
+    const lLvl = card.querySelector('.tema-level-lbl');
+    if (lLvl) lLvl.innerHTML = t.temaLevel + (isFirst ? ' <span class="req">*</span>' : '');
+    const lFmt = card.querySelector('.tema-formato-lbl');
+    if (lFmt) lFmt.textContent = t.temaFormato;
+    const lDur = card.querySelector('.tema-dur-lbl');
+    if (lDur) lDur.textContent = t.temaDur;
+    const lTit = card.querySelector('.tema-title-lbl');
+    if (lTit) lTit.innerHTML = t.temaTitle + (isFirst ? ' <span class="req">*</span>' : '');
+    const lDesc = card.querySelector('.tema-desc-lbl');
+    if (lDesc) lDesc.innerHTML = t.temaDesc + (isFirst ? ' <span class="req">*</span>' : '');
+    const taDesc = card.querySelector('textarea');
+    if (taDesc) taDesc.placeholder = t.temaDescHint;
   });
 }
 
 function setText(id, val) {
   const el = document.getElementById(id);
-  if (el) el.innerHTML = val.replace('★', '<span class="req">*</span>');
+  if (el) el.textContent = val;
+}
+function setLabel(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+function setLabelReq(id, val, req) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = val + (req ? ' <span class="req">*</span>' : '');
 }
 function setAttr(id, attr, val) {
   const el = document.getElementById(id);
   if (el) el.setAttribute(attr, val);
 }
 
-// ── TEMAS ──────────────────────────────────────────────────────────
-function addTema(required = false) {
+// ── TEMAS ───────────────────────────────────────────────────────────
+const FORMATO_OPTS = [
+  { val:'charla',    label:'Charla',    color:'#E84010' },
+  { val:'panel',     label:'Panel',     color:'#ec4899' },
+  { val:'taller',    label:'Taller',    color:'#eab308' },
+  { val:'ama',       label:'AMA',       color:'#ffffff' },
+  { val:'moderador', label:'Moderador', color:'#ef4444' },
+];
+const NIVEL_OPTS = [
+  { val:'basico',      label:'Básico',      color:'#ffffff' },
+  { val:'intermedio',  label:'Intermedio',  color:'#E84010' },
+  { val:'avanzado',    label:'Avanzado',    color:'#ef4444' },
+];
+const DUR_OPTS = [15, 20, 30, 45, 60];
+
+function addTema() {
   if (temaCount >= 4) return;
   temaCount++;
   const n = temaCount;
   const t = T[lang];
   const isFirst = n === 1;
+
+  const nivelesHtml = NIVEL_OPTS.map(o =>
+    `<label class="radio-chip" style="--c:${o.color}" onclick="setRadio(this,'nivel-${n}','${o.val}')">
+      <input type="radio" name="nivel-${n}" value="${o.val}">
+      ${o.label}
+    </label>`
+  ).join('');
+
+  const formatosHtml = FORMATO_OPTS.map(o =>
+    `<label class="check-chip" style="--c:${o.color}" onclick="toggleChip(this,'formato-${n}','${o.val}')">
+      <input type="checkbox" value="${o.val}">
+      ${o.label}
+    </label>`
+  ).join('');
+
+  const durHtml = DUR_OPTS.map(d =>
+    `<option value="${d}"${d===30?' selected':''}>${d} min</option>`
+  ).join('');
+
   const card = document.createElement('div');
   card.className = 'tema-card';
   card.dataset.num = n;
   card.innerHTML = `
     <div class="tema-card-header">
       <span class="tema-num">${t.temaNum(n)}</span>
-      ${!isFirst ? `<button type="button" class="tema-remove" onclick="removeTema(this,${n})">✕</button>` : ''}
+      ${!isFirst ? `<button type="button" class="tema-remove" onclick="removeTema(this)">✕</button>` : ''}
     </div>
-    <div class="grid-1" style="gap:10px">
+    <div class="grid-1" style="gap:12px">
+
+      <div class="field">
+        <label class="label tema-level-lbl">${t.temaLevel}${isFirst?' <span class="req">*</span>':''}</label>
+        <div class="radio-group" id="nivel-${n}">${nivelesHtml}</div>
+      </div>
+
+      <div class="field">
+        <label class="label tema-formato-lbl">${t.temaFormato}</label>
+        <div class="check-group" id="formato-${n}">${formatosHtml}</div>
+      </div>
+
+      <div class="grid-2" style="gap:12px">
+        <div class="field">
+          <label class="label tema-dur-lbl">${t.temaDur}</label>
+          <select class="sel" id="dur-${n}">${durHtml}</select>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="sep"></div>
+
       <div class="field" id="ft-${n}">
-        <label class="label tema-title-lbl">${t.temaTitle}${isFirst ? ' <span class="req">*</span>' : ''}</label>
-        <input class="inp" id="tema-titulo-${n}" type="text" maxlength="80" oninput="updateCounter('tema-titulo-${n}','cnt-t${n}',80)">
-        <div class="counter"><span id="cnt-t${n}">0</span>/80</div>
+        <label class="label tema-title-lbl">${t.temaTitle}${isFirst?' <span class="req">*</span>':''}</label>
+        <input class="inp" id="tema-titulo-${n}" type="text" maxlength="80"
+          oninput="updateCounter('tema-titulo-${n}','cnt-t${n}',80)">
+        <div class="counter"><span id="cnt-t${n}">0</span> / 80</div>
       </div>
+
       <div class="field" id="fd-${n}">
-        <label class="label tema-desc-lbl">${t.temaDesc}${isFirst ? ' <span class="req">*</span>' : ''}</label>
-        <textarea class="ta" id="tema-desc-${n}" maxlength="300" placeholder="${t.temaDescHint}" oninput="updateCounter('tema-desc-${n}','cnt-d${n}',300)"></textarea>
-        <div class="counter"><span id="cnt-d${n}">0</span>/300</div>
+        <label class="label tema-desc-lbl">${t.temaDesc}${isFirst?' <span class="req">*</span>':''}</label>
+        <textarea class="ta" id="tema-desc-${n}" maxlength="300"
+          oninput="updateCounter('tema-desc-${n}','cnt-d${n}',300)"
+          placeholder="${t.temaDescHint}"></textarea>
+        <div class="counter"><span id="cnt-d${n}">0</span> / 300</div>
       </div>
+
     </div>`;
+
   document.getElementById('temasWrap').appendChild(card);
   document.getElementById('addTemaBtn').style.display = temaCount >= 4 ? 'none' : 'flex';
 }
 
-function removeTema(btn, n) {
-  const card = btn.closest('.tema-card');
-  card.remove();
+function removeTema(btn) {
+  btn.closest('.tema-card').remove();
   temaCount--;
-  // Re-numerar
   let i = 0;
   document.querySelectorAll('.tema-card').forEach(c => {
     i++;
@@ -402,76 +642,52 @@ function removeTema(btn, n) {
 function updateCounter(inputId, cntId, max) {
   const el = document.getElementById(inputId);
   const cnt = document.getElementById(cntId);
-  if (el && cnt) cnt.textContent = (el.value || el.innerText || '').length;
+  if (el && cnt) cnt.textContent = el.value.length;
 }
 
-// ── VALIDACIÓN ─────────────────────────────────────────────────────
+// ── VALIDACIÓN ──────────────────────────────────────────────────────
 function clearErrors() {
   document.querySelectorAll('.field-error').forEach(f => f.classList.remove('field-error'));
   document.querySelectorAll('.err-msg').forEach(e => e.remove());
 }
-
 function setError(fieldId, msg) {
   const f = document.getElementById(fieldId);
   if (!f) return;
   f.classList.add('field-error');
-  const existing = f.querySelector('.err-msg');
-  if (!existing) {
+  if (!f.querySelector('.err-msg')) {
     const span = document.createElement('span');
     span.className = 'err-msg';
     span.textContent = msg;
     f.appendChild(span);
   }
 }
-
 function validate() {
   clearErrors();
   const t = T[lang];
   let ok = true;
-
-  const required = [
-    { id: 'f-nombre', inputId: 'nombre' },
-    { id: 'f-tipo',   inputId: 'tipo' },
-    { id: 'f-pais',   inputId: 'pais' },
-    { id: 'f-idioma', inputId: 'idioma' },
-    { id: 'f-mail',   inputId: 'mail' },
-  ];
-
-  required.forEach(({ id, inputId }) => {
-    const el = document.getElementById(inputId);
-    if (!el || !el.value.trim()) {
-      setError(id, t.errRequired);
-      ok = false;
-    }
+  [['f-nombre','nombre'],['f-tipo','tipo'],['f-pais','pais'],['f-mail','mail']].forEach(([fid,iid]) => {
+    const el = document.getElementById(iid);
+    if (!el?.value.trim()) { setError(fid, t.errRequired); ok = false; }
   });
-
-  // Mail format
   const mailEl = document.getElementById('mail');
-  if (mailEl && mailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())) {
-    setError('f-mail', t.errMail);
-    ok = false;
+  if (mailEl?.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())) {
+    setError('f-mail', t.errMail); ok = false;
   }
-
-  // Al menos 1 tema con título
-  const tema1 = document.getElementById('tema-titulo-1');
-  if (!tema1 || !tema1.value.trim()) {
-    const ft = document.getElementById('ft-1');
-    if (ft) setError('ft-1', t.errTema);
-    ok = false;
-  }
-
+  if (!getChecked('idiomaGroup').length) { setError('f-idioma', t.errIdioma); ok = false; }
+  const titulo1 = document.getElementById('tema-titulo-1');
+  if (!titulo1?.value.trim()) { setError('ft-1', t.errRequired); ok = false; }
+  const desc1 = document.getElementById('tema-desc-1');
+  if (!desc1?.value.trim()) { setError('fd-1', t.errRequired); ok = false; }
   return ok;
 }
 
-// ── SUBMIT ─────────────────────────────────────────────────────────
+// ── SUBMIT ──────────────────────────────────────────────────────────
 async function handleSubmit(e) {
   e.preventDefault();
   if (!validate()) {
-    const firstError = document.querySelector('.field-error');
-    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.querySelector('.field-error')?.scrollIntoView({ behavior:'smooth', block:'center' });
     return;
   }
-
   const btn = document.getElementById('submitBtn');
   const txt = document.getElementById('submitTxt');
   btn.disabled = true;
@@ -481,9 +697,15 @@ async function handleSubmit(e) {
   const temas = [];
   document.querySelectorAll('.tema-card').forEach(card => {
     const n = card.dataset.num;
-    const titulo = (document.getElementById(`tema-titulo-${n}`)?.value || '').trim();
-    const descripcion = (document.getElementById(`tema-desc-${n}`)?.value || '').trim();
-    if (titulo) temas.push({ titulo, descripcion });
+    const titulo = document.getElementById(`tema-titulo-${n}`)?.value.trim() || '';
+    if (!titulo) return;
+    temas.push({
+      titulo,
+      descripcion: document.getElementById(`tema-desc-${n}`)?.value.trim() || '',
+      nivel:       getRadio(`nivel-${n}`),
+      formatos:    getChecked(`formato-${n}`).join(','),
+      duracion:    document.getElementById(`dur-${n}`)?.value || '30',
+    });
   });
 
   const payload = {
@@ -493,31 +715,35 @@ async function handleSubmit(e) {
       apodo:              document.getElementById('apodo').value.trim(),
       tipo:               document.getElementById('tipo').value.trim(),
       pais:               document.getElementById('pais').value.trim(),
-      idioma:             document.getElementById('idioma').value.trim(),
+      idioma:             getChecked('idiomaGroup').join(','),
       mail:               document.getElementById('mail').value.trim(),
       whatsapp:           document.getElementById('whatsapp').value.trim(),
       telegram:           document.getElementById('telegram').value.trim(),
       signal:             document.getElementById('signal').value.trim(),
       linkedin:           document.getElementById('linkedin').value.trim(),
-      x:                  document.getElementById('x').value.trim().replace(/^@/, ''),
-      instagram:          document.getElementById('instagram').value.trim().replace(/^@/, ''),
+      x:                  document.getElementById('x').value.trim().replace(/^@/,''),
+      instagram:          document.getElementById('instagram').value.trim().replace(/^@/,''),
       empresa:            document.getElementById('empresa').value.trim(),
+      dias:               '',
       bio:                document.getElementById('bio').value.trim(),
       eventos_anteriores: document.getElementById('eventos').value.trim(),
-      temas
+      primera_vez:        getRadio('primeraGroup'),
+      acepta_moderador:   getRadio('moderadorGroup'),
+      disponible_podcast: getRadio('podcastGroup'),
+      trae_empresa:       getRadio('empresaPresentaGroup'),
+      temas,
     }
   };
+  payload.data.dias = getDias();
 
   try {
-    // Apps Script no soporta CORS preflight — usamos no-cors y asumimos éxito
     await fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
+      method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     showSuccess();
-  } catch (err) {
+  } catch(err) {
     btn.disabled = false;
     txt.textContent = T[lang].submitBtn;
     showToast(T[lang].toastError);
@@ -529,10 +755,8 @@ function showSuccess() {
   const sc = document.getElementById('successScreen');
   sc.style.display = 'block';
   document.getElementById('successTitle').textContent = T[lang].successTitle;
-  const subEl = document.getElementById('successSub');
-  subEl.innerHTML = T[lang].successSub.replace(/\n/g, '<br>');
+  document.getElementById('successSub').innerHTML = T[lang].successSub.replace(/\n/g,'<br>');
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -540,8 +764,18 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 4000);
 }
 
-// ── INIT ───────────────────────────────────────────────────────────
-addTema(true); // Tema 1 obligatorio siempre visible
+// ── INIT ────────────────────────────────────────────────────────────
+// Fix dias collection
+function getDias() {
+  const dias = [];
+  document.querySelectorAll('#formWrap .check-chip.checked').forEach(chip => {
+    const v = chip.querySelector('input')?.value;
+    if(['oct29','oct30','oct31','nov1'].includes(v)) dias.push(v);
+  });
+  return dias.join(',');
+}
+
+addTema();
 applyTranslations();
 </script>
 </body>
