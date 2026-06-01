@@ -185,7 +185,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
           <div class="field" id="f-cargo">
             <label class="label" id="l-cargo">Cargo | Rol <span class="req">*</span></label>
-            <input class="inp" id="cargo" type="text" maxlength="120" id="l-cargo-inp">
+            <input class="inp" id="cargo" type="text" maxlength="120" placeholder="Ej: CEO, Investigador, Desarrollador…">
           </div>
 
           <div class="field" id="f-pais">
@@ -444,6 +444,11 @@ const T = {
     errIdioma:'Seleccioná al menos un idioma', toastError:'Error al enviar. Intentá de nuevo.',
     placeholderEventos:'¿En qué eventos hablaste antes? (ej: BTC Miami, Satoshi Summit)',
     si:'Sí', no:'No',
+    tipoOpts:['—','Speaker','Moderador','Panelista','Empresa','Sponsor'],
+    nivelLabels:{basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'},
+    formatoLabels:{charla:'Charla',panel:'Panel',taller:'Taller',ama:'AMA',moderador:'Moderador'},
+    placeholderLinkedin:'linkedin.com/in/usuario',
+    placeholderCargo:'Ej: CEO, Investigador, Desarrollador…',
   },
   en: {
     pageTitle:'Speaker Registration',
@@ -478,6 +483,11 @@ const T = {
     errIdioma:'Select at least one language', toastError:'Error sending. Please try again.',
     placeholderEventos:'Which events have you spoken at before? (e.g. BTC Miami, Satoshi Summit)',
     si:'Yes', no:'No',
+    tipoOpts:['—','Speaker','Moderator','Panelist','Company','Sponsor'],
+    nivelLabels:{basico:'Basic',intermedio:'Intermediate',avanzado:'Advanced'},
+    formatoLabels:{charla:'Talk',panel:'Panel',taller:'Workshop',ama:'AMA',moderador:'Moderator'},
+    placeholderLinkedin:'linkedin.com/in/username',
+    placeholderCargo:'E.g: CEO, Researcher, Developer…',
   }
 };
 
@@ -515,7 +525,47 @@ function applyTranslations() {
   setTxt('photoBtnTxt',t.photoBtnTxt);
   setTxt('consentTxt',t.consent);
   setAttr('eventos','placeholder',t.placeholderEventos);
-  // Temas
+  setAttr('cargo','placeholder',t.placeholderCargo);
+  setAttr('linkedin','placeholder',t.placeholderLinkedin);
+
+  // Tipo select options
+  const tipoSel = document.getElementById('tipo');
+  if (tipoSel) {
+    const vals = ['','speaker','moderador','panelista','empresa','sponsor'];
+    [...tipoSel.options].forEach((opt,i) => { opt.text = t.tipoOpts[i]||opt.text; });
+  }
+
+  // Sí/No chips en sección participación
+  document.querySelectorAll('.radio-chip').forEach(chip => {
+    const input = chip.querySelector('input[type=radio]');
+    if (!input) return;
+    const v = input.value;
+    const txt = chip.lastChild;
+    if (txt && txt.nodeType === 3) {
+      if (v === 'si') txt.textContent = ' ' + t.si;
+      if (v === 'no') txt.textContent = ' ' + t.no;
+    }
+  });
+
+  // Temas — nivel y formato labels
+  document.querySelectorAll('.tema-card').forEach((card,i) => {
+    // Nivel
+    card.querySelectorAll(`[id^="nivel-"] .radio-chip`).forEach(chip => {
+      const input = chip.querySelector('input[type=radio]');
+      if (!input) return;
+      const lbl = t.nivelLabels[input.value];
+      if (lbl) { const txt = chip.lastChild; if(txt&&txt.nodeType===3) txt.textContent = ' '+lbl; }
+    });
+    // Formato
+    card.querySelectorAll(`[id^="formato-"] .check-chip`).forEach(chip => {
+      const input = chip.querySelector('input[type=checkbox]');
+      if (!input) return;
+      const lbl = t.formatoLabels[input.value];
+      if (lbl) { const txt = chip.lastChild; if(txt&&txt.nodeType===3) txt.textContent = ' '+lbl; }
+    });
+  });
+
+  // Temas — resto de labels
   document.querySelectorAll('.tema-card').forEach((card,i) => {
     const n = card.dataset.num;
     const isFirst = i===0;
@@ -579,17 +629,17 @@ function previewPhoto(input) {
 }
 
 // ── TEMAS ─────────────────────────────────────────────────────────────
-const FORMATO_OPTS = [
-  {val:'charla',    label:'Charla',    color:'#ffffff'},
-  {val:'panel',     label:'Panel',     color:'#ef4444'},
-  {val:'taller',    label:'Taller',    color:'#ec4899'},
-  {val:'ama',       label:'AMA',       color:'#E84010'},
-  {val:'moderador', label:'Moderador', color:'#eab308'},
+const FORMATO_VALS = [
+  {val:'charla',    color:'#ffffff'},
+  {val:'panel',     color:'#ef4444'},
+  {val:'taller',    color:'#ec4899'},
+  {val:'ama',       color:'#E84010'},
+  {val:'moderador', color:'#eab308'},
 ];
-const NIVEL_OPTS = [
-  {val:'basico',     label:'Básico',     color:'#22c55e'},
-  {val:'intermedio', label:'Intermedio', color:'#eab308'},
-  {val:'avanzado',   label:'Avanzado',   color:'#E84010'},
+const NIVEL_VALS = [
+  {val:'basico',     color:'#22c55e'},
+  {val:'intermedio', color:'#eab308'},
+  {val:'avanzado',   color:'#E84010'},
 ];
 
 function addTema() {
@@ -600,14 +650,14 @@ function addTema() {
   const isFirst = n === 1;
   const req = s => isFirst ? `${s} <span class="req">*</span>` : s;
 
-  const nivelesHtml = NIVEL_OPTS.map(o =>
+  const nivelesHtml = NIVEL_VALS.map(o =>
     `<label class="radio-chip" style="--c:${o.color}">
-      <input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)"> ${o.label}
+      <input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)"> ${t.nivelLabels[o.val]||o.val}
     </label>`).join('');
 
-  const formatosHtml = FORMATO_OPTS.map(o =>
+  const formatosHtml = FORMATO_VALS.map(o =>
     `<label class="check-chip" style="--c:${o.color}">
-      <input type="checkbox" value="${o.val}" onchange="syncChip(this)"> ${o.label}
+      <input type="checkbox" value="${o.val}" onchange="syncChip(this)"> ${t.formatoLabels[o.val]||o.val}
     </label>`).join('');
 
   const durHtml = [15,20,30,45,60].map(d =>
