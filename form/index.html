@@ -65,12 +65,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .phone-code{width:90px;flex-shrink:0;}
 
 /* PHOTO */
-.photo-wrap{display:flex;align-items:center;gap:14px;}
-.photo-preview{width:64px;height:64px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);object-fit:cover;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
-.photo-preview svg{opacity:.3;}
-.photo-preview img{width:100%;height:100%;object-fit:cover;}
-.photo-btn{padding:8px 16px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
-.photo-btn:hover{border-color:var(--orange);color:var(--orange);}
+.photo-sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.photo-source-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid var(--border);color:var(--dim2);}
+.photo-source-badge.valid{border-color:#22c55e;color:#22c55e;}
+.photo-source-badge.invalid{border-color:var(--error);color:var(--error);}
 
 /* CHIPS */
 .check-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
@@ -260,20 +258,15 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <!-- ── FOTO ── -->
       <div class="section">
         <div class="section-title" id="sec-fotoTitle">Foto</div>
-        <div class="field">
-          <label class="label" id="l-foto">Foto de perfil</label>
-          <div class="photo-wrap">
-            <div class="photo-preview" id="photoPreview">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-            </div>
-            <div>
-              <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="previewPhoto(this)">
-              <button type="button" class="photo-btn" id="photoBtn" onclick="document.getElementById('photoInput').click()">
-                <span id="photoBtnTxt">Subir foto</span>
-              </button>
-              <div class="hint" style="margin-top:6px" id="l-foto-hint">JPG o PNG. Recomendado: 400×400px.</div>
-            </div>
+        <div class="field" id="f-foto">
+          <label class="label" id="l-foto">Enlace de foto de perfil</label>
+          <input class="inp" id="foto" type="url" placeholder="https://..." oninput="checkPhotoSource(this)">
+          <div class="photo-sources">
+            <span class="photo-source-badge" id="badge-li">LinkedIn</span>
+            <span class="photo-source-badge" id="badge-ig">Instagram</span>
+            <span class="photo-source-badge" id="badge-x">X | Twitter</span>
           </div>
+          <div class="hint" id="l-foto-hint">JPG | PNG recomendado 400×400px — Solo enlaces de LinkedIn, Instagram o X.</div>
         </div>
       </div>
 
@@ -416,7 +409,7 @@ const T = {
     lTipo:'Tipo', lCargo:'Cargo | Rol', lPais:'País', lMail:'Email',
     lWebsite:'Sitio Web | Empresa', lEmpresa:'Empresa | Organización',
     lWhatsapp:'WhatsApp', lIdioma:'¿En qué idioma podés presentar?',
-    lFoto:'Foto de perfil', lFotoHint:'JPG o PNG. Recomendado: 400×400px.',
+    lFoto:'Enlace de foto de perfil', lFotoHint:'JPG | PNG recomendado 400×400px — Solo enlaces de LinkedIn, Instagram o X.',
     lDias:'Días que asistís al evento',
     lBio:'Biografía Corta', lEventos:'Eventos Anteriores',
     lPrimera:'¿Primera vez en LABITCONF?',
@@ -455,7 +448,7 @@ const T = {
     lTipo:'Type', lCargo:'Job Title', lPais:'Country', lMail:'Email',
     lWebsite:'Website | Company', lEmpresa:'Company | Organization',
     lWhatsapp:'WhatsApp', lIdioma:'Which language(s) can you present in?',
-    lFoto:'Profile photo', lFotoHint:'JPG or PNG. Recommended: 400×400px.',
+    lFoto:'Profile photo link', lFotoHint:'JPG | PNG recommended 400×400px — LinkedIn, Instagram or X links only.',
     lDias:'Days you will attend the event',
     lBio:'Short Bio', lEventos:'Previous Events',
     lPrimera:'First time at LABITCONF?',
@@ -488,7 +481,6 @@ const T = {
 
 let lang = 'es';
 let temaCount = 0;
-let photoBase64 = '';
 
 // ── LANG ────────────────────────────────────────────────────────────
 function setLang(l) {
@@ -610,17 +602,26 @@ function togglePanel(el, n) {
 }
 
 // ── FOTO ─────────────────────────────────────────────────────────────
-function previewPhoto(input) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    photoBase64 = e.target.result;
-    const preview = document.getElementById('photoPreview');
-    preview.innerHTML = `<img src="${photoBase64}" alt="foto">`;
-    const btn = document.getElementById('photoBtnTxt');
-    if (btn) btn.textContent = T[lang].photoChangeTxt;
-  };
-  reader.readAsDataURL(file);
+const PHOTO_SOURCES = {
+  'badge-li': ['linkedin.com'],
+  'badge-ig': ['instagram.com','cdninstagram.com'],
+  'badge-x':  ['twitter.com','x.com','pbs.twimg.com'],
+};
+function checkPhotoSource(input) {
+  const url = input.value.trim().toLowerCase();
+  Object.entries(PHOTO_SOURCES).forEach(([badgeId, domains]) => {
+    const badge = document.getElementById(badgeId);
+    if (!badge) return;
+    if (!url) { badge.className = 'photo-source-badge'; return; }
+    const match = domains.some(d => url.includes(d));
+    badge.className = 'photo-source-badge ' + (match ? 'valid' : '');
+  });
+  // Marcar inválido si hay URL pero no es de ninguna fuente válida
+  const allDomains = Object.values(PHOTO_SOURCES).flat();
+  const hasUrl = url.startsWith('http');
+  const isValid = !hasUrl || allDomains.some(d => url.includes(d));
+  const field = document.getElementById('f-foto');
+  if (field) field.classList.toggle('field-error', hasUrl && !isValid);
 }
 
 // ── TEMAS ─────────────────────────────────────────────────────────────
@@ -831,7 +832,7 @@ async function handleSubmit(e) {
       linkedin:           document.getElementById('linkedin').value.trim(),
       x:                  document.getElementById('x').value.trim().replace(/^@/,''),
       instagram:          document.getElementById('instagram').value.trim().replace(/^@/,''),
-      foto:               photoBase64 ? '[foto adjunta]' : '',
+      foto:               document.getElementById('foto').value.trim(),
       bio:                document.getElementById('bio').value.trim(),
       eventos_anteriores: document.getElementById('eventos').value.trim(),
       dias:               getDias(),
