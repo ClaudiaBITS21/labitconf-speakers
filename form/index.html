@@ -204,11 +204,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <input class="inp" id="website" type="url" placeholder="https://" maxlength="200">
           </div>
 
-          <div class="field">
-            <label class="label" id="l-empresa">Empresa | Organización</label>
-            <input class="inp" id="empresa" type="text" maxlength="120">
-          </div>
-
         </div>
       </div>
 
@@ -830,7 +825,6 @@ async function handleSubmit(e) {
       idioma:             getChecked('idiomaGroup').join(','),
       mail:               document.getElementById('mail').value.trim(),
       website:            document.getElementById('website').value.trim(),
-      empresa:            document.getElementById('empresa').value.trim(),
       whatsapp:           wCode && wNum ? `${wCode} ${wNum}` : wNum,
       telegram:           document.getElementById('telegram').value.trim(),
       signal:             document.getElementById('signal').value.trim(),
