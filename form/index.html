@@ -6,23 +6,24 @@
 <title>LABITCONF 2026 — Inscripción de Speakers</title>
 <style>
 :root {
-  --bg:     #000000;
-  --bg2:    #0f0f0f;
-  --bg3:    #1a1a1a;
-  --bg4:    #222222;
-  --border: #2d2d2d;
-  --text:   #ffffff;
-  --dim:    #888888;
-  --dim2:   #555555;
-  --orange: #E84010;
-  --orange-dim: rgba(232,64,16,.15);
+  --bg:          #000000;
+  --bg2:         #0f0f0f;
+  --bg3:         #1a1a1a;
+  --border:      #2d2d2d;
+  --text:        #ffffff;
+  --dim:         #888888;
+  --dim2:        #444444;
+  --orange:      #E84010;
+  --orange-dim:  rgba(232,64,16,.15);
+  --green:       #22c55e;
+  --error:       #ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;min-height:100vh;}
 
 /* HEADER */
 .header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
-.header-logo{font-weight:900;font-size:22px;color:var(--text);letter-spacing:-.5px;}
+.header-logo{font-weight:900;font-size:22px;letter-spacing:-.5px;}
 .header-logo span{color:var(--orange);}
 .lang-toggle{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
 .lang-btn{padding:5px 14px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;background:var(--bg3);color:var(--dim);}
@@ -37,7 +38,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .section{margin-bottom:30px;}
 .section-title{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--orange);margin-bottom:16px;padding-bottom:7px;border-bottom:1px solid var(--border);}
 
-/* GRID */
+/* GRIDS */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .grid-1{display:grid;grid-template-columns:1fr;gap:14px;}
@@ -54,35 +55,60 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .sel option{background:#1a1a1a;}
 .ta{resize:vertical;min-height:72px;}
 .counter{font-size:11px;color:var(--dim2);text-align:right;}
-.field-error .inp,.field-error .sel,.field-error .ta,.field-error .check-group{border-color:#ef4444 !important;outline:1px solid #ef4444;}
-.field-error .label{color:#ef4444;}
-.err-msg{font-size:12px;color:#ef4444;}
 .hint{font-size:12px;color:var(--dim2);line-height:1.4;}
+.field-error .inp,.field-error .sel,.field-error .ta,.field-error .check-group,.field-error .radio-group{border-color:var(--error) !important;}
+.field-error .label{color:var(--error);}
+.err-msg{font-size:12px;color:var(--error);}
 
-/* CHECKBOX GROUP */
+/* PHONE ROW */
+.phone-row{display:flex;gap:8px;}
+.phone-code{width:90px;flex-shrink:0;}
+
+/* PHOTO */
+.photo-wrap{display:flex;align-items:center;gap:14px;}
+.photo-preview{width:64px;height:64px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);object-fit:cover;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.photo-preview svg{opacity:.3;}
+.photo-preview img{width:100%;height:100%;object-fit:cover;}
+.photo-btn{padding:8px 16px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+.photo-btn:hover{border-color:var(--orange);color:var(--orange);}
+
+/* CHIPS */
 .check-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
 .check-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:700;}
 .check-chip input[type=checkbox]{display:none;}
 .check-chip:hover{border-color:var(--dim);}
 .check-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
 
-/* RADIO GROUP */
 .radio-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
 .radio-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:700;}
 .radio-chip input[type=radio]{display:none;}
+.radio-chip:hover{border-color:var(--dim);}
 .radio-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
+
+/* PANEL CHECK */
+.panel-check-wrap{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;user-select:none;transition:border-color .15s;}
+.panel-check-wrap:hover{border-color:var(--dim);}
+.panel-check-wrap.checked{border-color:#ec4899;background:rgba(236,72,153,.1);}
+.panel-check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:13px;}
+.panel-check-wrap.checked .panel-check-box{background:#ec4899;border-color:#ec4899;}
+.panel-check-txt{font-size:13px;color:var(--dim);font-weight:600;}
+.panel-check-wrap.checked .panel-check-txt{color:#ec4899;}
 
 /* TEMA CARD */
 .tema-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;}
-.tema-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.tema-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .tema-num{font-size:13px;font-weight:800;color:var(--orange);}
 .tema-remove{background:none;border:none;color:var(--dim2);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;}
-.tema-remove:hover{color:#ef4444;background:rgba(239,68,68,.1);}
+.tema-remove:hover{color:var(--error);background:rgba(239,68,68,.1);}
+.sep{height:1px;background:var(--border);margin:4px 0 14px;}
 .add-tema-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--dim);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:4px;}
 .add-tema-btn:hover{color:var(--orange);border-color:var(--orange);background:var(--orange-dim);}
 
+/* CONSENT */
+.consent{font-size:13px;color:var(--dim);line-height:1.6;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;}
+
 /* SUBMIT */
-.submit-btn{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s;margin-top:8px;letter-spacing:.02em;}
+.submit-btn{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s;letter-spacing:.02em;}
 .submit-btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px);}
 .submit-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
@@ -91,15 +117,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 /* SUCCESS */
 .success-screen{text-align:center;padding:70px 20px;display:none;}
 .success-icon{font-size:60px;margin-bottom:20px;}
-.success-title{font-size:24px;font-weight:900;color:#22c55e;margin-bottom:10px;}
+.success-title{font-size:24px;font-weight:900;color:var(--green);margin-bottom:10px;}
 .success-sub{font-size:15px;color:var(--dim);line-height:1.7;}
 
 /* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid #ef4444;color:#ef4444;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--error);color:var(--error);padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
 #toast.show{opacity:1;}
-
-/* DIVIDER */
-.sep{height:1px;background:var(--border);margin:6px 0 14px;}
 </style>
 </head>
 <body>
@@ -118,7 +141,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <div class="success-screen" id="successScreen">
     <div class="success-icon">₿</div>
     <div class="success-title" id="successTitle">¡Gracias por inscribirte!</div>
-    <div class="success-sub" id="successSub">Revisaremos tu propuesta y te contactaremos pronto.<br><br>LABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1</div>
+    <div class="success-sub" id="successSub"></div>
   </div>
 
   <!-- FORM -->
@@ -134,8 +157,13 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         <div class="grid-2">
 
           <div class="field" id="f-nombre">
-            <label class="label" id="l-nombre">Nombre Completo <span class="req">*</span></label>
-            <input class="inp" id="nombre" type="text" autocomplete="name" maxlength="120">
+            <label class="label" id="l-nombre">Nombre <span class="req">*</span></label>
+            <input class="inp" id="nombre" type="text" autocomplete="given-name" maxlength="80">
+          </div>
+
+          <div class="field" id="f-apellido">
+            <label class="label" id="l-apellido">Apellido <span class="req">*</span></label>
+            <input class="inp" id="apellido" type="text" autocomplete="family-name" maxlength="80">
           </div>
 
           <div class="field">
@@ -155,18 +183,29 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             </select>
           </div>
 
+          <div class="field" id="f-cargo">
+            <label class="label" id="l-cargo">Cargo | Rol <span class="req">*</span></label>
+            <input class="inp" id="cargo" type="text" maxlength="120" id="l-cargo-inp">
+          </div>
+
           <div class="field" id="f-pais">
-            <label class="label" id="l-pais">País de Origen <span class="req">*</span></label>
-            <input class="inp" id="pais" type="text" maxlength="60">
+            <label class="label" id="l-pais">País <span class="req">*</span></label>
+            <input class="inp" id="pais" type="text" list="paises-list" maxlength="60" autocomplete="off">
+            <datalist id="paises-list"></datalist>
           </div>
 
           <div class="field" id="f-mail">
-            <label class="label" id="l-mail">Mail <span class="req">*</span></label>
+            <label class="label" id="l-mail">Email <span class="req">*</span></label>
             <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
           </div>
 
           <div class="field">
-            <label class="label" id="l-empresa">Empresa | Referencia</label>
+            <label class="label" id="l-website">Sitio Web | Empresa</label>
+            <input class="inp" id="website" type="url" placeholder="https://" maxlength="200">
+          </div>
+
+          <div class="field">
+            <label class="label" id="l-empresa">Empresa | Organización</label>
             <input class="inp" id="empresa" type="text" maxlength="120">
           </div>
 
@@ -178,8 +217,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         <div class="section-title" id="sec2Title">Contacto</div>
         <div class="grid-2">
           <div class="field">
-            <label class="label">WhatsApp</label>
-            <input class="inp" id="whatsapp" type="tel" placeholder="+54 11 1234-5678">
+            <label class="label" id="l-whatsapp">WhatsApp</label>
+            <div class="phone-row">
+              <input class="inp phone-code" id="whatsapp-code" type="text" placeholder="+54" maxlength="6">
+              <input class="inp" id="whatsapp" type="tel" placeholder="11 1234-5678" maxlength="20">
+            </div>
           </div>
           <div class="field">
             <label class="label">Telegram</label>
@@ -220,6 +262,26 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         </div>
       </div>
 
+      <!-- ── FOTO ── -->
+      <div class="section">
+        <div class="section-title" id="sec-fotoTitle">Foto</div>
+        <div class="field">
+          <label class="label" id="l-foto">Foto de perfil</label>
+          <div class="photo-wrap">
+            <div class="photo-preview" id="photoPreview">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            </div>
+            <div>
+              <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+              <button type="button" class="photo-btn" id="photoBtn" onclick="document.getElementById('photoInput').click()">
+                <span id="photoBtnTxt">Subir foto</span>
+              </button>
+              <div class="hint" style="margin-top:6px" id="l-foto-hint">JPG o PNG. Recomendado: 400×400px.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── PROPUESTA(S) ── -->
       <div class="section">
         <div class="section-title" id="sec3Title">Propuesta(s)</div>
@@ -232,26 +294,22 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <!-- ── LOGÍSTICA ── -->
       <div class="section">
         <div class="section-title" id="sec4Title">Logística</div>
-        <div class="grid-1">
-
-          <div class="field">
-            <label class="label" id="l-dias">Días que asistís al evento</label>
-            <div class="check-group" id="diasGroup">
-              <label class="check-chip" style="--c:#f59e0b">
-                <input type="checkbox" value="oct29" onchange="syncChip(this)"> Oct 29
-              </label>
-              <label class="check-chip" style="--c:#E84010">
-                <input type="checkbox" value="oct30" onchange="syncChip(this)"> Oct 30
-              </label>
-              <label class="check-chip" style="--c:#E84010">
-                <input type="checkbox" value="oct31" onchange="syncChip(this)"> Oct 31
-              </label>
-              <label class="check-chip" style="--c:#f59e0b">
-                <input type="checkbox" value="nov1" onchange="syncChip(this)"> Nov 1
-              </label>
-            </div>
+        <div class="field">
+          <label class="label" id="l-dias">Días que asistís al evento</label>
+          <div class="check-group" id="diasGroup">
+            <label class="check-chip" style="--c:#f59e0b">
+              <input type="checkbox" value="oct29" onchange="syncChip(this)"> Oct 29
+            </label>
+            <label class="check-chip" style="--c:#E84010">
+              <input type="checkbox" value="oct30" onchange="syncChip(this)"> Oct 30
+            </label>
+            <label class="check-chip" style="--c:#E84010">
+              <input type="checkbox" value="oct31" onchange="syncChip(this)"> Oct 31
+            </label>
+            <label class="check-chip" style="--c:#f59e0b">
+              <input type="checkbox" value="nov1" onchange="syncChip(this)"> Nov 1
+            </label>
           </div>
-
         </div>
       </div>
 
@@ -260,9 +318,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         <div class="section-title" id="sec5Title">Perfil</div>
         <div class="grid-1">
           <div class="field">
-            <label class="label" id="l-bio">Biografía Corta</label>
-            <textarea class="ta" id="bio" maxlength="200" oninput="updateCounter('bio','bio-cnt',200)"></textarea>
-            <div class="counter"><span id="bio-cnt">0</span> / 200</div>
+            <label class="label" id="l-bio">Biografía Corta <span class="req">*</span></label>
+            <textarea class="ta" id="bio" maxlength="300" oninput="updateCounter('bio','bio-cnt',300)" style="min-height:90px"></textarea>
+            <div class="counter"><span id="bio-cnt">0</span> / 300</div>
           </div>
           <div class="field">
             <label class="label" id="l-eventos">Eventos Anteriores</label>
@@ -276,7 +334,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <div class="section">
         <div class="section-title" id="sec6Title">Participación</div>
         <div class="grid-2">
-
           <div class="field">
             <label class="label" id="l-primera">¿Primera vez en LABITCONF?</label>
             <div class="radio-group" id="primeraGroup">
@@ -288,21 +345,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
               </label>
             </div>
           </div>
-
           <div class="field">
-            <label class="label" id="l-moderador">¿Aceptás ser Moderador de panel?</label>
-            <div class="radio-group" id="moderadorGroup">
-              <label class="radio-chip" style="--c:#22c55e">
-                <input type="radio" name="moderador" value="si" onchange="syncRadio(this)"> Sí
-              </label>
-              <label class="radio-chip" style="--c:#E84010">
-                <input type="radio" name="moderador" value="no" onchange="syncRadio(this)"> No
-              </label>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label" id="l-podcast">¿Disponible para entrevista | podcast del evento?</label>
+            <label class="label" id="l-podcast">¿Disponible para entrevista | podcast?</label>
             <div class="radio-group" id="podcastGroup">
               <label class="radio-chip" style="--c:#22c55e">
                 <input type="radio" name="podcast" value="si" onchange="syncRadio(this)"> Sí
@@ -312,7 +356,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
               </label>
             </div>
           </div>
-
           <div class="field">
             <label class="label" id="l-empresa-presenta">¿Traés empresa | proyecto que presentás?</label>
             <div class="radio-group" id="empresaPresentaGroup">
@@ -324,8 +367,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
               </label>
             </div>
           </div>
-
         </div>
+      </div>
+
+      <!-- CONSENT -->
+      <div class="consent" id="consentTxt">
+        Al enviar este formulario, consentís que LABITCONF almacene y procese la información ingresada para gestionar tu participación como speaker en el evento.
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">
@@ -338,216 +385,212 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
 <div id="toast"></div>
 
+<!-- PAÍSES DATALIST -->
+<datalist id="paises-data">
+  <option>Argentina</option><option>Bolivia</option><option>Brasil</option>
+  <option>Chile</option><option>Colombia</option><option>Costa Rica</option>
+  <option>Cuba</option><option>Ecuador</option><option>El Salvador</option>
+  <option>España</option><option>Estados Unidos</option><option>Guatemala</option>
+  <option>Honduras</option><option>México</option><option>Nicaragua</option>
+  <option>Panamá</option><option>Paraguay</option><option>Perú</option>
+  <option>Portugal</option><option>Puerto Rico</option><option>República Dominicana</option>
+  <option>Uruguay</option><option>Venezuela</option>
+  <option>Alemania</option><option>Australia</option><option>Canadá</option>
+  <option>China</option><option>Francia</option><option>India</option>
+  <option>Italia</option><option>Japón</option><option>Reino Unido</option>
+  <option>Suiza</option><option>Turquía</option><option>Ucrania</option>
+</datalist>
+
 <script>
 'use strict';
-
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqQHn5o9xxS-wmMGgJews--w_1lstRRiDiBgnlicTchskyjaixflKKfb_JPayR96p3/exec';
 
-// ── TRADUCCIONES ───────────────────────────────────────────────────
+// Enlazar datalist de países al input
+document.getElementById('paises-list').innerHTML =
+  document.getElementById('paises-data').innerHTML;
+
+// ── TRADUCCIONES ────────────────────────────────────────────────────
 const T = {
   es: {
-    pageTitle:      'Inscripción de Speakers',
-    pageSub:        'Completá el formulario para proponer tu participación en LABITCONF 2026.',
-    sec1:           'Datos Personales',
-    sec2:           'Contacto',
-    secIdioma:      'Idioma de Presentación',
-    sec3:           'Propuesta(s)',
-    sec4:           'Logística',
-    sec5:           'Perfil',
-    sec6:           'Participación',
-    lNombre:        'Nombre Completo',
-    lApodo:         'Apodo (Alias)',
-    lTipo:          'Tipo',
-    lPais:          'País de Origen',
-    lMail:          'Mail',
-    lEmpresa:       'Empresa | Referencia',
-    lIdioma:        '¿En qué idioma podés presentar?',
-    lDias:          'Días que asistís al evento',
-    lBio:           'Biografía Corta',
-    lEventos:       'Eventos Anteriores',
-    lPrimera:       '¿Primera vez en LABITCONF?',
-    lModerador:     '¿Aceptás ser Moderador de panel?',
-    lPodcast:       '¿Disponible para entrevista | podcast del evento?',
-    lEmpresaPres:   '¿Traés empresa | proyecto que presentás?',
-    temaNum:        n => `Tema ${n}`,
-    temaLevel:      'Nivel',
-    temaFormato:    'Formato Preferido',
-    temaDur:        'Duración Ideal',
-    temaTitle:      'Título del Tema',
-    temaDesc:       'Descripción | Keywords',
-    temaDescHint:   'Describí brevemente tu propuesta. Las palabras clave ayudan a agrupar por temáticas.',
-    addTema:        'Agregar otro tema',
-    submitBtn:      'Enviar inscripción',
-    sending:        'Enviando…',
-    successTitle:   '¡Gracias por inscribirte!',
-    successSub:     'Revisaremos tu propuesta y te contactaremos pronto.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1',
-    errRequired:    'Este campo es requerido',
-    errMail:        'Mail inválido',
-    errIdioma:      'Seleccioná al menos un idioma',
-    toastError:     'Error al enviar. Intentá de nuevo.',
-    placeholderEventos: '¿En qué eventos hablaste antes? (ej: BTC Miami, Satoshi Summit)',
-    si: 'Sí', no: 'No',
+    pageTitle:'Inscripción de Speakers',
+    pageSub:'Completá el formulario para proponer tu participación en LABITCONF 2026.',
+    sec1:'Datos Personales', sec2:'Contacto', secIdioma:'Idioma de Presentación',
+    sec3:'Propuesta(s)', sec4:'Logística', sec5:'Perfil', sec6:'Participación',
+    secFoto:'Foto',
+    lNombre:'Nombre', lApellido:'Apellido', lApodo:'Apodo (Alias)',
+    lTipo:'Tipo', lCargo:'Cargo | Rol', lPais:'País', lMail:'Email',
+    lWebsite:'Sitio Web | Empresa', lEmpresa:'Empresa | Organización',
+    lWhatsapp:'WhatsApp', lIdioma:'¿En qué idioma podés presentar?',
+    lFoto:'Foto de perfil', lFotoHint:'JPG o PNG. Recomendado: 400×400px.',
+    lDias:'Días que asistís al evento',
+    lBio:'Biografía Corta', lEventos:'Eventos Anteriores',
+    lPrimera:'¿Primera vez en LABITCONF?',
+    lPodcast:'¿Disponible para entrevista | podcast?',
+    lEmpresaPres:'¿Traés empresa | proyecto que presentás?',
+    temaNum: n=>`Tema ${n}`,
+    temaLevel:'Nivel', temaFormato:'Formato Preferido', temaDur:'Duración Ideal',
+    temaTitle:'Título del Tema', temaAbstract:'Abstract',
+    temaAbstractHint:'Resumen de 200 caracteres de tu charla.',
+    temaDesc:'Descripción | Keywords',
+    temaDescHint:'Describí brevemente tu propuesta. Las palabras clave ayudan a agrupar por temáticas.',
+    temaTags:'Tags', temaTagsHint:'Palabras clave separadas por coma. Ej: bitcoin, lightning, privacidad',
+    temaPanel:'Puedo participar en un Panel con otros speakers sobre este tema.',
+    addTema:'Agregar otro tema', submitBtn:'Enviar inscripción', sending:'Enviando…',
+    photoBtnTxt:'Subir foto', photoChangeTxt:'Cambiar foto',
+    successTitle:'¡Gracias por inscribirte!',
+    successSub:'Revisaremos tu propuesta y te contactaremos pronto.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1',
+    consent:'Al enviar este formulario, consentís que LABITCONF almacene y procese la información ingresada para gestionar tu participación como speaker en el evento.',
+    errRequired:'Este campo es requerido', errMail:'Email inválido',
+    errIdioma:'Seleccioná al menos un idioma', toastError:'Error al enviar. Intentá de nuevo.',
+    placeholderEventos:'¿En qué eventos hablaste antes? (ej: BTC Miami, Satoshi Summit)',
+    si:'Sí', no:'No',
   },
   en: {
-    pageTitle:      'Speaker Registration',
-    pageSub:        'Fill in the form to propose your participation at LABITCONF 2026.',
-    sec1:           'Personal Info',
-    sec2:           'Contact',
-    secIdioma:      'Presentation Language',
-    sec3:           'Proposal(s)',
-    sec4:           'Logistics',
-    sec5:           'Profile',
-    sec6:           'Participation',
-    lNombre:        'Full Name',
-    lApodo:         'Alias (Nickname)',
-    lTipo:          'Type',
-    lPais:          'Country of Origin',
-    lMail:          'Email',
-    lEmpresa:       'Company | Reference',
-    lIdioma:        'Which language(s) can you present in?',
-    lDias:          'Days you will attend the event',
-    lBio:           'Short Bio',
-    lEventos:       'Previous Events',
-    lPrimera:       'First time at LABITCONF?',
-    lModerador:     'Open to moderate a panel?',
-    lPodcast:       'Available for event interview | podcast?',
-    lEmpresaPres:   'Are you bringing a company | project to present?',
-    temaNum:        n => `Topic ${n}`,
-    temaLevel:      'Level',
-    temaFormato:    'Preferred Format',
-    temaDur:        'Ideal Duration',
-    temaTitle:      'Topic Title',
-    temaDesc:       'Description | Keywords',
-    temaDescHint:   'Briefly describe your proposal. Keywords help group by theme.',
-    addTema:        'Add another topic',
-    submitBtn:      'Submit registration',
-    sending:        'Sending…',
-    successTitle:   'Thank you for registering!',
-    successSub:     "We'll review your proposal and contact you soon.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1",
-    errRequired:    'This field is required',
-    errMail:        'Invalid email',
-    errIdioma:      'Select at least one language',
-    toastError:     'Error sending. Please try again.',
-    placeholderEventos: 'Which events have you spoken at before? (e.g. BTC Miami, Satoshi Summit)',
-    si: 'Yes', no: 'No',
+    pageTitle:'Speaker Registration',
+    pageSub:'Fill in the form to propose your participation at LABITCONF 2026.',
+    sec1:'Personal Info', sec2:'Contact', secIdioma:'Presentation Language',
+    sec3:'Proposal(s)', sec4:'Logistics', sec5:'Profile', sec6:'Participation',
+    secFoto:'Photo',
+    lNombre:'First Name', lApellido:'Last Name', lApodo:'Alias (Nickname)',
+    lTipo:'Type', lCargo:'Job Title', lPais:'Country', lMail:'Email',
+    lWebsite:'Website | Company', lEmpresa:'Company | Organization',
+    lWhatsapp:'WhatsApp', lIdioma:'Which language(s) can you present in?',
+    lFoto:'Profile photo', lFotoHint:'JPG or PNG. Recommended: 400×400px.',
+    lDias:'Days you will attend the event',
+    lBio:'Short Bio', lEventos:'Previous Events',
+    lPrimera:'First time at LABITCONF?',
+    lPodcast:'Available for interview | podcast?',
+    lEmpresaPres:'Are you bringing a company | project to present?',
+    temaNum: n=>`Topic ${n}`,
+    temaLevel:'Level', temaFormato:'Preferred Format', temaDur:'Ideal Duration',
+    temaTitle:'Full Title', temaAbstract:'Abstract',
+    temaAbstractHint:'200-character summary of your talk.',
+    temaDesc:'Description | Keywords',
+    temaDescHint:'Briefly describe your proposal. Keywords help group by theme.',
+    temaTags:'Tags', temaTagsHint:'Keywords separated by comma. E.g: bitcoin, lightning, privacy',
+    temaPanel:'I can participate in a Panel with other speakers about this topic.',
+    addTema:'Add another topic', submitBtn:'Submit registration', sending:'Sending…',
+    photoBtnTxt:'Upload photo', photoChangeTxt:'Change photo',
+    successTitle:'Thank you for registering!',
+    successSub:"We'll review your proposal and contact you soon.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1",
+    consent:'By submitting this form, you consent to allow LABITCONF to store and process the submitted information to manage your participation as a speaker at the event.',
+    errRequired:'This field is required', errMail:'Invalid email',
+    errIdioma:'Select at least one language', toastError:'Error sending. Please try again.',
+    placeholderEventos:'Which events have you spoken at before? (e.g. BTC Miami, Satoshi Summit)',
+    si:'Yes', no:'No',
   }
 };
 
 let lang = 'es';
 let temaCount = 0;
-
-// ── CHIP HANDLERS ───────────────────────────────────────────────────
-function syncChip(input) {
-  input.closest('.check-chip').classList.toggle('checked', input.checked);
-}
-function syncRadio(input) {
-  input.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l => l.classList.remove('checked'));
-  input.closest('.radio-chip').classList.add('checked');
-}
-function getChecked(groupId) {
-  return [...(document.getElementById(groupId)?.querySelectorAll('.check-chip.checked') || [])]
-    .map(l => l.querySelector('input').value);
-}
-function getRadio(groupId) {
-  const checked = document.getElementById(groupId)?.querySelector('.radio-chip.checked');
-  return checked ? checked.querySelector('input').value : '';
-}
+let photoBase64 = '';
 
 // ── LANG ────────────────────────────────────────────────────────────
 function setLang(l) {
   lang = l;
-  document.getElementById('btnES').classList.toggle('active', l === 'es');
-  document.getElementById('btnEN').classList.toggle('active', l === 'en');
+  document.getElementById('btnES').classList.toggle('active', l==='es');
+  document.getElementById('btnEN').classList.toggle('active', l==='en');
   document.documentElement.lang = l;
   applyTranslations();
 }
-
 function applyTranslations() {
   const t = T[lang];
-  setText('pageTitle',      t.pageTitle);
-  setText('pageSub',        t.pageSub);
-  setText('sec1Title',      t.sec1);
-  setText('sec2Title',      t.sec2);
-  setText('sec-idiomaTitle',t.secIdioma);
-  setText('sec3Title',      t.sec3);
-  setText('sec4Title',      t.sec4);
-  setText('sec5Title',      t.sec5);
-  setText('sec6Title',      t.sec6);
-  setLabelReq('l-nombre',   t.lNombre, true);
-  setLabel('l-apodo',       t.lApodo);
-  setLabelReq('l-tipo',     t.lTipo, true);
-  setLabelReq('l-pais',     t.lPais, true);
-  setLabelReq('l-mail',     t.lMail, true);
-  setLabel('l-empresa',     t.lEmpresa);
-  setLabelReq('l-idioma',   t.lIdioma, true);
-  setLabel('l-dias',        t.lDias);
-  setLabel('l-bio',         t.lBio);
-  setLabel('l-eventos',     t.lEventos);
-  setLabel('l-primera',     t.lPrimera);
-  setLabel('l-moderador',   t.lModerador);
-  setLabel('l-podcast',     t.lPodcast);
-  setLabel('l-empresa-presenta', t.lEmpresaPres);
-  setText('addTemaLabel',   t.addTema);
-  setText('submitTxt',      t.submitBtn);
-  setText('successTitle',   t.successTitle);
-  const subEl = document.getElementById('successSub');
-  if (subEl) subEl.innerHTML = t.successSub.replace(/\n/g,'<br>');
-  setAttr('eventos', 'placeholder', t.placeholderEventos);
-  // Sí/No chips
-  document.querySelectorAll('[data-si]').forEach(el => el.textContent = t.si);
-  document.querySelectorAll('[data-no]').forEach(el => el.textContent = t.no);
+  setTxt('pageTitle',t.pageTitle); setTxt('pageSub',t.pageSub);
+  setTxt('sec1Title',t.sec1); setTxt('sec2Title',t.sec2);
+  setTxt('sec-idiomaTitle',t.secIdioma); setTxt('sec3Title',t.sec3);
+  setTxt('sec4Title',t.sec4); setTxt('sec5Title',t.sec5);
+  setTxt('sec6Title',t.sec6); setTxt('sec-fotoTitle',t.secFoto);
+  setReq('l-nombre',t.lNombre,true); setReq('l-apellido',t.lApellido,true);
+  setTxt('l-apodo',t.lApodo); setReq('l-tipo',t.lTipo,true);
+  setReq('l-cargo',t.lCargo,true); setReq('l-pais',t.lPais,true);
+  setReq('l-mail',t.lMail,true);
+  setTxt('l-website',t.lWebsite); setTxt('l-empresa',t.lEmpresa);
+  setTxt('l-whatsapp',t.lWhatsapp); setReq('l-idioma',t.lIdioma,true);
+  setTxt('l-foto',t.lFoto); setTxt('l-foto-hint',t.lFotoHint);
+  setTxt('l-dias',t.lDias); setReq('l-bio',t.lBio,true);
+  setTxt('l-eventos',t.lEventos);
+  setTxt('l-primera',t.lPrimera); setTxt('l-podcast',t.lPodcast);
+  setTxt('l-empresa-presenta',t.lEmpresaPres);
+  setTxt('addTemaLabel',t.addTema); setTxt('submitTxt',t.submitBtn);
+  setTxt('photoBtnTxt',t.photoBtnTxt);
+  setTxt('consentTxt',t.consent);
+  setAttr('eventos','placeholder',t.placeholderEventos);
   // Temas
-  document.querySelectorAll('.tema-card').forEach((card, i) => {
+  document.querySelectorAll('.tema-card').forEach((card,i) => {
     const n = card.dataset.num;
-    const isFirst = i === 0;
-    const lNum = card.querySelector('.tema-num');
-    if (lNum) lNum.textContent = t.temaNum(n);
-    const lLvl = card.querySelector('.tema-level-lbl');
-    if (lLvl) lLvl.innerHTML = t.temaLevel + (isFirst ? ' <span class="req">*</span>' : '');
-    const lFmt = card.querySelector('.tema-formato-lbl');
-    if (lFmt) lFmt.textContent = t.temaFormato;
-    const lDur = card.querySelector('.tema-dur-lbl');
-    if (lDur) lDur.textContent = t.temaDur;
-    const lTit = card.querySelector('.tema-title-lbl');
-    if (lTit) lTit.innerHTML = t.temaTitle + (isFirst ? ' <span class="req">*</span>' : '');
-    const lDesc = card.querySelector('.tema-desc-lbl');
-    if (lDesc) lDesc.innerHTML = t.temaDesc + (isFirst ? ' <span class="req">*</span>' : '');
-    const taDesc = card.querySelector('textarea');
-    if (taDesc) taDesc.placeholder = t.temaDescHint;
+    const isFirst = i===0;
+    const req = s => isFirst ? `${s} <span class="req">*</span>` : s;
+    q(card,'.tema-num').textContent = t.temaNum(n);
+    setInner(q(card,'.tema-level-lbl'), req(t.temaLevel));
+    setTxtEl(q(card,'.tema-formato-lbl'), t.temaFormato);
+    setTxtEl(q(card,'.tema-dur-lbl'), t.temaDur);
+    setInner(q(card,'.tema-title-lbl'), req(t.temaTitle));
+    setInner(q(card,'.tema-abstract-lbl'), req(t.temaAbstract));
+    setAttrEl(q(card,'#tema-abstract-'+n), 'placeholder', t.temaAbstractHint);
+    setInner(q(card,'.tema-desc-lbl'), t.temaDesc);
+    setAttrEl(q(card,'#tema-desc-'+n), 'placeholder', t.temaDescHint);
+    setInner(q(card,'.tema-tags-lbl'), t.temaTags);
+    setAttrEl(q(card,'#tema-tags-'+n), 'placeholder', t.temaTagsHint);
+    setTxtEl(q(card,'.panel-check-txt'), t.temaPanel);
   });
 }
+function q(el, sel) { try { return el.querySelector(sel); } catch(e){ return null; } }
+function setTxt(id,v){ const e=document.getElementById(id); if(e)e.textContent=v; }
+function setTxtEl(el,v){ if(el)el.textContent=v; }
+function setInner(el,v){ if(el)el.innerHTML=v; }
+function setReq(id,v,r){ const e=document.getElementById(id); if(e)e.innerHTML=v+(r?' <span class="req">*</span>':''); }
+function setAttr(id,a,v){ const e=document.getElementById(id); if(e)e.setAttribute(a,v); }
+function setAttrEl(el,a,v){ if(el)el.setAttribute(a,v); }
 
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
+// ── CHIPS ────────────────────────────────────────────────────────────
+function syncChip(input) { input.closest('.check-chip').classList.toggle('checked', input.checked); }
+function syncRadio(input) {
+  input.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l=>l.classList.remove('checked'));
+  input.closest('.radio-chip').classList.add('checked');
 }
-function setLabel(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
+function getChecked(groupId) {
+  return [...(document.getElementById(groupId)?.querySelectorAll('.check-chip.checked')||[])]
+    .map(l=>l.querySelector('input').value);
 }
-function setLabelReq(id, val, req) {
-  const el = document.getElementById(id);
-  if (el) el.innerHTML = val + (req ? ' <span class="req">*</span>' : '');
-}
-function setAttr(id, attr, val) {
-  const el = document.getElementById(id);
-  if (el) el.setAttribute(attr, val);
+function getRadio(groupId) {
+  const c = document.getElementById(groupId)?.querySelector('.radio-chip.checked');
+  return c ? c.querySelector('input').value : '';
 }
 
-// ── TEMAS ───────────────────────────────────────────────────────────
+// ── PANEL CHECK ──────────────────────────────────────────────────────
+function togglePanel(el, n) {
+  el.classList.toggle('checked');
+  const box = el.querySelector('.panel-check-box');
+  if (box) box.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+// ── FOTO ─────────────────────────────────────────────────────────────
+function previewPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoBase64 = e.target.result;
+    const preview = document.getElementById('photoPreview');
+    preview.innerHTML = `<img src="${photoBase64}" alt="foto">`;
+    const btn = document.getElementById('photoBtnTxt');
+    if (btn) btn.textContent = T[lang].photoChangeTxt;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── TEMAS ─────────────────────────────────────────────────────────────
 const FORMATO_OPTS = [
-  { val:'charla',    label:'Charla',    color:'#ffffff' },
-  { val:'panel',     label:'Panel',     color:'#ef4444' },
-  { val:'taller',    label:'Taller',    color:'#ec4899' },
-  { val:'ama',       label:'AMA',       color:'#E84010' },
-  { val:'moderador', label:'Moderador', color:'#eab308' },
+  {val:'charla',    label:'Charla',    color:'#ffffff'},
+  {val:'panel',     label:'Panel',     color:'#ef4444'},
+  {val:'taller',    label:'Taller',    color:'#ec4899'},
+  {val:'ama',       label:'AMA',       color:'#E84010'},
+  {val:'moderador', label:'Moderador', color:'#eab308'},
 ];
 const NIVEL_OPTS = [
-  { val:'basico',      label:'Básico',      color:'#22c55e' },
-  { val:'intermedio',  label:'Intermedio',  color:'#eab308' },
-  { val:'avanzado',    label:'Avanzado',    color:'#E84010' },
+  {val:'basico',     label:'Básico',     color:'#22c55e'},
+  {val:'intermedio', label:'Intermedio', color:'#eab308'},
+  {val:'avanzado',   label:'Avanzado',   color:'#E84010'},
 ];
-const DUR_OPTS = [15, 20, 30, 45, 60];
 
 function addTema() {
   if (temaCount >= 4) return;
@@ -555,24 +598,20 @@ function addTema() {
   const n = temaCount;
   const t = T[lang];
   const isFirst = n === 1;
+  const req = s => isFirst ? `${s} <span class="req">*</span>` : s;
 
   const nivelesHtml = NIVEL_OPTS.map(o =>
     `<label class="radio-chip" style="--c:${o.color}">
-      <input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)">
-      ${o.label}
-    </label>`
-  ).join('');
+      <input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)"> ${o.label}
+    </label>`).join('');
 
   const formatosHtml = FORMATO_OPTS.map(o =>
     `<label class="check-chip" style="--c:${o.color}">
-      <input type="checkbox" value="${o.val}" onchange="syncChip(this)">
-      ${o.label}
-    </label>`
-  ).join('');
+      <input type="checkbox" value="${o.val}" onchange="syncChip(this)"> ${o.label}
+    </label>`).join('');
 
-  const durHtml = DUR_OPTS.map(d =>
-    `<option value="${d}"${d===30?' selected':''}>${d} min</option>`
-  ).join('');
+  const durHtml = [15,20,30,45,60].map(d =>
+    `<option value="${d}"${d===30?' selected':''}>${d} min</option>`).join('');
 
   const card = document.createElement('div');
   card.className = 'tema-card';
@@ -580,12 +619,12 @@ function addTema() {
   card.innerHTML = `
     <div class="tema-card-header">
       <span class="tema-num">${t.temaNum(n)}</span>
-      ${!isFirst ? `<button type="button" class="tema-remove" onclick="removeTema(this)">✕</button>` : ''}
+      ${!isFirst?`<button type="button" class="tema-remove" onclick="removeTema(this)">✕</button>`:''}
     </div>
     <div class="grid-1" style="gap:12px">
 
       <div class="field">
-        <label class="label tema-level-lbl">${t.temaLevel}${isFirst?' <span class="req">*</span>':''}</label>
+        <label class="label tema-level-lbl">${req(t.temaLevel)}</label>
         <div class="radio-group" id="nivel-${n}">${nivelesHtml}</div>
       </div>
 
@@ -594,29 +633,46 @@ function addTema() {
         <div class="check-group" id="formato-${n}">${formatosHtml}</div>
       </div>
 
-      <div class="grid-2" style="gap:12px">
-        <div class="field">
-          <label class="label tema-dur-lbl">${t.temaDur}</label>
-          <select class="sel" id="dur-${n}">${durHtml}</select>
-        </div>
-        <div></div>
+      <div class="field" style="max-width:200px">
+        <label class="label tema-dur-lbl">${t.temaDur}</label>
+        <select class="sel" id="dur-${n}">${durHtml}</select>
       </div>
 
       <div class="sep"></div>
 
       <div class="field" id="ft-${n}">
-        <label class="label tema-title-lbl">${t.temaTitle}${isFirst?' <span class="req">*</span>':''}</label>
-        <input class="inp" id="tema-titulo-${n}" type="text" maxlength="80"
-          oninput="updateCounter('tema-titulo-${n}','cnt-t${n}',80)">
-        <div class="counter"><span id="cnt-t${n}">0</span> / 80</div>
+        <label class="label tema-title-lbl">${req(t.temaTitle)}</label>
+        <input class="inp" id="tema-titulo-${n}" type="text" maxlength="100"
+          oninput="updateCounter('tema-titulo-${n}','cnt-t${n}',100)">
+        <div class="counter"><span id="cnt-t${n}">0</span> / 100</div>
+      </div>
+
+      <div class="field" id="fa-${n}">
+        <label class="label tema-abstract-lbl">${req(t.temaAbstract)}</label>
+        <textarea class="ta" id="tema-abstract-${n}" maxlength="200" style="min-height:60px"
+          oninput="updateCounter('tema-abstract-${n}','cnt-a${n}',200)"
+          placeholder="${t.temaAbstractHint}"></textarea>
+        <div class="counter"><span id="cnt-a${n}">0</span> / 200</div>
       </div>
 
       <div class="field" id="fd-${n}">
-        <label class="label tema-desc-lbl">${t.temaDesc}${isFirst?' <span class="req">*</span>':''}</label>
-        <textarea class="ta" id="tema-desc-${n}" maxlength="300"
-          oninput="updateCounter('tema-desc-${n}','cnt-d${n}',300)"
+        <label class="label tema-desc-lbl">${t.temaDesc}</label>
+        <textarea class="ta" id="tema-desc-${n}" maxlength="400" style="min-height:72px"
+          oninput="updateCounter('tema-desc-${n}','cnt-d${n}',400)"
           placeholder="${t.temaDescHint}"></textarea>
-        <div class="counter"><span id="cnt-d${n}">0</span> / 300</div>
+        <div class="counter"><span id="cnt-d${n}">0</span> / 400</div>
+      </div>
+
+      <div class="field">
+        <label class="label tema-tags-lbl">${t.temaTags}</label>
+        <input class="inp" id="tema-tags-${n}" type="text" maxlength="200"
+          placeholder="${t.temaTagsHint}">
+        <div class="hint" style="margin-top:4px" id="tags-hint-${n}">${t.temaTagsHint}</div>
+      </div>
+
+      <div class="panel-check-wrap" id="panel-wrap-${n}" onclick="togglePanel(this,${n})">
+        <div class="panel-check-box"></div>
+        <span class="panel-check-txt">${t.temaPanel}</span>
       </div>
 
     </div>`;
@@ -644,27 +700,25 @@ function updateCounter(inputId, cntId, max) {
   if (el && cnt) cnt.textContent = el.value.length;
 }
 
-// ── VALIDACIÓN ──────────────────────────────────────────────────────
+// ── VALIDACIÓN ────────────────────────────────────────────────────────
 function clearErrors() {
-  document.querySelectorAll('.field-error').forEach(f => f.classList.remove('field-error'));
-  document.querySelectorAll('.err-msg').forEach(e => e.remove());
+  document.querySelectorAll('.field-error').forEach(f=>f.classList.remove('field-error'));
+  document.querySelectorAll('.err-msg').forEach(e=>e.remove());
 }
 function setError(fieldId, msg) {
-  const f = document.getElementById(fieldId);
-  if (!f) return;
+  const f = document.getElementById(fieldId); if (!f) return;
   f.classList.add('field-error');
   if (!f.querySelector('.err-msg')) {
-    const span = document.createElement('span');
-    span.className = 'err-msg';
-    span.textContent = msg;
-    f.appendChild(span);
+    const s = document.createElement('span');
+    s.className = 'err-msg'; s.textContent = msg;
+    f.appendChild(s);
   }
 }
 function validate() {
   clearErrors();
-  const t = T[lang];
-  let ok = true;
-  [['f-nombre','nombre'],['f-tipo','tipo'],['f-pais','pais'],['f-mail','mail']].forEach(([fid,iid]) => {
+  const t = T[lang]; let ok = true;
+  [['f-nombre','nombre'],['f-apellido','apellido'],['f-tipo','tipo'],
+   ['f-cargo','cargo'],['f-pais','pais'],['f-mail','mail']].forEach(([fid,iid]) => {
     const el = document.getElementById(iid);
     if (!el?.value.trim()) { setError(fid, t.errRequired); ok = false; }
   });
@@ -673,18 +727,20 @@ function validate() {
     setError('f-mail', t.errMail); ok = false;
   }
   if (!getChecked('idiomaGroup').length) { setError('f-idioma', t.errIdioma); ok = false; }
+  const bio = document.getElementById('bio');
+  if (!bio?.value.trim()) { setError('f-bio-wrap', t.errRequired); ok = false; }
   const titulo1 = document.getElementById('tema-titulo-1');
   if (!titulo1?.value.trim()) { setError('ft-1', t.errRequired); ok = false; }
-  const desc1 = document.getElementById('tema-desc-1');
-  if (!desc1?.value.trim()) { setError('fd-1', t.errRequired); ok = false; }
+  const abstract1 = document.getElementById('tema-abstract-1');
+  if (!abstract1?.value.trim()) { setError('fa-1', t.errRequired); ok = false; }
   return ok;
 }
 
-// ── SUBMIT ──────────────────────────────────────────────────────────
+// ── SUBMIT ────────────────────────────────────────────────────────────
 async function handleSubmit(e) {
   e.preventDefault();
   if (!validate()) {
-    document.querySelector('.field-error')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    document.querySelector('.field-error')?.scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
   const btn = document.getElementById('submitBtn');
@@ -692,53 +748,60 @@ async function handleSubmit(e) {
   btn.disabled = true;
   txt.innerHTML = `<span class="spinner"></span>${T[lang].sending}`;
 
-  // Recopilar temas
   const temas = [];
   document.querySelectorAll('.tema-card').forEach(card => {
     const n = card.dataset.num;
-    const titulo = document.getElementById(`tema-titulo-${n}`)?.value.trim() || '';
+    const titulo = document.getElementById(`tema-titulo-${n}`)?.value.trim()||'';
     if (!titulo) return;
     temas.push({
       titulo,
-      descripcion: document.getElementById(`tema-desc-${n}`)?.value.trim() || '',
+      abstract:    document.getElementById(`tema-abstract-${n}`)?.value.trim()||'',
+      descripcion: document.getElementById(`tema-desc-${n}`)?.value.trim()||'',
+      tags:        document.getElementById(`tema-tags-${n}`)?.value.trim()||'',
       nivel:       getRadio(`nivel-${n}`),
       formatos:    getChecked(`formato-${n}`).join(','),
-      duracion:    document.getElementById(`dur-${n}`)?.value || '30',
+      duracion:    document.getElementById(`dur-${n}`)?.value||'30',
+      panel:       document.getElementById(`panel-wrap-${n}`)?.classList.contains('checked')?'si':'no',
     });
   });
+
+  const wCode = document.getElementById('whatsapp-code').value.trim();
+  const wNum  = document.getElementById('whatsapp').value.trim();
 
   const payload = {
     action: 'speaker_form_submit',
     data: {
       nombre:             document.getElementById('nombre').value.trim(),
+      apellido:           document.getElementById('apellido').value.trim(),
       apodo:              document.getElementById('apodo').value.trim(),
       tipo:               document.getElementById('tipo').value.trim(),
+      cargo:              document.getElementById('cargo').value.trim(),
       pais:               document.getElementById('pais').value.trim(),
       idioma:             getChecked('idiomaGroup').join(','),
       mail:               document.getElementById('mail').value.trim(),
-      whatsapp:           document.getElementById('whatsapp').value.trim(),
+      website:            document.getElementById('website').value.trim(),
+      empresa:            document.getElementById('empresa').value.trim(),
+      whatsapp:           wCode && wNum ? `${wCode} ${wNum}` : wNum,
       telegram:           document.getElementById('telegram').value.trim(),
       signal:             document.getElementById('signal').value.trim(),
       linkedin:           document.getElementById('linkedin').value.trim(),
       x:                  document.getElementById('x').value.trim().replace(/^@/,''),
       instagram:          document.getElementById('instagram').value.trim().replace(/^@/,''),
-      empresa:            document.getElementById('empresa').value.trim(),
-      dias:               '',
+      foto:               photoBase64 ? '[foto adjunta]' : '',
       bio:                document.getElementById('bio').value.trim(),
       eventos_anteriores: document.getElementById('eventos').value.trim(),
+      dias:               getDias(),
       primera_vez:        getRadio('primeraGroup'),
-      acepta_moderador:   getRadio('moderadorGroup'),
       disponible_podcast: getRadio('podcastGroup'),
       trae_empresa:       getRadio('empresaPresentaGroup'),
       temas,
     }
   };
-  payload.data.dias = getDias();
 
   try {
     await fetch(GAS_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
     showSuccess();
@@ -749,6 +812,10 @@ async function handleSubmit(e) {
   }
 }
 
+function getDias() {
+  return [...(document.getElementById('diasGroup')?.querySelectorAll('.check-chip.checked')||[])]
+    .map(c=>c.querySelector('input').value).join(',');
+}
 function showSuccess() {
   document.getElementById('formWrap').style.display = 'none';
   const sc = document.getElementById('successScreen');
@@ -758,22 +825,11 @@ function showSuccess() {
 }
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 4000);
 }
 
-// ── INIT ────────────────────────────────────────────────────────────
-// Fix dias collection
-function getDias() {
-  const dias = [];
-  document.querySelectorAll('#formWrap .check-chip.checked').forEach(chip => {
-    const v = chip.querySelector('input')?.value;
-    if(['oct29','oct30','oct31','nov1'].includes(v)) dias.push(v);
-  });
-  return dias.join(',');
-}
-
+// ── INIT ──────────────────────────────────────────────────────────────
 addTema();
 applyTranslations();
 </script>
