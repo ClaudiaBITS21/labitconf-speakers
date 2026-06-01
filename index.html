@@ -253,6 +253,19 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 #claveError{color:#ef4444;font-size:15px;margin-bottom:8px;min-height:16px;}
 #claveConfirm{background:var(--red);color:#fff;border:none;padding:9px 22px;border-radius:7px;font-weight:700;cursor:pointer;font-size:14px;width:100%;}
 
+/* LOCK SCREEN */
+#lockScreen{display:none;position:fixed;inset:0;background:#000;z-index:99999;align-items:center;justify-content:center;flex-direction:column;}
+#lockScreen.show{display:flex;}
+#lockBox{background:#0f0f0f;border:1px solid #2d2d2d;border-radius:14px;padding:36px 32px;width:320px;text-align:center;}
+#lockLogo{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px;}
+#lockLogo span{color:var(--red);}
+#lockSub{font-size:14px;color:#666;margin-bottom:24px;}
+#lockInput{width:100%;background:#1a1a1a;border:1px solid #2d2d2d;color:#fff;padding:11px 14px;border-radius:8px;font-size:16px;text-align:center;letter-spacing:.15em;margin-bottom:10px;outline:none;font-family:inherit;}
+#lockInput:focus{border-color:var(--red);}
+#lockError{color:#ef4444;font-size:13px;margin-bottom:10px;min-height:16px;}
+#lockBtn{width:100%;background:var(--red);color:#fff;border:none;padding:11px;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;}
+#lockBtn:hover{filter:brightness(1.1);}
+
 /* Stage header conflict indicator */
 .stage-h-warn{color:#ef4444 !important;}
 .stage-h-full{border-bottom:2px solid #22c55e !important;}
@@ -260,6 +273,17 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </style>
 </head>
 <body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div id="lockBox">
+    <div id="lockLogo">LABITCONF <span>'26</span></div>
+    <div id="lockSub">Ingresá la clave de acceso</div>
+    <input id="lockInput" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')lockConfirm()">
+    <div id="lockError"></div>
+    <button id="lockBtn" onclick="lockConfirm()">Entrar</button>
+  </div>
+</div>
 
 <!-- NAV -->
 <div class="nav">
@@ -519,6 +543,7 @@ let spSortField = '';
 let spSortDir = 1;
 let spSearchVal = '';
 let dirty = {principal:false,speakers:false,speakersManual:false,ideas:false};
+const ACCESS_KEY = 'BTC/2026';
 let writeKey = localStorage.getItem('labitconf_write_key') || '';
 let versions = {Principal:'0',Speakers:'0',SpeakerManual:'0',Ideas:'0'};
 
@@ -2034,7 +2059,32 @@ async function init(){
   await loadAll();
 }
 
-init();
+// ── LOCK SCREEN ───────────────────────────────────────────────────────
+function lockConfirm() {
+  const input = document.getElementById('lockInput');
+  const err   = document.getElementById('lockError');
+  const k = input.value.trim();
+  if (!k) { err.textContent = 'Ingresá la clave.'; return; }
+  if (k !== ACCESS_KEY) { err.textContent = 'Clave incorrecta.'; input.value=''; input.focus(); return; }
+  // Clave correcta
+  writeKey = k;
+  localStorage.setItem('labitconf_write_key', k);
+  document.getElementById('lockScreen').classList.remove('show');
+  init();
+}
+
+// Arranque: chequear clave antes de mostrar nada
+(function() {
+  const saved = localStorage.getItem('labitconf_write_key');
+  if (saved === ACCESS_KEY) {
+    init(); // ya tiene clave válida guardada
+  } else {
+    localStorage.removeItem('labitconf_write_key');
+    writeKey = '';
+    document.getElementById('lockScreen').classList.add('show');
+    setTimeout(() => document.getElementById('lockInput').focus(), 100);
+  }
+})();
 </script>
 </body>
 </html>
