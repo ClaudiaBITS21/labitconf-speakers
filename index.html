@@ -906,12 +906,15 @@ function spMatchScore(query,s){
   let best=0;
   s.temasArr.forEach((tema,ti)=>{
     const det=s.detallesArr[ti]||'';
-    const sToks=new Set([...spTokenize(tema),...spTokenize(det)]);
+    const abs=s.abstractsArr?.[ti]||'';
+    const tags=(s.tagsArr?.[ti]||'').replace(/,/g,' ');
+    const sToks=new Set([...spTokenize(tema),...spTokenize(det),...spTokenize(abs),...spTokenize(tags)]);
     const inter=[...qToks].filter(t=>sToks.has(t)).length;
     const union=new Set([...qToks,...sToks]).size;
     const score=union>0?inter/union:0;
     const titleBonus=spTokenize(tema).filter(t=>qToks.has(t)).length*0.15;
-    best=Math.max(best,score+titleBonus);
+    const tagsBonus=spTokenize(tags).filter(t=>qToks.has(t)).length*0.2;
+    best=Math.max(best,score+titleBonus+tagsBonus);
   });
   return best;
 }
@@ -1479,11 +1482,17 @@ async function loadSpeakers(){
     const raw=await gasGet('Speakers');
     if(!raw||raw.length<2){state.speakers=[];renderSpeakers();return;}
     const[,...rows]=raw;
-    // Schema (30 cols):
+    // Schema (62 cols) — cols 0-29 existentes, 30-61 nuevos del form
     // [0]nombre [1]tipo [2]apodo [3]pais [4]idioma [5]mail [6]whatsapp [7]telegram [8]signal
     // [9]linkedin [10]x [11]instagram [12]empresa [13]notas [14]bio [15]eventos_anteriores
     // [16]tema1 [17]detalle1 [18]tema2 [19]detalle2 [20]tema3 [21]detalle3 [22]tema4 [23]detalle4
     // [24]temas_estado [25]estado [26]oct29 [27]oct30 [28]oct31 [29]nov1
+    // [30]apellido [31]cargo [32]website [33]foto [34]primera_vez [35]disponible_podcast
+    // [36]trae_empresa [37]dias_asiste
+    // [38]abstract1 [39]tags1 [40]nivel1 [41]formatos1 [42]duracion1 [43]panel1
+    // [44]abstract2 [45]tags2 [46]nivel2 [47]formatos2 [48]duracion2 [49]panel2
+    // [50]abstract3 [51]tags3 [52]nivel3 [53]formatos3 [54]duracion3 [55]panel3
+    // [56]abstract4 [57]tags4 [58]nivel4 [59]formatos4 [60]duracion4 [61]panel4
     state.speakers=rows.map(r=>({
       nombre:String(r[0]||''),tipo:String(r[1]||'speaker'),
       apodo:String(r[2]||''),pais:String(r[3]||''),idioma:String(r[4]||'es'),
@@ -1499,10 +1508,21 @@ async function loadSpeakers(){
       temas_estado:String(r[24]||''),
       estado:String(r[25]||'disponible'),
       oct29:String(r[26]||''),oct30:String(r[27]||''),oct31:String(r[28]||''),nov1:String(r[29]||''),
-      // Derived helpers
-      get temas(){ return [this.tema1,this.tema2,this.tema3,this.tema4].filter(Boolean).join(', '); },
+      // Cols nuevas del form
+      apellido:String(r[30]||''),cargo:String(r[31]||''),
+      website:String(r[32]||''),foto:String(r[33]||''),
+      primera_vez:String(r[34]||''),disponible_podcast:String(r[35]||''),
+      trae_empresa:String(r[36]||''),dias_asiste:String(r[37]||''),
+      abstract1:String(r[38]||''),tags1:String(r[39]||''),nivel1:String(r[40]||''),formatos1:String(r[41]||''),duracion1:String(r[42]||''),panel1:String(r[43]||''),
+      abstract2:String(r[44]||''),tags2:String(r[45]||''),nivel2:String(r[46]||''),formatos2:String(r[47]||''),duracion2:String(r[48]||''),panel2:String(r[49]||''),
+      abstract3:String(r[50]||''),tags3:String(r[51]||''),nivel3:String(r[52]||''),formatos3:String(r[53]||''),duracion3:String(r[54]||''),panel3:String(r[55]||''),
+      abstract4:String(r[56]||''),tags4:String(r[57]||''),nivel4:String(r[58]||''),formatos4:String(r[59]||''),duracion4:String(r[60]||''),panel4:String(r[61]||''),
+      // Helpers derivados
       get temasArr(){ return [this.tema1,this.tema2,this.tema3,this.tema4].filter(Boolean); },
       get detallesArr(){ return [this.detalle1,this.detalle2,this.detalle3,this.detalle4]; },
+      get abstractsArr(){ return [this.abstract1,this.abstract2,this.abstract3,this.abstract4]; },
+      get tagsArr(){ return [this.tags1,this.tags2,this.tags3,this.tags4]; },
+      get temas(){ return [this.tema1,this.tema2,this.tema3,this.tema4].filter(Boolean).join(', '); },
       get temasEstadoArr(){
         const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
         const n=this.temasArr.length||1;
@@ -1526,7 +1546,7 @@ async function loadManualSpeakers(){
 
 async function saveSpeakers(){
   if(!(await checkVersion('Speakers')))return;
-  // Schema 30 cols
+  // Schema 62 cols
   const data=state.speakers.map(s=>[
     s.nombre||'',s.tipo||'speaker',s.apodo||'',s.pais||'',s.idioma||'es',
     s.mail||'',s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',
@@ -1534,7 +1554,15 @@ async function saveSpeakers(){
     s.tema1||'',s.detalle1||'',s.tema2||'',s.detalle2||'',
     s.tema3||'',s.detalle3||'',s.tema4||'',s.detalle4||'',
     s.temas_estado||'',s.estado||'disponible',
-    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||''
+    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'',
+    // Cols 30-37
+    s.apellido||'',s.cargo||'',s.website||'',s.foto||'',
+    s.primera_vez||'',s.disponible_podcast||'',s.trae_empresa||'',s.dias_asiste||'',
+    // Cols 38-61 (abstract, tags, nivel, formatos, duracion, panel × 4 temas)
+    s.abstract1||'',s.tags1||'',s.nivel1||'',s.formatos1||'',s.duracion1||'',s.panel1||'',
+    s.abstract2||'',s.tags2||'',s.nivel2||'',s.formatos2||'',s.duracion2||'',s.panel2||'',
+    s.abstract3||'',s.tags3||'',s.nivel3||'',s.formatos3||'',s.duracion3||'',s.panel3||'',
+    s.abstract4||'',s.tags4||'',s.nivel4||'',s.formatos4||'',s.duracion4||'',s.panel4||''
   ]);
   await gasPost('Speakers','replace_all',data);
   // Also save manual if dirty
