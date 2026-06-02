@@ -457,7 +457,8 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
           <th onclick="setSortSp('postulacion_num')" style="cursor:pointer;user-select:none;width:50px">N° <span id="srt-postulacion_num"></span></th>
           <th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th>
           <th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th>
-          <th>Temas · Estado</th>
+          <th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th>
+          <th>Temas</th>
           <th onclick="setSortSp('pais')" style="cursor:pointer;user-select:none">País <span id="srt-pais"></span></th>
           <th>Idioma</th>
           <th onclick="setSortSp('mail')" style="cursor:pointer;user-select:none">Mail <span id="srt-mail"></span></th>
@@ -1486,6 +1487,7 @@ function renderSpeakers(){
         <div style="color:var(--red);font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
         ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
       </td>
+      <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
       <td style="min-width:160px">${temasResumen}</td>
       <td style="font-size:13px;text-align:center"><span title="${esc(s.pais||'')}">${paisInfo[0]} <span style="color:#555;font-size:11px">${paisInfo[1]}</span></span></td>
       <td style="text-align:center">${idiomaHtml}</td>
