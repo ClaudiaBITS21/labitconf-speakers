@@ -160,15 +160,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
           <div class="field" id="f-pais">
             <label class="label" id="l-pais"></label>
-            <select class="sel" id="pais"></select>
+            <select class="sel" id="pais" onchange="onPaisChange(this)"></select>
+            <input class="inp" id="pais-custom" type="text" maxlength="80" style="display:none;margin-top:6px">
           </div>
           <div class="field" id="f-mail">
             <label class="label" id="l-mail"></label>
             <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
-          </div>
-          <div class="field" id="f-mail2">
-            <label class="label" id="l-mail2"></label>
-            <input class="inp" id="mail2" type="email" maxlength="120" autocomplete="off">
           </div>
           <div class="field">
             <label class="label" id="l-cargo"></label>
@@ -362,7 +359,25 @@ function buildPaises(){
   const sel=document.getElementById('pais');
   const list=lang==='en'?PAISES_EN:PAISES_ES;
   const cur=sel.value;
-  sel.innerHTML=`<option value="">${lang==='en'?'Select country':'Seleccioná país'}</option>`+list.map(p=>`<option value="${p}"${p===cur?' selected':''}>${p}</option>`).join('');
+  sel.innerHTML=`<option value="">${lang==='en'?'Select country':'Seleccioná país'}</option>`
+    +list.map(p=>`<option value="${p}"${p===cur?' selected':''}>${p}</option>`).join('')
+    +`<option value="__otro__">${lang==='en'?'Other (specify)':'Otro (especificar)'}</option>`;
+}
+function onPaisChange(sel){
+  const custom=document.getElementById('pais-custom');
+  if(sel.value==='__otro__'){
+    custom.style.display='block';
+    custom.placeholder=lang==='en'?'Your country':'Tu país';
+    custom.focus();
+  } else {
+    custom.style.display='none';
+    custom.value='';
+  }
+}
+function getPaisValue(){
+  const sel=document.getElementById('pais');
+  if(sel.value==='__otro__') return document.getElementById('pais-custom').value.trim();
+  return sel.value;
 }
 
 // ── TAGS PRESET ───────────────────────────────────────────────────────
@@ -735,14 +750,13 @@ function setError(id,msg){const f=document.getElementById(id);if(!f)return;f.cla
 
 function validate(){
   clearErrors();const t=T[lang];let ok=true;
-  [['f-nombre','nombre'],['f-apellido','apellido'],['f-confname','confname'],['f-pais','pais'],['f-mail','mail']].forEach(([fid,iid])=>{
+  [['f-nombre','nombre'],['f-apellido','apellido'],['f-confname','confname'],['f-mail','mail']].forEach(([fid,iid])=>{
     const el=document.getElementById(iid);if(!el?.value.trim()){setError(fid,t.errRequired);ok=false;}
   });
+  // País: validar select o custom
+  if(!getPaisValue()){setError('f-pais',t.errRequired);ok=false;}
   const mailEl=document.getElementById('mail');
   if(mailEl?.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())){setError('f-mail',t.errMail);ok=false;}
-  const mail2El=document.getElementById('mail2');
-  if(!mail2El?.value.trim()){setError('f-mail2',t.errRequired);ok=false;}
-  else if(mail2El.value.trim()!==mailEl?.value.trim()){setError('f-mail2',t.errMailMatch);ok=false;}
   if(!getChecked('idiomaGroup').length){setError('f-idioma',t.errIdioma);ok=false;}
   // Al menos un contacto
   const waNum=(document.getElementById('wa-num')?.value||'').trim();
@@ -808,7 +822,7 @@ async function handleSubmit(e){
       confname:document.getElementById('confname').value.trim(),
       tipo:'speaker',
       cargo:document.getElementById('cargo').value.trim(),
-      pais:document.getElementById('pais').value.trim(),
+      pais:getPaisValue(),
       idioma:getChecked('idiomaGroup').join(','),
       mail:document.getElementById('mail').value.trim(),
       website:document.getElementById('website').value.trim(),
