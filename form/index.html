@@ -562,7 +562,6 @@ function setTxt(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
 // setInner acepta tanto string ID como elemento DOM
 function setInner(idOrEl,v){const e=typeof idOrEl==='string'?document.getElementById(idOrEl):idOrEl;if(e)e.innerHTML=v;}
 function setTxtEl(el,v){if(el)el.textContent=v;}
-function setInner(el,v){if(el)el.innerHTML=v;}
 function setReq(id,v,r){const e=document.getElementById(id);if(e)e.innerHTML=v+(r?' <span class="req">*</span>':'');}
 function setAttr(id,a,v){const e=document.getElementById(id);if(e)e.setAttribute(a,v);}
 function setAttrEl(el,a,v){if(el)el.setAttribute(a,v);}
