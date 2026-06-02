@@ -126,13 +126,51 @@ function handleFormSubmit(ss, d) {
   const spSheet = ss.getSheetByName('Speakers');
   if (!spSheet) return respond({ ok:false, error:'No existe la pestaña "Speakers".' });
 
-  // Anti-duplicado por mail
+  // Buscar por mail — si existe, fusionar en lugar de duplicar
   const mail = String(d.mail || '').trim().toLowerCase();
   if (mail) {
     const allData = spSheet.getDataRange().getValues();
     for (let i = 1; i < allData.length; i++) {
       if (String(allData[i][7]||'').trim().toLowerCase() === mail) {
-        return respond({ ok:true, duplicado:true, msg:'Ya existe un speaker con ese mail.' });
+        // ── FUSIONAR con fila existente ──
+        const existing = allData[i];
+
+        // Temas existentes
+        let existingTemas = [];
+        const col24 = String(existing[24]||'').trim();
+        if (col24.startsWith('[')) {
+          try { existingTemas = JSON.parse(col24); } catch(e) { existingTemas = []; }
+        }
+
+        // Temas nuevos del form — agregar solo los que no existen (por título)
+        const existingTitles = existingTemas.map(t => String(t.titulo||'').trim().toLowerCase());
+        temasArr.forEach(t => {
+          const titulo = String(t.titulo||'').trim();
+          if (titulo && !existingTitles.includes(titulo.toLowerCase())) {
+            existingTemas.push(t);
+          }
+        });
+
+        // temas_estado: extender para nuevos temas
+        let temasEstadoArr = String(existing[25]||'').split(',').map(x=>x.trim()).filter(Boolean);
+        while (temasEstadoArr.length < existingTemas.length) temasEstadoArr.push('disponible');
+
+        // Fusionar campos simples: actualizar solo si estaba vacío
+        const merged = [...existing];
+        const newRow = row; // el row ya construido
+        [0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,27,28,29,30].forEach(col => {
+          if (!String(merged[col]||'').trim() && String(newRow[col]||'').trim()) {
+            merged[col] = newRow[col];
+          }
+        });
+        // Siempre actualizar temas (fusionados) y temas_estado
+        merged[24] = JSON.stringify(existingTemas);
+        merged[25] = temasEstadoArr.join(',');
+
+        // Actualizar la fila en el sheet (fila i+1 en Sheets es 1-based)
+        spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
+        PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+        return respond({ ok:true, actualizado:true, msg:'Tus datos fueron actualizados. ¡Gracias!' });
       }
     }
   }
