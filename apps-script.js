@@ -131,7 +131,7 @@ function handleFormSubmit(ss, d) {
   if (mail) {
     const allData = spSheet.getDataRange().getValues();
     for (let i = 1; i < allData.length; i++) {
-      if (String(allData[i][7]||'').trim().toLowerCase() === mail) {
+      if (String(allData[i][8]||'').trim().toLowerCase() === mail) {
         // ── FUSIONAR con fila existente ──
         const existing = allData[i];
 
@@ -196,46 +196,56 @@ function handleFormSubmit(ss, d) {
   const hasDia = d => diasArr.includes(d) ? 'si' : '';
 
   const row = [
-    nombre,                                          // [0]
-    String(d.apellido          ||'').trim(),         // [1]
-    String(d.tipo              ||'speaker').trim(),  // [2]
-    String(d.apodo             ||'').trim(),         // [3]
-    String(d.cargo             ||'').trim(),         // [4]
-    String(d.pais              ||'').trim(),         // [5]
-    String(d.idioma            ||'es').trim(),       // [6]
-    mail,                                            // [7]
-    String(d.website           ||'').trim(),         // [8]
-    String(d.foto              ||'').trim(),         // [9]
-    String(d.whatsapp          ||'').trim().replace(/^\+/,''),  // [10]
-    String(d.telegram          ||'').trim(),         // [11]
-    String(d.signal            ||'').trim(),         // [12]
-    String(d.linkedin          ||'').trim(),         // [13]
-    String(d.x                 ||'').trim().replace(/^@/,''), // [14]
-    String(d.instagram         ||'').trim().replace(/^@/,''), // [15]
-    '',                                              // [16] empresa — vacío
-    '',                                              // [17] notas — vacío
-    String(d.bio               ||'').trim(),         // [18]
-    String(d.eventos_anteriores||'').trim(),         // [19]
-    String(d.primera_vez       ||'').trim(),         // [20]
-    String(d.disponible_podcast||'').trim(),         // [21]
-    String(d.trae_empresa      ||'').trim(),         // [22]
-    String(d.dias              ||'').trim(),         // [23] dias_asiste CSV
-    temasJson,                                       // [24] temas JSON
-    temasEstado,                                     // [25]
-    'disponible',                                    // [26] estado
-    hasDia('oct29'),                                 // [27]
-    hasDia('oct30'),                                 // [28]
-    hasDia('oct31'),                                 // [29]
-    hasDia('nov1'),                                  // [30]
+    counter,                                         // [0]  postulacion_num
+    nombre,                                          // [1]  nombre
+    String(d.apellido          ||'').trim(),         // [2]  apellido
+    String(d.confname          ||'').trim(),         // [3]  confname
+    'speaker',                                       // [4]  tipo (siempre speaker)
+    String(d.cargo             ||'').trim(),         // [5]  cargo
+    String(d.pais              ||'').trim(),         // [6]  pais
+    String(d.idioma            ||'es').trim(),       // [7]  idioma
+    mail,                                            // [8]  mail
+    String(d.website           ||'').trim(),         // [9]  website
+    String(d.foto              ||'').trim(),         // [10] foto
+    String(d.whatsapp          ||'').trim(),         // [11] whatsapp (ya viene como wa.me/...)
+    String(d.telegram          ||'').trim(),         // [12] telegram (ya viene como t.me/...)
+    String(d.signal            ||'').trim(),         // [13] signal
+    String(d.linkedin          ||'').trim(),         // [14] linkedin
+    String(d.x                 ||'').trim().replace(/^@/,''), // [15] x
+    String(d.instagram         ||'').trim().replace(/^@/,''), // [16] instagram
+    String(d.github            ||'').trim(),         // [17] github
+    String(d.nostr             ||'').trim(),         // [18] nostr
+    String(d.empresa           ||'').trim(),         // [19] empresa
+    '',                                              // [20] notas — vacío
+    String(d.bio               ||'').trim(),         // [21] bio
+    String(d.eventos_anteriores||'').trim(),         // [22] eventos_anteriores
+    String(d.primera_vez       ||'').trim(),         // [23] primera_vez
+    String(d.disponible_podcast||'').trim(),         // [24] disponible_podcast
+    String(d.trae_empresa      ||'').trim(),         // [25] trae_empresa
+    String(d.dias              ||'').trim(),         // [26] dias_asiste CSV
+    String(d.disponible_desde  ||'').trim(),         // [27] disponible_desde
+    String(d.disponible_hasta  ||'').trim(),         // [28] disponible_hasta
+    temasJson,                                       // [29] temas JSON
+    temasEstado,                                     // [30] temas_estado
+    'disponible',                                    // [31] estado
+    hasDia('oct29'),                                 // [32]
+    hasDia('oct30'),                                 // [33]
+    hasDia('oct31'),                                 // [34]
+    hasDia('nov1'),                                  // [35]
   ];
+
+  // Número correlativo de postulación
+  const counter = parseInt(PropertiesService.getScriptProperties().getProperty('postulacion_counter')||'0') + 1;
+  PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(counter));
 
   // Asegurar fila de headers si el sheet está vacío
   if (spSheet.getLastRow() === 0) {
     spSheet.appendRow([
-      'nombre','apellido','tipo','apodo','cargo','pais','idioma','mail',
+      'postulacion_num','nombre','apellido','confname','tipo','cargo','pais','idioma','mail',
       'website','foto','whatsapp','telegram','signal','linkedin','x','instagram',
-      'empresa','notas','bio','eventos_anteriores',
+      'github','nostr','empresa','notas','bio','eventos_anteriores',
       'primera_vez','disponible_podcast','trae_empresa','dias_asiste',
+      'disponible_desde','disponible_hasta',
       'temas','temas_estado','estado','oct29','oct30','oct31','nov1'
     ]);
   }

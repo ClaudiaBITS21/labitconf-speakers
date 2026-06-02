@@ -5,126 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LABITCONF 2026 — Inscripción de Speakers</title>
 <style>
-:root {
-  --bg:          #000000;
-  --bg2:         #0f0f0f;
-  --bg3:         #1a1a1a;
-  --border:      #2d2d2d;
-  --text:        #ffffff;
-  --dim:         #888888;
-  --dim2:        #444444;
-  --orange:      #E84010;
-  --orange-dim:  rgba(232,64,16,.15);
-  --green:       #22c55e;
-  --error:       #ef4444;
+:root{
+  --bg:#000;--bg2:#0f0f0f;--bg3:#1a1a1a;--border:#2d2d2d;
+  --text:#fff;--dim:#888;--dim2:#555;
+  --orange:#E84010;--orange-dim:rgba(232,64,16,.15);
+  --green:#22c55e;--error:#ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;min-height:100vh;}
-
 /* HEADER */
 .header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
 .header-logo{font-weight:900;font-size:22px;letter-spacing:-.5px;}
 .header-logo span{color:var(--orange);}
 .lang-toggle{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.lang-btn{padding:5px 14px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;background:var(--bg3);color:var(--dim);}
+.lang-btn{padding:5px 14px;border:none;font-size:14px;font-weight:700;cursor:pointer;background:var(--bg3);color:var(--dim);transition:all .15s;}
 .lang-btn.active{background:var(--orange);color:#fff;}
-
 /* MAIN */
 .main{max-width:780px;margin:0 auto;padding:32px 20px 80px;}
 .page-title{font-size:26px;font-weight:900;margin-bottom:6px;}
 .page-sub{font-size:15px;color:var(--dim);margin-bottom:32px;line-height:1.5;}
-
 /* SECTION */
 .section{margin-bottom:30px;}
-.section-title{font-size:14px;font-weight:600;letter-spacing:.06em;color:var(--orange);margin-bottom:16px;padding-bottom:7px;border-bottom:1px solid var(--border);}
-
+.section-title{font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--orange);margin-bottom:16px;padding-bottom:7px;border-bottom:1px solid var(--border);}
 /* GRIDS */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .grid-1{display:grid;grid-template-columns:1fr;gap:14px;}
-@media(max-width:580px){.grid-2,.grid-3{grid-template-columns:1fr;}}
-
+@media(max-width:580px){.grid-2{grid-template-columns:1fr;}}
 /* FIELD */
 .field{display:flex;flex-direction:column;gap:6px;}
-.label{font-size:13px;font-weight:700;color:#ffffff;}
+.label{font-size:13px;font-weight:700;color:#fff;}
 .label .req{color:var(--orange);}
 .inp,.sel,.ta{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:15px;font-family:inherit;width:100%;outline:none;transition:border-color .15s;}
-.inp::placeholder,.ta::placeholder{color:#666666;}
+.inp::placeholder,.ta::placeholder{color:#666;}
 .inp:focus,.sel:focus,.ta:focus{border-color:var(--orange);}
 .sel{cursor:pointer;color-scheme:dark;}
 .sel option{background:#1a1a1a;}
 .ta{resize:vertical;min-height:72px;}
 .counter{font-size:11px;color:var(--dim2);text-align:right;}
-.hint{font-size:12px;color:var(--dim2);line-height:1.4;}
-.field-error .inp,.field-error .sel,.field-error .ta,.field-error .check-group,.field-error .radio-group{border-color:var(--error) !important;}
+.hint{font-size:12px;color:var(--dim2);line-height:1.4;margin-top:2px;}
+.field-error .inp,.field-error .sel,.field-error .ta,.field-error .check-group,.field-error .radio-group{border-color:var(--error)!important;}
 .field-error .label{color:var(--error);}
 .err-msg{font-size:12px;color:var(--error);}
-
-/* PHONE ROW */
+/* PHONE */
 .phone-row{display:flex;gap:8px;}
-.phone-code{width:90px;flex-shrink:0;}
-
-/* PHOTO */
-.photo-sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
-.photo-source-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid var(--border);color:var(--dim2);}
-.photo-source-badge.valid{border-color:#22c55e;color:#22c55e;}
-.photo-source-badge.invalid{border-color:var(--error);color:var(--error);}
-
+.phone-code{width:82px;flex-shrink:0;}
 /* CHIPS */
-.check-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
-.check-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:700;}
-.check-chip input[type=checkbox]{display:none;}
-.check-chip:hover{border-color:var(--dim);}
+.check-group{display:flex;flex-wrap:wrap;gap:7px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
+.check-chip,.radio-chip{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;padding:5px 12px;border-radius:6px;border:1px solid var(--border);font-size:13px;font-weight:700;transition:all .15s;}
+.check-chip input,.radio-chip input{display:none;}
+.check-chip:hover,.radio-chip:hover{border-color:var(--dim);}
 .check-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
-
-.radio-group{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
-.radio-chip{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:6px 14px;border-radius:6px;border:1px solid var(--border);transition:all .15s;font-size:13px;font-weight:700;}
-.radio-chip input[type=radio]{display:none;}
-.radio-chip:hover{border-color:var(--dim);}
+.radio-group{display:flex;flex-wrap:wrap;gap:7px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
 .radio-chip.checked{border-color:var(--c,var(--orange));background:color-mix(in srgb,var(--c,var(--orange)) 18%,transparent);color:var(--c,var(--orange));}
-
+/* TAGS */
+.tags-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.tags-preset{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.tag-chip{cursor:pointer;user-select:none;padding:3px 9px;border-radius:5px;border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim);transition:all .12s;}
+.tag-chip:hover{border-color:#555;color:#aaa;}
+.tag-chip.selected{border-color:var(--orange);background:var(--orange-dim);color:var(--orange);}
+.tags-custom-row{display:flex;gap:8px;align-items:center;}
+.tags-selected-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;min-height:0;}
+.tag-sel-chip{display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;background:var(--orange-dim);border:1px solid var(--orange);color:var(--orange);font-size:12px;font-weight:700;}
+.tag-sel-chip button{background:none;border:none;color:var(--orange);cursor:pointer;font-size:13px;padding:0 1px;line-height:1;}
+/* FOTO */
+.foto-wrap{display:flex;align-items:flex-start;gap:14px;}
+.foto-thumb{width:64px;height:64px;border-radius:50%;border:1px solid var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg3);}
+.foto-thumb img{width:100%;height:100%;object-fit:cover;}
+.foto-thumb svg{opacity:.25;}
+.foto-controls{flex:1;display:flex;flex-direction:column;gap:8px;}
+.foto-btns{display:flex;gap:8px;align-items:center;}
+.foto-btn{padding:7px 14px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+.foto-btn:hover{border-color:var(--orange);color:var(--orange);}
+/* EVENTOS PRESET */
+.eventos-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
+.evento-chip{cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim);transition:all .12s;}
+.evento-chip:hover{border-color:#555;color:#ccc;}
+.evento-chip.selected{border-color:var(--orange);background:var(--orange-dim);color:var(--orange);}
+/* TEMA CARD */
+.tema-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;}
+.tema-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.tema-num{font-size:13px;font-weight:800;color:var(--orange);}
+.tema-remove{background:none;border:none;color:var(--dim2);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;}
+.tema-remove:hover{color:var(--error);background:rgba(239,68,68,.1);}
+.sep{height:1px;background:var(--border);margin:6px 0 14px;}
+.add-tema-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--dim);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:4px;}
+.add-tema-btn:hover{color:var(--orange);border-color:var(--orange);background:var(--orange-dim);}
+/* DATES */
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 /* PANEL CHECK */
 .panel-check-wrap{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;user-select:none;transition:border-color .15s;}
 .panel-check-wrap:hover{border-color:var(--dim);}
 .panel-check-wrap.checked{border-color:#ec4899;background:rgba(236,72,153,.1);}
-.panel-check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:13px;}
+.panel-check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:12px;}
 .panel-check-wrap.checked .panel-check-box{background:#ec4899;border-color:#ec4899;}
 .panel-check-txt{font-size:13px;color:var(--dim);font-weight:600;}
 .panel-check-wrap.checked .panel-check-txt{color:#ec4899;}
-
-/* TEMA CARD */
-.tema-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;}
-.tema-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.tema-num{font-size:13px;font-weight:800;color:var(--orange);}
-.tema-remove{background:none;border:none;color:var(--dim2);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;}
-.tema-remove:hover{color:var(--error);background:rgba(239,68,68,.1);}
-.sep{height:1px;background:var(--border);margin:4px 0 14px;}
-.add-tema-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--dim);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:4px;}
-.add-tema-btn:hover{color:var(--orange);border-color:var(--orange);background:var(--orange-dim);}
-
-/* CONSENT */
-.consent{font-size:13px;color:var(--dim);line-height:1.6;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;}
-
 /* SUBMIT */
 .submit-btn{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;transition:all .15s;letter-spacing:.02em;}
 .submit-btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px);}
 .submit-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+.consent{font-size:13px;color:var(--dim);line-height:1.6;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;}
 /* SUCCESS */
 .success-screen{text-align:center;padding:70px 20px;display:none;}
 .success-icon{font-size:60px;margin-bottom:20px;}
 .success-title{font-size:24px;font-weight:900;color:var(--green);margin-bottom:10px;}
 .success-sub{font-size:15px;color:var(--dim);line-height:1.7;}
-
 /* TOAST */
 #toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--error);color:var(--error);padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
 #toast.show{opacity:1;}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-logo">LABITCONF <span>'26</span></div>
   <div class="lang-toggle">
@@ -134,116 +127,131 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </div>
 
 <div class="main">
-
   <!-- SUCCESS -->
   <div class="success-screen" id="successScreen">
     <div class="success-icon">₿</div>
-    <div class="success-title" id="successTitle">¡Gracias por inscribirte!</div>
+    <div class="success-title" id="successTitle"></div>
     <div class="success-sub" id="successSub"></div>
   </div>
 
   <!-- FORM -->
   <div id="formWrap">
-    <div class="page-title" id="pageTitle">Inscripción de Speakers</div>
-    <div class="page-sub" id="pageSub">Completá el formulario para proponer tu participación en LABITCONF 2026.</div>
+    <div class="page-title" id="pageTitle"></div>
+    <div class="page-sub" id="pageSub"></div>
 
     <form id="speakerForm" onsubmit="handleSubmit(event)" novalidate>
 
-      <!-- ── DATOS PERSONALES ── -->
+      <!-- DATOS PERSONALES -->
       <div class="section">
-        <div class="section-title" id="sec1Title">Datos Personales</div>
+        <div class="section-title" id="sec1Title"></div>
         <div class="grid-2">
-
           <div class="field" id="f-nombre">
-            <label class="label" id="l-nombre">Nombre <span class="req">*</span></label>
+            <label class="label" id="l-nombre"></label>
             <input class="inp" id="nombre" type="text" autocomplete="given-name" maxlength="80">
           </div>
-
           <div class="field" id="f-apellido">
-            <label class="label" id="l-apellido">Apellido <span class="req">*</span></label>
+            <label class="label" id="l-apellido"></label>
             <input class="inp" id="apellido" type="text" autocomplete="family-name" maxlength="80">
           </div>
-
-          <div class="field">
-            <label class="label" id="l-apodo">Apodo (Alias)</label>
-            <input class="inp" id="apodo" type="text" maxlength="80">
+          <div class="field" id="f-confname" style="grid-column:1/-1">
+            <label class="label" id="l-confname"></label>
+            <input class="inp" id="confname" type="text" maxlength="80">
+            <div class="hint" id="h-confname"></div>
           </div>
-
-          <div class="field" id="f-tipo">
-            <label class="label" id="l-tipo">Tipo <span class="req">*</span></label>
-            <select class="sel" id="tipo">
-              <option value="">—</option>
-              <option value="speaker">Speaker</option>
-              <option value="moderador">Moderador</option>
-              <option value="panelista">Panelista</option>
-              <option value="empresa">Empresa</option>
-              <option value="sponsor">Sponsor</option>
-            </select>
-          </div>
-
-          <div class="field" id="f-cargo">
-            <label class="label" id="l-cargo">Cargo | Rol <span class="req">*</span></label>
-            <input class="inp" id="cargo" type="text" maxlength="120" placeholder="Ej: CEO, Investigador, Desarrollador…">
-          </div>
-
           <div class="field" id="f-pais">
-            <label class="label" id="l-pais">País <span class="req">*</span></label>
-            <input class="inp" id="pais" type="text" list="paises-list" maxlength="60" autocomplete="off">
-            <datalist id="paises-list"></datalist>
+            <label class="label" id="l-pais"></label>
+            <select class="sel" id="pais"></select>
           </div>
-
           <div class="field" id="f-mail">
-            <label class="label" id="l-mail">Email <span class="req">*</span></label>
+            <label class="label" id="l-mail"></label>
             <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
           </div>
-
           <div class="field">
-            <label class="label" id="l-website">Sitio Web | Empresa</label>
-            <input class="inp" id="website" type="url" placeholder="https://" maxlength="200">
+            <label class="label" id="l-cargo"></label>
+            <input class="inp" id="cargo" type="text" maxlength="120">
           </div>
-
+          <div class="field">
+            <label class="label" id="l-empresa"></label>
+            <input class="inp" id="empresa" type="text" maxlength="120">
+          </div>
         </div>
       </div>
 
-      <!-- ── CONTACTO ── -->
+      <!-- CONTACTO -->
       <div class="section">
-        <div class="section-title" id="sec2Title">Contacto</div>
-        <div class="grid-2">
-          <div class="field">
-            <label class="label" id="l-whatsapp">WhatsApp</label>
+        <div class="section-title" id="sec2Title"></div>
+        <div class="hint" id="h-contacto" style="margin-bottom:12px"></div>
+        <div class="grid-2" id="contactoGrid">
+          <div class="field" id="f-whatsapp">
+            <label class="label" id="l-whatsapp"></label>
             <div class="phone-row">
-              <input class="inp phone-code" id="whatsapp-code" type="text" placeholder="+54" maxlength="6">
-              <input class="inp" id="whatsapp" type="tel" placeholder="11 1234-5678" maxlength="20">
+              <input class="inp phone-code" id="wa-code" type="text" placeholder="54" maxlength="5">
+              <input class="inp" id="wa-num" type="tel" placeholder="1134120000" maxlength="20" oninput="updateWaPreview()">
             </div>
+            <div class="hint" id="wa-preview" style="color:#25D366"></div>
           </div>
-          <div class="field">
-            <label class="label">Telegram</label>
-            <input class="inp" id="telegram" type="text" placeholder="@usuario">
+          <div class="field" id="f-telegram">
+            <label class="label" id="l-telegram"></label>
+            <input class="inp" id="telegram" type="text" placeholder="@alias" maxlength="80" oninput="updateTgPreview()">
+            <div class="hint" id="tg-preview" style="color:#229ED9"></div>
           </div>
-          <div class="field">
+          <div class="field" id="f-signal">
             <label class="label">Signal</label>
-            <input class="inp" id="signal" type="text" placeholder="@alias">
+            <input class="inp" id="signal" type="text" placeholder="@alias" maxlength="80">
+          </div>
+          <div class="field">
+            <label class="label">GitHub</label>
+            <input class="inp" id="github" type="text" placeholder="@usuario" maxlength="80">
+          </div>
+          <div class="field">
+            <label class="label">Nostr</label>
+            <input class="inp" id="nostr" type="text" id="h-nostr" maxlength="200">
+            <div class="hint" id="h-nostr-hint"></div>
           </div>
           <div class="field">
             <label class="label">LinkedIn</label>
-            <input class="inp" id="linkedin" type="url" placeholder="linkedin.com/in/usuario">
+            <input class="inp" id="linkedin" type="url" placeholder="https://www.linkedin.com/in/usuario/" maxlength="200">
           </div>
           <div class="field">
             <label class="label">X | Twitter</label>
-            <input class="inp" id="x" type="text" placeholder="@handle">
+            <input class="inp" id="x" type="text" placeholder="@handle" maxlength="80">
           </div>
           <div class="field">
             <label class="label">Instagram</label>
-            <input class="inp" id="instagram" type="text" placeholder="@handle">
+            <input class="inp" id="instagram" type="text" placeholder="@handle" maxlength="80">
+          </div>
+          <div class="field">
+            <label class="label" id="l-website"></label>
+            <input class="inp" id="website" type="url" placeholder="https://" maxlength="200">
           </div>
         </div>
       </div>
 
-      <!-- ── IDIOMA ── -->
+      <!-- FOTO -->
       <div class="section">
-        <div class="section-title" id="sec-idiomaTitle">Idioma de Presentación</div>
+        <div class="section-title" id="sec-fotoTitle"></div>
+        <div class="field">
+          <label class="label" id="l-foto"></label>
+          <div class="foto-wrap">
+            <div class="foto-thumb" id="fotoThumb">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            </div>
+            <div class="foto-controls">
+              <div class="foto-btns">
+                <input type="file" id="fotoFile" accept="image/*" style="display:none" onchange="onFotoFile(this)">
+                <button type="button" class="foto-btn" onclick="document.getElementById('fotoFile').click()" id="fotoUploadBtn"></button>
+              </div>
+              <input class="inp" id="fotoUrl" type="url" placeholder="https://..." oninput="onFotoUrl(this)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IDIOMA -->
+      <div class="section">
+        <div class="section-title" id="sec-idiomaTitle"></div>
         <div class="field" id="f-idioma">
-          <label class="label" id="l-idioma">¿En qué idioma podés presentar? <span class="req">*</span></label>
+          <label class="label" id="l-idioma"></label>
           <div class="check-group" id="idiomaGroup">
             <label class="check-chip" style="--c:#ffffff">
               <input type="checkbox" value="es" onchange="syncChip(this)"> Español (ES)
@@ -255,41 +263,31 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         </div>
       </div>
 
-      <!-- ── FOTO ── -->
+      <!-- PROPUESTAS -->
       <div class="section">
-        <div class="section-title" id="sec-fotoTitle">Foto</div>
-        <div class="field" id="f-foto">
-          <label class="label" id="l-foto">Enlace de foto de perfil</label>
-          <div style="display:flex;align-items:center;gap:14px">
-            <div style="width:56px;height:56px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="white" style="opacity:.25"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-            </div>
-            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
-              <input class="inp" id="foto" type="url" placeholder="https://..." oninput="checkPhotoSource(this)">
-              <div class="photo-sources">
-                <span class="photo-source-badge" id="badge-li">LinkedIn</span>
-                <span class="photo-source-badge" id="badge-ig">Instagram</span>
-                <span class="photo-source-badge" id="badge-x">X | Twitter</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── PROPUESTA(S) ── -->
-      <div class="section">
-        <div class="section-title" id="sec3Title">Propuesta(s)</div>
+        <div class="section-title" id="sec3Title"></div>
         <div id="temasWrap"></div>
         <button type="button" class="add-tema-btn" id="addTemaBtn" onclick="addTema()">
-          + <span id="addTemaLabel">Agregar otro tema</span>
+          + <span id="addTemaLabel"></span>
         </button>
       </div>
 
-      <!-- ── LOGÍSTICA ── -->
+      <!-- DISPONIBILIDAD -->
       <div class="section">
-        <div class="section-title" id="sec4Title">Logística</div>
-        <div class="field">
-          <label class="label" id="l-dias">Días que asistís al evento</label>
+        <div class="section-title" id="sec4Title"></div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" id="l-disp-desde"></label>
+            <input class="inp" id="disp-desde" type="date">
+          </div>
+          <div class="field">
+            <label class="label" id="l-disp-hasta"></label>
+            <input class="inp" id="disp-hasta" type="date">
+          </div>
+        </div>
+        <div class="hint" style="margin-top:6px" id="h-disp"></div>
+        <div class="field" style="margin-top:14px">
+          <label class="label" id="l-dias"></label>
           <div class="check-group" id="diasGroup">
             <label class="check-chip" style="--c:#f59e0b">
               <input type="checkbox" value="oct29" onchange="syncChip(this)"> Oct 29
@@ -307,580 +305,550 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
         </div>
       </div>
 
-      <!-- ── PERFIL ── -->
+      <!-- PERFIL -->
       <div class="section">
-        <div class="section-title" id="sec5Title">Perfil</div>
+        <div class="section-title" id="sec5Title"></div>
         <div class="grid-1">
-          <div class="field">
-            <label class="label" id="l-bio">Biografía Corta <span class="req">*</span></label>
+          <div class="field" id="f-bio">
+            <label class="label" id="l-bio"></label>
             <textarea class="ta" id="bio" maxlength="300" oninput="updateCounter('bio','bio-cnt',300)" style="min-height:90px"></textarea>
             <div class="counter"><span id="bio-cnt">0</span> / 300</div>
           </div>
-          <div class="field">
-            <label class="label" id="l-eventos">Eventos Anteriores</label>
-            <textarea class="ta" id="eventos" maxlength="100" oninput="updateCounter('eventos','eventos-cnt',100)" style="min-height:52px"></textarea>
-            <div class="counter"><span id="eventos-cnt">0</span> / 100</div>
-          </div>
         </div>
       </div>
 
-      <!-- ── PARTICIPACIÓN ── -->
+      <!-- EVENTOS ANTERIORES -->
       <div class="section">
-        <div class="section-title" id="sec6Title">Participación</div>
+        <div class="section-title" id="sec-eventosTitle"></div>
+        <div class="field">
+          <label class="label" id="l-eventos"></label>
+          <div class="eventos-chips" id="eventosPreset"></div>
+          <input class="inp" id="eventosOtros" type="text" style="margin-top:8px" maxlength="200">
+          <div class="hint" id="h-eventos-otros"></div>
+        </div>
+      </div>
+
+      <!-- PARTICIPACIÓN -->
+      <div class="section">
+        <div class="section-title" id="sec6Title"></div>
         <div class="grid-2">
           <div class="field">
-            <label class="label" id="l-primera">¿Primera vez en LABITCONF?</label>
+            <label class="label" id="l-primera"></label>
             <div class="radio-group" id="primeraGroup">
-              <label class="radio-chip" style="--c:#22c55e">
-                <input type="radio" name="primera" value="si" onchange="syncRadio(this)"> Sí
-              </label>
-              <label class="radio-chip" style="--c:#E84010">
-                <input type="radio" name="primera" value="no" onchange="syncRadio(this)"> No
-              </label>
+              <label class="radio-chip" style="--c:#22c55e"><input type="radio" name="primera" value="si" onchange="syncRadio(this)"> <span id="si1"></span></label>
+              <label class="radio-chip" style="--c:#E84010"><input type="radio" name="primera" value="no" onchange="syncRadio(this)"> <span id="no1"></span></label>
             </div>
           </div>
           <div class="field">
-            <label class="label" id="l-podcast">¿Disponible para entrevista | podcast?</label>
+            <label class="label" id="l-podcast"></label>
             <div class="radio-group" id="podcastGroup">
-              <label class="radio-chip" style="--c:#22c55e">
-                <input type="radio" name="podcast" value="si" onchange="syncRadio(this)"> Sí
-              </label>
-              <label class="radio-chip" style="--c:#E84010">
-                <input type="radio" name="podcast" value="no" onchange="syncRadio(this)"> No
-              </label>
+              <label class="radio-chip" style="--c:#22c55e"><input type="radio" name="podcast" value="si" onchange="syncRadio(this)"> <span id="si2"></span></label>
+              <label class="radio-chip" style="--c:#E84010"><input type="radio" name="podcast" value="no" onchange="syncRadio(this)"> <span id="no2"></span></label>
             </div>
           </div>
           <div class="field">
-            <label class="label" id="l-empresa-presenta">¿Traés empresa | proyecto que presentás?</label>
+            <label class="label" id="l-empresa-pres"></label>
             <div class="radio-group" id="empresaPresentaGroup">
-              <label class="radio-chip" style="--c:#22c55e">
-                <input type="radio" name="empresaPresenta" value="si" onchange="syncRadio(this)"> Sí
-              </label>
-              <label class="radio-chip" style="--c:#E84010">
-                <input type="radio" name="empresaPresenta" value="no" onchange="syncRadio(this)"> No
-              </label>
+              <label class="radio-chip" style="--c:#22c55e"><input type="radio" name="empresaPresenta" value="si" onchange="syncRadio(this)"> <span id="si3"></span></label>
+              <label class="radio-chip" style="--c:#E84010"><input type="radio" name="empresaPresenta" value="no" onchange="syncRadio(this)"> <span id="no3"></span></label>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- CONSENT -->
-      <div class="consent" id="consentTxt">
-        Al enviar este formulario, consentís que LABITCONF almacene y procese la información ingresada para gestionar tu participación como speaker en el evento.
-      </div>
-
-      <button type="submit" class="submit-btn" id="submitBtn">
-        <span id="submitTxt">Enviar inscripción</span>
-      </button>
-
+      <div class="consent" id="consentTxt"></div>
+      <button type="submit" class="submit-btn" id="submitBtn"><span id="submitTxt"></span></button>
     </form>
   </div>
 </div>
-
 <div id="toast"></div>
-
-<!-- PAÍSES DATALIST -->
-<datalist id="paises-data">
-  <option>Argentina</option><option>Bolivia</option><option>Brasil</option>
-  <option>Chile</option><option>Colombia</option><option>Costa Rica</option>
-  <option>Cuba</option><option>Ecuador</option><option>El Salvador</option>
-  <option>España</option><option>Estados Unidos</option><option>Guatemala</option>
-  <option>Honduras</option><option>México</option><option>Nicaragua</option>
-  <option>Panamá</option><option>Paraguay</option><option>Perú</option>
-  <option>Portugal</option><option>Puerto Rico</option><option>República Dominicana</option>
-  <option>Uruguay</option><option>Venezuela</option>
-  <option>Alemania</option><option>Australia</option><option>Canadá</option>
-  <option>China</option><option>Francia</option><option>India</option>
-  <option>Italia</option><option>Japón</option><option>Reino Unido</option>
-  <option>Suiza</option><option>Turquía</option><option>Ucrania</option>
-</datalist>
 
 <script>
 'use strict';
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqQHn5o9xxS-wmMGgJews--w_1lstRRiDiBgnlicTchskyjaixflKKfb_JPayR96p3/exec';
+const GAS_URL='https://script.google.com/macros/s/AKfycbwqQHn5o9xxS-wmMGgJews--w_1lstRRiDiBgnlicTchskyjaixflKKfb_JPayR96p3/exec';
 
-// Enlazar datalist de países al input
-document.getElementById('paises-list').innerHTML =
-  document.getElementById('paises-data').innerHTML;
+// ── PAÍSES ────────────────────────────────────────────────────────────
+const PAISES_ES=['Argentina','Bolivia','Brasil','Chile','Colombia','Costa Rica','Cuba','Ecuador','El Salvador','España','Estados Unidos','Guatemala','Honduras','México','Nicaragua','Panamá','Paraguay','Perú','Portugal','Puerto Rico','República Dominicana','Uruguay','Venezuela','Alemania','Australia','Austria','Bélgica','Canadá','China','Corea del Sur','Francia','India','Italia','Japón','Noruega','Países Bajos','Polonia','Reino Unido','Rusia','Singapur','Sudáfrica','Suecia','Suiza','Turquía','Ucrania','Otro'];
+const PAISES_EN=['Argentina','Bolivia','Brazil','Chile','Colombia','Costa Rica','Cuba','Ecuador','El Salvador','Spain','United States','Guatemala','Honduras','Mexico','Nicaragua','Panama','Paraguay','Peru','Portugal','Puerto Rico','Dominican Republic','Uruguay','Venezuela','Germany','Australia','Austria','Belgium','Canada','China','South Korea','France','India','Italy','Japan','Norway','Netherlands','Poland','United Kingdom','Russia','Singapore','South Africa','Sweden','Switzerland','Turkey','Ukraine','Other'];
 
-// ── TRADUCCIONES ────────────────────────────────────────────────────
-const T = {
-  es: {
+function buildPaises(){
+  const sel=document.getElementById('pais');
+  const list=lang==='en'?PAISES_EN:PAISES_ES;
+  const cur=sel.value;
+  sel.innerHTML=`<option value="">${lang==='en'?'Select country':'Seleccioná país'}</option>`+list.map(p=>`<option value="${p}"${p===cur?' selected':''}>${p}</option>`).join('');
+}
+
+// ── TAGS PRESET ───────────────────────────────────────────────────────
+const TAGS_ES=['Bitcoin','Custodia','Seguridad','Herencia','Multisig','Passphrase','Privacidad','Lightning','Minería','Nodos','Desarrollo','Escalabilidad','Educación','Economía','Inversión','Ahorro','Regulación','Impuestos','Empresas','Tesorería','Pagos','Comercio','Adopción','Libertad','Derechos','Energía','Nostr','Identidad','Criptografía','Hardware','Software','Wallets','Infraestructura','OpenSource','Compliance','Riesgo','Auditoría','Gobernanza','Finanzas','Macroeconomía','Stablecoins','IA','Cuántica','Cultura','Filosofía','Geopolítica','Comunidad','Emprendimiento','Innovación','Soberanía'];
+const TAGS_EN=['Bitcoin','Custody','Security','Inheritance','Multisig','Passphrase','Privacy','Lightning','Mining','Nodes','Development','Scalability','Education','Economics','Investment','Savings','Regulation','Taxes','Companies','Treasury','Payments','Commerce','Adoption','Freedom','Rights','Energy','Nostr','Identity','Cryptography','Hardware','Software','Wallets','Infrastructure','OpenSource','Compliance','Risk','Audit','Governance','Finance','Macroeconomics','Stablecoins','AI','Quantum','Culture','Philosophy','Geopolitics','Community','Entrepreneurship','Innovation','Sovereignty'];
+
+const EVENTOS_PRESET=['BTC Prague','Bitcoin Conference','Bitcoin++','Adopting Bitcoin','TABConf','Baltic Honeybadger','BitBlockBoom','LABITCONF','Satsconf','Bitcoin Amsterdam','CoreDev','Scaling Bitcoin','OpNext','Breaking Bitcoin','Advancing Bitcoin','Lightning Summit','Plan ₿ Forum','Mining Disrupt','Bitcoin Atlantis','Oslo Freedom Forum'];
+
+// ── TRADUCCIONES ─────────────────────────────────────────────────────
+const T={
+  es:{
     pageTitle:'Inscripción de Speakers',
     pageSub:'Completá el formulario para proponer tu participación en LABITCONF 2026.',
-    sec1:'Datos Personales', sec2:'Contacto', secIdioma:'Idioma de Presentación',
-    sec3:'Propuesta(s)', sec4:'Logística', sec5:'Perfil', sec6:'Participación',
-    secFoto:'Foto',
-    lNombre:'Nombre', lApellido:'Apellido', lApodo:'Apodo (Alias)',
-    lTipo:'Tipo', lCargo:'Cargo | Rol', lPais:'País', lMail:'Email',
-    lWebsite:'Sitio Web | Empresa', lEmpresa:'Empresa | Organización',
-    lWhatsapp:'WhatsApp', lIdioma:'¿En qué idioma podés presentar?',
-    lFoto:'Enlace de foto de perfil', lFotoHint:'JPG | PNG recomendado 400×400px — Solo enlaces de LinkedIn, Instagram o X.',
-    lDias:'Días que asistís al evento',
-    lBio:'Biografía Corta', lEventos:'Eventos Anteriores',
-    lPrimera:'¿Primera vez en LABITCONF?',
-    lPodcast:'¿Disponible para entrevista | podcast?',
+    sec1:'Datos Personales',sec2:'Contacto',secIdioma:'Idioma de Presentación',
+    sec3:'Propuesta(s)',sec4:'Disponibilidad',sec5:'Perfil',sec6:'Participación',
+    secFoto:'Foto de Perfil',secEventos:'Eventos Anteriores',
+    lNombre:'Nombre',lApellido:'Apellido',lConfname:'Nombre preferido en Conferencia',
+    hConfname:'Nombre/Apellido y/o Apodo que usarás en LABITCONF.',
+    lPais:'País de Origen',lMail:'Email',lCargo:'Cargo | Rol',lEmpresa:'Empresa | Organización',
+    lWebsite:'Sitio Web',
+    hContacto:'Completá al menos uno de: WhatsApp, Telegram o Signal.',
+    lWhatsapp:'WhatsApp (Preferido)',lTelegram:'Telegram',
+    lFoto:'Foto de Perfil (subir y/o compartir enlace)',
+    lIdioma:'¿En qué idioma podés presentar?',
+    lDispDesde:'Disponible desde',lDispHasta:'Hasta',hDisp:'Dato estimado de disponibilidad de viaje.',
+    lDias:'Días del evento que asistís',
+    lBio:'Biografía Corta',
+    lEventos:'¿En qué eventos hablaste antes?',hEventosOtros:'Otros eventos no listados',
+    lPrimera:'¿Primera vez en LABITCONF?',lPodcast:'¿Disponible para entrevista | podcast?',
     lEmpresaPres:'¿Traés empresa | proyecto que presentás?',
-    temaNum: n=>`Tema ${n}`,
-    temaLevel:'Nivel', temaFormato:'Formato Preferido', temaDur:'Duración Ideal',
-    temaTitle:'Título del Tema', temaAbstract:'Abstract',
-    temaAbstractHint:'Resumen de 200 caracteres de tu charla.',
-    temaDesc:'Descripción | Keywords',
-    temaDescHint:'Describí brevemente tu propuesta. Las palabras clave ayudan a agrupar por temáticas.',
-    temaTags:'Tags', temaTagsHint:'Palabras clave separadas por coma. Ej: bitcoin, lightning, privacidad',
-    temaPanel:'Puedo participar en un Panel con otros speakers sobre este tema.',
-    addTema:'Agregar otro tema', submitBtn:'Enviar inscripción', sending:'Enviando…',
-    photoBtnTxt:'Subir foto', photoChangeTxt:'Cambiar foto',
+    temaNum:n=>`Tema ${n}`,temaLevel:'Nivel',temaFormato:'Formato Preferido',temaDur:'Tiempo de presentación',
+    hTemaDur:'Sujeto a modificación según agenda.',
+    temaTitle:'Título del Tema',temaAbstract:'Abstract',temaDesc:'Descripción | Keywords',
+    temaTags:'Tags',temaPanel:'Puedo participar en un Panel con otros speakers sobre este tema.',
+    addTema:'Agregar otro tema',fotoUpload:'Subir foto',fotoChange:'Cambiar foto',
+    submitBtn:'Enviar inscripción',sending:'Enviando…',
     successTitle:'¡Gracias por inscribirte!',
     successSub:'Revisaremos tu propuesta y te contactaremos pronto.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1',
-    consent:'Al enviar este formulario, consentís que LABITCONF almacene y procese la información ingresada para gestionar tu participación como speaker en el evento.',
-    errRequired:'Este campo es requerido', errMail:'Email inválido',
-    errIdioma:'Seleccioná al menos un idioma', toastError:'Error al enviar. Intentá de nuevo.',
-    placeholderEventos:'¿En qué eventos hablaste antes? (ej: BTC Miami, Satoshi Summit)',
-    si:'Sí', no:'No',
-    tipoOpts:['—','Speaker','Moderador','Panelista','Empresa','Sponsor'],
-    nivelLabels:{basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'},
-    formatoLabels:{charla:'Charla',panel:'Panel',taller:'Taller',ama:'AMA',moderador:'Moderador'},
-    placeholderLinkedin:'linkedin.com/in/usuario',
-    placeholderCargo:'Ej: CEO, Investigador, Desarrollador…',
+    consent:'Al enviar este formulario consentís que LABITCONF almacene y procese la información ingresada para gestionar tu participación como speaker en el evento.',
+    errRequired:'Este campo es requerido',errMail:'Email inválido',
+    errIdioma:'Seleccioná al menos un idioma',
+    errContacto:'Completá al menos uno: WhatsApp, Telegram o Signal.',
+    toastError:'Error al enviar. Intentá de nuevo.',
+    hNostr:'npub... y/o @alias',
+    siLabel:'Sí',noLabel:'No',
+    nivelLabels:{todos:'Todos',basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'},
+    formatoLabels:{charla:'Charla',panel:'Panel',taller:'Taller'},
+    tagsPreset:TAGS_ES,customTagPlaceholder:'Agregar tag personalizado…',
+    placeholderEventosOtros:'Otros eventos…',
   },
-  en: {
+  en:{
     pageTitle:'Speaker Registration',
     pageSub:'Fill in the form to propose your participation at LABITCONF 2026.',
-    sec1:'Personal Info', sec2:'Contact', secIdioma:'Presentation Language',
-    sec3:'Proposal(s)', sec4:'Logistics', sec5:'Profile', sec6:'Participation',
-    secFoto:'Photo',
-    lNombre:'First Name', lApellido:'Last Name', lApodo:'Alias (Nickname)',
-    lTipo:'Type', lCargo:'Job Title', lPais:'Country', lMail:'Email',
-    lWebsite:'Website | Company', lEmpresa:'Company | Organization',
-    lWhatsapp:'WhatsApp', lIdioma:'Which language(s) can you present in?',
-    lFoto:'Profile photo link', lFotoHint:'JPG | PNG recommended 400×400px — LinkedIn, Instagram or X links only.',
-    lDias:'Days you will attend the event',
-    lBio:'Short Bio', lEventos:'Previous Events',
-    lPrimera:'First time at LABITCONF?',
-    lPodcast:'Available for interview | podcast?',
+    sec1:'Personal Info',sec2:'Contact',secIdioma:'Presentation Language',
+    sec3:'Proposal(s)',sec4:'Availability',sec5:'Profile',sec6:'Participation',
+    secFoto:'Profile Photo',secEventos:'Previous Events',
+    lNombre:'First Name',lApellido:'Last Name',lConfname:'Preferred Conference Name',
+    hConfname:'Name/Surname and/or Nickname you will use at LABITCONF.',
+    lPais:'Country of Origin',lMail:'Email',lCargo:'Job Title',lEmpresa:'Company | Organization',
+    lWebsite:'Website',
+    hContacto:'Fill in at least one of: WhatsApp, Telegram or Signal.',
+    lWhatsapp:'WhatsApp (Preferred)',lTelegram:'Telegram',
+    lFoto:'Profile Photo (upload and/or share link)',
+    lIdioma:'Which language(s) can you present in?',
+    lDispDesde:'Available from',lDispHasta:'Until',hDisp:'Estimated travel availability.',
+    lDias:'Event days you will attend',
+    lBio:'Short Bio',
+    lEventos:'Which events have you spoken at before?',hEventosOtros:'Other events not listed',
+    lPrimera:'First time at LABITCONF?',lPodcast:'Available for interview | podcast?',
     lEmpresaPres:'Are you bringing a company | project to present?',
-    temaNum: n=>`Topic ${n}`,
-    temaLevel:'Level', temaFormato:'Preferred Format', temaDur:'Ideal Duration',
-    temaTitle:'Full Title', temaAbstract:'Abstract',
-    temaAbstractHint:'200-character summary of your talk.',
-    temaDesc:'Description | Keywords',
-    temaDescHint:'Briefly describe your proposal. Keywords help group by theme.',
-    temaTags:'Tags', temaTagsHint:'Keywords separated by comma. E.g: bitcoin, lightning, privacy',
-    temaPanel:'I can participate in a Panel with other speakers about this topic.',
-    addTema:'Add another topic', submitBtn:'Submit registration', sending:'Sending…',
-    photoBtnTxt:'Upload photo', photoChangeTxt:'Change photo',
+    temaNum:n=>`Topic ${n}`,temaLevel:'Level',temaFormato:'Preferred Format',temaDur:'Presentation time',
+    hTemaDur:'Subject to change based on schedule.',
+    temaTitle:'Full Title',temaAbstract:'Abstract',temaDesc:'Description | Keywords',
+    temaTags:'Tags',temaPanel:'I can participate in a Panel with other speakers about this topic.',
+    addTema:'Add another topic',fotoUpload:'Upload photo',fotoChange:'Change photo',
+    submitBtn:'Submit registration',sending:'Sending…',
     successTitle:'Thank you for registering!',
     successSub:"We'll review your proposal and contact you soon.\n\nLABITCONF 2026 — Oct 29 · 30 · 31 · Nov 1",
     consent:'By submitting this form, you consent to allow LABITCONF to store and process the submitted information to manage your participation as a speaker at the event.',
-    errRequired:'This field is required', errMail:'Invalid email',
-    errIdioma:'Select at least one language', toastError:'Error sending. Please try again.',
-    placeholderEventos:'Which events have you spoken at before? (e.g. BTC Miami, Satoshi Summit)',
-    si:'Yes', no:'No',
-    tipoOpts:['—','Speaker','Moderator','Panelist','Company','Sponsor'],
-    nivelLabels:{basico:'Basic',intermedio:'Intermediate',avanzado:'Advanced'},
-    formatoLabels:{charla:'Talk',panel:'Panel',taller:'Workshop',ama:'AMA',moderador:'Moderator'},
-    placeholderLinkedin:'linkedin.com/in/username',
-    placeholderCargo:'E.g: CEO, Researcher, Developer…',
+    errRequired:'This field is required',errMail:'Invalid email',
+    errIdioma:'Select at least one language',
+    errContacto:'Fill in at least one: WhatsApp, Telegram or Signal.',
+    toastError:'Error sending. Please try again.',
+    hNostr:'npub... and/or @alias',
+    siLabel:'Yes',noLabel:'No',
+    nivelLabels:{todos:'All Levels',basico:'Basic',intermedio:'Intermediate',avanzado:'Advanced'},
+    formatoLabels:{charla:'Talk',panel:'Panel',taller:'Workshop'},
+    tagsPreset:TAGS_EN,customTagPlaceholder:'Add custom tag…',
+    placeholderEventosOtros:'Other events…',
   }
 };
 
-let lang = 'es';
-let temaCount = 0;
+let lang='es', temaCount=0, fotoData='';
 
-// ── LANG ────────────────────────────────────────────────────────────
-function setLang(l) {
-  lang = l;
-  document.getElementById('btnES').classList.toggle('active', l==='es');
-  document.getElementById('btnEN').classList.toggle('active', l==='en');
-  document.documentElement.lang = l;
+// ── LANG ──────────────────────────────────────────────────────────────
+function setLang(l){
+  lang=l;
+  document.getElementById('btnES').classList.toggle('active',l==='es');
+  document.getElementById('btnEN').classList.toggle('active',l==='en');
+  document.documentElement.lang=l;
+  buildPaises();
+  buildEventosPreset();
   applyTranslations();
 }
-function applyTranslations() {
-  const t = T[lang];
-  setTxt('pageTitle',t.pageTitle); setTxt('pageSub',t.pageSub);
-  setTxt('sec1Title',t.sec1); setTxt('sec2Title',t.sec2);
-  setTxt('sec-idiomaTitle',t.secIdioma); setTxt('sec3Title',t.sec3);
-  setTxt('sec4Title',t.sec4); setTxt('sec5Title',t.sec5);
-  setTxt('sec6Title',t.sec6); setTxt('sec-fotoTitle',t.secFoto);
-  setReq('l-nombre',t.lNombre,true); setReq('l-apellido',t.lApellido,true);
-  setTxt('l-apodo',t.lApodo); setReq('l-tipo',t.lTipo,true);
-  setReq('l-cargo',t.lCargo,true); setReq('l-pais',t.lPais,true);
-  setReq('l-mail',t.lMail,true);
-  setTxt('l-website',t.lWebsite); setTxt('l-empresa',t.lEmpresa);
-  setTxt('l-whatsapp',t.lWhatsapp); setReq('l-idioma',t.lIdioma,true);
-  setTxt('l-foto',t.lFoto); setTxt('l-foto-hint',t.lFotoHint);
-  setTxt('l-dias',t.lDias); setReq('l-bio',t.lBio,true);
-  setTxt('l-eventos',t.lEventos);
-  setTxt('l-primera',t.lPrimera); setTxt('l-podcast',t.lPodcast);
-  setTxt('l-empresa-presenta',t.lEmpresaPres);
-  setTxt('addTemaLabel',t.addTema); setTxt('submitTxt',t.submitBtn);
-  setTxt('photoBtnTxt',t.photoBtnTxt);
+
+function applyTranslations(){
+  const t=T[lang];
+  setTxt('pageTitle',t.pageTitle);setTxt('pageSub',t.pageSub);
+  setTxt('sec1Title',t.sec1);setTxt('sec2Title',t.sec2);
+  setTxt('sec-idiomaTitle',t.secIdioma);setTxt('sec3Title',t.sec3);
+  setTxt('sec4Title',t.sec4);setTxt('sec5Title',t.sec5);setTxt('sec6Title',t.sec6);
+  setTxt('sec-fotoTitle',t.secFoto);setTxt('sec-eventosTitle',t.secEventos);
+  setReq('l-nombre',t.lNombre,true);setReq('l-apellido',t.lApellido,true);
+  setReq('l-confname',t.lConfname,true);setTxt('h-confname',t.hConfname);
+  setReq('l-pais',t.lPais,true);setReq('l-mail',t.lMail,true);
+  setTxt('l-cargo',t.lCargo);setTxt('l-empresa',t.lEmpresa);setTxt('l-website',t.lWebsite);
+  setTxt('h-contacto',t.hContacto);
+  setTxt('l-whatsapp',t.lWhatsapp);setTxt('l-telegram',t.lTelegram);
+  setTxt('l-foto',t.lFoto);
+  setReq('l-idioma',t.lIdioma,true);
+  setTxt('l-disp-desde',t.lDispDesde);setTxt('l-disp-hasta',t.lDispHasta);
+  setTxt('h-disp',t.hDisp);setTxt('l-dias',t.lDias);
+  setReq('l-bio',t.lBio,true);
+  setTxt('l-eventos',t.lEventos);setAttr('eventosOtros','placeholder',t.placeholderEventosOtros);
+  setTxt('h-eventos-otros',t.hEventosOtros);
+  setTxt('l-primera',t.lPrimera);setTxt('l-podcast',t.lPodcast);
+  setTxt('l-empresa-pres',t.lEmpresaPres);
+  setTxt('addTemaLabel',t.addTema);setTxt('submitTxt',t.submitBtn);
   setTxt('consentTxt',t.consent);
-  setAttr('eventos','placeholder',t.placeholderEventos);
-  setAttr('cargo','placeholder',t.placeholderCargo);
-  setAttr('linkedin','placeholder',t.placeholderLinkedin);
+  setTxt('h-nostr-hint',t.hNostr);setAttr('nostr','placeholder',t.hNostr);
+  // Sí/No
+  ['si1','si2','si3'].forEach(id=>setTxt(id,t.siLabel));
+  ['no1','no2','no3'].forEach(id=>setTxt(id,t.noLabel));
+  // Foto btn
+  const fotoBtn=document.getElementById('fotoUploadBtn');
+  if(fotoBtn)fotoBtn.textContent=fotoData?t.fotoChange:t.fotoUpload;
+  // Temas
+  document.querySelectorAll('.tema-card').forEach((card,i)=>{
+    const n=card.dataset.num;
+    const isF=i===0;
+    const req=s=>isF?`${s} <span class="req">*</span>`:s;
+    setTxtEl(card.querySelector('.tema-num'),t.temaNum(n));
+    setInner(card.querySelector('.tema-level-lbl'),req(t.temaLevel));
+    setTxtEl(card.querySelector('.tema-formato-lbl'),t.temaFormato);
+    setTxtEl(card.querySelector('.tema-dur-lbl'),t.temaDur);
+    setTxtEl(card.querySelector('.tema-dur-hint'),t.hTemaDur);
+    setInner(card.querySelector('.tema-title-lbl'),req(t.temaTitle));
+    setInner(card.querySelector('.tema-abstract-lbl'),req(t.temaAbstract));
+    setAttrEl(card.querySelector(`#ta-abstract-${n}`),'placeholder','');
+    setInner(card.querySelector('.tema-desc-lbl'),t.temaDesc);
+    setTxtEl(card.querySelector('.panel-check-txt'),t.temaPanel);
+    setAttrEl(card.querySelector(`.tags-custom-inp`),'placeholder',t.customTagPlaceholder);
+    // Niveles y formatos
+    card.querySelectorAll(`[id^="nivel-"] .radio-chip`).forEach(chip=>{
+      const v=chip.querySelector('input')?.value;
+      if(v&&t.nivelLabels[v]){const tn=chip.lastChild;if(tn&&tn.nodeType===3)tn.textContent=' '+t.nivelLabels[v];}
+    });
+    card.querySelectorAll(`[id^="formato-"] .check-chip`).forEach(chip=>{
+      const v=chip.querySelector('input')?.value;
+      if(v&&t.formatoLabels[v]){const tn=chip.lastChild;if(tn&&tn.nodeType===3)tn.textContent=' '+t.formatoLabels[v];}
+    });
+    // Rebuild tags preset for this tema
+    buildTagsPreset(n);
+  });
+}
 
-  // Tipo select options
-  const tipoSel = document.getElementById('tipo');
-  if (tipoSel) {
-    const vals = ['','speaker','moderador','panelista','empresa','sponsor'];
-    [...tipoSel.options].forEach((opt,i) => { opt.text = t.tipoOpts[i]||opt.text; });
+// ── HELPERS ───────────────────────────────────────────────────────────
+function setTxt(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function setTxtEl(el,v){if(el)el.textContent=v;}
+function setInner(el,v){if(el)el.innerHTML=v;}
+function setReq(id,v,r){const e=document.getElementById(id);if(e)e.innerHTML=v+(r?' <span class="req">*</span>':'');}
+function setAttr(id,a,v){const e=document.getElementById(id);if(e)e.setAttribute(a,v);}
+function setAttrEl(el,a,v){if(el)el.setAttribute(a,v);}
+function updateCounter(id,cntId,max){const e=document.getElementById(id);const c=document.getElementById(cntId);if(e&&c)c.textContent=e.value.length;}
+
+// ── CHIPS ─────────────────────────────────────────────────────────────
+function syncChip(input){input.closest('.check-chip').classList.toggle('checked',input.checked);}
+function syncRadio(input){input.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l=>l.classList.remove('checked'));input.closest('.radio-chip').classList.add('checked');}
+function getChecked(groupId){return [...(document.getElementById(groupId)?.querySelectorAll('.check-chip.checked')||[])].map(l=>l.querySelector('input').value);}
+function getRadio(groupId){const c=document.getElementById(groupId)?.querySelector('.radio-chip.checked');return c?c.querySelector('input').value:'';}
+function togglePanel(el){el.classList.toggle('checked');const b=el.querySelector('.panel-check-box');if(b)b.textContent=el.classList.contains('checked')?'✓':'';}
+
+// ── WHATSAPP / TELEGRAM PREVIEW ───────────────────────────────────────
+function updateWaPreview(){
+  const code=(document.getElementById('wa-code').value||'').replace(/\D/g,'');
+  const num=(document.getElementById('wa-num').value||'').replace(/\D/g,'');
+  const full=code&&num?code+num:num;
+  const prev=document.getElementById('wa-preview');
+  if(prev)prev.textContent=full?`→ wa.me/${full}`:'';
+}
+function updateTgPreview(){
+  const alias=(document.getElementById('telegram').value||'').replace(/^@/,'').trim();
+  const prev=document.getElementById('tg-preview');
+  if(prev)prev.textContent=alias?`→ t.me/${alias}`:'';
+}
+
+// ── FOTO ──────────────────────────────────────────────────────────────
+function onFotoFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const max=200;
+      let w=img.width,h=img.height;
+      if(w>h){if(w>max){h=h*max/w;w=max;}}else{if(h>max){w=w*max/h;h=max;}}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      fotoData=canvas.toDataURL('image/jpeg',0.75);
+      updateFotoThumb(fotoData);
+      document.getElementById('fotoUrl').value='';
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function onFotoUrl(input){
+  const url=input.value.trim();
+  if(url){fotoData=url;updateFotoThumb(url);}
+  else{fotoData='';updateFotoThumb('');}
+}
+function updateFotoThumb(src){
+  const thumb=document.getElementById('fotoThumb');
+  const btn=document.getElementById('fotoUploadBtn');
+  if(src){
+    thumb.innerHTML=`<img src="${src}" onerror="updateFotoThumb('')">`;
+    if(btn)btn.textContent=T[lang].fotoChange;
+  } else {
+    thumb.innerHTML=`<svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>`;
+    if(btn)btn.textContent=T[lang].fotoUpload;
+    fotoData='';
   }
-
-  // Sí/No chips en sección participación
-  document.querySelectorAll('.radio-chip').forEach(chip => {
-    const input = chip.querySelector('input[type=radio]');
-    if (!input) return;
-    const v = input.value;
-    const txt = chip.lastChild;
-    if (txt && txt.nodeType === 3) {
-      if (v === 'si') txt.textContent = ' ' + t.si;
-      if (v === 'no') txt.textContent = ' ' + t.no;
-    }
-  });
-
-  // Temas — nivel y formato labels
-  document.querySelectorAll('.tema-card').forEach((card,i) => {
-    // Nivel
-    card.querySelectorAll(`[id^="nivel-"] .radio-chip`).forEach(chip => {
-      const input = chip.querySelector('input[type=radio]');
-      if (!input) return;
-      const lbl = t.nivelLabels[input.value];
-      if (lbl) { const txt = chip.lastChild; if(txt&&txt.nodeType===3) txt.textContent = ' '+lbl; }
-    });
-    // Formato
-    card.querySelectorAll(`[id^="formato-"] .check-chip`).forEach(chip => {
-      const input = chip.querySelector('input[type=checkbox]');
-      if (!input) return;
-      const lbl = t.formatoLabels[input.value];
-      if (lbl) { const txt = chip.lastChild; if(txt&&txt.nodeType===3) txt.textContent = ' '+lbl; }
-    });
-  });
-
-  // Temas — resto de labels
-  document.querySelectorAll('.tema-card').forEach((card,i) => {
-    const n = card.dataset.num;
-    const isFirst = i===0;
-    const req = s => isFirst ? `${s} <span class="req">*</span>` : s;
-    q(card,'.tema-num').textContent = t.temaNum(n);
-    setInner(q(card,'.tema-level-lbl'), req(t.temaLevel));
-    setTxtEl(q(card,'.tema-formato-lbl'), t.temaFormato);
-    setTxtEl(q(card,'.tema-dur-lbl'), t.temaDur);
-    setInner(q(card,'.tema-title-lbl'), req(t.temaTitle));
-    setInner(q(card,'.tema-abstract-lbl'), req(t.temaAbstract));
-    setAttrEl(q(card,'#tema-abstract-'+n), 'placeholder', t.temaAbstractHint);
-    setInner(q(card,'.tema-desc-lbl'), t.temaDesc);
-    setAttrEl(q(card,'#tema-desc-'+n), 'placeholder', t.temaDescHint);
-    setInner(q(card,'.tema-tags-lbl'), t.temaTags);
-    setAttrEl(q(card,'#tema-tags-'+n), 'placeholder', t.temaTagsHint);
-    setTxtEl(q(card,'.panel-check-txt'), t.temaPanel);
-  });
-}
-function q(el, sel) { try { return el.querySelector(sel); } catch(e){ return null; } }
-function setTxt(id,v){ const e=document.getElementById(id); if(e)e.textContent=v; }
-function setTxtEl(el,v){ if(el)el.textContent=v; }
-function setInner(el,v){ if(el)el.innerHTML=v; }
-function setReq(id,v,r){ const e=document.getElementById(id); if(e)e.innerHTML=v+(r?' <span class="req">*</span>':''); }
-function setAttr(id,a,v){ const e=document.getElementById(id); if(e)e.setAttribute(a,v); }
-function setAttrEl(el,a,v){ if(el)el.setAttribute(a,v); }
-
-// ── CHIPS ────────────────────────────────────────────────────────────
-function syncChip(input) { input.closest('.check-chip').classList.toggle('checked', input.checked); }
-function syncRadio(input) {
-  input.closest('.radio-group').querySelectorAll('.radio-chip').forEach(l=>l.classList.remove('checked'));
-  input.closest('.radio-chip').classList.add('checked');
-}
-function getChecked(groupId) {
-  return [...(document.getElementById(groupId)?.querySelectorAll('.check-chip.checked')||[])]
-    .map(l=>l.querySelector('input').value);
-}
-function getRadio(groupId) {
-  const c = document.getElementById(groupId)?.querySelector('.radio-chip.checked');
-  return c ? c.querySelector('input').value : '';
 }
 
-// ── PANEL CHECK ──────────────────────────────────────────────────────
-function togglePanel(el, n) {
-  el.classList.toggle('checked');
-  const box = el.querySelector('.panel-check-box');
-  if (box) box.textContent = el.classList.contains('checked') ? '✓' : '';
+// ── TAGS ──────────────────────────────────────────────────────────────
+const selectedTagsMap={};
+function buildTagsPreset(n){
+  const wrap=document.getElementById(`tags-preset-${n}`);
+  if(!wrap)return;
+  const tags=T[lang].tagsPreset;
+  const selected=selectedTagsMap[n]||[];
+  wrap.innerHTML=tags.map(tag=>`<span class="tag-chip${selected.includes(tag)?' selected':''}" onclick="togglePresetTag(${n},'${tag.replace(/'/g,"\\'")}',this)">#${tag}</span>`).join('');
+}
+function togglePresetTag(n,tag,el){
+  if(!selectedTagsMap[n])selectedTagsMap[n]=[];
+  const idx=selectedTagsMap[n].indexOf(tag);
+  if(idx>=0){selectedTagsMap[n].splice(idx,1);el.classList.remove('selected');}
+  else{selectedTagsMap[n].push(tag);el.classList.add('selected');}
+  renderSelectedTags(n);
+}
+function addCustomTag(n,inputEl){
+  const val=(inputEl.value||'').trim().replace(/^#/,'');
+  if(!val)return;
+  if(!selectedTagsMap[n])selectedTagsMap[n]=[];
+  if(!selectedTagsMap[n].includes(val))selectedTagsMap[n].push(val);
+  inputEl.value='';
+  renderSelectedTags(n);
+}
+function removeTag(n,tag){
+  if(!selectedTagsMap[n])return;
+  selectedTagsMap[n]=selectedTagsMap[n].filter(t=>t!==tag);
+  renderSelectedTags(n);
+  buildTagsPreset(n);
+}
+function renderSelectedTags(n){
+  const wrap=document.getElementById(`tags-selected-${n}`);
+  if(!wrap)return;
+  const tags=selectedTagsMap[n]||[];
+  wrap.innerHTML=tags.map(t=>`<span class="tag-sel-chip">#${t}<button type="button" onclick="removeTag(${n},'${t.replace(/'/g,"\\'")}')" title="Quitar">×</button></span>`).join('');
 }
 
-// ── FOTO ─────────────────────────────────────────────────────────────
-const PHOTO_SOURCES = {
-  'badge-li': ['linkedin.com'],
-  'badge-ig': ['instagram.com','cdninstagram.com'],
-  'badge-x':  ['twitter.com','x.com','pbs.twimg.com'],
-};
-function checkPhotoSource(input) {
-  const url = input.value.trim().toLowerCase();
-  Object.entries(PHOTO_SOURCES).forEach(([badgeId, domains]) => {
-    const badge = document.getElementById(badgeId);
-    if (!badge) return;
-    if (!url) { badge.className = 'photo-source-badge'; return; }
-    const match = domains.some(d => url.includes(d));
-    badge.className = 'photo-source-badge ' + (match ? 'valid' : '');
-  });
-  // Marcar inválido si hay URL pero no es de ninguna fuente válida
-  const allDomains = Object.values(PHOTO_SOURCES).flat();
-  const hasUrl = url.startsWith('http');
-  const isValid = !hasUrl || allDomains.some(d => url.includes(d));
-  const field = document.getElementById('f-foto');
-  if (field) field.classList.toggle('field-error', hasUrl && !isValid);
+// ── EVENTOS ANTERIORES ────────────────────────────────────────────────
+const selectedEventos=[];
+function buildEventosPreset(){
+  const wrap=document.getElementById('eventosPreset');
+  if(!wrap)return;
+  wrap.innerHTML=EVENTOS_PRESET.map(ev=>`<span class="evento-chip${selectedEventos.includes(ev)?' selected':''}" onclick="toggleEvento('${ev.replace(/'/g,"\\'").replace(/₿/g,'₿')}',this)">${ev}</span>`).join('');
+}
+function toggleEvento(ev,el){
+  const idx=selectedEventos.indexOf(ev);
+  if(idx>=0){selectedEventos.splice(idx,1);el.classList.remove('selected');}
+  else{selectedEventos.push(ev);el.classList.add('selected');}
 }
 
 // ── TEMAS ─────────────────────────────────────────────────────────────
-const FORMATO_VALS = [
-  {val:'charla',    color:'#ffffff'},
-  {val:'panel',     color:'#ef4444'},
-  {val:'taller',    color:'#ec4899'},
-  {val:'ama',       color:'#E84010'},
-  {val:'moderador', color:'#eab308'},
-];
-const NIVEL_VALS = [
-  {val:'basico',     color:'#22c55e'},
-  {val:'intermedio', color:'#eab308'},
-  {val:'avanzado',   color:'#E84010'},
-];
+const NIVEL_VALS=[{val:'todos',color:'#9ca3af'},{val:'basico',color:'#22c55e'},{val:'intermedio',color:'#eab308'},{val:'avanzado',color:'#E84010'}];
+const FORMATO_VALS=[{val:'charla',color:'#ffffff'},{val:'panel',color:'#ef4444'},{val:'taller',color:'#ec4899'}];
 
-function addTema() {
-  if (temaCount >= 4) return;
+function addTema(){
+  if(temaCount>=3)return;
   temaCount++;
-  const n = temaCount;
-  const t = T[lang];
-  const isFirst = n === 1;
-  const req = s => isFirst ? `${s} <span class="req">*</span>` : s;
+  const n=temaCount;const t=T[lang];const isF=n===1;
+  const req=s=>isF?`${s} <span class="req">*</span>`:s;
+  selectedTagsMap[n]=[];
 
-  const nivelesHtml = NIVEL_VALS.map(o =>
-    `<label class="radio-chip" style="--c:${o.color}">
-      <input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)"> ${t.nivelLabels[o.val]||o.val}
-    </label>`).join('');
+  const nivelesHtml=NIVEL_VALS.map(o=>`<label class="radio-chip" style="--c:${o.color}"><input type="radio" name="nivel-${n}" value="${o.val}" onchange="syncRadio(this)"> ${t.nivelLabels[o.val]||o.val}</label>`).join('');
+  const formatosHtml=FORMATO_VALS.map(o=>`<label class="check-chip" style="--c:${o.color}"><input type="checkbox" value="${o.val}" onchange="syncChip(this)"> ${t.formatoLabels[o.val]||o.val}</label>`).join('');
+  const durHtml=[15,20,30,45,60].map(d=>`<option value="${d}"${d===30?' selected':''}>${d} min</option>`).join('');
 
-  const formatosHtml = FORMATO_VALS.map(o =>
-    `<label class="check-chip" style="--c:${o.color}">
-      <input type="checkbox" value="${o.val}" onchange="syncChip(this)"> ${t.formatoLabels[o.val]||o.val}
-    </label>`).join('');
-
-  const durHtml = [15,20,30,45,60].map(d =>
-    `<option value="${d}"${d===30?' selected':''}>${d} min</option>`).join('');
-
-  const card = document.createElement('div');
-  card.className = 'tema-card';
-  card.dataset.num = n;
-  card.innerHTML = `
+  const card=document.createElement('div');
+  card.className='tema-card';card.dataset.num=n;
+  card.innerHTML=`
     <div class="tema-card-header">
       <span class="tema-num">${t.temaNum(n)}</span>
-      ${!isFirst?`<button type="button" class="tema-remove" onclick="removeTema(this)">✕</button>`:''}
+      ${!isF?`<button type="button" class="tema-remove" onclick="removeTema(this)">✕</button>`:''}
     </div>
     <div class="grid-1" style="gap:12px">
-
-      <div class="field">
-        <label class="label tema-level-lbl">${req(t.temaLevel)}</label>
-        <div class="radio-group" id="nivel-${n}">${nivelesHtml}</div>
-      </div>
-
-      <div class="field">
-        <label class="label tema-formato-lbl">${t.temaFormato}</label>
-        <div class="check-group" id="formato-${n}">${formatosHtml}</div>
-      </div>
-
-      <div class="field" style="max-width:200px">
+      <div class="field"><label class="label tema-level-lbl">${req(t.temaLevel)}</label>
+        <div class="radio-group" id="nivel-${n}">${nivelesHtml}</div></div>
+      <div class="field"><label class="label tema-formato-lbl">${t.temaFormato}</label>
+        <div class="check-group" id="formato-${n}">${formatosHtml}</div></div>
+      <div style="max-width:220px"><div class="field">
         <label class="label tema-dur-lbl">${t.temaDur}</label>
         <select class="sel" id="dur-${n}">${durHtml}</select>
-      </div>
-
+        <div class="hint tema-dur-hint">${t.hTemaDur}</div>
+      </div></div>
       <div class="sep"></div>
-
-      <div class="field" id="ft-${n}">
-        <label class="label tema-title-lbl">${req(t.temaTitle)}</label>
-        <input class="inp" id="tema-titulo-${n}" type="text" maxlength="100"
-          oninput="updateCounter('tema-titulo-${n}','cnt-t${n}',100)">
-        <div class="counter"><span id="cnt-t${n}">0</span> / 100</div>
-      </div>
-
-      <div class="field" id="fa-${n}">
-        <label class="label tema-abstract-lbl">${req(t.temaAbstract)}</label>
-        <textarea class="ta" id="tema-abstract-${n}" maxlength="200" style="min-height:60px"
-          oninput="updateCounter('tema-abstract-${n}','cnt-a${n}',200)"
-          placeholder="${t.temaAbstractHint}"></textarea>
-        <div class="counter"><span id="cnt-a${n}">0</span> / 200</div>
-      </div>
-
-      <div class="field" id="fd-${n}">
-        <label class="label tema-desc-lbl">${t.temaDesc}</label>
-        <textarea class="ta" id="tema-desc-${n}" maxlength="400" style="min-height:72px"
-          oninput="updateCounter('tema-desc-${n}','cnt-d${n}',400)"
-          placeholder="${t.temaDescHint}"></textarea>
-        <div class="counter"><span id="cnt-d${n}">0</span> / 400</div>
-      </div>
-
-      <div class="field">
-        <label class="label tema-tags-lbl">${t.temaTags}</label>
-        <input class="inp" id="tema-tags-${n}" type="text" maxlength="200"
-          placeholder="${t.temaTagsHint}">
-        <div class="hint" style="margin-top:4px" id="tags-hint-${n}">${t.temaTagsHint}</div>
-      </div>
-
-      <div class="panel-check-wrap" id="panel-wrap-${n}" onclick="togglePanel(this,${n})">
+      <div class="field" id="ft-${n}"><label class="label tema-title-lbl">${req(t.temaTitle)}</label>
+        <input class="inp" id="tema-titulo-${n}" type="text" maxlength="100" oninput="updateCounter('tema-titulo-${n}','cnt-t${n}',100)">
+        <div class="counter"><span id="cnt-t${n}">0</span> / 100</div></div>
+      <div class="field" id="fa-${n}"><label class="label tema-abstract-lbl">${req(t.temaAbstract)}</label>
+        <textarea class="ta" id="ta-abstract-${n}" maxlength="300" style="min-height:60px" oninput="updateCounter('ta-abstract-${n}','cnt-a${n}',300)"></textarea>
+        <div class="counter"><span id="cnt-a${n}">0</span> / 300</div></div>
+      <div class="field"><label class="label tema-desc-lbl">${t.temaDesc}</label>
+        <textarea class="ta" id="ta-desc-${n}" maxlength="1000" style="min-height:80px" oninput="updateCounter('ta-desc-${n}','cnt-d${n}',1000)"></textarea>
+        <div class="counter"><span id="cnt-d${n}">0</span> / 1000</div></div>
+      <div class="field"><label class="label tema-tags-lbl">${t.temaTags}</label>
+        <div class="tags-wrap">
+          <div class="tags-preset" id="tags-preset-${n}"></div>
+          <div class="tags-custom-row">
+            <input class="inp tags-custom-inp" type="text" placeholder="${t.customTagPlaceholder}" style="flex:1;padding:6px 10px;font-size:13px"
+              onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addCustomTag(${n},this);}">
+            <button type="button" class="foto-btn" style="padding:6px 12px;font-size:13px" onclick="addCustomTag(${n},this.previousElementSibling)">+</button>
+          </div>
+          <div class="tags-selected-wrap" id="tags-selected-${n}"></div>
+        </div></div>
+      <div class="panel-check-wrap" id="panel-wrap-${n}" onclick="togglePanel(this)">
         <div class="panel-check-box"></div>
         <span class="panel-check-txt">${t.temaPanel}</span>
       </div>
-
     </div>`;
-
   document.getElementById('temasWrap').appendChild(card);
-  document.getElementById('addTemaBtn').style.display = temaCount >= 4 ? 'none' : 'flex';
+  buildTagsPreset(n);
+  document.getElementById('addTemaBtn').style.display=temaCount>=3?'none':'flex';
 }
 
-function removeTema(btn) {
-  btn.closest('.tema-card').remove();
-  temaCount--;
-  let i = 0;
-  document.querySelectorAll('.tema-card').forEach(c => {
-    i++;
-    c.dataset.num = i;
-    const lbl = c.querySelector('.tema-num');
-    if (lbl) lbl.textContent = T[lang].temaNum(i);
-  });
-  document.getElementById('addTemaBtn').style.display = temaCount >= 4 ? 'none' : 'flex';
-}
-
-function updateCounter(inputId, cntId, max) {
-  const el = document.getElementById(inputId);
-  const cnt = document.getElementById(cntId);
-  if (el && cnt) cnt.textContent = el.value.length;
+function removeTema(btn){
+  btn.closest('.tema-card').remove();temaCount--;
+  let i=0;document.querySelectorAll('.tema-card').forEach(c=>{i++;c.dataset.num=i;const l=c.querySelector('.tema-num');if(l)l.textContent=T[lang].temaNum(i);});
+  document.getElementById('addTemaBtn').style.display=temaCount>=3?'none':'flex';
 }
 
 // ── VALIDACIÓN ────────────────────────────────────────────────────────
-function clearErrors() {
-  document.querySelectorAll('.field-error').forEach(f=>f.classList.remove('field-error'));
-  document.querySelectorAll('.err-msg').forEach(e=>e.remove());
-}
-function setError(fieldId, msg) {
-  const f = document.getElementById(fieldId); if (!f) return;
-  f.classList.add('field-error');
-  if (!f.querySelector('.err-msg')) {
-    const s = document.createElement('span');
-    s.className = 'err-msg'; s.textContent = msg;
-    f.appendChild(s);
-  }
-}
-function validate() {
-  clearErrors();
-  const t = T[lang]; let ok = true;
-  [['f-nombre','nombre'],['f-apellido','apellido'],['f-tipo','tipo'],
-   ['f-cargo','cargo'],['f-pais','pais'],['f-mail','mail']].forEach(([fid,iid]) => {
-    const el = document.getElementById(iid);
-    if (!el?.value.trim()) { setError(fid, t.errRequired); ok = false; }
+function clearErrors(){document.querySelectorAll('.field-error').forEach(f=>f.classList.remove('field-error'));document.querySelectorAll('.err-msg').forEach(e=>e.remove());}
+function setError(id,msg){const f=document.getElementById(id);if(!f)return;f.classList.add('field-error');if(!f.querySelector('.err-msg')){const s=document.createElement('span');s.className='err-msg';s.textContent=msg;f.appendChild(s);}}
+
+function validate(){
+  clearErrors();const t=T[lang];let ok=true;
+  [['f-nombre','nombre'],['f-apellido','apellido'],['f-confname','confname'],['f-pais','pais'],['f-mail','mail']].forEach(([fid,iid])=>{
+    const el=document.getElementById(iid);if(!el?.value.trim()){setError(fid,t.errRequired);ok=false;}
   });
-  const mailEl = document.getElementById('mail');
-  if (mailEl?.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())) {
-    setError('f-mail', t.errMail); ok = false;
-  }
-  if (!getChecked('idiomaGroup').length) { setError('f-idioma', t.errIdioma); ok = false; }
-  const bio = document.getElementById('bio');
-  if (!bio?.value.trim()) { setError('f-bio-wrap', t.errRequired); ok = false; }
-  const titulo1 = document.getElementById('tema-titulo-1');
-  if (!titulo1?.value.trim()) { setError('ft-1', t.errRequired); ok = false; }
-  const abstract1 = document.getElementById('tema-abstract-1');
-  if (!abstract1?.value.trim()) { setError('fa-1', t.errRequired); ok = false; }
+  const mailEl=document.getElementById('mail');
+  if(mailEl?.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())){setError('f-mail',t.errMail);ok=false;}
+  if(!getChecked('idiomaGroup').length){setError('f-idioma',t.errIdioma);ok=false;}
+  // Al menos un contacto
+  const waNum=(document.getElementById('wa-num')?.value||'').trim();
+  const tgAlias=(document.getElementById('telegram')?.value||'').trim();
+  const sigAlias=(document.getElementById('signal')?.value||'').trim();
+  if(!waNum&&!tgAlias&&!sigAlias){setError('f-whatsapp',t.errContacto);setError('f-telegram',t.errContacto);ok=false;}
+  // Tema 1 obligatorio
+  if(!document.getElementById('tema-titulo-1')?.value.trim()){setError('ft-1',t.errRequired);ok=false;}
+  if(!document.getElementById('ta-abstract-1')?.value.trim()){setError('fa-1',t.errRequired);ok=false;}
+  const bio=document.getElementById('bio');if(!bio?.value.trim()){setError('f-bio',t.errRequired);ok=false;}
   return ok;
 }
 
 // ── SUBMIT ────────────────────────────────────────────────────────────
-async function handleSubmit(e) {
+async function handleSubmit(e){
   e.preventDefault();
-  if (!validate()) {
-    document.querySelector('.field-error')?.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-  const btn = document.getElementById('submitBtn');
-  const txt = document.getElementById('submitTxt');
-  btn.disabled = true;
-  txt.innerHTML = `<span class="spinner"></span>${T[lang].sending}`;
+  if(!validate()){document.querySelector('.field-error')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  const btn=document.getElementById('submitBtn');const txt=document.getElementById('submitTxt');
+  btn.disabled=true;txt.innerHTML=`<span class="spinner"></span>${T[lang].sending}`;
 
-  const temas = [];
-  document.querySelectorAll('.tema-card').forEach(card => {
-    const n = card.dataset.num;
-    const titulo = document.getElementById(`tema-titulo-${n}`)?.value.trim()||'';
-    if (!titulo) return;
+  // Construir temas
+  const temas=[];
+  document.querySelectorAll('.tema-card').forEach(card=>{
+    const n=card.dataset.num;
+    const titulo=(document.getElementById(`tema-titulo-${n}`)?.value||'').trim();
+    if(!titulo)return;
     temas.push({
       titulo,
-      abstract:    document.getElementById(`tema-abstract-${n}`)?.value.trim()||'',
-      descripcion: document.getElementById(`tema-desc-${n}`)?.value.trim()||'',
-      tags:        document.getElementById(`tema-tags-${n}`)?.value.trim()||'',
-      nivel:       getRadio(`nivel-${n}`),
-      formatos:    getChecked(`formato-${n}`).join(','),
-      duracion:    document.getElementById(`dur-${n}`)?.value||'30',
-      panel:       document.getElementById(`panel-wrap-${n}`)?.classList.contains('checked')?'si':'no',
+      abstract:(document.getElementById(`ta-abstract-${n}`)?.value||'').trim(),
+      descripcion:(document.getElementById(`ta-desc-${n}`)?.value||'').trim(),
+      tags:(selectedTagsMap[n]||[]).join(','),
+      nivel:getRadio(`nivel-${n}`),
+      formatos:getChecked(`formato-${n}`).join(','),
+      duracion:document.getElementById(`dur-${n}`)?.value||'30',
+      panel:document.getElementById(`panel-wrap-${n}`)?.classList.contains('checked')?'si':'no',
     });
   });
 
-  const wCode = document.getElementById('whatsapp-code').value.trim();
-  const wNum  = document.getElementById('whatsapp').value.trim();
+  // WhatsApp → wa.me URL
+  const waCode=(document.getElementById('wa-code')?.value||'').replace(/\D/g,'');
+  const waNum=(document.getElementById('wa-num')?.value||'').replace(/\D/g,'');
+  const waFull=waCode&&waNum?waCode+waNum:waNum;
+  const whatsapp=waFull?`https://wa.me/${waFull}`:'';
 
-  const payload = {
-    action: 'speaker_form_submit',
-    data: {
-      nombre:             document.getElementById('nombre').value.trim(),
-      apellido:           document.getElementById('apellido').value.trim(),
-      apodo:              document.getElementById('apodo').value.trim(),
-      tipo:               document.getElementById('tipo').value.trim(),
-      cargo:              document.getElementById('cargo').value.trim(),
-      pais:               document.getElementById('pais').value.trim(),
-      idioma:             getChecked('idiomaGroup').join(','),
-      mail:               document.getElementById('mail').value.trim(),
-      website:            document.getElementById('website').value.trim(),
-      whatsapp:           (wCode && wNum ? `${wCode.replace(/^\+/,'')} ${wNum}` : wNum).trim(),
-      telegram:           document.getElementById('telegram').value.trim(),
-      signal:             document.getElementById('signal').value.trim(),
-      linkedin:           document.getElementById('linkedin').value.trim(),
-      x:                  document.getElementById('x').value.trim().replace(/^@/,''),
-      instagram:          document.getElementById('instagram').value.trim().replace(/^@/,''),
-      foto:               document.getElementById('foto').value.trim(),
-      bio:                document.getElementById('bio').value.trim(),
-      eventos_anteriores: document.getElementById('eventos').value.trim(),
-      dias:               getDias(),
-      primera_vez:        getRadio('primeraGroup'),
-      disponible_podcast: getRadio('podcastGroup'),
-      trae_empresa:       getRadio('empresaPresentaGroup'),
+  // Telegram → t.me URL
+  const tgAlias=(document.getElementById('telegram')?.value||'').replace(/^@/,'').trim();
+  const telegram=tgAlias?`https://t.me/${tgAlias}`:'';
+
+  // GitHub
+  const ghAlias=(document.getElementById('github')?.value||'').replace(/^@/,'').trim();
+  const github=ghAlias?`https://github.com/${ghAlias}`:'';
+
+  // Eventos anteriores
+  const eventosSeleccionados=[...selectedEventos];
+  const eventosOtros=(document.getElementById('eventosOtros')?.value||'').trim();
+  const eventosAll=[...eventosSeleccionados,...(eventosOtros?[eventosOtros]:[])].join(', ');
+
+  const payload={
+    action:'speaker_form_submit',
+    data:{
+      nombre:document.getElementById('nombre').value.trim(),
+      apellido:document.getElementById('apellido').value.trim(),
+      confname:document.getElementById('confname').value.trim(),
+      tipo:'speaker',
+      cargo:document.getElementById('cargo').value.trim(),
+      pais:document.getElementById('pais').value.trim(),
+      idioma:getChecked('idiomaGroup').join(','),
+      mail:document.getElementById('mail').value.trim(),
+      website:document.getElementById('website').value.trim(),
+      empresa:document.getElementById('empresa').value.trim(),
+      foto:fotoData,
+      whatsapp,telegram,
+      signal:(document.getElementById('signal')?.value||'').trim(),
+      linkedin:document.getElementById('linkedin').value.trim(),
+      x:(document.getElementById('x')?.value||'').replace(/^@/,'').trim(),
+      instagram:(document.getElementById('instagram')?.value||'').replace(/^@/,'').trim(),
+      github,
+      nostr:(document.getElementById('nostr')?.value||'').trim(),
+      bio:document.getElementById('bio').value.trim(),
+      eventos_anteriores:eventosAll,
+      disponible_desde:document.getElementById('disp-desde')?.value||'',
+      disponible_hasta:document.getElementById('disp-hasta')?.value||'',
+      dias:getChecked('diasGroup').join(','),
+      primera_vez:getRadio('primeraGroup'),
+      disponible_podcast:getRadio('podcastGroup'),
+      trae_empresa:getRadio('empresaPresentaGroup'),
       temas,
     }
   };
 
-  try {
-    await fetch(GAS_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify(payload)
-    });
+  try{
+    await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
     showSuccess();
-  } catch(err) {
-    btn.disabled = false;
-    txt.textContent = T[lang].submitBtn;
-    showToast(T[lang].toastError);
+  }catch(err){
+    btn.disabled=false;txt.textContent=T[lang].submitBtn;showToast(T[lang].toastError);
   }
 }
 
-function getDias() {
-  return [...(document.getElementById('diasGroup')?.querySelectorAll('.check-chip.checked')||[])]
-    .map(c=>c.querySelector('input').value).join(',');
+function showSuccess(){
+  document.getElementById('formWrap').style.display='none';
+  const sc=document.getElementById('successScreen');sc.style.display='block';
+  document.getElementById('successTitle').textContent=T[lang].successTitle;
+  document.getElementById('successSub').innerHTML=T[lang].successSub.replace(/\n/g,'<br>');
 }
-function showSuccess() {
-  document.getElementById('formWrap').style.display = 'none';
-  const sc = document.getElementById('successScreen');
-  sc.style.display = 'block';
-  document.getElementById('successTitle').textContent = T[lang].successTitle;
-  document.getElementById('successSub').innerHTML = T[lang].successSub.replace(/\n/g,'<br>');
-}
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 4000);
-}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000);}
 
 // ── INIT ──────────────────────────────────────────────────────────────
+buildPaises();
+buildEventosPreset();
 addTema();
 applyTranslations();
 </script>
