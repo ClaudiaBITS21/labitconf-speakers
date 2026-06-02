@@ -446,24 +446,42 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       </div>
       <button class="form-btn" onclick="addSpeaker()">Agregar</button>
     </div>
-    <div class="sp-filter-bar">
-      <button class="btn sp-flt active" onclick="setSpFilter('all')" data-flt="all">Todos</button>
-      <button class="btn sp-flt" onclick="setSpFilter('speaker')" data-flt="speaker" style="color:#FFF200">Speaker</button>
-      <button class="btn sp-flt" onclick="setSpFilter('panelista')" data-flt="panelista" style="color:#f97316">Panelista</button>
-      <button class="btn sp-flt" onclick="setSpFilter('manual')" data-flt="manual">⚠️ Manuales</button>
-      <input type="text" id="spSearchInput" placeholder="Buscar en todos los campos…" oninput="spSearchVal=this.value;renderSpeakers()" style="margin-left:10px;padding:4px 10px;font-size:15px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#ffffff;font-family:inherit;outline:none;width:240px">
+    <div class="sp-filter-bar" style="gap:8px">
+      <input type="text" id="spSearchInput" placeholder="🔍 Buscar…" oninput="spSearchVal=this.value;renderSpeakers()" style="padding:5px 10px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:200px;flex-shrink:0">
+      <select id="spFltEstado" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterEstado=this.value;renderSpeakers()">
+        <option value="">Estado: Todos</option>
+        <option value="disponible">Disponible</option>
+        <option value="confirmado">✅ Confirmado</option>
+        <option value="revision">🔍 Revisión</option>
+        <option value="respaldo">🔶 Respaldo</option>
+        <option value="pendiente">🌸 Pendiente</option>
+        <option value="rechazado">❌ Rechazado</option>
+      </select>
+      <select id="spFltFecha" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterFecha=this.value;renderSpeakers()">
+        <option value="">Fecha: Todas</option>
+        <option value="oct29">Oct 29</option>
+        <option value="oct30">Oct 30</option>
+        <option value="oct31">Oct 31</option>
+        <option value="nov1">Nov 1</option>
+      </select>
+      <select id="spFltStage" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterStage=this.value;renderSpeakers()">
+        <option value="">Stage: Todos</option>
+      </select>
+      <button class="btn" onclick="clearSpFilters()" style="font-size:13px;padding:5px 10px">✕ Limpiar</button>
     </div>
     <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
           <th style="width:20px"></th>
-          <th onclick="setSortSp('postulacion_num')" style="cursor:pointer;user-select:none;width:50px">N° <span id="srt-postulacion_num"></span></th>
+          <th onclick="setSortSp('postulacion_num')" style="cursor:pointer;user-select:none;width:44px">N° <span id="srt-postulacion_num"></span></th>
           <th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th>
           <th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th>
           <th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th>
-          <th>Temas</th>
+          <th onclick="setSortSp('temas')" style="cursor:pointer;user-select:none">Temas <span id="srt-temas"></span></th>
+          <th onclick="setSortSp('_stage')" style="cursor:pointer;user-select:none">Stage <span id="srt-_stage"></span></th>
+          <th onclick="setSortSp('_dia')" style="cursor:pointer;user-select:none">Días <span id="srt-_dia"></span></th>
           <th onclick="setSortSp('pais')" style="cursor:pointer;user-select:none">País <span id="srt-pais"></span></th>
-          <th>Idioma</th>
+          <th onclick="setSortSp('idioma')" style="cursor:pointer;user-select:none">Idioma <span id="srt-idioma"></span></th>
           <th onclick="setSortSp('mail')" style="cursor:pointer;user-select:none">Mail <span id="srt-mail"></span></th>
           <th>Contacto</th>
           <th style="width:28px"></th>
@@ -580,6 +598,25 @@ let spFilterVal = 'all';
 let spSortField = '';
 let spSortDir = 1;
 let spSearchVal = '';
+let spFilterEstado = '';
+let spFilterFecha = '';
+let spFilterStage = '';
+
+function clearSpFilters(){
+  spSearchVal='';spFilterEstado='';spFilterFecha='';spFilterStage='';
+  const si=document.getElementById('spSearchInput'); if(si)si.value='';
+  const fe=document.getElementById('spFltEstado'); if(fe)fe.value='';
+  const ff=document.getElementById('spFltFecha'); if(ff)ff.value='';
+  const fs=document.getElementById('spFltStage'); if(fs)fs.value='';
+  renderSpeakers();
+}
+
+function buildStageFilterOptions(){
+  const sel=document.getElementById('spFltStage');if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML=`<option value="">Stage: Todos</option>`
+    +STAGE_KEYS.map((sk,i)=>`<option value="${sk}"${cur===sk?' selected':''}>${esc(stageNames[i]||'Stage '+(i+1))}</option>`).join('');
+}
 let dirty = {principal:false,speakers:false,speakersManual:false,ideas:false};
 const ACCESS_KEY = 'BTC/2026';
 let writeKey = localStorage.getItem('labitconf_write_key') || '';
@@ -1430,40 +1467,54 @@ function renderSpeakers(){
     tbody.innerHTML=rows||`<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers manuales.</td></tr>`;
     return;
   }
-  if(spFilterVal!=='all')list=list.filter(s=>(s.tipo||'speaker')===spFilterVal);
+  // Filtros dropdown
+  if(spFilterEstado) list=list.filter(s=>s.estado===spFilterEstado);
+  if(spFilterFecha)  list=list.filter(s=>(s._temas||[]).some(t=>t.day===spFilterFecha));
+  if(spFilterStage)  list=list.filter(s=>(s._temas||[]).some(t=>t.stage===spFilterStage));
 
-  // search across all text fields
+  // Búsqueda texto libre
   if(spSearchVal.trim()){
     const q=spSearchVal.trim().toLowerCase();
     list=list.filter(s=>{
-      // Campos fijos
-      const enFijos=['nombre','apellido','tipo','apodo','cargo','pais','idioma','mail',
-        'website','whatsapp','telegram','signal','linkedin','x','instagram',
-        'empresa','notas','bio','eventos_anteriores','dias_asiste','estado'].some(f=>String(s[f]||'').toLowerCase().includes(q));
+      const enFijos=['nombre','apellido','confname','cargo','pais','idioma','mail',
+        'whatsapp','telegram','signal','linkedin','x','instagram','github','nostr',
+        'empresa','notas','bio','estado'].some(f=>String(s[f]||'').toLowerCase().includes(q));
       if(enFijos)return true;
-      // Campos dentro de temas JSON
       return (s._temas||[]).some(t=>
         ['titulo','abstract','descripcion','tags','nivel','formatos'].some(f=>String(t[f]||'').toLowerCase().includes(q))
       );
     });
   }
 
-  // sort
+  // Sort — incluye campos derivados _stage y _dia
   if(spSortField){
     const tierOrder={'1':1,'2':2,'3':3,'':99};
+    const DAY_ORDER={oct29:1,oct30:2,oct31:3,nov1:4,'':9};
     list=[...list].sort((a,b)=>{
-      let va=String(a[spSortField]||'').toLowerCase();
-      let vb=String(b[spSortField]||'').toLowerCase();
-      if(spSortField==='tier'){va=tierOrder[a.tier||'']||99;vb=tierOrder[b.tier||'']||99;return(va-vb)*spSortDir;}
-      if(va<vb)return -spSortDir; if(va>vb)return spSortDir; return 0;
+      if(spSortField==='tier'){const va=tierOrder[a.tier||'']||99,vb=tierOrder[b.tier||'']||99;return(va-vb)*spSortDir;}
+      if(spSortField==='postulacion_num'){return((a.postulacion_num||0)-(b.postulacion_num||0))*spSortDir;}
+      if(spSortField==='_dia'){
+        const va=DAY_ORDER[(a._temas||[]).map(t=>t.day).filter(Boolean)[0]||'']||9;
+        const vb=DAY_ORDER[(b._temas||[]).map(t=>t.day).filter(Boolean)[0]||'']||9;
+        return(va-vb)*spSortDir;
+      }
+      if(spSortField==='_stage'){
+        const va=(a._temas||[]).map(t=>t.stage).filter(Boolean)[0]||'z';
+        const vb=(b._temas||[]).map(t=>t.stage).filter(Boolean)[0]||'z';
+        return va<vb?-spSortDir:va>vb?spSortDir:0;
+      }
+      const va=String(a[spSortField]||'').toLowerCase();
+      const vb=String(b[spSortField]||'').toLowerCase();
+      return va<vb?-spSortDir:va>vb?spSortDir:0;
     });
   }
 
-  // update sort indicators
-  ['tipo','tier','nombre','estado','temas','referido'].forEach(f=>{
+  // Actualizar indicadores de sort
+  ['postulacion_num','tier','nombre','estado','temas','_stage','_dia','pais','idioma','mail'].forEach(f=>{
     const el=document.getElementById('srt-'+f);
     if(el)el.textContent=spSortField===f?(spSortDir===1?'↑':'↓'):'';
   });
+  buildStageFilterOptions();
 
   if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
 
@@ -1549,7 +1600,9 @@ function renderSpeakers(){
         ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
       </td>
       <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
-      <td style="min-width:160px">${temasResumen}</td>
+      <td style="min-width:140px">${temasResumen}</td>
+      <td style="font-size:12px;white-space:nowrap">${(()=>{const stages=[...new Set((s._temas||[]).map(t=>t.stage).filter(Boolean))];return stages.length?stages.map(sk=>`<span style="color:var(--red);font-weight:700">${esc(stageNames[STAGE_KEYS.indexOf(sk)]||sk)}</span>`).join(' '):`<span style="color:#333">—</span>`;})()}</td>
+      <td style="font-size:11px;white-space:nowrap">${(()=>{const days=[...new Set((s._temas||[]).map(t=>t.day).filter(Boolean))];const DAY_COLOR={oct29:'#555',oct30:'#fff',oct31:'#fff',nov1:'#555'};const DAY_LABEL={oct29:'29',oct30:'30',oct31:'31',nov1:'N1'};return days.length?days.map(d=>`<span style="color:${DAY_COLOR[d]||'#888'};font-weight:700;margin-right:3px">${DAY_LABEL[d]||d}</span>`).join(''):`<span style="color:#333">—</span>`;})()}</td>
       <td style="font-size:13px;text-align:center"><span title="${esc(s.pais||'')}">${paisInfo[0]} <span style="color:#555;font-size:11px">${paisInfo[1]}</span></span></td>
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
