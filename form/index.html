@@ -166,6 +166,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <label class="label" id="l-mail"></label>
             <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
           </div>
+          <div class="field" id="f-mail2">
+            <label class="label" id="l-mail2"></label>
+            <input class="inp" id="mail2" type="email" maxlength="120" autocomplete="off">
+          </div>
           <div class="field">
             <label class="label" id="l-cargo"></label>
             <input class="inp" id="cargo" type="text" maxlength="120">
@@ -394,7 +398,7 @@ const T={
     secFoto:'Foto de Perfil',secEventos:'Eventos Anteriores',
     lNombre:'Nombre',lApellido:'Apellido',lConfname:'Nombre preferido en Conferencia',
     hConfname:'Nombre/Apellido y/o Apodo que usarás en LABITCONF.',
-    lPais:'País de Origen',lMail:'Email',lCargo:'Cargo | Rol',lEmpresa:'Empresa | Organización',
+    lPais:'País de Origen',lMail:'Email',lMail2:'Confirmar Email',lCargo:'Cargo | Rol',lEmpresa:'Empresa | Organización',errMailMatch:'Los emails no coinciden',
     lWebsite:'Sitio Web',
     hContacto:'Completá al menos uno de: WhatsApp, Telegram o Signal.',
     lWhatsapp:'WhatsApp (Preferido)',lTelegram:'Telegram',
@@ -434,7 +438,7 @@ const T={
     secFoto:'Profile Photo',secEventos:'Previous Events',
     lNombre:'First Name',lApellido:'Last Name',lConfname:'Preferred Conference Name',
     hConfname:'Name/Surname and/or Nickname you will use at LABITCONF.',
-    lPais:'Country of Origin',lMail:'Email',lCargo:'Job Title',lEmpresa:'Company | Organization',
+    lPais:'Country of Origin',lMail:'Email',lMail2:'Confirm Email',lCargo:'Job Title',lEmpresa:'Company | Organization',errMailMatch:'Emails do not match',
     lWebsite:'Website',
     hContacto:'Fill in at least one of: WhatsApp, Telegram or Signal.',
     lWhatsapp:'WhatsApp (Preferred)',lTelegram:'Telegram',
@@ -490,7 +494,7 @@ function applyTranslations(){
   setTxt('sec-fotoTitle',t.secFoto);setTxt('sec-eventosTitle',t.secEventos);
   setReq('l-nombre',t.lNombre,true);setReq('l-apellido',t.lApellido,true);
   setReq('l-confname',t.lConfname,true);setTxt('h-confname',t.hConfname);
-  setReq('l-pais',t.lPais,true);setReq('l-mail',t.lMail,true);
+  setReq('l-pais',t.lPais,true);setReq('l-mail',t.lMail,true);setReq('l-mail2',t.lMail2,true);
   setTxt('l-cargo',t.lCargo);setTxt('l-empresa',t.lEmpresa);setTxt('l-website',t.lWebsite);
   setTxt('h-contacto',t.hContacto);
   setTxt('l-whatsapp',t.lWhatsapp);setTxt('l-telegram',t.lTelegram);
@@ -740,6 +744,9 @@ function validate(){
   });
   const mailEl=document.getElementById('mail');
   if(mailEl?.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())){setError('f-mail',t.errMail);ok=false;}
+  const mail2El=document.getElementById('mail2');
+  if(!mail2El?.value.trim()){setError('f-mail2',t.errRequired);ok=false;}
+  else if(mail2El.value.trim()!==mailEl?.value.trim()){setError('f-mail2',t.errMailMatch);ok=false;}
   if(!getChecked('idiomaGroup').length){setError('f-idioma',t.errIdioma);ok=false;}
   // Al menos un contacto
   const waNum=(document.getElementById('wa-num')?.value||'').trim();

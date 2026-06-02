@@ -198,14 +198,29 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-estado-sel{border:none;border-radius:4px;font-size:14px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;width:100%;}
 .sp-estado-sel.est-empty{background:var(--bg3);color:#ffffff;}
 .sp-estado-sel.est-disponible{background:rgba(255,255,255,.06);color:#ffffff;border:1px solid #444;}
-.sp-estado-sel.est-rechazado{background:rgba(220,38,38,.2);color:#ef4444;}
+.sp-estado-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
+.sp-estado-sel.est-revision{background:rgba(234,179,8,.2);color:#eab308;}
+.sp-estado-sel.est-respaldo{background:rgba(249,115,22,.2);color:#f97316;}
+.sp-estado-sel.est-pendiente{background:rgba(236,72,153,.2);color:#ec4899;}
+.sp-estado-sel.est-rechazado{background:rgba(239,68,68,.2);color:#ef4444;}
+/* compat legacy */
 .sp-estado-sel.est-revisar{background:rgba(234,179,8,.2);color:#eab308;}
 .sp-estado-sel.est-manual{background:rgba(6,182,212,.2);color:#06b6d4;}
-.sp-estado-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
-/* compat legacy */
-.sp-estado-sel.est-invitado{background:rgba(59,130,246,.2);color:#3b82f6;}
-.sp-estado-sel.est-pendiente{background:rgba(234,179,8,.2);color:#eab308;}
-.sp-estado-sel.est-no_aprobado{background:rgba(239,68,68,.2);color:#ef4444;}
+/* Tema estado inline */
+.tema-est-sel{border:none;border-radius:4px;font-size:12px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;}
+.tema-est-sel.est-disponible{background:rgba(255,255,255,.06);color:#888;border:1px solid #333;}
+.tema-est-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
+.tema-est-sel.est-revision{background:rgba(234,179,8,.2);color:#eab308;}
+.tema-est-sel.est-respaldo{background:rgba(249,115,22,.2);color:#f97316;}
+.tema-est-sel.est-pendiente{background:rgba(236,72,153,.2);color:#ec4899;}
+.tema-est-sel.est-rechazado{background:rgba(239,68,68,.2);color:#ef4444;}
+/* Tooltip */
+.sp-tema-tooltip{position:relative;display:inline-block;}
+.sp-tema-tooltip:hover .sp-tooltip-txt{visibility:visible;opacity:1;}
+.sp-tooltip-txt{visibility:hidden;opacity:0;position:absolute;bottom:100%;left:0;z-index:999;background:#111;border:1px solid #333;color:#fff;font-size:12px;padding:5px 9px;border-radius:5px;white-space:nowrap;max-width:320px;white-space:normal;width:max-content;pointer-events:none;transition:opacity .15s;}
+/* Enlace social arrow */
+.sp-link-arrow{display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:4px;border:1px solid transparent;transition:all .12s;}
+.sp-link-arrow:hover{border-color:currentColor;background:rgba(255,255,255,.05);}
 .sp-manual-row{background:rgba(234,179,8,.04);}
 .sp-manual-badge{display:inline-block;background:rgba(234,179,8,.2);color:#eab308;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;}
 .sp-fuzzy-row td{background:rgba(59,130,246,.04);border-top:none;padding:4px 8px;font-size:14px;color:#3b82f6;cursor:pointer;}
@@ -438,15 +453,16 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
-          <th style="width:24px"></th>
-          <th onclick="setSortSp('tipo')" style="cursor:pointer;user-select:none">Tipo <span id="srt-tipo"></span></th>
+          <th style="width:20px"></th>
+          <th onclick="setSortSp('postulacion_num')" style="cursor:pointer;user-select:none;width:50px">N° <span id="srt-postulacion_num"></span></th>
           <th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th>
           <th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th>
-          <th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th>
-          <th>Temas</th>
-          <th>País</th><th>Idioma</th><th>Mail</th>
-          <th style="color:#25D366">WhatsApp</th>
-          <th style="width:32px"></th>
+          <th>Temas · Estado</th>
+          <th onclick="setSortSp('pais')" style="cursor:pointer;user-select:none">País <span id="srt-pais"></span></th>
+          <th>Idioma</th>
+          <th onclick="setSortSp('mail')" style="cursor:pointer;user-select:none">Mail <span id="srt-mail"></span></th>
+          <th>Contacto</th>
+          <th style="width:28px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
           <tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers aún.</td></tr>
@@ -546,7 +562,11 @@ const STAGE_COLORS = ['#6366f1','#0ea5e9','#22c55e','#f59e0b','#ec4899','#14b8a6
 const STAGE_DIMS   = ['rgba(99,102,241,.15)','rgba(14,165,233,.15)','rgba(34,197,94,.15)','rgba(245,158,11,.15)','rgba(236,72,153,.15)','rgba(20,184,166,.15)','rgba(249,115,22,.15)','rgba(167,139,250,.15)','rgba(251,113,133,.15)'];
 const DUR_OPTIONS = [15,20,25,30,40];
 const DUR_COLORS = {15:'#22c55e',20:'#eab308',25:'#f97316',30:'#f9a8d4',40:'#a78bfa'};
-const ESTADO_ICON = {disponible:'',rechazado:'❌',revisar:'🔍',manual:'📋',confirmado:'✅',pendiente:'⏳',invitado:'📩',no_aprobado:'❌',''  :''};
+const ESTADO_ICON = {disponible:'',confirmado:'✅',revision:'🔍',respaldo:'🔶',pendiente:'🌸',rechazado:'❌',revisar:'🔍',manual:'📋',''  :''};
+const ESTADO_COLOR= {disponible:'#888',confirmado:'#22c55e',revision:'#eab308',respaldo:'#f97316',pendiente:'#ec4899',rechazado:'#ef4444'};
+// País → [emoji bandera, abreviatura 3 letras]
+const PAIS_INFO={'Argentina':['🇦🇷','ARG'],'Bolivia':['🇧🇴','BOL'],'Brasil':['🇧🇷','BRA'],'Brazil':['🇧🇷','BRA'],'Chile':['🇨🇱','CHI'],'Colombia':['🇨🇴','COL'],'Costa Rica':['🇨🇷','CRI'],'Cuba':['🇨🇺','CUB'],'Ecuador':['🇪🇨','ECU'],'El Salvador':['🇸🇻','SLV'],'España':['🇪🇸','ESP'],'Spain':['🇪🇸','ESP'],'Estados Unidos':['🇺🇸','USA'],'United States':['🇺🇸','USA'],'Guatemala':['🇬🇹','GTM'],'Honduras':['🇭🇳','HON'],'México':['🇲🇽','MEX'],'Mexico':['🇲🇽','MEX'],'Nicaragua':['🇳🇮','NIC'],'Panamá':['🇵🇦','PAN'],'Panama':['🇵🇦','PAN'],'Paraguay':['🇵🇾','PRY'],'Perú':['🇵🇪','PER'],'Peru':['🇵🇪','PER'],'Portugal':['🇵🇹','PRT'],'Puerto Rico':['🇵🇷','PRI'],'República Dominicana':['🇩🇴','DOM'],'Dominican Republic':['🇩🇴','DOM'],'Uruguay':['🇺🇾','URY'],'Venezuela':['🇻🇪','VEN'],'Alemania':['🇩🇪','DEU'],'Germany':['🇩🇪','DEU'],'Australia':['🇦🇺','AUS'],'Austria':['🇦🇹','AUT'],'Bélgica':['🇧🇪','BEL'],'Belgium':['🇧🇪','BEL'],'Canadá':['🇨🇦','CAN'],'Canada':['🇨🇦','CAN'],'China':['🇨🇳','CHN'],'Francia':['🇫🇷','FRA'],'France':['🇫🇷','FRA'],'India':['🇮🇳','IND'],'Italia':['🇮🇹','ITA'],'Italy':['🇮🇹','ITA'],'Japón':['🇯🇵','JPN'],'Japan':['🇯🇵','JPN'],'Noruega':['🇳🇴','NOR'],'Norway':['🇳🇴','NOR'],'Reino Unido':['🇬🇧','GBR'],'United Kingdom':['🇬🇧','GBR'],'Rusia':['🇷🇺','RUS'],'Russia':['🇷🇺','RUS'],'Singapur':['🇸🇬','SGP'],'Singapore':['🇸🇬','SGP'],'Suecia':['🇸🇪','SWE'],'Sweden':['🇸🇪','SWE'],'Suiza':['🇨🇭','CHE'],'Switzerland':['🇨🇭','CHE'],'Turquía':['🇹🇷','TUR'],'Turkey':['🇹🇷','TUR'],'Ucrania':['🇺🇦','UKR'],'Ukraine':['🇺🇦','UKR']};
+function getPaisInfo(p){return PAIS_INFO[p]||['🌍',p?p.slice(0,3).toUpperCase():'???'];};
 
 // ── STATE ─────────────────────────────────────────────────────────────
 let state = { principal:[], speakers:[], speakersManual:[], ideas:[] };
@@ -1303,17 +1323,38 @@ function setSortSp(field){
   renderSpeakers();
 }
 
-function estadoSelectHtml(ri,val,isManual=false){
-  const cls=val?'est-'+val:'est-disponible';
-  const fn=isManual?`updateManualSpeaker`:`updateSpeakerEstado`;
+const ESTADOS=[
+  {v:'disponible', l:'Disponible'},
+  {v:'confirmado', l:'✅ Confirmado'},
+  {v:'revision',   l:'🔍 Revisión'},
+  {v:'respaldo',   l:'🔶 Respaldo'},
+  {v:'pendiente',  l:'🌸 Pendiente'},
+  {v:'rechazado',  l:'❌ Rechazado'},
+];
+function estadoSelectHtml(ri,val,isManual=false,field='estado'){
   const v=val||'disponible';
-  return `<select class="sp-estado-sel ${cls}" onchange="${fn}(${ri},'estado',this.value);this.className='sp-estado-sel est-'+this.value">
-    <option value="disponible"${v==='disponible'?' selected':''}>Disponible</option>
-    <option value="revisar"${v==='revisar'?' selected':''}>🔍 Revisar</option>
-    <option value="manual"${v==='manual'?' selected':''}>📋 Manual</option>
-    <option value="confirmado"${v==='confirmado'?' selected':''}>✅ Confirmado</option>
-    <option value="rechazado"${v==='rechazado'?' selected':''}>❌ Rechazado</option>
-  </select>`;
+  const cls='est-'+(ESTADO_COLOR[v]?v:'disponible');
+  const fn=isManual?`updateManualSpeaker`:`updateSpeakerEstado`;
+  const opts=ESTADOS.map(e=>`<option value="${e.v}"${v===e.v?' selected':''}>${e.l}</option>`).join('');
+  return `<select class="sp-estado-sel ${cls}" onchange="${fn}(${ri},'${field}',this.value);this.className='sp-estado-sel est-'+this.value">${opts}</select>`;
+}
+function temaEstadoSelectHtml(ri,ti,val){
+  const v=val||'disponible';
+  const cls='est-'+(ESTADO_COLOR[v]?v:'disponible');
+  const opts=ESTADOS.map(e=>`<option value="${e.v}"${v===e.v?' selected':''}>${e.l}</option>`).join('');
+  return `<select class="tema-est-sel ${cls}" onchange="updateTemaEstado(${ri},${ti},this.value);this.className='tema-est-sel est-'+this.value">${opts}</select>`;
+}
+function updateTemaEstado(ri,ti,newEst){
+  const s=state.speakers[ri];if(!s)return;
+  const arr=s.temasEstadoArr;
+  arr[ti]=newEst;
+  s.temas_estado=arr.join(',');
+  // Bidireccional: si todos los temas confirmados → estado global confirmado
+  if(arr.every(e=>e==='confirmado'))s.estado='confirmado';
+  // Si hay alguno confirmado → asegurarse que no esté rechazado a nivel global
+  markDirty('speakers');
+  renderSpeakers();
+  renderPrincipal(); // re-render agenda para reflejar cambio de estado
 }
 function updateSpeakerEstado(ri,field,val){ if(state.speakers[ri])state.speakers[ri][field]=val; markDirty('speakers'); renderSpeakers(); }
 
@@ -1379,21 +1420,34 @@ function renderSpeakers(){
   if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
 
   list.forEach(s=>{
-    const ri=state.speakers.indexOf(s), tipo=s.tipo||'speaker';
-    const assigns=getSpeakerAssignments(s.nombre||'');
+    const ri=state.speakers.indexOf(s);
     const tArr=s.temasArr;
     const estArr=s.temasEstadoArr;
-    const estColor={disponible:'#6b7280',confirmado:'#22c55e',revisar:'#eab308',manual:'#06b6d4',rechazado:'#ef4444'};
-    const idiomaStr=(s.idioma||'').includes('en')&&(s.idioma||'').includes('es')?'ES·EN':(s.idioma||'').includes('en')?'EN':'ES';
+    const paisInfo=getPaisInfo(s.pais||'');
+    const idiomaHasEs=(s.idioma||'').includes('es');
+    const idiomaHasEn=(s.idioma||'').includes('en');
+    const idiomaHtml=`<span style="color:${idiomaHasEs?'#fff':'#333'};font-weight:700;font-size:12px">SP</span><span style="color:#555;font-size:10px"> / </span><span style="color:${idiomaHasEn?'#60a5fa':'#333'};font-weight:700;font-size:12px">EN</span>`;
 
-    // Resumen compacto de temas (una línea)
+    // Resumen compacto de temas (truncado con tooltip)
     const temasResumen=tArr.length
-      ?tArr.map((t,ti)=>{const col=estColor[estArr[ti]||'disponible']||'#888';return `<span style="display:inline-flex;align-items:center;gap:3px;margin-right:6px"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span style="font-size:12px;color:#ccc;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block">${esc(t)}</span></span>`;}).join('')
+      ?tArr.map((t,ti)=>{const col=ESTADO_COLOR[estArr[ti]||'disponible']||'#888';const trunc=t.length>28?t.slice(0,26)+'…':t;return `<div style="display:flex;align-items:center;gap:5px;line-height:1.7"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span class="sp-tema-tooltip" style="font-size:12px;color:#ccc">${esc(trunc)}${t.length>28?`<span class="sp-tooltip-txt">${esc(t)}</span>`:''}</span></div>`;}).join('')
       :`<span style="color:#444;font-size:12px">—</span>`;
 
-    // Tier selector
     const tierHtml=(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#555'};background:transparent;border:1px solid ${tc[t]||'#333'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1"${t==='1'?' selected':''} style="color:#22c55e">N1</option><option value="2"${t==='2'?' selected':''} style="color:#eab308">N2</option><option value="3"${t==='3'?' selected':''} style="color:#ef4444">N3</option></select>`;})();
+    // Contacto: flechas de enlace
+    function socialLink(url,label,color){if(!url)return'';return `<a href="${esc(url)}" target="_blank" class="sp-link-arrow" style="color:${color}">${label} ↗</a>`;}
+    const contactHtml=[
+      s.whatsapp?`<a href="${esc(s.whatsapp)}" target="_blank" class="sp-link-arrow" style="color:#25D366">WA ↗</a>`:'',
+      s.telegram?`<a href="${esc(s.telegram)}" target="_blank" class="sp-link-arrow" style="color:#229ED9">TG ↗</a>`:'',
+      s.signal?socialLink(`https://signal.me/#p/${esc(s.signal)}`,'SG','#3A76F0'):'',
+      s.linkedin?socialLink(s.linkedin.startsWith('http')?s.linkedin:'https://'+s.linkedin,'LI','#0A66C2'):'',
+      s.x?socialLink(`https://x.com/${s.x}`,'X','#aaa'):'',
+      s.instagram?socialLink(`https://instagram.com/${s.instagram}`,'IG','#e1306c'):'',
+      s.github?socialLink(s.github.startsWith('http')?s.github:'https://github.com/'+s.github,'GH','#8b949e'):'',
+      s.nostr?socialLink(`https://snort.social/p/${s.nostr}`,'NS','#9333ea'):'',
+    ].filter(Boolean).join(' ');
 
+    const assigns=getSpeakerAssignments(s.nombre||'');
     // Detalle expandido
     const repartosDetail=assigns.length
       ?assigns.map(a=>`<div style="font-size:12px;line-height:1.9">${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} <span style="color:#94a3b8">${esc(a.inicio)}</span>${a.tema?` — <span style="color:#f97316">${esc(a.tema)}</span>`:''}</div>`).join('')
@@ -1402,32 +1456,41 @@ function renderSpeakers(){
     const temasDetail=tArr.map((t,ti)=>{
       const tm=s._temas[ti]||{};
       const est=estArr[ti]||'disponible';
-      const col=estColor[est]||'#888';
-      const tags=(tm.tags||'').split(',').filter(Boolean).map(tg=>`<span class="sp-tema-tag">${esc(tg.trim())}</span>`).join('');
-      return `<div class="sp-tema-card">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-          <span style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></span>
-          <span class="sp-tema-card-title">${esc(t)}</span>
-          ${tm.nivel?`<span class="sp-tema-tag" style="color:#eab308">${esc(tm.nivel)}</span>`:''}
-          ${tm.duracion?`<span class="sp-tema-tag">${esc(tm.duracion)} min</span>`:''}
-          ${tm.panel==='si'?`<span class="sp-tema-tag" style="color:#ec4899">Panel ✓</span>`:''}
+      const col=ESTADO_COLOR[est]||'#888';
+      const tags=(tm.tags||'').split(',').filter(Boolean).map(tg=>`<span class="sp-tema-tag">#${esc(tg.trim())}</span>`).join('');
+      // Repartos para este tema
+      const rep=assigns.filter(a=>a.tema===t);
+      const repHtml=rep.length?rep.map(a=>`<span style="font-size:11px;color:#f97316;margin-left:6px">📍${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} ${esc(a.inicio)}</span>`).join(''):'';
+      return `<div class="sp-tema-card" style="border-left:3px solid ${col}">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          <span class="sp-tema-card-title" style="flex:1">${esc(t)}</span>
+          ${temaEstadoSelectHtml(ri,ti,est)}
+          ${repHtml}
         </div>
         ${tm.abstract?`<div style="font-size:12px;color:#666;margin-bottom:4px">${esc(tm.abstract)}</div>`:''}
-        ${tags?`<div>${tags}</div>`:''}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          ${tm.nivel?`<span class="sp-tema-tag" style="color:#eab308">${esc(tm.nivel)}</span>`:''}
+          ${tm.duracion?`<span class="sp-tema-tag">${esc(tm.duracion)} min</span>`:''}
+          ${tm.formatos?`<span class="sp-tema-tag" style="color:#aaa">${esc(tm.formatos)}</span>`:''}
+          ${tm.panel==='si'?`<span class="sp-tema-tag" style="color:#ec4899">Panel ✓</span>`:''}
+        </div>
+        ${tags?`<div style="margin-top:4px">${tags}</div>`:''}
       </div>`;
     }).join('')||'<span style="color:#444;font-size:12px">Sin temas</span>';
 
     rows+=`<tr class="sp-main-row" id="sp-row-${ri}" onclick="toggleSpDetail(${ri})">
-      <td style="text-align:center;color:#444;font-size:11px;width:22px" id="sp-arrow-${ri}">▶</td>
-      <td onclick="event.stopPropagation()"><select class="sp-tipo-sel" style="color:${tColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tOpts(tipo)}</select></td>
+      <td style="text-align:center;color:#444;font-size:11px;width:20px" id="sp-arrow-${ri}">▶</td>
+      <td style="font-size:12px;color:#555;text-align:center;font-weight:700">${s.postulacion_num||'—'}</td>
       <td style="text-align:center" onclick="event.stopPropagation()">${tierHtml}</td>
-      <td style="font-weight:700"><span style="color:var(--red)">${esc(s.nombre||'')}</span>${s.apellido?` <span style="color:#777;font-weight:400;font-size:13px">${esc(s.apellido)}</span>`:''}</td>
-      <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
-      <td style="max-width:200px">${temasResumen}</td>
-      <td style="color:#666;font-size:12px">${esc(s.pais||'')}</td>
-      <td style="color:#666;font-size:12px;text-align:center">${idiomaStr}</td>
+      <td style="font-weight:700">
+        <div style="color:var(--red);font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
+        ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
+      </td>
+      <td style="min-width:160px">${temasResumen}</td>
+      <td style="font-size:13px;text-align:center"><span title="${esc(s.pais||'')}">${paisInfo[0]} <span style="color:#555;font-size:11px">${paisInfo[1]}</span></span></td>
+      <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
-      <td style="font-size:12px;color:#25D366">${esc(s.whatsapp||'')}</td>
+      <td style="font-size:12px">${contactHtml}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
     </tr>
     <tr class="sp-detail-row" id="sp-detail-${ri}">
@@ -1565,55 +1628,79 @@ async function loadSpeakers(){
     const raw=await gasGet('Speakers');
     if(!raw||raw.length<2){state.speakers=[];renderSpeakers();return;}
     const[,...rows]=raw;
-    // Schema (31 cols) — campos fijos + temas como JSON
-    // [0]nombre [1]apellido [2]tipo [3]apodo [4]cargo [5]pais [6]idioma [7]mail
-    // [8]website [9]foto [10]whatsapp [11]telegram [12]signal [13]linkedin [14]x [15]instagram
-    // [16]empresa [17]notas [18]bio [19]eventos_anteriores
-    // [20]primera_vez [21]disponible_podcast [22]trae_empresa [23]dias_asiste
-    // [24]temas (JSON array) [25]temas_estado [26]estado [27]oct29 [28]oct30 [29]oct31 [30]nov1
+    // Schema nuevo (GAS v3): [0]postulacion_num [1]nombre [2]apellido [3]confname [4]tipo [5]cargo
+    // [6]pais [7]idioma [8]mail [9]website [10]foto [11]whatsapp [12]telegram [13]signal
+    // [14]linkedin [15]x [16]instagram [17]github [18]nostr [19]empresa [20]notas [21]bio
+    // [22]eventos_anteriores [23]primera_vez [24]disponible_podcast [25]trae_empresa
+    // [26]dias_asiste [27]disponible_desde [28]disponible_hasta [29]temas JSON [30]temas_estado
+    // [31]estado [32]oct29 [33]oct30 [34]oct31 [35]nov1
+    //
+    // Schema medio (v2): [0]nombre [1]apellido [2]tipo [3]apodo [4]cargo [5]pais [6]idioma
+    // [7]mail ... [24]temas JSON [25]temas_estado [26]estado [27]oct29...[30]nov1
     state.speakers=rows.map(r=>{
-      // Parsear temas JSON — con fallback al schema viejo (tema1/detalle1...)
-      let temasData=[];
-      const col24=String(r[24]||'').trim();
-      if(col24.startsWith('[')){
-        try{ temasData=JSON.parse(col24); }catch(e){ temasData=[]; }
+      // Detectar versión del schema: si r[0] es número → v3 (con postulacion_num)
+      const isV3 = !isNaN(parseInt(r[0])) && String(r[0]).trim()!=='';
+      let base, temaCol, estadoCol, oct29Col;
+      if(isV3){
+        base={
+          postulacion_num:parseInt(r[0])||0,
+          nombre:String(r[1]||''),apellido:String(r[2]||''),confname:String(r[3]||''),
+          tipo:String(r[4]||'speaker'),cargo:String(r[5]||''),pais:String(r[6]||''),
+          idioma:String(r[7]||'es'),mail:String(r[8]||''),website:String(r[9]||''),
+          foto:String(r[10]||''),whatsapp:String(r[11]||''),telegram:String(r[12]||''),
+          signal:String(r[13]||''),linkedin:String(r[14]||''),x:String(r[15]||''),
+          instagram:String(r[16]||''),github:String(r[17]||''),nostr:String(r[18]||''),
+          empresa:String(r[19]||''),notas:String(r[20]||''),bio:String(r[21]||''),
+          eventos_anteriores:String(r[22]||''),primera_vez:String(r[23]||''),
+          disponible_podcast:String(r[24]||''),trae_empresa:String(r[25]||''),
+          dias_asiste:String(r[26]||''),disponible_desde:String(r[27]||''),
+          disponible_hasta:String(r[28]||''),
+        };
+        temaCol=29;estadoCol=[30,31,32,33,34,35];
+      } else {
+        // v2 fallback
+        base={
+          postulacion_num:0,
+          nombre:String(r[0]||''),apellido:String(r[1]||''),confname:String(r[3]||''),
+          tipo:String(r[2]||'speaker'),cargo:String(r[4]||''),pais:String(r[5]||''),
+          idioma:String(r[6]||'es'),mail:String(r[7]||''),website:String(r[8]||''),
+          foto:String(r[9]||''),whatsapp:String(r[10]||''),telegram:String(r[11]||''),
+          signal:String(r[12]||''),linkedin:String(r[13]||''),x:String(r[14]||''),
+          instagram:String(r[15]||''),github:'',nostr:'',
+          empresa:String(r[16]||''),notas:String(r[17]||''),bio:String(r[18]||''),
+          eventos_anteriores:String(r[19]||''),primera_vez:String(r[20]||''),
+          disponible_podcast:String(r[21]||''),trae_empresa:String(r[22]||''),
+          dias_asiste:String(r[23]||''),disponible_desde:'',disponible_hasta:'',
+        };
+        temaCol=24;estadoCol=[25,26,27,28,29,30];
       }
-      // Fallback: schema viejo con columnas separadas
+
+      // Parsear temas JSON
+      let temasData=[];
+      const colT=String(r[temaCol]||'').trim();
+      if(colT.startsWith('[')){try{temasData=JSON.parse(colT);}catch(e){temasData=[];}}
       if(!temasData.length){
+        // fallback schema v1 (tema1/detalle1...)
         [[16,17],[18,19],[20,21],[22,23]].forEach(([ti,di])=>{
           const tt=String(r[ti]||'').trim();
-          if(tt) temasData.push({titulo:tt,abstract:'',descripcion:String(r[di]||''),tags:'',nivel:'',formatos:'',duracion:'30',panel:'no'});
+          if(tt)temasData.push({titulo:tt,abstract:'',descripcion:String(r[di]||''),tags:'',nivel:'',formatos:'',duracion:'30',panel:'no'});
         });
-        // Si había datos en formato viejo, temas_estado está en [24]
-        // (se lee abajo normalmente)
       }
-      const temasEstadoRaw = col24.startsWith('[') ? String(r[25]||'') : String(r[24]||'');
-      const estadoRaw      = col24.startsWith('[') ? String(r[26]||'disponible') : String(r[25]||'disponible');
-      const oct29Raw       = col24.startsWith('[') ? String(r[27]||'') : String(r[26]||'');
-      const oct30Raw       = col24.startsWith('[') ? String(r[28]||'') : String(r[27]||'');
-      const oct31Raw       = col24.startsWith('[') ? String(r[29]||'') : String(r[28]||'');
-      const nov1Raw        = col24.startsWith('[') ? String(r[30]||'') : String(r[29]||'');
 
+      const [tcE,tcS,t29,t30,t31,tn1]=estadoCol;
       return {
-        nombre:String(r[0]||''), apellido:String(r[1]||''), tipo:String(r[2]||'speaker'),
-        apodo:String(r[3]||''),  cargo:String(r[4]||''),    pais:String(r[5]||''),
-        idioma:String(r[6]||'es'), mail:String(r[7]||''),   website:String(r[8]||''),
-        foto:String(r[9]||''),   whatsapp:String(r[10]||''),telegram:String(r[11]||''),
-        signal:String(r[12]||''),linkedin:String(r[13]||''),x:String(r[14]||''),
-        instagram:String(r[15]||''),empresa:String(r[16]||''),notas:String(r[17]||''),
-        bio:String(r[18]||''),   eventos_anteriores:String(r[19]||''),
-        primera_vez:String(r[20]||''),disponible_podcast:String(r[21]||''),
-        trae_empresa:String(r[22]||''),dias_asiste:String(r[23]||''),
-        _temas: temasData,
-        temas_estado: temasEstadoRaw,
-        estado: estadoRaw,
-        oct29:oct29Raw, oct30:oct30Raw, oct31:oct31Raw, nov1:nov1Raw,
-        // Helpers
-        get temasArr(){ return this._temas.map(t=>t.titulo).filter(Boolean); },
-        get detallesArr(){ return this._temas.map(t=>t.descripcion||''); },
-        get abstractsArr(){ return this._temas.map(t=>t.abstract||''); },
-        get tagsArr(){ return this._temas.map(t=>t.tags||''); },
-        get temas(){ return this.temasArr.join(', '); },
+        ...base,
+        _temas:temasData,
+        temas_estado:String(r[tcE]||''),
+        estado:String(r[tcS]||'disponible'),
+        oct29:String(r[t29]||''),oct30:String(r[t30]||''),
+        oct31:String(r[t31]||''),nov1:String(r[tn1]||''),
+        get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
+        get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
+        get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
+        get tagsArr(){return this._temas.map(t=>t.tags||'');},
+        get temas(){return this.temasArr.join(', ');},
+        get displayName(){return this.confname||this.apodo||this.nombre||'';},
         get temasEstadoArr(){
           const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
           const n=this.temasArr.length||1;
@@ -1638,17 +1725,25 @@ async function loadManualSpeakers(){
 
 async function saveSpeakers(){
   if(!(await checkVersion('Speakers')))return;
-  // Schema 31 cols — campos fijos + temas JSON
+  // Schema v3 (36 cols) — mismo orden que GAS
   const data=state.speakers.map(s=>[
-    s.nombre||'',s.apellido||'',s.tipo||'speaker',s.apodo||'',s.cargo||'',
-    s.pais||'',s.idioma||'es',s.mail||'',s.website||'',s.foto||'',
-    s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',s.x||'',s.instagram||'',
-    s.empresa||'',s.notas||'',s.bio||'',s.eventos_anteriores||'',
-    s.primera_vez||'',s.disponible_podcast||'',s.trae_empresa||'',s.dias_asiste||'',
-    JSON.stringify(s._temas||[]),   // [24] temas JSON
-    s.temas_estado||'',             // [25]
-    s.estado||'disponible',         // [26]
-    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||''  // [27-30]
+    s.postulacion_num||'',                          // [0]
+    s.nombre||'',s.apellido||'',s.confname||'',     // [1-3]
+    s.tipo||'speaker',s.cargo||'',                  // [4-5]
+    s.pais||'',s.idioma||'es',s.mail||'',           // [6-8]
+    s.website||'',s.foto||'',                       // [9-10]
+    s.whatsapp||'',s.telegram||'',s.signal||'',     // [11-13]
+    s.linkedin||'',s.x||'',s.instagram||'',         // [14-16]
+    s.github||'',s.nostr||'',                       // [17-18]
+    s.empresa||'',s.notas||'',s.bio||'',            // [19-21]
+    s.eventos_anteriores||'',                       // [22]
+    s.primera_vez||'',s.disponible_podcast||'',     // [23-24]
+    s.trae_empresa||'',s.dias_asiste||'',           // [25-26]
+    s.disponible_desde||'',s.disponible_hasta||'',  // [27-28]
+    JSON.stringify(s._temas||[]),                   // [29]
+    s.temas_estado||'',                             // [30]
+    s.estado||'disponible',                         // [31]
+    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'' // [32-35]
   ]);
   await gasPost('Speakers','replace_all',data);
   // Also save manual if dirty
@@ -2008,9 +2103,9 @@ function buildStageSemaphore() {
 }
 
 // ── KANBAN ────────────────────────────────────────────────────────────
-const KANBAN_COLS = ['disponible','revisar','manual','confirmado'];
-const KANBAN_LABELS = { disponible:'⬜ Disponible', revisar:'🔍 Revisar', manual:'📋 Manual', confirmado:'✅ Confirmado' };
-const KANBAN_COLORS = { disponible:'#6b7280', revisar:'#eab308', manual:'#06b6d4', confirmado:'#22c55e' };
+const KANBAN_COLS   = ['disponible','revision','respaldo','pendiente','confirmado'];
+const KANBAN_LABELS = { disponible:'⬜ Disponible', revision:'🔍 Revisión', respaldo:'🔶 Respaldo', pendiente:'🌸 Pendiente', confirmado:'✅ Confirmado' };
+const KANBAN_COLORS = { disponible:'#6b7280', revision:'#eab308', respaldo:'#f97316', pendiente:'#ec4899', confirmado:'#22c55e' };
 
 function renderKanban() {
   const board = document.getElementById('kanbanBoard');
@@ -2020,9 +2115,9 @@ function renderKanban() {
   KANBAN_COLS.forEach(c => groups[c] = []);
   state.speakers.forEach((s, i) => {
     const est = s.estado === 'rechazado' ? null : (s.estado || 'disponible');
-    if (est && groups[est]) groups[est].push({ s, i });
-    else if (!est) {} // rechazados no aparecen en kanban
-    else groups['disponible'].push({ s, i });
+    if (est && groups[est] !== undefined) groups[est].push({ s, i });
+    else if (est) groups['disponible'].push({ s, i });
+    // rechazados no aparecen en kanban
   });
 
   board.innerHTML = KANBAN_COLS.map(col => {
@@ -2064,6 +2159,11 @@ function kanbanDrop(e, newEstado) {
   e.preventDefault();
   if (_kanbanDragIdx === null) return;
   state.speakers[_kanbanDragIdx].estado = newEstado;
+  // Actualizar temas_estado si se confirma desde kanban
+  if(newEstado==='confirmado'){
+    const s=state.speakers[_kanbanDragIdx];
+    if(s){const arr=s.temasEstadoArr.map(()=>'confirmado');s.temas_estado=arr.join(',');}
+  }
   markDirty('speakers');
   _kanbanDragIdx = null;
   renderKanban();
