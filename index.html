@@ -171,9 +171,26 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-filter-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 0 14px;}
 .sp-flt.active{background:var(--red-dim);border-color:var(--red);color:var(--red);}
 .sp-table{border-collapse:collapse;width:100%;}
-.sp-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 8px;text-align:left;font-size:15px;font-weight:700;color:#ffffff;white-space:nowrap;position:sticky;top:0;z-index:10;}
-.sp-table tbody td{border:1px solid var(--border);padding:5px 7px;vertical-align:middle;font-size:16px;max-width:260px;overflow-wrap:break-word;word-break:break-word;}
-.sp-table tbody tr:hover{background:var(--red-dim);}
+.sp-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 8px;text-align:left;font-size:14px;font-weight:700;color:#ffffff;white-space:nowrap;position:sticky;top:0;z-index:10;}
+.sp-table tbody td{border:1px solid var(--border);padding:4px 7px;vertical-align:middle;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.sp-table tbody tr.sp-main-row{cursor:pointer;}
+.sp-table tbody tr.sp-main-row:hover{background:var(--red-dim);}
+.sp-table tbody tr.sp-main-row.expanded{background:rgba(232,64,16,.08);border-left:2px solid var(--red);}
+/* Fila de detalle expandida */
+.sp-detail-row{display:none;}
+.sp-detail-row.open{display:table-row;}
+.sp-detail-row td{background:#0a0a0a;border:1px solid #333;padding:14px 16px;white-space:normal;max-width:none;}
+.sp-detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 20px;}
+.sp-detail-section{margin-bottom:12px;}
+.sp-detail-sec-title{font-size:11px;font-weight:800;color:var(--red);letter-spacing:.06em;margin-bottom:6px;border-bottom:1px solid #222;padding-bottom:3px;}
+.sp-detail-field{margin-bottom:4px;}
+.sp-detail-lbl{font-size:11px;color:#555;font-weight:700;}
+.sp-detail-val{font-size:13px;color:#ccc;}
+.sp-detail-val a{color:#60a5fa;text-decoration:none;}
+.sp-detail-val a:hover{text-decoration:underline;}
+.sp-tema-card{background:#111;border:1px solid #222;border-radius:6px;padding:10px 12px;margin-bottom:6px;}
+.sp-tema-card-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.sp-tema-tag{display:inline-block;background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:1px 7px;font-size:11px;color:#888;margin:1px;}
 .sp-edit{display:block;width:100%;outline:none;background:transparent;font-family:inherit;font-size:inherit;color:inherit;border:none;padding:2px 3px;resize:none;min-width:60px;white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;overflow:hidden;}
 .sp-edit:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);border-radius:3px;}
 .sp-tipo-sel{background:transparent;border:none;color:inherit;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;outline:none;padding:0 2px;}
@@ -421,17 +438,14 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div style="overflow:auto">
       <table class="sp-table">
         <thead><tr>
+          <th style="width:24px"></th>
           <th onclick="setSortSp('tipo')" style="cursor:pointer;user-select:none">Tipo <span id="srt-tipo"></span></th>
           <th onclick="setSortSp('tier')" style="cursor:pointer;user-select:none">Tier <span id="srt-tier"></span></th>
           <th onclick="setSortSp('nombre')" style="cursor:pointer;user-select:none">Nombre <span id="srt-nombre"></span></th>
           <th onclick="setSortSp('estado')" style="cursor:pointer;user-select:none">Estado <span id="srt-estado"></span></th>
-          <th>Temas (estado)</th>
-          <th>Repartos</th>
-          <th onclick="setSortSp('referido')" style="border:2px solid #f97316;color:#f97316;cursor:pointer;user-select:none">Referido <span id="srt-referido"></span></th>
-          <th>País</th><th>Idioma</th>
-          <th>Mail</th><th style="color:#25D366">WhatsApp</th><th style="color:#229ED9">Telegram</th><th style="color:#3A76F0">Signal</th><th style="color:#0A66C2">LinkedIn</th>
-          <th>Empresa</th><th>Notas</th>
-          <th style="color:#f59e0b;font-size:12px">Oct 29</th><th style="color:#f59e0b;font-size:12px">Oct 30</th><th style="color:#f59e0b;font-size:12px">Oct 31</th><th style="color:#f59e0b;font-size:12px">Nov 1</th>
+          <th>Temas</th>
+          <th>País</th><th>Idioma</th><th>Mail</th>
+          <th style="color:#25D366">WhatsApp</th>
           <th style="width:32px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
@@ -1302,6 +1316,16 @@ function estadoSelectHtml(ri,val,isManual=false){
   </select>`;
 }
 function updateSpeakerEstado(ri,field,val){ if(state.speakers[ri])state.speakers[ri][field]=val; markDirty('speakers'); renderSpeakers(); }
+
+function toggleSpDetail(ri){
+  const detRow=document.getElementById('sp-detail-'+ri);
+  const mainRow=document.getElementById('sp-row-'+ri);
+  const arrow=document.getElementById('sp-arrow-'+ri);
+  if(!detRow)return;
+  const open=detRow.classList.toggle('open');
+  if(mainRow)mainRow.classList.toggle('expanded',open);
+  if(arrow)arrow.textContent=open?'▼':'▶';
+}
 function updateManualSpeaker(ri,field,val){ if(state.speakersManual[ri])state.speakersManual[ri][field]=val; markDirty('speakersManual'); }
 
 function renderSpeakers(){
@@ -1352,51 +1376,100 @@ function renderSpeakers(){
     if(el)el.textContent=spSortField===f?(spSortDir===1?'↑':'↓'):'';
   });
 
-  if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
+  if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
 
   list.forEach(s=>{
     const ri=state.speakers.indexOf(s), tipo=s.tipo||'speaker';
     const assigns=getSpeakerAssignments(s.nombre||'');
-    const repartosHtml=assigns.length
-      ?assigns.map(a=>`<div style="white-space:nowrap;line-height:1.9;font-size:13px">${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} <span style="color:#94a3b8">${esc(a.inicio)}</span>${a.tema?` <span style="color:#f97316">${esc(a.tema)}</span>`:''}</div>`).join('')
-      :'';
-    // Temas con estado individual por tema
-    const temasHtml=(()=>{
-      const tArr=s.temasArr;
-      if(!tArr.length)return `<span class="sp-edit" style="color:#555;font-size:13px" contenteditable="true" onblur="updateSpeaker(${ri},'tema1',this.innerText.trim());markDirty('speakers')">${esc(s.tema1||'')}</span>`;
-      const estArr=s.temasEstadoArr;
-      const estColor={disponible:'#6b7280',confirmado:'#22c55e',revisar:'#eab308',manual:'#06b6d4'};
-      return tArr.map((t,ti)=>{
-        const est=estArr[ti]||'disponible';
-        const col=estColor[est]||'#888';
-        return `<div style="display:flex;align-items:center;gap:4px;line-height:1.7;font-size:13px">
-          <span style="width:7px;height:7px;border-radius:50%;background:${col};flex-shrink:0;display:inline-block"></span>
-          <span>${esc(t)}</span>
-        </div>`;
-      }).join('');
-    })();
-    // Días de participación
-    const dayCell=d=>`<td style="text-align:center;padding:2px"><select class="sp-tipo-sel" style="font-size:12px;padding:1px 2px" onchange="updateSpeaker(${ri},'${d}',this.value);markDirty('speakers')"><option value=""${s[d]===''?' selected':''}>—</option><option value="si"${s[d]==='si'?' selected':''}>✓</option><option value="no"${s[d]==='no'?' selected':''}>✗</option></select></td>`;
-    rows+=`<tr>
-      <td><select class="sp-tipo-sel" style="color:${tColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tOpts(tipo)}</select></td>
-      <td style="text-align:center">${(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return t?`<select class="sp-tipo-sel" style="color:${tc[t]};font-weight:800;background:transparent;border:1px solid ${tc[t]};border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" ${t==='1'?'selected':''} style="color:#22c55e">N1</option><option value="2" ${t==='2'?'selected':''} style="color:#eab308">N2</option><option value="3" ${t==='3'?'selected':''} style="color:#ef4444">N3</option></select>`:`<select class="sp-tipo-sel" style="color:#666;background:transparent;border:1px solid #333;border-radius:4px;padding:2px 4px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1" style="color:#22c55e">N1</option><option value="2" style="color:#eab308">N2</option><option value="3" style="color:#ef4444">N3</option></select>`;})()} </td>
-      <td style="font-weight:700;white-space:nowrap"><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakers')">${esc(s.nombre||'')}</span>${s.apodo?`<div style="font-size:11px;color:#555">${esc(s.apodo)}</div>`:''}
+    const tArr=s.temasArr;
+    const estArr=s.temasEstadoArr;
+    const estColor={disponible:'#6b7280',confirmado:'#22c55e',revisar:'#eab308',manual:'#06b6d4',rechazado:'#ef4444'};
+    const idiomaStr=(s.idioma||'').includes('en')&&(s.idioma||'').includes('es')?'ES·EN':(s.idioma||'').includes('en')?'EN':'ES';
+
+    // Resumen compacto de temas (una línea)
+    const temasResumen=tArr.length
+      ?tArr.map((t,ti)=>{const col=estColor[estArr[ti]||'disponible']||'#888';return `<span style="display:inline-flex;align-items:center;gap:3px;margin-right:6px"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span style="font-size:12px;color:#ccc;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block">${esc(t)}</span></span>`;}).join('')
+      :`<span style="color:#444;font-size:12px">—</span>`;
+
+    // Tier selector
+    const tierHtml=(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#555'};background:transparent;border:1px solid ${tc[t]||'#333'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1"${t==='1'?' selected':''} style="color:#22c55e">N1</option><option value="2"${t==='2'?' selected':''} style="color:#eab308">N2</option><option value="3"${t==='3'?' selected':''} style="color:#ef4444">N3</option></select>`;})();
+
+    // Detalle expandido
+    const repartosDetail=assigns.length
+      ?assigns.map(a=>`<div style="font-size:12px;line-height:1.9">${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} <span style="color:#94a3b8">${esc(a.inicio)}</span>${a.tema?` — <span style="color:#f97316">${esc(a.tema)}</span>`:''}</div>`).join('')
+      :'<span style="color:#444;font-size:12px">Sin repartos</span>';
+
+    const temasDetail=tArr.map((t,ti)=>{
+      const tm=s._temas[ti]||{};
+      const est=estArr[ti]||'disponible';
+      const col=estColor[est]||'#888';
+      const tags=(tm.tags||'').split(',').filter(Boolean).map(tg=>`<span class="sp-tema-tag">${esc(tg.trim())}</span>`).join('');
+      return `<div class="sp-tema-card">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></span>
+          <span class="sp-tema-card-title">${esc(t)}</span>
+          ${tm.nivel?`<span class="sp-tema-tag" style="color:#eab308">${esc(tm.nivel)}</span>`:''}
+          ${tm.duracion?`<span class="sp-tema-tag">${esc(tm.duracion)} min</span>`:''}
+          ${tm.panel==='si'?`<span class="sp-tema-tag" style="color:#ec4899">Panel ✓</span>`:''}
+        </div>
+        ${tm.abstract?`<div style="font-size:12px;color:#666;margin-bottom:4px">${esc(tm.abstract)}</div>`:''}
+        ${tags?`<div>${tags}</div>`:''}
+      </div>`;
+    }).join('')||'<span style="color:#444;font-size:12px">Sin temas</span>';
+
+    rows+=`<tr class="sp-main-row" id="sp-row-${ri}" onclick="toggleSpDetail(${ri})">
+      <td style="text-align:center;color:#444;font-size:11px;width:22px" id="sp-arrow-${ri}">▶</td>
+      <td onclick="event.stopPropagation()"><select class="sp-tipo-sel" style="color:${tColor[tipo]||'var(--text)'}" onchange="updateSpeaker(${ri},'tipo',this.value);markDirty('speakers');renderSpeakers()">${tOpts(tipo)}</select></td>
+      <td style="text-align:center" onclick="event.stopPropagation()">${tierHtml}</td>
+      <td style="font-weight:700"><span style="color:var(--red)">${esc(s.nombre||'')}</span>${s.apellido?` <span style="color:#777;font-weight:400;font-size:13px">${esc(s.apellido)}</span>`:''}</td>
+      <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
+      <td style="max-width:200px">${temasResumen}</td>
+      <td style="color:#666;font-size:12px">${esc(s.pais||'')}</td>
+      <td style="color:#666;font-size:12px;text-align:center">${idiomaStr}</td>
+      <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
+      <td style="font-size:12px;color:#25D366">${esc(s.whatsapp||'')}</td>
+      <td style="text-align:center" onclick="event.stopPropagation()"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
+    </tr>
+    <tr class="sp-detail-row" id="sp-detail-${ri}">
+      <td colspan="11" style="background:#080808;border:1px solid #222;padding:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div>
+            <div class="sp-detail-sec-title">Datos</div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Nombre completo</span><br>
+              <span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'nombre',this.innerText.trim());markDirty('speakers')">${esc(s.nombre||'')}</span>
+              <span class="sp-edit sp-detail-val" style="margin-left:4px" contenteditable="true" onblur="updateSpeaker(${ri},'apellido',this.innerText.trim());markDirty('speakers')">${esc(s.apellido||'')}</span>
+            </div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Apodo</span><br><span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'apodo',this.innerText.trim());markDirty('speakers')">${esc(s.apodo||'')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Cargo</span><br><span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'cargo',this.innerText.trim());markDirty('speakers')">${esc(s.cargo||'')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">País · Idioma</span><br><span class="sp-detail-val">${esc(s.pais||'')} · ${esc(idiomaStr)}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Empresa</span><br><span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></div>
+            ${s.website?`<div class="sp-detail-field"><span class="sp-detail-lbl">Website</span><br><a href="${esc(s.website)}" target="_blank" class="sp-detail-val">${esc(s.website)}</a></div>`:''}
+            <div class="sp-detail-sec-title" style="margin-top:10px">Participación</div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Días</span> <span class="sp-detail-val">${esc(s.dias_asiste||'—')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">1ra vez</span> <span class="sp-detail-val">${s.primera_vez||'—'}</span> · <span class="sp-detail-lbl">Podcast</span> <span class="sp-detail-val">${s.disponible_podcast||'—'}</span> · <span class="sp-detail-lbl">Empresa</span> <span class="sp-detail-val">${s.trae_empresa||'—'}</span></div>
+          </div>
+          <div>
+            <div class="sp-detail-sec-title">Contacto</div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Mail</span><br><span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'mail',this.innerText.trim());markDirty('speakers')">${esc(s.mail||'')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl" style="color:#25D366">WhatsApp</span><br><span class="sp-edit sp-detail-val" style="color:#25D366" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl" style="color:#229ED9">Telegram</span><br><span class="sp-edit sp-detail-val" style="color:#229ED9" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl" style="color:#3A76F0">Signal</span><br><span class="sp-edit sp-detail-val" style="color:#3A76F0" contenteditable="true" onblur="updateSpeaker(${ri},'signal',this.innerText.trim());markDirty('speakers')">${esc(s.signal||'')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl" style="color:#0A66C2">LinkedIn</span><br><span class="sp-edit sp-detail-val" style="color:#0A66C2" contenteditable="true" onblur="updateSpeaker(${ri},'linkedin',this.innerText.trim());markDirty('speakers')">${esc(s.linkedin||'')}</span></div>
+            ${s.x||s.instagram?`<div class="sp-detail-field"><span class="sp-detail-lbl">X / Instagram</span><br><span class="sp-detail-val">${s.x?'@'+esc(s.x):''}${s.instagram?' / @'+esc(s.instagram):''}</span></div>`:''}
+            <div class="sp-detail-sec-title" style="margin-top:10px">Notas internas</div>
+            <span class="sp-edit sp-detail-val" style="display:block;white-space:pre-wrap;font-size:13px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span>
+          </div>
+          <div>
+            <div class="sp-detail-sec-title">Temas</div>
+            ${temasDetail}
+            <div class="sp-detail-sec-title" style="margin-top:12px">Repartos en agenda</div>
+            ${repartosDetail}
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px">
+          <button class="del-row" onclick="delSpeaker(${ri})" style="font-size:13px;padding:4px 12px">✕ Eliminar</button>
+        </div>
       </td>
-      <td>${estadoSelectHtml(ri,s.estado||'disponible')}</td>
-      <td style="vertical-align:top;min-width:120px">${temasHtml}</td>
-      <td style="vertical-align:top">${repartosHtml}</td>
-      <td style="border:2px solid #f97316"><span class="sp-edit" style="color:#ffffff" contenteditable="true" onblur="updateSpeaker(${ri},'referido',this.innerText.trim());markDirty('speakers')">${esc(s.referido||'')}</span></td>
-      <td style="font-size:13px;color:#888">${esc(s.pais||'')}</td>
-      <td style="font-size:13px;color:#888;text-align:center">${s.idioma==='en'?'🌍 EN':'🌎 ES'}</td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'mail',this.innerText.trim());markDirty('speakers')">${esc(s.mail||'')}</span></td>
-      <td style="border-left:2px solid #25D366"><span class="sp-edit" style="color:#25D366" contenteditable="true" onblur="updateSpeaker(${ri},'whatsapp',this.innerText.trim());markDirty('speakers')">${esc(s.whatsapp||'')}</span></td>
-      <td style="border-left:2px solid #229ED9"><span class="sp-edit" style="color:#229ED9" contenteditable="true" onblur="updateSpeaker(${ri},'telegram',this.innerText.trim());markDirty('speakers')">${esc(s.telegram||'')}</span></td>
-      <td style="border-left:2px solid #3A76F0"><span class="sp-edit" style="color:#3A76F0" contenteditable="true" onblur="updateSpeaker(${ri},'signal',this.innerText.trim());markDirty('speakers')">${esc(s.signal||'')}</span></td>
-      <td style="border-left:2px solid #0A66C2"><span class="sp-edit" style="color:#0A66C2" contenteditable="true" onblur="updateSpeaker(${ri},'linkedin',this.innerText.trim());markDirty('speakers')">${esc(s.linkedin||'')}</span></td>
-      <td><span class="sp-edit" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></td>
-      <td><span class="sp-edit" style="color:#ffffff;font-size:13px" contenteditable="true" onblur="updateSpeaker(${ri},'notas',this.innerText.trim());markDirty('speakers')">${esc(s.notas||'')}</span></td>
-      ${dayCell('oct29')}${dayCell('oct30')}${dayCell('oct31')}${dayCell('nov1')}
-      <td style="text-align:center"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
     </tr>`;
   });
 
