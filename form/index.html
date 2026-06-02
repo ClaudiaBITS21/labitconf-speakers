@@ -201,7 +201,15 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
           <div class="field" id="f-signal">
             <label class="label">Signal</label>
-            <input class="inp" id="signal" type="text" placeholder="@alias" maxlength="80">
+            <input class="inp" id="signal" type="text" placeholder="@usuario" maxlength="80">
+          </div>
+          <div class="field">
+            <label class="label">X | Twitter</label>
+            <input class="inp" id="x" type="text" id="l-x-inp" maxlength="80">
+          </div>
+          <div class="field">
+            <label class="label">Instagram</label>
+            <input class="inp" id="instagram" type="text" id="l-ig-inp" maxlength="80">
           </div>
           <div class="field">
             <label class="label">GitHub</label>
@@ -209,20 +217,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
           <div class="field">
             <label class="label">Nostr</label>
-            <input class="inp" id="nostr" type="text" id="h-nostr" maxlength="200">
+            <input class="inp" id="nostr" type="text" maxlength="200">
             <div class="hint" id="h-nostr-hint"></div>
           </div>
           <div class="field">
             <label class="label">LinkedIn</label>
             <input class="inp" id="linkedin" type="url" placeholder="https://www.linkedin.com/in/usuario/" maxlength="200">
-          </div>
-          <div class="field">
-            <label class="label">X | Twitter</label>
-            <input class="inp" id="x" type="text" placeholder="@handle" maxlength="80">
-          </div>
-          <div class="field">
-            <label class="label">Instagram</label>
-            <input class="inp" id="instagram" type="text" placeholder="@handle" maxlength="80">
           </div>
           <div class="field">
             <label class="label" id="l-website"></label>
@@ -290,23 +290,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
         </div>
         <div class="hint" style="margin-top:6px" id="h-disp"></div>
-        <div class="field" style="margin-top:14px">
-          <label class="label" id="l-dias"></label>
-          <div class="check-group" id="diasGroup">
-            <label class="check-chip" style="--c:#f59e0b">
-              <input type="checkbox" value="oct29" onchange="syncChip(this)"> Oct 29
-            </label>
-            <label class="check-chip" style="--c:#E84010">
-              <input type="checkbox" value="oct30" onchange="syncChip(this)"> Oct 30
-            </label>
-            <label class="check-chip" style="--c:#E84010">
-              <input type="checkbox" value="oct31" onchange="syncChip(this)"> Oct 31
-            </label>
-            <label class="check-chip" style="--c:#f59e0b">
-              <input type="checkbox" value="nov1" onchange="syncChip(this)"> Nov 1
-            </label>
-          </div>
-        </div>
       </div>
 
       <!-- PERFIL -->
@@ -411,7 +394,7 @@ const T={
     lPrimera:'¿Primera vez en LABITCONF?',lPodcast:'¿Disponible para entrevista | podcast?',
     lEmpresaPres:'¿Traés empresa | proyecto que presentás?',
     temaNum:n=>`Tema ${n}`,temaLevel:'Nivel',temaFormato:'Formato Preferido',temaDur:'Tiempo de presentación',
-    hTemaDur:'Sujeto a modificación según agenda.',
+    hTemaDur:'Sujeto a modificaciones.',
     temaTitle:'Título del Tema',temaAbstract:'Abstract',temaDesc:'Descripción | Keywords',
     temaTags:'Tags',temaPanel:'Puedo participar en un Panel con otros speakers sobre este tema.',
     addTema:'Agregar otro tema',fotoUpload:'Subir foto',fotoChange:'Cambiar foto',
@@ -429,6 +412,9 @@ const T={
     formatoLabels:{charla:'Charla',panel:'Panel',taller:'Taller'},
     tagsPreset:TAGS_ES,customTagPlaceholder:'Agregar tag personalizado…',
     placeholderEventosOtros:'Otros eventos…',
+    placeholderHandle:'@usuario',
+    placeholderMail:'nombre@mail.com',
+    placeholderConfname:'@Satoshi',
   },
   en:{
     pageTitle:'Speaker Registration',
@@ -451,7 +437,7 @@ const T={
     lPrimera:'First time at LABITCONF?',lPodcast:'Available for interview | podcast?',
     lEmpresaPres:'Are you bringing a company | project to present?',
     temaNum:n=>`Topic ${n}`,temaLevel:'Level',temaFormato:'Preferred Format',temaDur:'Presentation time',
-    hTemaDur:'Subject to change based on schedule.',
+    hTemaDur:'Subject to modifications.',
     temaTitle:'Full Title',temaAbstract:'Abstract',temaDesc:'Description | Keywords',
     temaTags:'Tags',temaPanel:'I can participate in a Panel with other speakers about this topic.',
     addTema:'Add another topic',fotoUpload:'Upload photo',fotoChange:'Change photo',
@@ -469,6 +455,9 @@ const T={
     formatoLabels:{charla:'Talk',panel:'Panel',taller:'Workshop'},
     tagsPreset:TAGS_EN,customTagPlaceholder:'Add custom tag…',
     placeholderEventosOtros:'Other events…',
+    placeholderHandle:'@username',
+    placeholderMail:'name@mail.com',
+    placeholderConfname:'@Satoshi',
   }
 };
 
@@ -510,6 +499,13 @@ function applyTranslations(){
   setTxt('addTemaLabel',t.addTema);setTxt('submitTxt',t.submitBtn);
   setTxt('consentTxt',t.consent);
   setTxt('h-nostr-hint',t.hNostr);setAttr('nostr','placeholder',t.hNostr);
+  setAttr('x','placeholder',t.placeholderHandle);
+  setAttr('instagram','placeholder',t.placeholderHandle);
+  setAttr('telegram','placeholder',t.placeholderHandle);
+  setAttr('signal','placeholder',t.placeholderHandle);
+  setAttr('mail','placeholder',t.placeholderMail);
+  setAttr('mail2','placeholder',t.placeholderMail);
+  setAttr('confname','placeholder',t.placeholderConfname);
   // Sí/No
   ['si1','si2','si3'].forEach(id=>setTxt(id,t.siLabel));
   ['no1','no2','no3'].forEach(id=>setTxt(id,t.noLabel));
