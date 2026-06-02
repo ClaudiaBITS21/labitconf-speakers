@@ -191,6 +191,17 @@ function handleFormSubmit(ss, d) {
     hasDia('nov1'),                                  // [30]
   ];
 
+  // Asegurar fila de headers si el sheet está vacío
+  if (spSheet.getLastRow() === 0) {
+    spSheet.appendRow([
+      'nombre','apellido','tipo','apodo','cargo','pais','idioma','mail',
+      'website','foto','whatsapp','telegram','signal','linkedin','x','instagram',
+      'empresa','notas','bio','eventos_anteriores',
+      'primera_vez','disponible_podcast','trae_empresa','dias_asiste',
+      'temas','temas_estado','estado','oct29','oct30','oct31','nov1'
+    ]);
+  }
+
   spSheet.appendRow(row);
   PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
