@@ -141,10 +141,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
     <form id="speakerForm" onsubmit="handleSubmit(event)" novalidate>
 
-      <!-- DATOS PERSONALES -->
+      <!-- DATOS PERSONALES + CONTACTO -->
       <div class="section">
         <div class="section-title" id="sec1Title"></div>
         <div class="grid-2">
+
+          <!-- Nombre | Apellido -->
           <div class="field" id="f-nombre">
             <label class="label" id="l-nombre"></label>
             <input class="inp" id="nombre" type="text" autocomplete="given-name" maxlength="80">
@@ -153,7 +155,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <label class="label" id="l-apellido"></label>
             <input class="inp" id="apellido" type="text" autocomplete="family-name" maxlength="80">
           </div>
-          <div class="field" id="f-confname" style="grid-column:1/-1">
+
+          <!-- Nombre preferido | País -->
+          <div class="field" id="f-confname">
             <label class="label" id="l-confname"></label>
             <input class="inp" id="confname" type="text" maxlength="80">
             <div class="hint" id="h-confname"></div>
@@ -163,10 +167,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <select class="sel" id="pais" onchange="onPaisChange(this)"></select>
             <input class="inp" id="pais-custom" type="text" maxlength="80" style="display:none;margin-top:6px">
           </div>
-          <div class="field" id="f-mail">
-            <label class="label" id="l-mail"></label>
-            <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
-          </div>
+
+          <!-- Cargo | Empresa -->
           <div class="field">
             <label class="label" id="l-cargo"></label>
             <input class="inp" id="cargo" type="text" maxlength="120">
@@ -175,6 +177,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <label class="label" id="l-empresa"></label>
             <input class="inp" id="empresa" type="text" maxlength="120">
           </div>
+
         </div>
       </div>
 
@@ -182,7 +185,13 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <div class="section">
         <div class="section-title" id="sec2Title"></div>
         <div class="hint" id="h-contacto" style="margin-bottom:12px"></div>
-        <div class="grid-2" id="contactoGrid">
+        <div class="grid-2">
+
+          <!-- Email | WhatsApp -->
+          <div class="field" id="f-mail">
+            <label class="label" id="l-mail"></label>
+            <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
+          </div>
           <div class="field" id="f-whatsapp">
             <label class="label" id="l-whatsapp"></label>
             <div class="phone-row">
@@ -191,32 +200,40 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             </div>
             <div class="hint" id="wa-preview" style="color:#25D366"></div>
           </div>
+
+          <!-- Telegram | Signal -->
           <div class="field" id="f-telegram">
             <label class="label" id="l-telegram"></label>
-            <input class="inp" id="telegram" type="text" placeholder="@alias" maxlength="80" oninput="updateTgPreview()">
+            <input class="inp" id="telegram" type="text" maxlength="80" oninput="updateTgPreview()">
             <div class="hint" id="tg-preview" style="color:#229ED9"></div>
           </div>
           <div class="field" id="f-signal">
             <label class="label">Signal</label>
-            <input class="inp" id="signal" type="text" placeholder="@usuario" maxlength="80">
+            <input class="inp" id="signal" type="text" maxlength="80">
           </div>
-          <div class="field">
-            <label class="label">X | Twitter</label>
-            <input class="inp" id="x" type="text" id="l-x-inp" maxlength="80">
-          </div>
-          <div class="field">
-            <label class="label">Instagram</label>
-            <input class="inp" id="instagram" type="text" id="l-ig-inp" maxlength="80">
-          </div>
+
+          <!-- GitHub | Nostr -->
           <div class="field">
             <label class="label">GitHub</label>
-            <input class="inp" id="github" type="text" placeholder="@usuario" maxlength="80">
+            <input class="inp" id="github" type="text" maxlength="80">
           </div>
           <div class="field">
             <label class="label">Nostr</label>
             <input class="inp" id="nostr" type="text" maxlength="200">
             <div class="hint" id="h-nostr-hint"></div>
           </div>
+
+          <!-- X | Instagram -->
+          <div class="field">
+            <label class="label">X | Twitter</label>
+            <input class="inp" id="x" type="text" maxlength="80">
+          </div>
+          <div class="field">
+            <label class="label">Instagram</label>
+            <input class="inp" id="instagram" type="text" maxlength="80">
+          </div>
+
+          <!-- LinkedIn | Sitio Web -->
           <div class="field">
             <label class="label">LinkedIn</label>
             <input class="inp" id="linkedin" type="url" placeholder="https://www.linkedin.com/in/usuario/" maxlength="200">
@@ -225,6 +242,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <label class="label" id="l-website"></label>
             <input class="inp" id="website" type="url" placeholder="https://" maxlength="200">
           </div>
+
         </div>
       </div>
 
