@@ -413,7 +413,7 @@ const T={
     sec3:'Propuesta(s)',sec4:'Disponibilidad',sec5:'Perfil',sec6:'Participación',
     secFoto:'Foto de Perfil',secEventos:'Eventos Anteriores',
     lNombre:'Nombre',lApellido:'Apellido',lConfname:'Nombre preferido en Conferencia',
-    hConfname:'Alias (apodo) para presentarte en los eventos. Si no se completa se toma por defecto Nombre/Apellido.',
+    hConfname:'Alias (apodo) para presentarte en los eventos.<br>Si no se completa se toma por defecto Nombre/Apellido.',
     lPais:'País de Origen',lMail:'Email',lMail2:'Confirmar Email',lCargo:'Cargo (Rol)',lEmpresa:'Empresa (Referencia)',errMailMatch:'Los emails no coinciden',
     lWebsite:'Sitio Web',
     hContacto:'Completar al menos uno de: WhatsApp, Telegram y/o Signal.',
@@ -456,7 +456,7 @@ const T={
     sec3:'Proposal(s)',sec4:'Availability',sec5:'Profile',sec6:'Participation',
     secFoto:'Profile Photo',secEventos:'Previous Events',
     lNombre:'First Name',lApellido:'Last Name',lConfname:'Preferred Conference Name',
-    hConfname:'Alias (nickname) to introduce you at events. If left empty, Name/Surname will be used by default.',
+    hConfname:'Alias (nickname) to introduce you at events.<br>If left empty, Name/Surname will be used by default.',
     lPais:'Country of Origin',lMail:'Email',lMail2:'Confirm Email',lCargo:'Position (Role)',lEmpresa:'Company (Reference)',errMailMatch:'Emails do not match',
     lWebsite:'Website',
     hContacto:'Complete at least one of: WhatsApp, Telegram and/or Signal.',
@@ -515,7 +515,7 @@ function applyTranslations(){
   setTxt('sec4Title',t.sec4);setTxt('sec5Title',t.sec5);setTxt('sec6Title',t.sec6);
   setTxt('sec-fotoTitle',t.secFoto);setTxt('sec-eventosTitle',t.secEventos);
   setReq('l-nombre',t.lNombre,true);setReq('l-apellido',t.lApellido,true);
-  setReq('l-confname',t.lConfname,true);setTxt('h-confname',t.hConfname);
+  setReq('l-confname',t.lConfname,true);setInner('h-confname',t.hConfname);
   setReq('l-pais',t.lPais,true);setReq('l-mail',t.lMail,true);setReq('l-mail2',t.lMail2,true);
   setTxt('l-cargo',t.lCargo);setTxt('l-empresa',t.lEmpresa);setTxt('l-website',t.lWebsite);
   setTxt('h-contacto',t.hContacto);
