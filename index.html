@@ -1322,7 +1322,17 @@ function renderSpeakers(){
   // search across all text fields
   if(spSearchVal.trim()){
     const q=spSearchVal.trim().toLowerCase();
-    list=list.filter(s=>['nombre','tipo','apodo','pais','estado','tema1','tema2','tema3','tema4','detalle1','detalle2','detalle3','detalle4','referido','mail','whatsapp','empresa','notas'].some(f=>String(s[f]||'').toLowerCase().includes(q)));
+    list=list.filter(s=>{
+      // Campos fijos
+      const enFijos=['nombre','apellido','tipo','apodo','cargo','pais','idioma','mail',
+        'website','whatsapp','telegram','signal','linkedin','x','instagram',
+        'empresa','notas','bio','eventos_anteriores','dias_asiste','estado'].some(f=>String(s[f]||'').toLowerCase().includes(q));
+      if(enFijos)return true;
+      // Campos dentro de temas JSON
+      return (s._temas||[]).some(t=>
+        ['titulo','abstract','descripcion','tags','nivel','formatos'].some(f=>String(t[f]||'').toLowerCase().includes(q))
+      );
+    });
   }
 
   // sort
