@@ -428,32 +428,8 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <button class="btn" onclick="exportCSV()">📥 CSV</button>
   </div>
   <div style="padding:18px">
-    <div class="form-card">
-      <h3>+ Agregar Speaker</h3>
-      <div class="form-grid">
-        <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="sp-nombre" placeholder="Nombre"></div>
-        <div class="form-field"><label class="form-label">Apellido</label><input class="form-input" id="sp-apellido" placeholder="Apellido"></div>
-        <div class="form-field"><label class="form-label">Apodo (Alias)</label><input class="form-input" id="sp-confname" placeholder="@Satoshi"></div>
-        <div class="form-field"><label class="form-label">Cargo (Rol)</label><input class="form-input" id="sp-cargo" placeholder="CEO, Dev…"></div>
-        <div class="form-field"><label class="form-label">País</label><input class="form-input" id="sp-pais" placeholder="Argentina"></div>
-        <div class="form-field"><label class="form-label">Idioma</label><select class="form-select" id="sp-idioma"><option value="es">ES</option><option value="en">EN</option><option value="es,en">ES + EN</option></select></div>
-        <div class="form-field"><label class="form-label">Tier</label><select class="form-select" id="sp-tier"><option value="">Sin Tier</option><option value="1" style="color:#22c55e">Nivel 1</option><option value="2" style="color:#eab308">Nivel 2</option><option value="3" style="color:#ef4444">Nivel 3</option></select></div>
-        <div class="form-field"><label class="form-label">Mail</label><input class="form-input" id="sp-mail" placeholder="mail@ejemplo.com"></div>
-        <div class="form-field"><label class="form-label" style="color:#25D366">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="https://wa.me/549…" style="border-color:#25D366"></div>
-        <div class="form-field"><label class="form-label" style="color:#229ED9">Telegram</label><input class="form-input" id="sp-telegram" placeholder="https://t.me/usuario" style="border-color:#229ED9"></div>
-        <div class="form-field"><label class="form-label" style="color:#3A76F0">Signal</label><input class="form-input" id="sp-signal" placeholder="@alias" style="border-color:#3A76F0"></div>
-        <div class="form-field"><label class="form-label" style="color:#0A66C2">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…" style="border-color:#0A66C2"></div>
-        <div class="form-field"><label class="form-label">X | Twitter</label><input class="form-input" id="sp-x" placeholder="@usuario"></div>
-        <div class="form-field"><label class="form-label">Instagram</label><input class="form-input" id="sp-instagram" placeholder="@usuario"></div>
-        <div class="form-field"><label class="form-label">GitHub</label><input class="form-input" id="sp-github" placeholder="https://github.com/usuario"></div>
-        <div class="form-field"><label class="form-label">Nostr</label><input class="form-input" id="sp-nostr" placeholder="npub… y/o @alias"></div>
-        <div class="form-field"><label class="form-label">Sitio Web</label><input class="form-input" id="sp-website" placeholder="https://"></div>
-        <div class="form-field"><label class="form-label">Empresa (Referencia)</label><input class="form-input" id="sp-empresa" placeholder="Empresa o proyecto"></div>
-        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning… (separados por coma)"></div>
-        <div class="form-field"><label class="form-label" style="color:#f97316">Referido</label><input class="form-input" id="sp-referido" placeholder="¿Quién refiere?" style="border-color:#f97316"></div>
-        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Notas internas</label><textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones…"></textarea></div>
-      </div>
-      <button class="form-btn" onclick="addSpeaker()">Agregar</button>
+    <div style="padding:8px 0 4px">
+      <a href="https://app-labitconf.github.io/LABITCONF-speakers/form/" target="_blank" class="btn" style="display:inline-flex;align-items:center;gap:6px;color:var(--red);border-color:var(--red)">+ Inscripción de Speaker ↗</a>
     </div>
     <div class="sp-filter-bar" style="gap:8px">
       <input type="text" id="spSearchInput" placeholder="🔍 Buscar…" oninput="spSearchVal=this.value;renderSpeakers()" style="padding:5px 10px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:200px;flex-shrink:0">
