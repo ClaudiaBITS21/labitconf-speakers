@@ -559,7 +559,8 @@ function applyTranslations(){
 
 // ── HELPERS ───────────────────────────────────────────────────────────
 function setTxt(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
-function setInner(id,v){const e=document.getElementById(id);if(e)e.innerHTML=v;}
+// setInner acepta tanto string ID como elemento DOM
+function setInner(idOrEl,v){const e=typeof idOrEl==='string'?document.getElementById(idOrEl):idOrEl;if(e)e.innerHTML=v;}
 function setTxtEl(el,v){if(el)el.textContent=v;}
 function setInner(el,v){if(el)el.innerHTML=v;}
 function setReq(id,v,r){const e=document.getElementById(id);if(e)e.innerHTML=v+(r?' <span class="req">*</span>':'');}
