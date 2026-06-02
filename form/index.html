@@ -636,17 +636,22 @@ function buildTagsPreset(n){
   const selected=selectedTagsMap[n]||[];
   wrap.innerHTML=tags.map(tag=>`<span class="tag-chip${selected.includes(tag)?' selected':''}" onclick="togglePresetTag(${n},'${tag.replace(/'/g,"\\'")}',this)">#${tag}</span>`).join('');
 }
+const MAX_TAGS=5;
 function togglePresetTag(n,tag,el){
   if(!selectedTagsMap[n])selectedTagsMap[n]=[];
   const idx=selectedTagsMap[n].indexOf(tag);
   if(idx>=0){selectedTagsMap[n].splice(idx,1);el.classList.remove('selected');}
-  else{selectedTagsMap[n].push(tag);el.classList.add('selected');}
+  else{
+    if(selectedTagsMap[n].length>=MAX_TAGS)return;
+    selectedTagsMap[n].push(tag);el.classList.add('selected');
+  }
   renderSelectedTags(n);
 }
 function addCustomTag(n,inputEl){
   const val=(inputEl.value||'').trim().replace(/^#/,'');
   if(!val)return;
   if(!selectedTagsMap[n])selectedTagsMap[n]=[];
+  if(selectedTagsMap[n].length>=MAX_TAGS){inputEl.value='';return;}
   if(!selectedTagsMap[n].includes(val))selectedTagsMap[n].push(val);
   inputEl.value='';
   renderSelectedTags(n);
@@ -671,10 +676,14 @@ function buildEventosPreset(){
   if(!wrap)return;
   wrap.innerHTML=EVENTOS_PRESET.map(ev=>`<span class="evento-chip${selectedEventos.includes(ev)?' selected':''}" onclick="toggleEvento('${ev.replace(/'/g,"\\'").replace(/₿/g,'₿')}',this)">${ev}</span>`).join('');
 }
+const MAX_EVENTOS=5;
 function toggleEvento(ev,el){
   const idx=selectedEventos.indexOf(ev);
   if(idx>=0){selectedEventos.splice(idx,1);el.classList.remove('selected');}
-  else{selectedEventos.push(ev);el.classList.add('selected');}
+  else{
+    if(selectedEventos.length>=MAX_EVENTOS)return;
+    selectedEventos.push(ev);el.classList.add('selected');
+  }
 }
 
 // ── TEMAS ─────────────────────────────────────────────────────────────

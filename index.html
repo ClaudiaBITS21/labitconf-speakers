@@ -218,6 +218,12 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-tema-tooltip{position:relative;display:inline-block;}
 .sp-tema-tooltip:hover .sp-tooltip-txt{visibility:visible;opacity:1;}
 .sp-tooltip-txt{visibility:hidden;opacity:0;position:absolute;bottom:100%;left:0;z-index:999;background:#111;border:1px solid #333;color:#fff;font-size:12px;padding:5px 9px;border-radius:5px;white-space:nowrap;max-width:320px;white-space:normal;width:max-content;pointer-events:none;transition:opacity .15s;}
+/* Días de conferencia por tema */
+.day-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-size:11px;font-weight:700;cursor:pointer;margin:1px;transition:all .12s;}
+.day-chip.main{color:#ffffff;border-color:#555;}
+.day-chip.side{color:#444;border-color:#333;}
+.day-chip.active.main{background:rgba(255,255,255,.15);border-color:#fff;color:#fff;}
+.day-chip.active.side{background:rgba(100,100,100,.2);border-color:#666;color:#888;}
 /* Enlace social arrow */
 .sp-link-arrow{display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:4px;border:1px solid transparent;transition:all .12s;}
 .sp-link-arrow:hover{border-color:currentColor;background:rgba(255,255,255,.05);}
@@ -1044,7 +1050,30 @@ function populateSpDrop(){
   list.innerHTML=html;
 }
 
-function selectSpeaker(name){ selectSpeakerWithTema(name,''); }
+function selectSpeaker(name){
+  // Si se deselecciona (vacío), limpiar stage/day del speaker anterior
+  if(!name){
+    const {idx,sk}=_spDropCtx;
+    if(idx!==null){
+      const prevName=(state.principal[idx]?.stages[sk]?.speaker||'').trim();
+      const prevTema=(state.principal[idx]?.stages[sk]?.tema||'').trim();
+      if(prevName){
+        const sp=state.speakers.find(s=>s.nombre===prevName);
+        if(sp&&prevTema){
+          const ti=sp.temasArr.indexOf(prevTema);
+          if(ti>=0&&sp._temas[ti]){
+            sp._temas[ti].stage='';
+            sp._temas[ti].day='';
+            sp._temas[ti].estado='disponible';
+            sp.temas_estado=sp._temas.map(t=>t.estado||'disponible').join(',');
+            markDirty('speakers');
+          }
+        }
+      }
+    }
+  }
+  selectSpeakerWithTema(name,'');
+}
 
 function selectSpeakerWithTema(name,tema){
   const {idx,sk}=_spDropCtx;
@@ -1053,22 +1082,31 @@ function selectSpeakerWithTema(name,tema){
   if(tema)updateStageField(idx,sk,'tema',tema);
   markDirty('principal');
 
-  // Auto-confirmación: marcar ese tema como confirmado en el speaker
-  if(name&&tema){
+  // Auto-confirmación + grabar stage y day en _temas[i]
+  if(name){
     const sp=state.speakers.find(s=>s.nombre===name);
     if(sp){
       const tArr=sp.temasArr;
-      const ti=tArr.indexOf(tema);
-      if(ti>=0){
-        const estArr=sp.temasEstadoArr;
-        estArr[ti]='confirmado';
-        sp.temas_estado=estArr.join(',');
-        // Si todos los temas están confirmados → estado global confirmado
-        if(estArr.every(e=>e==='confirmado')&&sp.estado==='disponible'){
-          sp.estado='confirmado';
+      const ti=tema?tArr.indexOf(tema):-1;
+      const dayLabel=['','oct29','oct30','oct31','nov1'][currentDay]||'';
+      if(ti>=0&&sp._temas[ti]){
+        sp._temas[ti].estado='confirmado';
+        sp._temas[ti].stage=sk;
+        sp._temas[ti].day=dayLabel;
+      } else if(ti<0&&sp._temas.length>0){
+        // Sin tema específico: confirmar el primero disponible
+        const firstDisp=sp._temas.findIndex(t=>t.estado!=='confirmado');
+        if(firstDisp>=0){
+          sp._temas[firstDisp].estado='confirmado';
+          sp._temas[firstDisp].stage=sk;
+          sp._temas[firstDisp].day=dayLabel;
         }
-        markDirty('speakers');
       }
+      // Sync temas_estado
+      sp.temas_estado=sp._temas.map(t=>t.estado||'disponible').join(',');
+      if(sp._temas.every(t=>t.estado==='confirmado')&&sp.estado==='disponible')
+        sp.estado='confirmado';
+      markDirty('speakers');
     }
   }
 
@@ -1344,17 +1382,29 @@ function temaEstadoSelectHtml(ri,ti,val){
 }
 function updateTemaEstado(ri,ti,newEst){
   const s=state.speakers[ri];if(!s)return;
-  const arr=s.temasEstadoArr;
-  arr[ti]=newEst;
-  s.temas_estado=arr.join(',');
-  // Bidireccional: si todos los temas confirmados → estado global confirmado
-  if(arr.every(e=>e==='confirmado'))s.estado='confirmado';
-  // Si hay alguno confirmado → asegurarse que no esté rechazado a nivel global
+  // Fuente de verdad: _temas[i].estado
+  if(s._temas[ti])s._temas[ti].estado=newEst;
+  // Sincronizar temas_estado CSV
+  s.temas_estado=s._temas.map(t=>t.estado||'disponible').join(',');
+  // Si todos confirmados → estado global confirmado
+  if(s._temas.every(t=>t.estado==='confirmado')&&s.estado==='disponible')s.estado='confirmado';
+  // Si se desconfirma un tema → quitar stage/day si había asignación
+  if(newEst!=='confirmado'&&s._temas[ti]){
+    // No borramos stage/day automáticamente — puede estar en revisión pero aún asignado
+  }
   markDirty('speakers');
   renderSpeakers();
-  renderPrincipal(); // re-render agenda para reflejar cambio de estado
+  renderPrincipal();
 }
 function updateSpeakerEstado(ri,field,val){ if(state.speakers[ri])state.speakers[ri][field]=val; markDirty('speakers'); renderSpeakers(); }
+
+function updateTemaDay(ri,ti,dayKey){
+  const s=state.speakers[ri];if(!s||!s._temas[ti])return;
+  // Toggle: si ya era ese día, lo quita; sino lo asigna
+  s._temas[ti].day = s._temas[ti].day===dayKey?'':dayKey;
+  markDirty('speakers');
+  renderSpeakers();
+}
 
 function toggleSpDetail(ri){
   const detRow=document.getElementById('sp-detail-'+ri);
@@ -1456,14 +1506,28 @@ function renderSpeakers(){
       const est=estArr[ti]||'disponible';
       const col=ESTADO_COLOR[est]||'#888';
       const tags=(tm.tags||'').split(',').filter(Boolean).map(tg=>`<span class="sp-tema-tag">#${esc(tg.trim())}</span>`).join('');
-      // Repartos para este tema
-      const rep=assigns.filter(a=>a.tema===t);
-      const repHtml=rep.length?rep.map(a=>`<span style="font-size:11px;color:#f97316;margin-left:6px">📍${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} ${esc(a.inicio)}</span>`).join(''):'';
+      // Stage y día del tema (del _temas[ti])
+      const tmStage=tm.stage||'';
+      const tmDay=tm.day||'';
+      const stageName=tmStage?esc(stageNames[STAGE_KEYS.indexOf(tmStage)]||tmStage):'';
+      // Chips de día: oct29=gris, oct30/31=blanco, nov1=gris
+      const DAY_CHIPS=[
+        {key:'oct29',label:'Oct 29',main:false},
+        {key:'oct30',label:'Oct 30',main:true},
+        {key:'oct31',label:'Oct 31',main:true},
+        {key:'nov1', label:'Nov 1', main:false},
+      ];
+      const dayChipsHtml=DAY_CHIPS.map(d=>`<span class="day-chip ${d.main?'main':'side'}${tmDay===d.key?' active':''}" onclick="updateTemaDay(${ri},${ti},'${d.key}')">${d.label}</span>`).join('');
+      const repHtml=assigns.filter(a=>a.tema===t).map(a=>`<span style="font-size:11px;color:#f97316;margin-left:4px">📍${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} ${esc(a.inicio)}</span>`).join('');
       return `<div class="sp-tema-card" style="border-left:3px solid ${col}">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
           <span class="sp-tema-card-title" style="flex:1">${esc(t)}</span>
           ${temaEstadoSelectHtml(ri,ti,est)}
           ${repHtml}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          <span style="font-size:11px;color:#555">Día:</span>${dayChipsHtml}
+          ${stageName?`<span style="font-size:11px;color:#f97316;margin-left:4px">Stage: ${stageName}</span>`:''}
         </div>
         ${tm.abstract?`<div style="font-size:12px;color:#666;margin-bottom:4px">${esc(tm.abstract)}</div>`:''}
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
@@ -1682,9 +1746,11 @@ async function loadSpeakers(){
         // fallback schema v1 (tema1/detalle1...)
         [[16,17],[18,19],[20,21],[22,23]].forEach(([ti,di])=>{
           const tt=String(r[ti]||'').trim();
-          if(tt)temasData.push({titulo:tt,abstract:'',descripcion:String(r[di]||''),tags:'',nivel:'',formatos:'',duracion:'30',panel:'no'});
+          if(tt)temasData.push({titulo:tt,abstract:'',descripcion:String(r[di]||''),tags:'',nivel:'',formatos:'',duracion:'30',panel:'no',estado:'disponible',stage:'',day:''});
         });
       }
+      // Asegurar campos estado/stage/day en cada tema
+      temasData=temasData.map(t=>({...t,estado:t.estado||'disponible',stage:t.stage||'',day:t.day||''}));
 
       const [tcE,tcS,t29,t30,t31,tn1]=estadoCol;
       return {
@@ -1701,6 +1767,10 @@ async function loadSpeakers(){
         get temas(){return this.temasArr.join(', ');},
         get displayName(){return this.confname||this.apodo||this.nombre||'';},
         get temasEstadoArr(){
+          // Fuente de verdad: _temas[i].estado (con fallback a temas_estado CSV)
+          if(this._temas.length>0&&this._temas[0].estado){
+            return this._temas.map(t=>t.estado||'disponible');
+          }
           const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
           const n=this.temasArr.length||1;
           while(arr.length<n)arr.push('disponible');
