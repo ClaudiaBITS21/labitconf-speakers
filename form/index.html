@@ -832,7 +832,7 @@ async function handleSubmit(e) {
       idioma:             getChecked('idiomaGroup').join(','),
       mail:               document.getElementById('mail').value.trim(),
       website:            document.getElementById('website').value.trim(),
-      whatsapp:           wCode && wNum ? `${wCode} ${wNum}` : wNum,
+      whatsapp:           (wCode && wNum ? `${wCode.replace(/^\+/,'')} ${wNum}` : wNum).trim(),
       telegram:           document.getElementById('telegram').value.trim(),
       signal:             document.getElementById('signal').value.trim(),
       linkedin:           document.getElementById('linkedin').value.trim(),

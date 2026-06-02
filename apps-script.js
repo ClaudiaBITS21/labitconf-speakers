@@ -168,7 +168,7 @@ function handleFormSubmit(ss, d) {
     mail,                                            // [7]
     String(d.website           ||'').trim(),         // [8]
     String(d.foto              ||'').trim(),         // [9]
-    String(d.whatsapp          ||'').trim(),         // [10]
+    String(d.whatsapp          ||'').trim().replace(/^\+/,''),  // [10]
     String(d.telegram          ||'').trim(),         // [11]
     String(d.signal            ||'').trim(),         // [12]
     String(d.linkedin          ||'').trim(),         // [13]
