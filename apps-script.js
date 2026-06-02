@@ -199,7 +199,7 @@ function handleFormSubmit(ss, d) {
     counter,                                         // [0]  postulacion_num
     nombre,                                          // [1]  nombre
     String(d.apellido          ||'').trim(),         // [2]  apellido
-    String(d.confname          ||'').trim(),         // [3]  confname
+    (String(d.confname||'').trim() || (nombre+' '+String(d.apellido||'').trim()).trim()), // [3] confname (default nombre+apellido)
     'speaker',                                       // [4]  tipo (siempre speaker)
     String(d.cargo             ||'').trim(),         // [5]  cargo
     String(d.pais              ||'').trim(),         // [6]  pais
