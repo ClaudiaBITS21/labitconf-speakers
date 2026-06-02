@@ -379,7 +379,7 @@ function buildPaises(){
   const cur=sel.value;
   sel.innerHTML=`<option value="">${lang==='en'?'Select':'Seleccionar'}</option>`
     +list.map(p=>`<option value="${p}"${p===cur?' selected':''}>${p}</option>`).join('')
-    +`<option value="__otro__">${lang==='en'?'Other (specify)':'Otro (especificar)'}</option>`;
+    +`<option value="__otro__">${lang==='en'?'Other':'Otro'}</option>`;
 }
 function onPaisChange(sel){
   const custom=document.getElementById('pais-custom');
