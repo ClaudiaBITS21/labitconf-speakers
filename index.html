@@ -431,18 +431,27 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div class="form-card">
       <h3>+ Agregar Speaker</h3>
       <div class="form-grid">
-        <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="sp-nombre" placeholder="Nombre completo"></div>
-        <div class="form-field"><label class="form-label">Tipo</label><select class="form-select" id="sp-tipo"><option value="speaker">Speaker</option><option value="moderador">Moderador</option><option value="empresa">Empresa</option><option value="sponsor">Sponsor</option></select></div>
+        <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" id="sp-nombre" placeholder="Nombre"></div>
+        <div class="form-field"><label class="form-label">Apellido</label><input class="form-input" id="sp-apellido" placeholder="Apellido"></div>
+        <div class="form-field"><label class="form-label">Apodo (Alias)</label><input class="form-input" id="sp-confname" placeholder="@Satoshi"></div>
+        <div class="form-field"><label class="form-label">Cargo (Rol)</label><input class="form-input" id="sp-cargo" placeholder="CEO, Dev…"></div>
+        <div class="form-field"><label class="form-label">País</label><input class="form-input" id="sp-pais" placeholder="Argentina"></div>
+        <div class="form-field"><label class="form-label">Idioma</label><select class="form-select" id="sp-idioma"><option value="es">ES</option><option value="en">EN</option><option value="es,en">ES + EN</option></select></div>
         <div class="form-field"><label class="form-label">Tier</label><select class="form-select" id="sp-tier"><option value="">Sin Tier</option><option value="1" style="color:#22c55e">Nivel 1</option><option value="2" style="color:#eab308">Nivel 2</option><option value="3" style="color:#ef4444">Nivel 3</option></select></div>
         <div class="form-field"><label class="form-label">Mail</label><input class="form-input" id="sp-mail" placeholder="mail@ejemplo.com"></div>
-        <div class="form-field"><label class="form-label" style="color:#25D366">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="+54 9 …" style="border-color:#25D366"></div>
-        <div class="form-field"><label class="form-label" style="color:#229ED9">Telegram</label><input class="form-input" id="sp-telegram" placeholder="@usuario" style="border-color:#229ED9"></div>
-        <div class="form-field"><label class="form-label" style="color:#3A76F0">Signal</label><input class="form-input" id="sp-signal" placeholder="+54 9 …" style="border-color:#3A76F0"></div>
+        <div class="form-field"><label class="form-label" style="color:#25D366">WhatsApp</label><input class="form-input" id="sp-whatsapp" placeholder="https://wa.me/549…" style="border-color:#25D366"></div>
+        <div class="form-field"><label class="form-label" style="color:#229ED9">Telegram</label><input class="form-input" id="sp-telegram" placeholder="https://t.me/usuario" style="border-color:#229ED9"></div>
+        <div class="form-field"><label class="form-label" style="color:#3A76F0">Signal</label><input class="form-input" id="sp-signal" placeholder="@alias" style="border-color:#3A76F0"></div>
         <div class="form-field"><label class="form-label" style="color:#0A66C2">LinkedIn</label><input class="form-input" id="sp-linkedin" placeholder="linkedin.com/in/…" style="border-color:#0A66C2"></div>
-        <div class="form-field"><label class="form-label">Empresa</label><input class="form-input" id="sp-empresa" placeholder="Empresa o rol"></div>
-        <div class="form-field" style="grid-column:span 2"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning…"></div>
-        <div class="form-field"><label class="form-label" style="color:#f97316">Referido <span style="font-weight:400;color:#ffffff;font-size:12px">(opcional)</span></label><input class="form-input" id="sp-referido" placeholder="¿Quién refiere?" style="border-color:#f97316"></div>
-        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Notas</label><textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones…"></textarea></div>
+        <div class="form-field"><label class="form-label">X | Twitter</label><input class="form-input" id="sp-x" placeholder="@usuario"></div>
+        <div class="form-field"><label class="form-label">Instagram</label><input class="form-input" id="sp-instagram" placeholder="@usuario"></div>
+        <div class="form-field"><label class="form-label">GitHub</label><input class="form-input" id="sp-github" placeholder="https://github.com/usuario"></div>
+        <div class="form-field"><label class="form-label">Nostr</label><input class="form-input" id="sp-nostr" placeholder="npub… y/o @alias"></div>
+        <div class="form-field"><label class="form-label">Sitio Web</label><input class="form-input" id="sp-website" placeholder="https://"></div>
+        <div class="form-field"><label class="form-label">Empresa (Referencia)</label><input class="form-input" id="sp-empresa" placeholder="Empresa o proyecto"></div>
+        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Tema(s)</label><input class="form-input" id="sp-temas" placeholder="Bitcoin, Lightning… (separados por coma)"></div>
+        <div class="form-field"><label class="form-label" style="color:#f97316">Referido</label><input class="form-input" id="sp-referido" placeholder="¿Quién refiere?" style="border-color:#f97316"></div>
+        <div class="form-field" style="grid-column:1/-1"><label class="form-label">Notas internas</label><textarea class="form-ta" id="sp-notas" placeholder="Disponibilidad, restricciones…"></textarea></div>
       </div>
       <button class="form-btn" onclick="addSpeaker()">Agregar</button>
     </div>
@@ -1705,24 +1714,44 @@ function mergeManualSpeaker(ri,targetName){
 }
 
 function addSpeaker(){
-  const nombre=document.getElementById('sp-nombre').value.trim();
-  if(!nombre){toast('⚠️ Nombre requerido',true);return;}
+  const g=id=>(document.getElementById(id)?.value||'').trim();
+  const nombre=g('sp-nombre'); if(!nombre){toast('⚠️ Nombre requerido',true);return;}
+  const apellido=g('sp-apellido');
+  const confname=g('sp-confname')||(nombre+' '+apellido).trim();
+  // Temas → _temas array
+  const temasRaw=g('sp-temas');
+  const _temas=temasRaw?temasRaw.split(',').filter(Boolean).map(t=>({titulo:t.trim(),abstract:'',descripcion:'',tags:'',nivel:'',formatos:'',duracion:'30',panel:'no',estado:'disponible',stage:'',day:''})):[];
+  const temas_estado=_temas.map(()=>'disponible').join(',');
   state.speakers.push({
-    nombre, tipo:document.getElementById('sp-tipo').value,
-    mail:document.getElementById('sp-mail').value.trim(),
-    whatsapp:document.getElementById('sp-whatsapp').value.trim(),
-    telegram:document.getElementById('sp-telegram').value.trim(),
-    signal:document.getElementById('sp-signal').value.trim(),
-    linkedin:document.getElementById('sp-linkedin').value.trim(),
-    empresa:document.getElementById('sp-empresa').value.trim(),
-    tier:document.getElementById('sp-tier').value,
-    temas:document.getElementById('sp-temas').value.trim(),
-    referido:document.getElementById('sp-referido').value.trim(),
-    notas:document.getElementById('sp-notas').value.trim(),
-    estado:''
+    nombre, apellido, confname, tipo:'speaker',
+    cargo:g('sp-cargo'), pais:g('sp-pais'),
+    idioma:document.getElementById('sp-idioma')?.value||'es',
+    mail:g('sp-mail'), website:g('sp-website'), foto:'',
+    whatsapp:g('sp-whatsapp'), telegram:g('sp-telegram'),
+    signal:g('sp-signal'), linkedin:g('sp-linkedin'),
+    x:g('sp-x'), instagram:g('sp-instagram'),
+    github:g('sp-github'), nostr:g('sp-nostr'),
+    empresa:g('sp-empresa'), notas:g('sp-notas'), bio:'', eventos_anteriores:'',
+    primera_vez:'', disponible_podcast:'', trae_empresa:'', dias_asiste:'',
+    disponible_desde:'', disponible_hasta:'',
+    referido:g('sp-referido'), tier:document.getElementById('sp-tier').value,
+    _temas, temas_estado, estado:'disponible',
+    oct29:'', oct30:'', oct31:'', nov1:'', postulacion_num:0,
+    get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
+    get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
+    get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
+    get tagsArr(){return this._temas.map(t=>t.tags||'');},
+    get temas(){return this.temasArr.join(', ');},
+    get displayName(){return this.confname||this.nombre||'';},
+    get temasEstadoArr(){
+      if(this._temas.length>0&&this._temas[0].estado){return this._temas.map(t=>t.estado||'disponible');}
+      const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
+      const n=this.temasArr.length||1; while(arr.length<n)arr.push('disponible'); return arr;
+    }
   });
-  ['sp-nombre','sp-mail','sp-whatsapp','sp-telegram','sp-signal','sp-linkedin','sp-empresa','sp-temas','sp-referido','sp-notas'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('sp-tier').value='';
+  ['sp-nombre','sp-apellido','sp-confname','sp-cargo','sp-pais','sp-mail','sp-website',
+   'sp-whatsapp','sp-telegram','sp-signal','sp-linkedin','sp-x','sp-instagram',
+   'sp-github','sp-nostr','sp-empresa','sp-temas','sp-referido','sp-notas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   markDirty('speakers'); renderSpeakers(); toast('✅ Speaker agregado');
 }
 function updateSpeaker(ri,field,val){ if(state.speakers[ri]){pushHistory();state.speakers[ri][field]=val;} }
