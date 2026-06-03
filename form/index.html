@@ -261,6 +261,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
                 <button type="button" class="foto-btn" onclick="document.getElementById('fotoFile').click()" id="fotoUploadBtn"></button>
               </div>
               <input class="inp" id="fotoUrl" type="url" placeholder="https://..." oninput="onFotoUrl(this)">
+              <div class="hint">400×400px | JPEG/PNG | MAX 250KB</div>
             </div>
           </div>
         </div>
@@ -614,12 +615,12 @@ function onFotoFile(input){
     const img=new Image();
     img.onload=()=>{
       const canvas=document.createElement('canvas');
-      const max=200;
+      const max=400;
       let w=img.width,h=img.height;
       if(w>h){if(w>max){h=h*max/w;w=max;}}else{if(h>max){w=w*max/h;h=max;}}
       canvas.width=w;canvas.height=h;
       canvas.getContext('2d').drawImage(img,0,0,w,h);
-      fotoData=canvas.toDataURL('image/jpeg',0.75);
+      fotoData=canvas.toDataURL('image/jpeg',0.80);
       updateFotoThumb(fotoData);
       document.getElementById('fotoUrl').value='';
     };
