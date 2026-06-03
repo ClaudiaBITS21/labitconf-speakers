@@ -47,7 +47,30 @@
 //   Ideas         — [titulo, prop, detalle]
 // ═══════════════════════════════════════════════════════════════════
 
-const SHEET_ID = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
+const SHEET_ID   = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
+const PHOTO_FOLDER_ID = '14pa1CpZr2ao5yoqIGPiAfaaUrDR5RcL9';
+
+// Sube una foto (base64 data URL) a Drive y devuelve la URL de miniatura
+function savePhotoToDrive(base64DataUrl, counter, confname) {
+  try {
+    const match = base64DataUrl.match(/^data:([^;]+);base64,(.+)$/);
+    if (!match) return '';
+    const mimeType  = match[1];
+    const b64Data   = match[2];
+    const ext       = mimeType.includes('png') ? 'png' : 'jpg';
+    const safeName  = String(confname||'speaker').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\-_]/g,'_').slice(0,40);
+    const num       = String(counter).padStart(4,'0');
+    const filename  = `${num}-${safeName}.${ext}`;
+    const blob      = Utilities.newBlob(Utilities.base64Decode(b64Data), mimeType, filename);
+    const folder    = DriveApp.getFolderById(PHOTO_FOLDER_ID);
+    const file      = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w400`;
+  } catch(e) {
+    Logger.log('Error saving photo: ' + e.message);
+    return '';
+  }
+}
 
 // ── GET ─────────────────────────────────────────────────────────────
 function doGet(e) {
@@ -206,7 +229,7 @@ function handleFormSubmit(ss, d) {
     String(d.idioma            ||'es').trim(),       // [7]  idioma
     mail,                                            // [8]  mail
     String(d.website           ||'').trim(),         // [9]  website
-    String(d.foto              ||'').trim(),         // [10] foto
+    fotoUrl,                                         // [10] foto (URL Drive o enlace externo)
     String(d.whatsapp          ||'').trim(),         // [11] whatsapp (ya viene como wa.me/...)
     String(d.telegram          ||'').trim(),         // [12] telegram (ya viene como t.me/...)
     String(d.signal            ||'').trim(),         // [13] signal
@@ -237,6 +260,11 @@ function handleFormSubmit(ss, d) {
   // Número correlativo de postulación
   const counter = parseInt(PropertiesService.getScriptProperties().getProperty('postulacion_counter')||'0') + 1;
   PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(counter));
+
+  // Foto: si es base64 → subir a Drive; si es URL externa → usar tal cual
+  const fotoRaw  = String(d.foto||'').trim();
+  const confnameForFile = String(d.confname||d.nombre||'speaker').trim();
+  const fotoUrl  = fotoRaw.startsWith('data:') ? savePhotoToDrive(fotoRaw, counter, confnameForFile) : fotoRaw;
 
   // Asegurar fila de headers si el sheet está vacío
   if (spSheet.getLastRow() === 0) {

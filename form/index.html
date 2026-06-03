@@ -877,7 +877,9 @@ async function handleSubmit(e){
   };
 
   try{
-    await fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    const _res = await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    // Intentar leer respuesta (puede fallar si hay CORS estricto — no bloquea el envío)
+    try { const _json=await _res.json(); } catch(e) {}
     showSuccess();
   }catch(err){
     btn.disabled=false;txt.textContent=T[lang].submitBtn;showToast(T[lang].toastError);
