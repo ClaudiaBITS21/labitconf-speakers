@@ -149,56 +149,9 @@ function handleFormSubmit(ss, d) {
   const spSheet = ss.getSheetByName('Speakers');
   if (!spSheet) return respond({ ok:false, error:'No existe la pestaña "Speakers".' });
 
-  // Buscar por mail — si existe, fusionar en lugar de duplicar
   const mail = String(d.mail || '').trim().toLowerCase();
-  if (mail) {
-    const allData = spSheet.getDataRange().getValues();
-    for (let i = 1; i < allData.length; i++) {
-      if (String(allData[i][8]||'').trim().toLowerCase() === mail) {
-        // ── FUSIONAR con fila existente ──
-        const existing = allData[i];
 
-        // Temas existentes
-        let existingTemas = [];
-        const col24 = String(existing[24]||'').trim();
-        if (col24.startsWith('[')) {
-          try { existingTemas = JSON.parse(col24); } catch(e) { existingTemas = []; }
-        }
-
-        // Temas nuevos del form — agregar solo los que no existen (por título)
-        const existingTitles = existingTemas.map(t => String(t.titulo||'').trim().toLowerCase());
-        temasArr.forEach(t => {
-          const titulo = String(t.titulo||'').trim();
-          if (titulo && !existingTitles.includes(titulo.toLowerCase())) {
-            existingTemas.push(t);
-          }
-        });
-
-        // temas_estado: extender para nuevos temas
-        let temasEstadoArr = String(existing[25]||'').split(',').map(x=>x.trim()).filter(Boolean);
-        while (temasEstadoArr.length < existingTemas.length) temasEstadoArr.push('disponible');
-
-        // Fusionar campos simples: actualizar solo si estaba vacío
-        const merged = [...existing];
-        const newRow = row; // el row ya construido
-        [0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,27,28,29,30].forEach(col => {
-          if (!String(merged[col]||'').trim() && String(newRow[col]||'').trim()) {
-            merged[col] = newRow[col];
-          }
-        });
-        // Siempre actualizar temas (fusionados) y temas_estado
-        merged[24] = JSON.stringify(existingTemas);
-        merged[25] = temasEstadoArr.join(',');
-
-        // Actualizar la fila en el sheet (fila i+1 en Sheets es 1-based)
-        spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
-        PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
-        return respond({ ok:true, actualizado:true, msg:'Tus datos fueron actualizados. ¡Gracias!' });
-      }
-    }
-  }
-
-  // Temas → JSON array
+  // ── 1. Temas → JSON (definir ANTES de usarlo en el merge) ──
   const temasArr = Array.isArray(d.temas) ? d.temas.slice(0,4).filter(t=>(t.titulo||'').trim()) : [];
   const temasJson = JSON.stringify(temasArr.map(t => ({
     titulo:      String(t.titulo      ||'').trim(),
@@ -210,63 +163,92 @@ function handleFormSubmit(ss, d) {
     duracion:    String(t.duracion    ||'30').trim(),
     panel:       String(t.panel       ||'no').trim(),
   })));
-
-  // temas_estado: un 'disponible' por tema
   const temasEstado = Array(temasArr.length || 1).fill('disponible').join(',');
 
-  // Días del form → columnas oct29..nov1
-  const diasArr = String(d.dias||'').split(',').map(x=>x.trim());
-  const hasDia = d => diasArr.includes(d) ? 'si' : '';
-
-  const row = [
-    counter,                                         // [0]  postulacion_num
-    nombre,                                          // [1]  nombre
-    String(d.apellido          ||'').trim(),         // [2]  apellido
-    (String(d.confname||'').trim() || (nombre+' '+String(d.apellido||'').trim()).trim()), // [3] confname (default nombre+apellido)
-    'speaker',                                       // [4]  tipo (siempre speaker)
-    String(d.cargo             ||'').trim(),         // [5]  cargo
-    String(d.pais              ||'').trim(),         // [6]  pais
-    String(d.idioma            ||'es').trim(),       // [7]  idioma
-    mail,                                            // [8]  mail
-    String(d.website           ||'').trim(),         // [9]  website
-    fotoUrl,                                         // [10] foto (URL Drive o enlace externo)
-    String(d.whatsapp          ||'').trim(),         // [11] whatsapp (ya viene como wa.me/...)
-    String(d.telegram          ||'').trim(),         // [12] telegram (ya viene como t.me/...)
-    String(d.signal            ||'').trim(),         // [13] signal
-    String(d.linkedin          ||'').trim(),         // [14] linkedin
-    String(d.x                 ||'').trim().replace(/^@/,''), // [15] x
-    String(d.instagram         ||'').trim().replace(/^@/,''), // [16] instagram
-    String(d.github            ||'').trim(),         // [17] github
-    String(d.nostr             ||'').trim(),         // [18] nostr
-    String(d.empresa           ||'').trim(),         // [19] empresa
-    '',                                              // [20] notas — vacío
-    String(d.bio               ||'').trim(),         // [21] bio
-    String(d.eventos_anteriores||'').trim(),         // [22] eventos_anteriores
-    String(d.primera_vez       ||'').trim(),         // [23] primera_vez
-    String(d.disponible_podcast||'').trim(),         // [24] disponible_podcast
-    String(d.trae_empresa      ||'').trim(),         // [25] trae_empresa
-    String(d.dias              ||'').trim(),         // [26] dias_asiste CSV
-    String(d.disponible_desde  ||'').trim(),         // [27] disponible_desde
-    String(d.disponible_hasta  ||'').trim(),         // [28] disponible_hasta
-    temasJson,                                       // [29] temas JSON
-    temasEstado,                                     // [30] temas_estado
-    'disponible',                                    // [31] estado
-    hasDia('oct29'),                                 // [32]
-    hasDia('oct30'),                                 // [33]
-    hasDia('oct31'),                                 // [34]
-    hasDia('nov1'),                                  // [35]
-  ];
-
-  // Número correlativo de postulación
+  // ── 2. Número correlativo + foto (definir ANTES del row) ──
   const counter = parseInt(PropertiesService.getScriptProperties().getProperty('postulacion_counter')||'0') + 1;
   PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(counter));
 
-  // Foto: si es base64 → subir a Drive; si es URL externa → usar tal cual
-  const fotoRaw  = String(d.foto||'').trim();
+  const fotoRaw = String(d.foto||'').trim();
   const confnameForFile = String(d.confname||d.nombre||'speaker').trim();
-  const fotoUrl  = fotoRaw.startsWith('data:') ? savePhotoToDrive(fotoRaw, counter, confnameForFile) : fotoRaw;
+  const fotoUrl = fotoRaw.startsWith('data:') ? savePhotoToDrive(fotoRaw, counter, confnameForFile) : fotoRaw;
 
-  // Asegurar fila de headers si el sheet está vacío
+  // ── 3. Días ──
+  const diasArr = String(d.dias||'').split(',').map(x=>x.trim());
+  const hasDia = key => diasArr.includes(key) ? 'si' : '';
+
+  // ── 4. Row completo ──
+  const row = [
+    counter,                                                                              // [0]  postulacion_num
+    nombre,                                                                               // [1]  nombre
+    String(d.apellido          ||'').trim(),                                              // [2]  apellido
+    (String(d.confname||'').trim() || (nombre+' '+String(d.apellido||'').trim()).trim()), // [3]  confname
+    'speaker',                                                                            // [4]  tipo
+    String(d.cargo             ||'').trim(),                                              // [5]  cargo
+    String(d.pais              ||'').trim(),                                              // [6]  pais
+    String(d.idioma            ||'es').trim(),                                            // [7]  idioma
+    mail,                                                                                 // [8]  mail
+    String(d.website           ||'').trim(),                                              // [9]  website
+    fotoUrl,                                                                              // [10] foto
+    String(d.whatsapp          ||'').trim(),                                              // [11] whatsapp
+    String(d.telegram          ||'').trim(),                                              // [12] telegram
+    String(d.signal            ||'').trim(),                                              // [13] signal
+    String(d.linkedin          ||'').trim(),                                              // [14] linkedin
+    String(d.x                 ||'').trim().replace(/^@/,''),                             // [15] x
+    String(d.instagram         ||'').trim().replace(/^@/,''),                             // [16] instagram
+    String(d.github            ||'').trim(),                                              // [17] github
+    String(d.nostr             ||'').trim(),                                              // [18] nostr
+    String(d.empresa           ||'').trim(),                                              // [19] empresa
+    '',                                                                                   // [20] notas
+    String(d.bio               ||'').trim(),                                              // [21] bio
+    String(d.eventos_anteriores||'').trim(),                                              // [22] eventos_anteriores
+    String(d.primera_vez       ||'').trim(),                                              // [23] primera_vez
+    String(d.disponible_podcast||'').trim(),                                              // [24] disponible_podcast
+    String(d.trae_empresa      ||'').trim(),                                              // [25] trae_empresa
+    String(d.dias              ||'').trim(),                                              // [26] dias_asiste CSV
+    String(d.disponible_desde  ||'').trim(),                                              // [27] disponible_desde
+    String(d.disponible_hasta  ||'').trim(),                                              // [28] disponible_hasta
+    temasJson,                                                                            // [29] temas JSON
+    temasEstado,                                                                          // [30] temas_estado
+    'disponible',                                                                         // [31] estado
+    hasDia('oct29'),                                                                      // [32]
+    hasDia('oct30'),                                                                      // [33]
+    hasDia('oct31'),                                                                      // [34]
+    hasDia('nov1'),                                                                       // [35]
+  ];
+
+  // ── 5. Anti-duplicado por mail: fusionar si ya existe ──
+  if (mail) {
+    const allData = spSheet.getDataRange().getValues();
+    for (let i = 1; i < allData.length; i++) {
+      if (String(allData[i][8]||'').trim().toLowerCase() === mail) {
+        const existing = allData[i];
+        // Temas existentes
+        let existingTemas = [];
+        try { existingTemas = JSON.parse(String(existing[29]||'[]')); } catch(e) {}
+        // Agregar solo temas nuevos (por título)
+        const existingTitles = existingTemas.map(t => String(t.titulo||'').toLowerCase());
+        temasArr.forEach(t => {
+          const titulo = String(t.titulo||'').trim();
+          if (titulo && !existingTitles.includes(titulo.toLowerCase())) existingTemas.push(t);
+        });
+        let temasEstadoArr = String(existing[30]||'').split(',').map(x=>x.trim()).filter(Boolean);
+        while (temasEstadoArr.length < existingTemas.length) temasEstadoArr.push('disponible');
+        // Fusionar campos simples: solo si estaban vacíos
+        const merged = [...existing];
+        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28].forEach(col => {
+          if (!String(merged[col]||'').trim() && String(row[col]||'').trim()) merged[col] = row[col];
+        });
+        merged[29] = JSON.stringify(existingTemas);
+        merged[30] = temasEstadoArr.join(',');
+        spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
+        PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+        return respond({ ok:true, actualizado:true, msg:'Tus datos fueron actualizados. ¡Gracias!' });
+      }
+    }
+  }
+
+  // ── 6. Nuevo speaker ──
   if (spSheet.getLastRow() === 0) {
     spSheet.appendRow([
       'postulacion_num','nombre','apellido','confname','tipo','cargo','pais','idioma','mail',
@@ -277,7 +259,6 @@ function handleFormSubmit(ss, d) {
       'temas','temas_estado','estado','oct29','oct30','oct31','nov1'
     ]);
   }
-
   spSheet.appendRow(row);
   PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
