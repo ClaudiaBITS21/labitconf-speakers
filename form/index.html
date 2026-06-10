@@ -926,11 +926,20 @@ async function handleSubmit(e){
   };
 
   try{
-    const _res = await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
-    // Intentar leer respuesta (puede fallar si hay CORS estricto — no bloquea el envío)
-    try { const _json=await _res.json(); } catch(e) {}
-    showSuccess();
+    const res = await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    let json={};
+    try { json=await res.json(); } catch(e) {}
+    console.log('GAS response:', json);
+    if(json.ok){
+      showSuccess();
+    } else {
+      const errMsg = json.error || json.msg || 'Error desconocido';
+      btn.disabled=false;txt.textContent=T[lang].submitBtn;
+      showToast('Error: '+errMsg);
+      console.error('GAS error:', errMsg);
+    }
   }catch(err){
+    console.error('Fetch error:', err);
     btn.disabled=false;txt.textContent=T[lang].submitBtn;showToast(T[lang].toastError);
   }
 }
