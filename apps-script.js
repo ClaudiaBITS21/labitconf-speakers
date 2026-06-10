@@ -60,43 +60,40 @@ function savePhotoToDrive(base64DataUrl, counter, confname) {
     const ext      = mimeType.includes('png') ? 'png' : 'jpg';
     const safeName = String(confname||'speaker').replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
     const filename = String(counter).padStart(4,'0') + '-' + safeName + '.' + ext;
+    const token    = ScriptApp.getOAuthToken();
+    const bytes    = Utilities.base64Decode(b64Data);
 
-    const token = ScriptApp.getOAuthToken();
-    const bytes = Utilities.base64Decode(b64Data);
-    const blob  = Utilities.newBlob(bytes, mimeType, filename);
-
-    // Metadata del archivo
-    const metadata = JSON.stringify({ name: filename, parents: [PHOTO_FOLDER_ID] });
-    const boundary = '-------314159265358979323846';
-
-    // Multipart upload
-    const body =
-      '--' + boundary + '\r\n' +
-      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-      metadata + '\r\n' +
-      '--' + boundary + '\r\n' +
-      'Content-Type: ' + mimeType + '\r\n' +
-      'Content-Transfer-Encoding: base64\r\n\r\n' +
-      b64Data + '\r\n' +
-      '--' + boundary + '--';
-
-    const res = UrlFetchApp.fetch(
-      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
+    // 1. Subir contenido del archivo
+    const uploadRes = UrlFetchApp.fetch(
+      'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&fields=id',
       {
         method: 'POST',
-        contentType: 'multipart/related; boundary="' + boundary + '"',
-        payload: body,
+        contentType: mimeType,
+        payload: bytes,
+        headers: { Authorization: 'Bearer ' + token },
+        muteHttpExceptions: true
+      }
+    );
+    const uploadJson = JSON.parse(uploadRes.getContentText());
+    if (!uploadJson.id) { Logger.log('Upload error: ' + uploadRes.getContentText()); return ''; }
+    const fileId = uploadJson.id;
+
+    // 2. Actualizar nombre y mover a la carpeta
+    UrlFetchApp.fetch(
+      'https://www.googleapis.com/drive/v3/files/' + fileId +
+      '?addParents=' + PHOTO_FOLDER_ID + '&fields=id',
+      {
+        method: 'PATCH',
+        contentType: 'application/json',
+        payload: JSON.stringify({ name: filename }),
         headers: { Authorization: 'Bearer ' + token },
         muteHttpExceptions: true
       }
     );
 
-    const json = JSON.parse(res.getContentText());
-    if (!json.id) { Logger.log('Drive upload error: ' + res.getContentText()); return ''; }
-
-    // Hacer público
+    // 3. Hacer público
     UrlFetchApp.fetch(
-      'https://www.googleapis.com/drive/v3/files/' + json.id + '/permissions',
+      'https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions',
       {
         method: 'POST',
         contentType: 'application/json',
@@ -106,7 +103,7 @@ function savePhotoToDrive(base64DataUrl, counter, confname) {
       }
     );
 
-    return 'https://drive.google.com/thumbnail?id=' + json.id + '&sz=w400';
+    return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
   } catch(e) {
     Logger.log('Error saving photo: ' + e.message);
     return '';
