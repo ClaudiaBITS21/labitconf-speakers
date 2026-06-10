@@ -50,22 +50,63 @@
 const SHEET_ID   = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
 const PHOTO_FOLDER_ID = '14pa1CpZr2ao5yoqIGPiAfaaUrDR5RcL9';
 
-// Sube una foto (base64 data URL) a Drive y devuelve la URL de miniatura
+// Sube una foto (base64 data URL) a Drive via REST API y devuelve URL de miniatura
 function savePhotoToDrive(base64DataUrl, counter, confname) {
   try {
     const match = base64DataUrl.match(/^data:([^;]+);base64,(.+)$/);
     if (!match) return '';
-    const mimeType  = match[1];
-    const b64Data   = match[2];
-    const ext       = mimeType.includes('png') ? 'png' : 'jpg';
-    const safeName  = String(confname||'speaker').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\-_]/g,'_').slice(0,40);
-    const num       = String(counter).padStart(4,'0');
-    const filename  = `${num}-${safeName}.${ext}`;
-    const blob      = Utilities.newBlob(Utilities.base64Decode(b64Data), mimeType, filename);
-    const folder    = DriveApp.getFolderById(PHOTO_FOLDER_ID);
-    const file      = folder.createFile(blob);
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    return `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w400`;
+    const mimeType = match[1];
+    const b64Data  = match[2];
+    const ext      = mimeType.includes('png') ? 'png' : 'jpg';
+    const safeName = String(confname||'speaker').replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+    const filename = String(counter).padStart(4,'0') + '-' + safeName + '.' + ext;
+
+    const token = ScriptApp.getOAuthToken();
+    const bytes = Utilities.base64Decode(b64Data);
+    const blob  = Utilities.newBlob(bytes, mimeType, filename);
+
+    // Metadata del archivo
+    const metadata = JSON.stringify({ name: filename, parents: [PHOTO_FOLDER_ID] });
+    const boundary = '-------314159265358979323846';
+
+    // Multipart upload
+    const body =
+      '--' + boundary + '\r\n' +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+      metadata + '\r\n' +
+      '--' + boundary + '\r\n' +
+      'Content-Type: ' + mimeType + '\r\n' +
+      'Content-Transfer-Encoding: base64\r\n\r\n' +
+      b64Data + '\r\n' +
+      '--' + boundary + '--';
+
+    const res = UrlFetchApp.fetch(
+      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
+      {
+        method: 'POST',
+        contentType: 'multipart/related; boundary="' + boundary + '"',
+        payload: body,
+        headers: { Authorization: 'Bearer ' + token },
+        muteHttpExceptions: true
+      }
+    );
+
+    const json = JSON.parse(res.getContentText());
+    if (!json.id) { Logger.log('Drive upload error: ' + res.getContentText()); return ''; }
+
+    // Hacer público
+    UrlFetchApp.fetch(
+      'https://www.googleapis.com/drive/v3/files/' + json.id + '/permissions',
+      {
+        method: 'POST',
+        contentType: 'application/json',
+        payload: JSON.stringify({ role: 'reader', type: 'anyone' }),
+        headers: { Authorization: 'Bearer ' + token },
+        muteHttpExceptions: true
+      }
+    );
+
+    return 'https://drive.google.com/thumbnail?id=' + json.id + '&sz=w400';
   } catch(e) {
     Logger.log('Error saving photo: ' + e.message);
     return '';
@@ -266,18 +307,13 @@ function handleFormSubmit(ss, d) {
 
 // ── TEST DRIVE ──────────────────────────────────────────────────────
 function testDriveAccess() {
-  try {
-    const folder = DriveApp.getFolderById(PHOTO_FOLDER_ID);
-    Logger.log('✅ Carpeta encontrada: ' + folder.getName());
-    // Crear archivo de prueba
-    const blob = Utilities.newBlob('test', 'text/plain', 'test-access.txt');
-    const file = folder.createFile(blob);
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    Logger.log('✅ Archivo creado: ' + file.getId());
-    file.setTrashed(true); // borrar después del test
-    Logger.log('✅ Drive OK — permisos correctos');
-  } catch(e) {
-    Logger.log('❌ Error Drive: ' + e.message);
+  const fotoTest = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAARC' +
+    'AACAAQMBEQACEQEDEQH/xABIAAEAAAAAAAAAAAAAAAAAAAAHEAEAAAAAAAAAAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k=';
+  const url = savePhotoToDrive(fotoTest, 9999, 'test-drive');
+  if (url) {
+    Logger.log('✅ Foto subida OK: ' + url);
+  } else {
+    Logger.log('❌ savePhotoToDrive devolvió vacío — revisar logs anteriores');
   }
 }
 
