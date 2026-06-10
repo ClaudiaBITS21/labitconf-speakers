@@ -828,23 +828,22 @@ function setError(id,msg){const f=document.getElementById(id);if(!f)return;f.cla
 
 function validate(){
   clearErrors();const t=T[lang];let ok=true;
-  [['f-nombre','nombre'],['f-apellido','apellido'],['f-confname','confname'],['f-mail','mail']].forEach(([fid,iid])=>{
+  // Obligatorios mínimos: nombre, apellido, mail
+  [['f-nombre','nombre'],['f-apellido','apellido'],['f-mail','mail']].forEach(([fid,iid])=>{
     const el=document.getElementById(iid);if(!el?.value.trim()){setError(fid,t.errRequired);ok=false;}
   });
-  // País: validar select o custom
+  // País
   if(!getPaisValue()){setError('f-pais',t.errRequired);ok=false;}
+  // Mail válido
   const mailEl=document.getElementById('mail');
   if(mailEl?.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())){setError('f-mail',t.errMail);ok=false;}
-  if(!getChecked('idiomaGroup').length){setError('f-idioma',t.errIdioma);ok=false;}
-  // Al menos un contacto
-  const waNum=(document.getElementById('wa-num')?.value||'').trim();
-  const tgAlias=(document.getElementById('telegram')?.value||'').trim();
-  const sigAlias=(document.getElementById('signal')?.value||'').trim();
-  if(!waNum&&!tgAlias&&!sigAlias){setError('f-whatsapp',t.errContacto);setError('f-telegram',t.errContacto);ok=false;}
-  // Tema 1 obligatorio
+  // Tema 1: título obligatorio
   if(!document.getElementById('tema-titulo-1')?.value.trim()){setError('ft-1',t.errRequired);ok=false;}
-  if(!document.getElementById('ta-abstract-1')?.value.trim()){setError('fa-1',t.errRequired);ok=false;}
-  const bio=document.getElementById('bio');if(!bio?.value.trim()){setError('f-bio',t.errRequired);ok=false;}
+  if(!ok){
+    const first=document.querySelector('.field-error');
+    if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+    showToast(t.errRequired+' — revisá los campos en rojo');
+  }
   return ok;
 }
 
