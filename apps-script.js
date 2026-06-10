@@ -264,6 +264,23 @@ function handleFormSubmit(ss, d) {
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
 }
 
+// ── TEST DRIVE ──────────────────────────────────────────────────────
+function testDriveAccess() {
+  try {
+    const folder = DriveApp.getFolderById(PHOTO_FOLDER_ID);
+    Logger.log('✅ Carpeta encontrada: ' + folder.getName());
+    // Crear archivo de prueba
+    const blob = Utilities.newBlob('test', 'text/plain', 'test-access.txt');
+    const file = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    Logger.log('✅ Archivo creado: ' + file.getId());
+    file.setTrashed(true); // borrar después del test
+    Logger.log('✅ Drive OK — permisos correctos');
+  } catch(e) {
+    Logger.log('❌ Error Drive: ' + e.message);
+  }
+}
+
 // ── BACKUP DIARIO ───────────────────────────────────────────────────
 function backupPrincipal() {
   const ss  = SpreadsheetApp.openById(SHEET_ID);
