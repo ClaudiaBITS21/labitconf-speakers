@@ -431,6 +431,15 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div style="padding:8px 0 4px">
       <a href="https://app-labitconf.github.io/LABITCONF-speakers/form/" target="_blank" class="btn" style="display:inline-flex;align-items:center;gap:6px;color:var(--red);border-color:var(--red)">+ Inscripción de Speaker ↗</a>
     </div>
+    <!-- QUICK ADD -->
+    <div style="display:flex;align-items:center;gap:6px;padding:10px 0 6px;flex-wrap:wrap">
+      <input type="text" id="qaName" placeholder="Nombre del speaker…" onkeydown="if(event.key==='Enter')quickAddSpeaker()"
+        style="padding:6px 12px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:220px;flex-shrink:0">
+      <input type="text" id="qaApellido" placeholder="Apellido (opcional)" onkeydown="if(event.key==='Enter')quickAddSpeaker()"
+        style="padding:6px 12px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:180px;flex-shrink:0">
+      <button class="btn" onclick="quickAddSpeaker()" style="background:var(--red-dim);border-color:var(--red);color:var(--red);padding:6px 14px">+ Agregar</button>
+      <span style="font-size:12px;color:#555">↵ Enter para agregar rápido — expandí la fila para completar el resto</span>
+    </div>
     <div class="sp-filter-bar" style="gap:8px">
       <input type="text" id="spSearchInput" placeholder="🔍 Buscar…" oninput="spSearchVal=this.value;renderSpeakers()" style="padding:5px 10px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:200px;flex-shrink:0">
       <select id="spFltEstado" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterEstado=this.value;renderSpeakers()">
@@ -1635,7 +1644,8 @@ function renderSpeakers(){
             ${repartosDetail}
           </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
+          <button onclick="saveSpeakers();toast('✅ Guardado')" style="padding:5px 16px;background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">💾 Guardar cambios</button>
           <button class="del-row" onclick="delSpeaker(${ri})" style="font-size:13px;padding:4px 12px">✕ Eliminar</button>
         </div>
       </td>
@@ -1692,6 +1702,42 @@ function mergeManualSpeaker(ri,targetName){
   markDirty('principal'); markDirty('speakersManual');
   renderSpeakers(); renderPrincipal();
   toast('✅ Speaker relacionado');
+}
+
+function quickAddSpeaker(){
+  const nombre=(document.getElementById('qaName')?.value||'').trim();
+  if(!nombre){toast('⚠️ Escribí al menos el nombre',true);return;}
+  const apellido=(document.getElementById('qaApellido')?.value||'').trim();
+  const confname=(nombre+' '+apellido).trim();
+  pushHistory();
+  state.speakers.push({
+    postulacion_num:0, nombre, apellido, confname, tipo:'speaker',
+    cargo:'', pais:'', idioma:'es', mail:'', website:'', foto:'',
+    whatsapp:'', telegram:'', signal:'', linkedin:'',
+    x:'', instagram:'', github:'', nostr:'',
+    empresa:'', notas:'', bio:'', eventos_anteriores:'',
+    primera_vez:'', disponible_podcast:'', trae_empresa:'',
+    dias_asiste:'', disponible_desde:'', disponible_hasta:'',
+    tier:'', referido:'', _temas:[], temas_estado:'disponible', estado:'disponible',
+    oct29:'', oct30:'', oct31:'', nov1:'',
+    get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
+    get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
+    get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
+    get tagsArr(){return this._temas.map(t=>t.tags||'');},
+    get temas(){return this.temasArr.join(', ');},
+    get displayName(){return this.confname||this.nombre||'';},
+    get temasEstadoArr(){
+      if(this._temas.length>0&&this._temas[0].estado){return this._temas.map(t=>t.estado||'disponible');}
+      const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
+      const n=this.temasArr.length||1; while(arr.length<n)arr.push('disponible'); return arr;
+    }
+  });
+  document.getElementById('qaName').value='';
+  document.getElementById('qaApellido').value='';
+  markDirty('speakers');
+  saveSpeakers();
+  renderSpeakers();
+  toast('✅ '+confname+' agregado');
 }
 
 function addSpeaker(){
