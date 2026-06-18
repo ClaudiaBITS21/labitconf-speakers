@@ -338,10 +338,8 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
-    <button id="dayBtn1" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(1)" title="Opening Party">Oct 29</button>
-    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(2)" title="LABITCONF Day 1">Oct 30</button>
+    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(2)" title="LABITCONF Day 1">Oct 30</button>
     <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(3)" title="LABITCONF Day 2">Oct 31</button>
-    <button id="dayBtn4" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(4)" title="Experience Day">Nov 1</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
     <button class="btn" style="padding:3px 10px;font-size:15px" onclick="openCommandPalette()" title="Ctrl+K">🔍</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
@@ -423,10 +421,8 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       </select>
       <select id="spFltFecha" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterFecha=this.value;renderSpeakers()">
         <option value="">Fecha: Todas</option>
-        <option value="oct29">Oct 29</option>
         <option value="oct30">Oct 30</option>
         <option value="oct31">Oct 31</option>
-        <option value="nov1">Nov 1</option>
       </select>
       <select id="spFltStage" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterStage=this.value;renderSpeakers()">
         <option value="">Stage: Todos</option>
@@ -751,7 +747,7 @@ function calcStageAssignPct(stageIdx){
 }
 
 // ── AGENDA MODEL ──────────────────────────────────────────────────────
-const DAY_KEYS = ['D1','D2','D3','D4'];
+const DAY_KEYS = ['D2','D3'];
 
 function newAgendaRow(inicio='09:00',dur=30){
   return {tipo:'Charla',speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0};
@@ -1169,7 +1165,7 @@ function selectSpeakerWithTema(name,tema){
     if(sp){
       const tArr=sp.temasArr;
       const ti=tema?tArr.indexOf(tema):-1;
-      const dayLabel=['','oct29','oct30','oct31','nov1'][currentDay]||'';
+      const dayLabel={2:'oct30',3:'oct31'}[currentDay]||'';
       if(ti>=0&&sp._temas[ti]){
         sp._temas[ti].estado='confirmado';
         sp._temas[ti].stage=sk;
@@ -1499,7 +1495,7 @@ function renderSpeakers(){
   // Sort — incluye campos derivados _stage y _dia
   if(spSortField){
     const tierOrder={'1':1,'2':2,'3':3,'':99};
-    const DAY_ORDER={oct29:1,oct30:2,oct31:3,nov1:4,'':9};
+    const DAY_ORDER={oct30:1,oct31:2,'':9};
     list=[...list].sort((a,b)=>{
       if(spSortField==='tier'){const va=tierOrder[a.tier||'']||99,vb=tierOrder[b.tier||'']||99;return(va-vb)*spSortDir;}
       if(spSortField==='postulacion_num'){return((a.postulacion_num||0)-(b.postulacion_num||0))*spSortDir;}
@@ -1572,12 +1568,9 @@ function renderSpeakers(){
       const tmStage=tm.stage||'';
       const tmDay=tm.day||'';
       const stageName=tmStage?esc(stageNames[STAGE_KEYS.indexOf(tmStage)]||tmStage):'';
-      // Chips de día: oct29=gris, oct30/31=blanco, nov1=gris
       const DAY_CHIPS=[
-        {key:'oct29',label:'Oct 29',main:false},
         {key:'oct30',label:'Oct 30',main:true},
         {key:'oct31',label:'Oct 31',main:true},
-        {key:'nov1', label:'Nov 1', main:false},
       ];
       const dayChipsHtml=DAY_CHIPS.map(d=>`<span class="day-chip ${d.main?'main':'side'}${tmDay===d.key?' active':''}" onclick="updateTemaDay(${ri},${ti},'${d.key}')">${d.label}</span>`).join('');
       const repHtml=assigns.filter(a=>a.tema===t).map(a=>`<span style="font-size:11px;color:#f97316;margin-left:4px">📍${esc(stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk)} ${esc(a.inicio)}</span>`).join('');
@@ -1618,7 +1611,7 @@ function renderSpeakers(){
       <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
       <td style="min-width:140px">${temasResumen}</td>
       <td style="font-size:12px;white-space:nowrap">${(()=>{const stages=[...new Set((s._temas||[]).map(t=>t.stage).filter(Boolean))];return stages.length?stages.map(sk=>`<span style="color:var(--red);font-weight:700">${esc(stageNames[STAGE_KEYS.indexOf(sk)]||sk)}</span>`).join(' '):`<span style="color:#333">—</span>`;})()}</td>
-      <td style="font-size:11px;white-space:nowrap">${(()=>{const days=[...new Set((s._temas||[]).map(t=>t.day).filter(Boolean))];const DAY_COLOR={oct29:'#555',oct30:'#fff',oct31:'#fff',nov1:'#555'};const DAY_LABEL={oct29:'29',oct30:'30',oct31:'31',nov1:'N1'};return days.length?days.map(d=>`<span style="color:${DAY_COLOR[d]||'#888'};font-weight:700;margin-right:3px">${DAY_LABEL[d]||d}</span>`).join(''):`<span style="color:#333">—</span>`;})()}</td>
+      <td style="font-size:11px;white-space:nowrap">${(()=>{const days=[...new Set((s._temas||[]).map(t=>t.day).filter(d=>d==='oct30'||d==='oct31'))];const DAY_LABEL={oct30:'30',oct31:'31'};return days.length?days.map(d=>`<span style="color:#fff;font-weight:700;margin-right:3px">${DAY_LABEL[d]||d}</span>`).join(''):`<span style="color:#333">—</span>`;})()}</td>
       <td style="font-size:13px;text-align:center"><span title="${esc(s.pais||'')}">${paisInfo[0]} <span style="color:#555;font-size:11px">${paisInfo[1]}</span></span></td>
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
@@ -1743,7 +1736,7 @@ function quickAddSpeaker(){
     primera_vez:'', disponible_podcast:'', trae_empresa:'',
     dias_asiste:'', disponible_desde:'', disponible_hasta:'',
     tier:'', referido:'', _temas:[], temas_estado:'disponible', estado:'disponible',
-    oct29:'', oct30:'', oct31:'', nov1:'',
+    oct30:'', oct31:'',
     get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
     get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
     get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
@@ -1787,7 +1780,7 @@ function addSpeaker(){
     disponible_desde:'', disponible_hasta:'',
     referido:g('sp-referido'), tier:document.getElementById('sp-tier').value,
     _temas, temas_estado, estado:'disponible',
-    oct29:'', oct30:'', oct31:'', nov1:'', postulacion_num:0,
+    oct30:'', oct31:'', postulacion_num:0,
     get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
     get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
     get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
@@ -2132,9 +2125,9 @@ function redo() {
 }
 
 // ── MULTI-DÍA ─────────────────────────────────────────────────────────
-let currentDay = 1;
-const DAY_LABELS = {1:'Oct 29',2:'Oct 30',3:'Oct 31',4:'Nov 1'};
-const DAY_NAMES  = {1:'Opening Party',2:'LABITCONF Day 1',3:'LABITCONF Day 2',4:'Experience Day'};
+let currentDay = 2;
+const DAY_LABELS = {2:'Oct 30',3:'Oct 31'};
+const DAY_NAMES  = {2:'LABITCONF Day 1',3:'LABITCONF Day 2'};
 
 function switchDay(d) {
   if (d === currentDay) return;
@@ -2146,7 +2139,7 @@ function switchDay(d) {
 }
 function _doSwitchDay(d) {
   currentDay = d;
-  [1,2,3,4].forEach(n => {
+  [2,3].forEach(n => {
     const b = document.getElementById('dayBtn' + n);
     if (!b) return;
     if (n === d) { b.style.background='var(--red-dim)'; b.style.borderColor='var(--red)'; b.style.color='var(--red)'; }
@@ -2173,19 +2166,18 @@ function exportCSV() {
 // ── EXPORT ICAL ───────────────────────────────────────────────────────
 function exportICal() {
   const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//LABITCONF 2026//ES'];
-  const DAY_DATES=['20261029','20261030','20261031','20261101'];
+  const DAY_DATES={2:'20261030',3:'20261031'};
   STAGE_KEYS.forEach((sk,si)=>{
     const stageName=stageNames[si]||('Stage '+(si+1));
-    for(let d=1;d<=4;d++){
+    for(let d=2;d<=3;d++){
       getAgendaRows(sk,d).forEach(({row})=>{
         if(!row.speaker?.trim())return;
-        const dateStr=DAY_DATES[d-1]||'20261101';
         lines.push('BEGIN:VEVENT');
         lines.push('SUMMARY:'+row.speaker+(row.tema?' — '+row.tema:''));
         lines.push('LOCATION:'+stageName);
         lines.push('DESCRIPTION:'+(row.tipo||''));
-        lines.push('DTSTART:'+dateStr+'T'+(row.inicio||'09:00').replace(':','')+'00');
-        lines.push('DTEND:'+dateStr+'T'+(row.fin||'09:30').replace(':','')+'00');
+        lines.push('DTSTART:'+(DAY_DATES[d]||'20261030')+'T'+(row.inicio||'09:00').replace(':','')+'00');
+        lines.push('DTEND:'+(DAY_DATES[d]||'20261030')+'T'+(row.fin||'09:30').replace(':','')+'00');
         lines.push('END:VEVENT');
       });
     }
