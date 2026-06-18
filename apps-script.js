@@ -126,6 +126,7 @@ function doGet(e) {
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const validSheets = [
       'Principal','Principal_D1','Principal_D2','Principal_D3','Principal_D4',
+      'Stage_1','Stage_2','Stage_3','Stage_4','Stage_5','Stage_6','Stage_7','Stage_8','Stage_9',
       'Speakers','SpeakerManual','Ideas'
     ];
     if (!validSheets.includes(sheet)) return respond({ error:'Hoja no permitida: '+sheet }, 400);
@@ -133,6 +134,7 @@ function doGet(e) {
     if (!ws) {
       if (sheet === 'SpeakerManual') return respond({ ok:true, sheet, data:[['nombre','notas','fecha']], version:'0' });
       if (sheet.startsWith('Principal_D')) return respond({ ok:true, sheet, data:[], version:'0' });
+      if (sheet.startsWith('Stage_')) return respond({ ok:true, sheet, data:[], version:'0' });
       return respond({ error:'Hoja no encontrada: '+sheet }, 404);
     }
     const props = PropertiesService.getScriptProperties();
@@ -162,6 +164,7 @@ function doPost(e) {
 
     const validSheets = [
       'Principal','Principal_D1','Principal_D2','Principal_D3','Principal_D4',
+      'Stage_1','Stage_2','Stage_3','Stage_4','Stage_5','Stage_6','Stage_7','Stage_8','Stage_9',
       'Speakers','SpeakerManual','Ideas'
     ];
     if (!validSheets.includes(sheet)) return respond({ error:'Hoja no permitida: '+sheet }, 400);
@@ -169,6 +172,7 @@ function doPost(e) {
     let ws = ss.getSheetByName(sheet);
     if (!ws) {
       if (sheet === 'SpeakerManual') { ws = ss.insertSheet(sheet); ws.appendRow(['nombre','notas','fecha']); }
+      else if (sheet.startsWith('Stage_')) { ws = ss.insertSheet(sheet); ws.appendRow(['tipo','speaker','tema','dur','inicio','fin','durExt']); }
       else if (sheet.startsWith('Principal_D')) {
         ws = ss.insertSheet(sheet);
         const src = ss.getSheetByName('Principal');

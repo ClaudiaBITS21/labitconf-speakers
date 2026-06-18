@@ -359,66 +359,32 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 <div class="tab-content active" id="tab-principal">
   <div class="config-bar">
     <span class="config-label">Apertura</span>
-    <input type="text" class="time-input green" id="horaApertura" value="09:00" placeholder="HH:MM" oninput="recalcAllTimes()">
+    <input type="text" class="time-input green" id="horaApertura" value="09:00" placeholder="HH:MM" oninput="recalcAgendaTimes(activeStage,currentDay)">
     <span class="config-label">Cierre</span>
     <input type="text" class="time-input red" id="horaCierre" value="20:00" placeholder="HH:MM">
     <span style="color:var(--dim);font-size:15px" id="totalMin">—</span>
     <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;">
-      <button class="btn" onclick="addPrincipalRow()">+ Fila</button>
-      <button class="btn save" id="saveBtnPrincipal" onclick="savePrincipal()">💾 Guardar</button>
-      <button class="btn" onclick="loadPrincipal()">🔄 Actualizar</button>
+      <button class="btn" onclick="addAgendaRow()">+ Bloque</button>
+      <button class="btn save" id="saveBtnPrincipal" onclick="saveAgenda(activeStage)">💾 Guardar</button>
+      <button class="btn" onclick="loadAgenda().then(()=>renderAgenda())">🔄 Actualizar</button>
       <button class="btn" onclick="exportICal()">📅 iCal</button>
     </div>
   </div>
-  <!-- Agenda filter bar -->
-  <div style="padding:6px 20px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <button class="btn" style="padding:3px 10px;font-size:15px" onclick="toggleAgendaFilters()">🔍 Filtros</button>
-  </div>
-  <div id="agendaFilterBar" style="display:none;padding:8px 20px;background:var(--bg2);border-bottom:1px solid var(--border);align-items:center;gap:10px;flex-wrap:wrap;">
-    <label style="font-size:15px;color:#ffffff;font-weight:700">Tipo:</label>
-    <select id="afTipo" class="form-select" style="width:120px;padding:4px 8px;font-size:15px" onchange="applyAgendaFilters()">
-      <option value="">Todos</option>
-    </select>
-    <label style="font-size:15px;color:#ffffff;font-weight:700">Texto:</label>
-    <input id="afQ" type="text" class="form-input" style="width:180px;padding:4px 8px;font-size:15px" placeholder="Buscar tema, speaker…" oninput="applyAgendaFilters()">
-    <button class="btn" style="padding:3px 10px;font-size:15px" onclick="clearAgendaFilters()">✕ Limpiar</button>
-  </div>
-  <!-- Coverage semaphore (9 stage pills) -->
+  <!-- Stage selector (coverage pills) -->
   <div id="stageSemaphoreWrap" style="display:flex;gap:6px;flex-wrap:wrap;padding:8px 20px;background:var(--bg2);border-bottom:1px solid var(--border);align-items:center;">
-    <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:4px">Cobertura:</span>
-    <div id="stageSemaphoreRow" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-  </div>
-  <div class="stage-progress-wrap">
-    <div class="stage-progress-row" id="stageProgressRow"></div>
+    <span style="font-size:13px;color:#ffffff;font-weight:700;margin-right:4px;white-space:nowrap">Stage:</span>
+    <div id="stageSemaphoreRow" style="display:flex;gap:5px;flex-wrap:wrap;flex:1;"></div>
+    <span style="font-size:11px;color:var(--dim);white-space:nowrap">Shift+clic = comparar</span>
   </div>
   <!-- Heatmap -->
-  <div style="padding:6px 20px 6px;background:var(--bg2);border-bottom:1px solid var(--border);">
+  <div style="padding:5px 20px;background:var(--bg2);border-bottom:1px solid var(--border);">
     <div style="display:flex;align-items:center;gap:8px;">
-      <span style="font-size:16px;color:#ffffff;font-weight:700;white-space:nowrap">Ocupación horaria:</span>
+      <span style="font-size:12px;color:#fff;font-weight:700;white-space:nowrap">Ocupación:</span>
       <div id="heatmapRow" style="display:flex;gap:2px;flex:1;"></div>
     </div>
   </div>
-  <div class="table-wrap" id="principalTableWrap">
-    <table id="principalTable">
-      <thead>
-        <!-- Row 1: stage name inputs + fixed col headers -->
-        <tr id="headerRow1">
-          <th class="col-stk" style="left:0;width:40px;z-index:12"></th>
-          <th class="col-stk col-stk-sep" style="left:40px;width:88px;z-index:12">
-            <input class="stage-inp" id="custom-tipo" placeholder="+ Tipo" style="color:#ffffff;font-size:14px" onkeydown="addCustomTipo(event,this)">
-          </th>
-          <!-- Stage name headers injected by JS -->
-        </tr>
-        <!-- Row 2: sub-column headers -->
-        <tr id="headerRow2">
-          <th class="col-stk sub-h" style="left:0;width:40px;z-index:12">Acc.</th>
-          <th class="col-stk col-stk-sep sub-h" style="left:40px;width:88px;z-index:12">Tipo</th>
-          <!-- Sub-headers injected by JS -->
-        </tr>
-      </thead>
-      <tbody id="principalTbody"></tbody>
-    </table>
-    <button class="add-row-btn" onclick="addPrincipalRow()">+ Agregar fila</button>
+  <!-- Agenda tables (one or two stages side by side) -->
+  <div id="agendaTablesWrap" style="display:flex;gap:0;overflow-x:auto;align-items:flex-start;">
   </div>
 </div>
 
@@ -589,7 +555,10 @@ const PAIS_INFO={'Argentina':['🇦🇷','ARG'],'Bolivia':['🇧🇴','BOL'],'Br
 function getPaisInfo(p){return PAIS_INFO[p]||['🌍',p?p.slice(0,3).toUpperCase():'???'];};
 
 // ── STATE ─────────────────────────────────────────────────────────────
-let state = { principal:[], speakers:[], speakersManual:[], ideas:[] };
+const _emptyAgenda = () => { const a={}; STAGE_KEYS.forEach(sk=>a[sk]=[]); return a; };
+let state = { agenda: _emptyAgenda(), principal:[], speakers:[], speakersManual:[], ideas:[] };
+let activeStage = 's1';
+let compareStage = null;
 let stageNames = JSON.parse(localStorage.getItem('labitconf_stages') || 'null') ||
   ['Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6','Stage 7','Stage 8','Stage 9'];
 let spFilterVal = 'all';
@@ -726,7 +695,7 @@ function buildTableHeaders(){
     const assignPct=calcStageAssignPct(i);
     let borderClass='';
     if(assignPct>=90)borderClass=' stage-h-full';
-    else if(assignPct<30&&state.principal.length>0)borderClass=' stage-h-low';
+    else if(assignPct<30&&getAgendaRows(STAGE_KEYS[i],currentDay).length>0)borderClass=' stage-h-low';
     const warnIcon=conflicts?'⚠️ ':'';
 
     // Row 1: stage name spanning 5 cols
@@ -758,19 +727,16 @@ function buildTableHeaders(){
 
 function detectConflictsForStage(stageIdx){
   const sk=STAGE_KEYS[stageIdx];
-  for(let i=0;i<state.principal.length;i++){
-    const row=state.principal[i];
-    const sp=(row.stages[sk]?.speaker||'').trim();
-    if(!sp)continue;
-    // Same row conflict with other stages
-    for(let j=0;j<STAGE_KEYS.length;j++){
-      if(j===stageIdx)continue;
-      if((state.principal[i].stages[STAGE_KEYS[j]]?.speaker||'').trim()===sp)return true;
-    }
-    // Consecutive row conflict
-    if(i+1<state.principal.length){
-      for(let j=0;j<STAGE_KEYS.length;j++){
-        if((state.principal[i+1].stages[STAGE_KEYS[j]]?.speaker||'').trim()===sp)return true;
+  const rows=getAgendaRows(sk,currentDay);
+  for(const {row} of rows){
+    const sp=(row.speaker||'').trim(); if(!sp)continue;
+    const ini=timeToMin(row.inicio), fin=timeToMin(row.fin);
+    for(const sk2 of STAGE_KEYS){
+      if(sk2===sk)continue;
+      for(const {row:r2} of getAgendaRows(sk2,currentDay)){
+        if((r2.speaker||'').trim()!==sp)continue;
+        const ini2=timeToMin(r2.inicio), fin2=timeToMin(r2.fin);
+        if(ini<fin2&&fin>ini2)return true;
       }
     }
   }
@@ -778,148 +744,212 @@ function detectConflictsForStage(stageIdx){
 }
 
 function calcStageAssignPct(stageIdx){
-  if(!state.principal.length)return 0;
   const sk=STAGE_KEYS[stageIdx];
-  const assigned=state.principal.filter(r=>(r.stages[sk]?.speaker||'').trim()).length;
-  return Math.round(assigned/state.principal.length*100);
+  const rows=getAgendaRows(sk,currentDay);
+  if(!rows.length)return 0;
+  return Math.round(rows.filter(r=>r.row.speaker?.trim()).length/rows.length*100);
 }
 
-// ── NEW ROW MODEL ─────────────────────────────────────────────────────
-function newStageData(inicio='09:00',dur=30){
-  return {speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0};
-}
-function newRow(inicio='09:00'){
-  const stages={};
-  STAGE_KEYS.forEach(sk=>stages[sk]=newStageData(inicio));
-  return {tipo:'Charla',stages};
+// ── AGENDA MODEL ──────────────────────────────────────────────────────
+const DAY_KEYS = ['D1','D2','D3','D4'];
+
+function newAgendaRow(inicio='09:00',dur=30){
+  return {tipo:'Charla',speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0};
 }
 
-// ── RENDER PRINCIPAL ──────────────────────────────────────────────────
-function renderPrincipal(){
-  buildTableHeaders();
-  const tbody=document.getElementById('principalTbody');
-  tbody.innerHTML='';
-  recalcAllTimes();
-  let rows=state.principal;
-  if(agendaFilters.tipo) rows=rows.filter(r=>r.tipo===agendaFilters.tipo);
-  if(agendaFilters.q){const q=agendaFilters.q; rows=rows.filter(r=>JSON.stringify(r).toLowerCase().includes(q));}
-  rows.forEach((row,i)=>{
-    const realIdx=state.principal.indexOf(row);
-    tbody.appendChild(makePrincipalRow(row,realIdx));
+// Returns [{row, realIdx}] for the given stage and day number (1-4)
+function getAgendaRows(sk, dayNum){
+  const all = state.agenda[sk]||[];
+  const result=[];
+  let inDay=false;
+  all.forEach((row,realIdx)=>{
+    if(row.tipo==='DIA'){ inDay=(row.dia==='D'+dayNum); return; }
+    if(inDay) result.push({row,realIdx});
   });
-  buildStageProgressBars();
-  buildHeatmap();
-  buildStageSemaphore();
-  // Populate tipo filter dropdown
-  const afTipo=document.getElementById('afTipo');
-  if(afTipo){
-    const cur=afTipo.value;
-    afTipo.innerHTML='<option value="">Todos</option>'+TIPOS.map(t=>`<option value="${t}"${t===cur?' selected':''}>${t}</option>`).join('');
-  }
+  return result;
 }
 
-function makePrincipalRow(row,idx){
+// Ensure all 4 day sections exist in a stage array
+function ensureDaySections(sk){
+  DAY_KEYS.forEach(dk=>{
+    if(!(state.agenda[sk]||[]).some(r=>r.tipo==='DIA'&&r.dia===dk))
+      state.agenda[sk].push({tipo:'DIA',dia:dk});
+  });
+}
+
+// Recalc inicio/fin for all rows of sk/dayNum from scratch
+function recalcAgendaTimes(sk, dayNum){
+  const ap=timeToMin(document.getElementById('horaApertura')?.value||'09:00');
+  const all=state.agenda[sk]||[];
+  let cur=ap, inDay=false;
+  all.forEach((row,i)=>{
+    if(row.tipo==='DIA'){ inDay=(row.dia==='D'+dayNum); if(inDay)cur=ap; return; }
+    if(!inDay)return;
+    row.inicio=minToTime(cur);
+    cur+=row.dur||30;
+    row.fin=minToTime(cur);
+    const iniEl=document.getElementById('ini-'+i);
+    const finEl=document.getElementById('fin-'+i);
+    if(iniEl)iniEl.textContent=row.inicio;
+    if(finEl)finEl.textContent=row.fin;
+  });
+  updateGlobalProgress();
+}
+
+// Compat shim: keep newStageData/newRow for any remaining refs
+function newStageData(inicio='09:00',dur=30){ return {speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0}; }
+function newRow(inicio='09:00'){ const stages={}; STAGE_KEYS.forEach(sk=>stages[sk]=newStageData(inicio)); return {tipo:'Charla',stages}; }
+
+// ── RENDER AGENDA ─────────────────────────────────────────────────────
+function renderPrincipal(){ renderAgenda(); } // compat alias
+
+function renderAgenda(){
+  buildStageSemaphore();
+  buildHeatmap();
+  updateGlobalProgress();
+
+  const wrap=document.getElementById('agendaTablesWrap');
+  wrap.innerHTML='';
+
+  const stagesToShow=[activeStage];
+  if(compareStage&&compareStage!==activeStage) stagesToShow.push(compareStage);
+
+  stagesToShow.forEach(sk=>{
+    const si=STAGE_KEYS.indexOf(sk);
+    const color=STAGE_COLORS[si];
+    const name=stageNames[si]||('Stage '+(si+1));
+    const rows=getAgendaRows(sk,currentDay);
+
+    const div=document.createElement('div');
+    div.style.cssText='flex:1;min-width:340px;border-right:1px solid var(--border);';
+
+    // Stage header
+    const hdr=document.createElement('div');
+    hdr.style.cssText=`padding:7px 14px;background:#111;border-bottom:2px solid ${color};display:flex;align-items:center;gap:10px;`;
+    hdr.innerHTML=`<span style="font-size:15px;font-weight:800;color:${color}">${esc(name)}</span>
+      <span style="font-size:13px;color:#fff;font-weight:700">${DAY_LABELS[currentDay]||''}</span>
+      <span style="font-size:12px;color:var(--dim)">${rows.length} bloques</span>
+      <input class="stage-inp" id="sname-${si}" value="${esc(name)}" oninput="saveStageNames()" style="font-size:13px;color:${color};margin-left:auto;width:130px" title="Editar nombre">`;
+    div.appendChild(hdr);
+
+    // Table
+    const table=document.createElement('table');
+    table.style.cssText='width:100%;border-collapse:collapse;';
+    const thead=document.createElement('thead');
+    thead.innerHTML=`<tr>
+      <th style="width:40px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Acc</th>
+      <th style="width:80px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Tipo</th>
+      <th style="min-width:120px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Speaker</th>
+      <th style="min-width:140px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Tema</th>
+      <th style="width:58px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Dur</th>
+      <th style="width:50px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Inicio</th>
+      <th style="width:50px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Fin</th>
+    </tr>`;
+    table.appendChild(thead);
+    const tbody=document.createElement('tbody');
+    tbody.id='agendaTbody-'+sk;
+    if(!rows.length){
+      tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--dim);font-size:14px">Sin bloques para este día.</td></tr>`;
+    } else {
+      rows.forEach(({row,realIdx})=>tbody.appendChild(makeAgendaRow(row,realIdx,sk)));
+    }
+    table.appendChild(tbody);
+    div.appendChild(table);
+
+    const addBtn=document.createElement('button');
+    addBtn.className='add-row-btn';
+    addBtn.onclick=()=>addAgendaRow(sk);
+    addBtn.textContent='+ Agregar bloque';
+    div.appendChild(addBtn);
+
+    wrap.appendChild(div);
+  });
+}
+
+function makeAgendaRow(row,realIdx,sk){
   const tr=document.createElement('tr');
-  tr.dataset.idx=idx;
+  tr.dataset.idx=realIdx;
   const tipo=row.tipo||'Charla';
   const tc=TIPO_COLORS[tipo]||'#6366f1';
-  const tipoBg=tc+'22';
+  const allRows=getAgendaRows(sk,currentDay);
+  const posInDay=allRows.findIndex(r=>r.realIdx===realIdx);
+  const isFirst=posInDay===0, isLast=posInDay===allRows.length-1;
 
-  // Actions cell
+  // Actions
   const tdAct=document.createElement('td');
-  tdAct.className='row-actions col-stk';
-  tdAct.style.left='0';
+  tdAct.className='row-actions';
+  tdAct.style.width='40px';
   tdAct.innerHTML=`<div class="row-act-wrap">
     <div class="row-act-wrap2">
-      <button class="mv-row" onclick="movePrincipalRow(${idx},-1)" ${idx===0?'disabled':''} title="Subir">▲</button>
-      <button class="mv-row" onclick="movePrincipalRow(${idx},1)" ${idx===state.principal.length-1?'disabled':''} title="Bajar">▼</button>
+      <button class="mv-row" onclick="moveAgendaRow('${sk}',${realIdx},-1)" ${isFirst?'disabled':''} title="Subir">▲</button>
+      <button class="mv-row" onclick="moveAgendaRow('${sk}',${realIdx},1)" ${isLast?'disabled':''} title="Bajar">▼</button>
     </div>
     <div class="row-act-wrap2">
-      <button class="del-row" onclick="delPrincipalRow(${idx})" title="Eliminar">✕</button>
-      <button class="ins-row" onclick="insertPrincipalRow(${idx})" title="Insertar abajo">+</button>
+      <button class="del-row" onclick="delAgendaRow('${sk}',${realIdx})" title="Eliminar">✕</button>
+      <button class="ins-row" onclick="insertAgendaRow('${sk}',${realIdx})" title="Insertar abajo">+</button>
     </div>
   </div>`;
   tr.appendChild(tdAct);
 
-  // Tipo cell
+  // Tipo
   const tdTipo=document.createElement('td');
-  tdTipo.className='col-stk col-stk-sep tipo-td';
-  tdTipo.style.left='40px';
-  tdTipo.style.background=tipoBg;
+  tdTipo.style.cssText=`background:${tc}22;padding:0;`;
   const tipoOpts=TIPOS.map(t=>`<option value="${t}"${t===tipo?' selected':''}>${t}</option>`).join('');
-  tdTipo.innerHTML=`<select class="cell-sel" style="color:${tc};font-weight:700;font-size:14px" onchange="updateRowTipo(${idx},this.value)">${tipoOpts}</select>`;
+  tdTipo.innerHTML=`<select class="cell-sel" style="color:${tc};font-weight:700;font-size:13px;width:100%;padding:4px 3px" onchange="updateAgendaField(${realIdx},'${sk}','tipo',this.value)">${tipoOpts}</select>`;
   tr.appendChild(tdTipo);
 
-  // Stage cells (5 sub-cols each)
-  STAGE_KEYS.forEach((sk,si)=>{
-    const sd=row.stages[sk]||newStageData();
-    const conflictClass=getConflictClass(idx,sk);
+  // Speaker
+  const conflictClass=getConflictClass(realIdx,sk);
+  const tdSp=document.createElement('td');
+  tdSp.className='sc-speaker'+(conflictClass?' '+conflictClass:'');
+  tdSp.style.padding='0';
+  tdSp.innerHTML=renderSpCell(realIdx,sk,row.speaker||'');
+  tr.appendChild(tdSp);
 
-    // Speaker
-    const tdSp=document.createElement('td');
-    tdSp.className='sc-speaker'+(si===0?' stage-group-sep':'');
-    tdSp.style.padding='0';
-    if(conflictClass)tdSp.classList.add(conflictClass);
-    tdSp.innerHTML=renderSpCell(idx,sk,sd.speaker);
-    tr.appendChild(tdSp);
+  // Tema
+  const tdTema=document.createElement('td');
+  tdTema.style.padding='0';
+  tdTema.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','tema',this.value)" placeholder="Tema…">${esc(row.tema||'')}</textarea>`;
+  tr.appendChild(tdTema);
 
-    // Tema
-    const tdTema=document.createElement('td');
-    tdTema.className='sc-tema';
-    tdTema.style.padding='0';
-    const tema=esc(sd.tema||'');
-    tdTema.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateStageField(${idx},'${sk}','tema',this.value);markDirty('principal')" placeholder="Tema…">${tema}</textarea>`;
-    tr.appendChild(tdTema);
+  // Dur
+  const tdDur=document.createElement('td');
+  tdDur.className='sc-dur';
+  const dur=row.dur||30;
+  const durC=durColor(dur);
+  const durOpts=DUR_OPTIONS.map(d=>`<option value="${d}"${d===dur?' selected':''} style="color:${DUR_COLORS[d]||'#fff'}">${minToTime(d)}</option>`).join('');
+  const customOpt=!DUR_OPTIONS.includes(dur)&&dur>0?`<option value="${dur}" selected style="color:#fff">${minToTime(dur)}</option>`:'';
+  tdDur.innerHTML=`<select class="dur-sel" style="color:${durC}" onchange="onAgendaDurChange(${realIdx},'${sk}',this)">${durOpts}${customOpt}<option value="__custom__" style="color:#fff">…</option></select>`;
+  tr.appendChild(tdDur);
 
-    // Dur (dropdown + ext)
-    const tdDur=document.createElement('td');
-    tdDur.className='sc-dur';
-    const dur=sd.dur||30;
-    const durC=durColor(dur);
-    const extVal=sd.durExt||0;
-    const extClass=extVal>0?' dur-ext-active':'';
-    const durOpts2=DUR_OPTIONS.map(d=>`<option value="${d}"${d===dur?' selected':''} style="color:${DUR_COLORS[d]||'#fff'}">${minToTime(d)}</option>`).join('');
-    const customOpt=!DUR_OPTIONS.includes(dur)&&dur>0?`<option value="${dur}" selected style="color:#fff">${minToTime(dur)}</option>`:'';
-    tdDur.innerHTML=`<div class="${extClass}">
-      <select class="dur-sel" style="color:${durC}" onchange="onDurChange(${idx},'${sk}',this)">${durOpts2}${customOpt}<option value="__custom__" style="color:#fff">…</option></select>
-      <input class="dur-ext-inp" type="text" value="${extVal>0?minToTime(extVal):''}" placeholder="+ext" title="Tiempo extendido (no modifica fin oficial)" onchange="updateStageField(${idx},'${sk}','durExt',parseDur(this.value)||0);markDirty('principal')">
-    </div>`;
-    tr.appendChild(tdDur);
+  // Inicio
+  const tdIni=document.createElement('td');
+  tdIni.className='sc-inicio';
+  tdIni.innerHTML=`<div class="time-start" id="ini-${realIdx}" style="padding:4px 5px;text-align:center">${esc(row.inicio||'')}</div>`;
+  tr.appendChild(tdIni);
 
-    // Inicio
-    const tdIni=document.createElement('td');
-    tdIni.className='sc-inicio';
-    const extMark=extVal>0?`<span class="time-ext-mark">'</span>`:'';
-    tdIni.innerHTML=`<div style="padding:4px 5px;text-align:center" class="time-start" id="ini-${idx}-${sk}">${esc(sd.inicio||'')}${extMark}</div>`;
-    tr.appendChild(tdIni);
-
-    // Fin
-    const tdFin=document.createElement('td');
-    tdFin.className='sc-fin';
-    tdFin.innerHTML=`<div style="padding:4px 5px;text-align:center" class="time-end" id="fin-${idx}-${sk}">${esc(sd.fin||'')}</div>`;
-    tr.appendChild(tdFin);
-  });
+  // Fin
+  const tdFin=document.createElement('td');
+  tdFin.className='sc-fin';
+  tdFin.innerHTML=`<div class="time-end" id="fin-${realIdx}" style="padding:4px 5px;text-align:center">${esc(row.fin||'')}</div>`;
+  tr.appendChild(tdFin);
 
   return tr;
 }
 
-function getConflictClass(idx,sk){
-  const sp=(state.principal[idx]?.stages[sk]?.speaker||'').trim();
-  if(!sp)return '';
-  // Same slot: speaker in 2+ stages in same row
+// Detect time-overlap conflict for a speaker across all stages
+function getConflictClass(realIdx,sk){
+  const row=state.agenda[sk]?.[realIdx];
+  if(!row||!row.speaker?.trim())return '';
+  const name=row.speaker.trim();
+  const ini=timeToMin(row.inicio), fin=timeToMin(row.fin);
   for(const sk2 of STAGE_KEYS){
     if(sk2===sk)continue;
-    if((state.principal[idx]?.stages[sk2]?.speaker||'').trim()===sp)return 'sp-conflict-same';
-  }
-  // Consecutive: speaker in prev or next row
-  if(idx>0){
-    for(const sk2 of STAGE_KEYS){
-      if((state.principal[idx-1]?.stages[sk2]?.speaker||'').trim()===sp)return 'sp-conflict-consec';
-    }
-  }
-  if(idx<state.principal.length-1){
-    for(const sk2 of STAGE_KEYS){
-      if((state.principal[idx+1]?.stages[sk2]?.speaker||'').trim()===sp)return 'sp-conflict-consec';
+    const rows2=getAgendaRows(sk2,currentDay);
+    for(const {row:r2} of rows2){
+      if((r2.speaker||'').trim()!==name)continue;
+      const ini2=timeToMin(r2.inicio), fin2=timeToMin(r2.fin);
+      if(ini<fin2&&fin>ini2) return 'sp-conflict-same';
     }
   }
   return '';
@@ -934,23 +964,24 @@ function renderSpCell(idx,sk,selected){
   return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-empty">—</div></div></div>`;
 }
 
-function clearSpeakerCell(idx,sk,e){
+function clearSpeakerCell(realIdx,sk,e){
   e.stopPropagation();
-  if(!state.principal[idx])return;
-  if(!state.principal[idx].stages[sk])return;
+  const row=state.agenda[sk]?.[realIdx];
+  if(!row||row.tipo==='DIA')return;
   pushHistory();
-  state.principal[idx].stages[sk].speaker='';
-  state.principal[idx].stages[sk].tema='';
+  row.speaker='';
+  row.tema='';
   markDirty('principal');
-  renderPrincipal();
+  renderAgenda();
 }
 
 function getSpeakerAssignments(name){
   const res=[];
-  state.principal.forEach((row,rowIdx)=>{
-    STAGE_KEYS.forEach(sk=>{
-      if((row.stages[sk]?.speaker||'').trim()===name.trim())
-        res.push({rowIdx,sk,inicio:row.stages[sk].inicio||'',tema:row.stages[sk].tema||''});
+  STAGE_KEYS.forEach(sk=>{
+    (state.agenda[sk]||[]).forEach((row,realIdx)=>{
+      if(row.tipo==='DIA')return;
+      if((row.speaker||'').trim()===name.trim())
+        res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||''});
     });
   });
   return res;
@@ -1037,7 +1068,7 @@ function populateSpDrop(){
     // Verificar si el speaker ya está en la misma fila (mismo horario, otro stage)
     const blockedRow=_spDropCtx.idx!==null&&STAGE_KEYS.some(sk2=>{
       if(sk2===_spDropCtx.sk)return false;
-      return(state.principal[_spDropCtx.idx]?.stages[sk2]?.speaker||'').trim()===s.nombre.trim();
+      return(state.agenda[sk2]?.[_spDropCtx.idx]?.speaker||'').trim()===s.nombre.trim();
     });
 
     if(temasArr.length===0){
@@ -1101,12 +1132,12 @@ function populateSpDrop(){
 }
 
 function selectSpeaker(name){
-  // Si se deselecciona (vacío), limpiar stage/day del speaker anterior
   if(!name){
     const {idx,sk}=_spDropCtx;
     if(idx!==null){
-      const prevName=(state.principal[idx]?.stages[sk]?.speaker||'').trim();
-      const prevTema=(state.principal[idx]?.stages[sk]?.tema||'').trim();
+      const agRow=state.agenda[sk]?.[idx];
+      const prevName=(agRow?.speaker||'').trim();
+      const prevTema=(agRow?.tema||'').trim();
       if(prevName){
         const sp=state.speakers.find(s=>s.nombre===prevName);
         if(sp&&prevTema){
@@ -1161,14 +1192,13 @@ function selectSpeakerWithTema(name,tema){
   }
 
   // Update cell in DOM without full re-render
-  const row=document.querySelector(`tr[data-idx="${idx}"]`);
-  if(row){
-    const cells=row.querySelectorAll('.sc-speaker');
-    const si=STAGE_KEYS.indexOf(sk);
-    if(cells[si]){
-      cells[si].innerHTML=renderSpCell(idx,sk,name);
+  const tr=document.querySelector(`tr[data-idx="${idx}"]`);
+  if(tr){
+    const cell=tr.querySelector('.sc-speaker');
+    if(cell){
+      cell.innerHTML=renderSpCell(idx,sk,name);
       const conflictClass=getConflictClass(idx,sk);
-      cells[si].className='sc-speaker'+(si===0?' stage-group-sep':'')+(conflictClass?' '+conflictClass:'');
+      cell.className='sc-speaker'+(conflictClass?' '+conflictClass:'');
     }
   }
   closeSpDrop();
@@ -1189,152 +1219,116 @@ async function selectSpeakerManual(name){
 }
 
 // ── UPDATE HELPERS ────────────────────────────────────────────────────
-function updateStageField(idx,sk,field,val){
-  if(!state.principal[idx])return;
-  if(!state.principal[idx].stages[sk])state.principal[idx].stages[sk]=newStageData();
+function updateAgendaField(realIdx,sk,field,val){
+  const row=state.agenda[sk]?.[realIdx];
+  if(!row||row.tipo==='DIA')return;
   pushHistory();
-  if(field==='Tiempo') field='dur';
-  state.principal[idx].stages[sk][field]=val;
-  if(field==='dur'){
-    recalcStageTimesFrom(sk,idx);
-    // Update dur select color in DOM
-    const row=document.querySelector(`tr[data-idx="${idx}"]`);
-    if(row){
-      const si=STAGE_KEYS.indexOf(sk);
-      const sels=row.querySelectorAll('.dur-sel');
-      if(sels[si])sels[si].style.color=durColor(val);
-    }
-  }
-}
-
-function updateRowTipo(idx,val){
-  if(state.principal[idx])state.principal[idx].tipo=val;
+  if(field==='Tiempo')field='dur';
+  if(field==='dur')val=parseInt(val)||30;
+  row[field]=val;
+  if(field==='dur') recalcAgendaTimes(sk,currentDay);
   markDirty('principal');
-  renderPrincipal();
 }
 
-function onDurChange(idx,sk,sel){
+// Compat alias used by selectSpeakerWithTema
+function updateStageField(idx,sk,field,val){ updateAgendaField(idx,sk,field,val); }
+
+function updateRowTipo(idx,val){ updateAgendaField(idx,activeStage,'tipo',val); renderAgenda(); }
+
+function onAgendaDurChange(realIdx,sk,sel){
   if(sel.value==='__custom__'){
-    const cur=minToTime(state.principal[idx]?.stages[sk]?.dur||30);
+    const cur=minToTime(state.agenda[sk]?.[realIdx]?.dur||30);
     const raw=prompt('Duración (ej: 00:22 o 22 minutos):',cur);
-    if(raw===null){sel.value=state.principal[idx]?.stages[sk]?.dur||30;return;}
+    if(raw===null){sel.value=state.agenda[sk]?.[realIdx]?.dur||30;return;}
     const m=parseDur(raw);
-    if(m>0){updateStageField(idx,sk,'Tiempo',m);sel.value=m;sel.style.color=durColor(m);markDirty('principal');}
-    else sel.value=state.principal[idx]?.stages[sk]?.dur||30;
+    if(m>0){updateAgendaField(realIdx,sk,'dur',m);sel.value=m;sel.style.color=durColor(m);}
+    else sel.value=state.agenda[sk]?.[realIdx]?.dur||30;
     return;
   }
   const m=parseDur(sel.value);
   sel.style.color=durColor(m);
-  updateStageField(idx,sk,'Tiempo',m);
-  markDirty('principal');
+  updateAgendaField(realIdx,sk,'dur',m);
 }
+// Compat alias
+function onDurChange(idx,sk,sel){ onAgendaDurChange(idx,sk,sel); }
 
-// ── MOVE CELLS ────────────────────────────────────────────────────────
-// Move row up/down
-function movePrincipalRow(idx,dir){
-  const t=idx+dir; if(t<0||t>=state.principal.length)return;
-  [state.principal[idx],state.principal[t]]=[state.principal[t],state.principal[idx]];
-  markDirty('principal'); renderPrincipal();
+// ── AGENDA ROW OPERATIONS ─────────────────────────────────────────────
+function moveAgendaRow(sk,realIdx,dir){
+  const all=state.agenda[sk];
+  const rows=getAgendaRows(sk,currentDay);
+  const pos=rows.findIndex(r=>r.realIdx===realIdx);
+  const targetPos=pos+dir;
+  if(targetPos<0||targetPos>=rows.length)return;
+  const targetRealIdx=rows[targetPos].realIdx;
+  pushHistory();
+  [all[realIdx],all[targetRealIdx]]=[all[targetRealIdx],all[realIdx]];
+  recalcAgendaTimes(sk,currentDay);
+  markDirty('principal'); renderAgenda();
 }
+function movePrincipalRow(idx,dir){ moveAgendaRow(activeStage,idx,dir); } // compat
 
-// Move stage cell up/down (swap with adjacent row, same stage)
-function moveStageCell(idx,sk,dir){
-  const t=idx+dir; if(t<0||t>=state.principal.length)return;
-  const a=state.principal[idx].stages[sk], b=state.principal[t].stages[sk];
-  state.principal[idx].stages[sk]={...b,inicio:a.inicio,fin:a.fin};
-  state.principal[t].stages[sk]={...a,inicio:b.inicio,fin:b.fin};
-  markDirty('principal'); renderPrincipal();
+function delAgendaRow(sk,realIdx){
+  if(!confirm('¿Eliminar este bloque?'))return;
+  pushHistory();
+  state.agenda[sk].splice(realIdx,1);
+  recalcAgendaTimes(sk,currentDay);
+  markDirty('principal'); renderAgenda();
 }
+function delPrincipalRow(idx){ delAgendaRow(activeStage,idx); } // compat
 
-// Move stage cell left/right (swap with adjacent stage in same row)
-function moveStageHoriz(idx,sk,dir){
-  const si=STAGE_KEYS.indexOf(sk); const ti=si+dir;
-  if(ti<0||ti>=STAGE_KEYS.length)return;
-  const tsk=STAGE_KEYS[ti];
-  const a=state.principal[idx].stages[sk], b=state.principal[idx].stages[tsk];
-  // Swap speaker+tema+dur, keep timing
-  const tmpSp=a.speaker,tmpT=a.tema,tmpD=a.dur,tmpExt=a.durExt;
-  state.principal[idx].stages[sk].speaker=b.speaker; state.principal[idx].stages[sk].tema=b.tema; state.principal[idx].stages[sk].dur=b.dur; state.principal[idx].stages[sk].durExt=b.durExt||0;
-  state.principal[idx].stages[tsk].speaker=tmpSp; state.principal[idx].stages[tsk].tema=tmpT; state.principal[idx].stages[tsk].dur=tmpD; state.principal[idx].stages[tsk].durExt=tmpExt||0;
-  markDirty('principal'); renderPrincipal();
+function insertAgendaRow(sk,realIdx){
+  const prev=state.agenda[sk][realIdx];
+  const inicio=prev?.fin||'09:00';
+  pushHistory();
+  state.agenda[sk].splice(realIdx+1,0,newAgendaRow(inicio));
+  recalcAgendaTimes(sk,currentDay);
+  markDirty('principal'); renderAgenda();
 }
+function insertPrincipalRow(idx){ insertAgendaRow(activeStage,idx); } // compat
 
-function delPrincipalRow(idx){ if(!confirm('¿Eliminar esta fila?'))return; state.principal.splice(idx,1); markDirty('principal'); renderPrincipal(); }
-
-function insertPrincipalRow(idx){
-  const prev=state.principal[idx];
-  const inicio=prev?(prev.stages[STAGE_KEYS[0]]?.fin||'09:00'):'09:00';
-  state.principal.splice(idx+1,0,newRow(inicio));
-  markDirty('principal'); renderPrincipal();
-}
-
-function addPrincipalRow(){
-  const last=state.principal[state.principal.length-1];
-  let inicio=document.getElementById('horaApertura').value||'09:00';
-  if(last){
-    // Use max fin of all stages in last row
-    let maxFin=0;
-    STAGE_KEYS.forEach(sk=>{ const f=timeToMin(last.stages[sk]?.fin||''); if(f>maxFin)maxFin=f; });
-    if(maxFin>0)inicio=minToTime(maxFin);
-  }
-  state.principal.push(newRow(inicio));
-  markDirty('principal'); renderPrincipal();
-}
-
-// ── TIME RECALC ───────────────────────────────────────────────────────
-function recalcAllTimes(){
-  const apertura=timeToMin(document.getElementById('horaApertura').value||'09:00');
-  STAGE_KEYS.forEach(sk=>{
-    let cur=apertura;
-    state.principal.forEach((row,i)=>{
-      const sd=row.stages[sk]||newStageData();
-      sd.inicio=minToTime(cur);
-      const dur=sd.dur||30;
-      cur+=dur;
-      sd.fin=minToTime(cur);
-      row.stages[sk]=sd;
-      // Update DOM if exists
-      const iniEl=document.getElementById(`ini-${i}-${sk}`);
-      const finEl=document.getElementById(`fin-${i}-${sk}`);
-      if(iniEl)iniEl.textContent=sd.inicio;
-      if(finEl)finEl.textContent=sd.fin;
-    });
+function addAgendaRow(sk){
+  sk=sk||activeStage;
+  ensureDaySections(sk);
+  const rows=getAgendaRows(sk,currentDay);
+  const last=rows.length?rows[rows.length-1].row:null;
+  const inicio=last?.fin||document.getElementById('horaApertura').value||'09:00';
+  // Find insertion point: after last row of this day
+  const dayKey='D'+currentDay;
+  let insertAt=state.agenda[sk].length;
+  let inDay=false;
+  state.agenda[sk].forEach((r,i)=>{
+    if(r.tipo==='DIA'){ inDay=r.dia===dayKey; return; }
+    if(inDay) insertAt=i+1;
   });
-  updateGlobalProgress();
+  pushHistory();
+  state.agenda[sk].splice(insertAt,0,newAgendaRow(inicio));
+  recalcAgendaTimes(sk,currentDay);
+  markDirty('principal'); renderAgenda();
 }
+function addPrincipalRow(){ addAgendaRow(activeStage); } // compat
 
-function recalcStageTimesFrom(sk,fromIdx){
-  let cur=fromIdx>0?timeToMin(state.principal[fromIdx-1]?.stages[sk]?.fin||'09:00'):timeToMin(document.getElementById('horaApertura').value||'09:00');
-  for(let i=fromIdx;i<state.principal.length;i++){
-    const sd=state.principal[i].stages[sk]||newStageData();
-    sd.inicio=minToTime(cur);
-    const dur=sd.dur||30;
-    cur+=dur;
-    sd.fin=minToTime(cur);
-    state.principal[i].stages[sk]=sd;
-    const iniEl=document.getElementById(`ini-${i}-${sk}`);
-    const finEl=document.getElementById(`fin-${i}-${sk}`);
-    if(iniEl)iniEl.textContent=sd.inicio;
-    if(finEl)finEl.textContent=sd.fin;
-  }
-  updateGlobalProgress();
-}
+// ── TIME RECALC (compat stubs) ────────────────────────────────────────
+function recalcAllTimes(){ recalcAgendaTimes(activeStage,currentDay); }
+function recalcStageTimesFrom(sk,fromIdx){ recalcAgendaTimes(sk,currentDay); }
 
 function updateGlobalProgress(){
-  const ap=timeToMin(document.getElementById('horaApertura').value||'09:00');
-  const cl=timeToMin(document.getElementById('horaCierre').value||'20:00');
+  const ap=timeToMin(document.getElementById('horaApertura')?.value||'09:00');
+  const cl=timeToMin(document.getElementById('horaCierre')?.value||'20:00');
   const total=cl-ap;
   const hrs=(total/60).toFixed(1).replace(/\.0$/,'');
-  document.getElementById('totalMin').textContent=`${hrs} hs disponibles`;
-  buildStageProgressBars();
+  const el=document.getElementById('totalMin');
+  if(el)el.textContent=`${hrs} hs disponibles`;
 }
 
 function buildStageProgressBars(){
   const wrap=document.getElementById('stageProgressRow');
+  if(!wrap)return;
   wrap.innerHTML='';
   STAGE_KEYS.forEach((sk,i)=>{
-    const pct=calcStageAssignPct(i);
-    const fillClass=pct>=90?'full':pct<30&&state.principal.length>0?'low':'mid';
+    const rows=getAgendaRows(sk,currentDay);
+    const assigned=rows.filter(r=>r.row.speaker?.trim()).length;
+    const pct=rows.length?Math.round(assigned/rows.length*100):0;
+    const fillClass=pct>=90?'full':pct<30&&rows.length>0?'low':'mid';
     const div=document.createElement('div');
     div.className='stage-prog-item';
     div.innerHTML=`<div class="stage-prog-label">${esc(stageNames[i])}</div>
@@ -1344,44 +1338,46 @@ function buildStageProgressBars(){
 }
 
 // ── LOAD / SAVE PRINCIPAL ─────────────────────────────────────────────
-async function loadPrincipal(){
-  try{
-    const raw=await gasGet('Principal');
-    if(!raw||raw.length<2){state.principal=[];renderPrincipal();return;}
-    const[,...rows]=raw;
-    state.principal=rows.map(r=>{
-      const tipo=String(r[0]||'Charla');
-      const stages={};
-      STAGE_KEYS.forEach((sk,i)=>{
-        const base=1+i*6;
-        stages[sk]={
-          speaker:String(r[base]||''),
-          tema:String(r[base+1]||''),
-          dur:parseInt(r[base+2])||30,
-          inicio:String(r[base+3]||''),
-          fin:String(r[base+4]||''),
-          durExt:parseInt(r[base+5])||0
-        };
+// ── LOAD / SAVE AGENDA ────────────────────────────────────────────────
+async function loadAgenda(){
+  await Promise.all(STAGE_KEYS.map(async(sk,i)=>{
+    const sheetName='Stage_'+(i+1);
+    try{
+      const raw=await gasGet(sheetName);
+      if(!raw||raw.length<2){
+        state.agenda[sk]=DAY_KEYS.map(dk=>({tipo:'DIA',dia:dk}));
+        return;
+      }
+      const[,...rows]=raw;
+      state.agenda[sk]=rows.map(r=>{
+        const tipo=String(r[0]||'');
+        if(tipo==='DIA') return {tipo:'DIA',dia:String(r[1]||'D1')};
+        return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:String(r[4]||''),fin:String(r[5]||''),durExt:parseInt(r[6])||0};
       });
-      return {tipo,stages};
-    });
-    renderPrincipal(); return true;
-  }catch(e){toast('⚠️ Error al cargar: '+e.message,true);return false;}
+      // Ensure all day markers exist
+      DAY_KEYS.forEach(dk=>{ if(!state.agenda[sk].some(r=>r.tipo==='DIA'&&r.dia===dk)) state.agenda[sk].push({tipo:'DIA',dia:dk}); });
+    }catch(e){
+      console.error('Error loading',sheetName,e);
+      state.agenda[sk]=DAY_KEYS.map(dk=>({tipo:'DIA',dia:dk}));
+    }
+  }));
 }
 
-async function savePrincipal(){
-  if(!(await checkVersion('Principal')))return;
-  const data=state.principal.map(r=>{
-    const row=[r.tipo];
-    STAGE_KEYS.forEach(sk=>{
-      const sd=r.stages[sk]||newStageData();
-      row.push(sd.speaker||'',sd.tema||'',sd.dur||30,sd.inicio||'',sd.fin||'',sd.durExt||0);
-    });
-    return row;
+async function saveAgenda(sk){
+  sk=sk||activeStage;
+  const i=STAGE_KEYS.indexOf(sk);
+  const sheetName='Stage_'+(i+1);
+  const data=(state.agenda[sk]||[]).map(row=>{
+    if(row.tipo==='DIA') return ['DIA',row.dia,'',0,'','',0];
+    return [row.tipo||'Charla',row.speaker||'',row.tema||'',row.dur||30,row.inicio||'',row.fin||'',row.durExt||0];
   });
-  await gasPost('Principal','replace_all',data);
-  toast('✅ Agenda guardada'); markClean('principal');
+  await gasPost(sheetName,'replace_all',data);
+  toast('✅ '+stageNames[i]+' guardado'); markClean('principal');
 }
+
+// Compat stubs
+async function loadPrincipal(){ await loadAgenda(); renderAgenda(); }
+async function savePrincipal(){ await saveAgenda(activeStage); }
 
 // ── CUSTOM TIPO ───────────────────────────────────────────────────────
 function addCustomTipo(e,inp){
@@ -1720,9 +1716,12 @@ function mergeManualSpeaker(ri,targetName){
   if(!confirm(`¿Relacionar "${state.speakersManual[ri]?.nombre}" con "${targetName}"?\nSe elimina el speaker manual y los slots quedan asignados al speaker del sheet.`))return;
   const oldName=state.speakersManual[ri].nombre;
   // Replace in principal
-  state.principal.forEach(row=>STAGE_KEYS.forEach(sk=>{
-    if((row.stages[sk]?.speaker||'').trim()===oldName.trim())row.stages[sk].speaker=targetName;
-  }));
+  STAGE_KEYS.forEach(sk=>{
+    (state.agenda[sk]||[]).forEach(row=>{
+      if(row.tipo==='DIA')return;
+      if((row.speaker||'').trim()===oldName.trim())row.speaker=targetName;
+    });
+  });
   state.speakersManual.splice(ri,1);
   markDirty('principal'); markDirty('speakersManual');
   renderSpeakers(); renderPrincipal();
@@ -1960,22 +1959,21 @@ async function saveSpeakers(){
 // ── RESUMEN ───────────────────────────────────────────────────────────
 function buildResumen(){
   const wrap=document.getElementById('resumenWrap');
-  if(!state.principal.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">📊</div>Cargá datos en Agenda primero.</div>';return;}
+  const hasAnyData=STAGE_KEYS.some(sk=>getAgendaRows(sk,currentDay).length>0);
+  if(!hasAnyData){wrap.innerHTML='<div class="empty"><div class="empty-icon">📊</div>Cargá datos en Agenda primero.</div>';return;}
 
-  let html=`<div class="tl-section-title">📊 Resumen por Stage</div><div class="tl-stage-cards">`;
+  let html=`<div class="tl-section-title">📊 Resumen por Stage — ${DAY_LABELS[currentDay]||''}</div><div class="tl-stage-cards">`;
   STAGE_KEYS.forEach((sk,i)=>{
     const sname=stageNames[i]||('Stage '+(i+1));
-    let assigned=0;
-    state.principal.forEach(r=>{ if((r.stages[sk]?.speaker||'').trim())assigned++; });
-    const libre=state.principal.length-assigned;
-    const pct=state.principal.length>0?Math.round(assigned/state.principal.length*100):0;
-    const spEnStage=state.speakers.filter(s=>(calcSpeakerAssignmentsText(s.nombre||'')).includes(sname));
+    const rows=getAgendaRows(sk,currentDay);
+    const assigned=rows.filter(r=>r.row.speaker?.trim()).length;
+    const libre=rows.length-assigned;
+    const pct=rows.length>0?Math.round(assigned/rows.length*100):0;
     const confirmados=state.speakers.filter(s=>s.estado==='confirmado'&&getSpeakerAssignments(s.nombre||'').some(a=>a.sk===sk)).length;
     const pendientes=state.speakers.filter(s=>s.estado==='pendiente'&&getSpeakerAssignments(s.nombre||'').some(a=>a.sk===sk)).length;
-    const hasConflict=detectConflictsForStage(i);
-    html+=`<div class="tl-stage-card"${pct>=90?' style="border-color:#22c55e"':pct<30&&state.principal.length>0?' style="border-color:#f97316"':''}>
-      <div class="tl-stage-name">${hasConflict?'⚠️ ':''} ${esc(sname)}</div>
-      <div class="tl-stat-row"><span class="tl-stat-label">Total bloques</span><span class="tl-stat-val">${state.principal.length}</span></div>
+    html+=`<div class="tl-stage-card"${pct>=90?' style="border-color:#22c55e"':pct<30&&rows.length>0?' style="border-color:#f97316"':''}>
+      <div class="tl-stage-name">${esc(sname)}</div>
+      <div class="tl-stat-row"><span class="tl-stat-label">Total bloques</span><span class="tl-stat-val">${rows.length}</span></div>
       <div class="tl-stat-row"><span class="tl-stat-label">Ocupados</span><span class="tl-stat-val ok">${assigned}</span></div>
       <div class="tl-stat-row"><span class="tl-stat-label">Libres</span><span class="tl-stat-val ${libre>0?'warn':'ok'}">${libre}</span></div>
       <div class="tl-stat-row"><span class="tl-stat-label">✅ Confirmados</span><span class="tl-stat-val ok">${confirmados}</span></div>
@@ -1985,21 +1983,46 @@ function buildResumen(){
   });
   html+='</div>';
 
-  // Conflictos mismo slot
+  // Conflictos: mismo speaker en dos stages solapados en el mismo día
   const conflictsSame=[];
-  state.principal.forEach((r,ri)=>{
-    const spMap={};
-    STAGE_KEYS.forEach((sk,i)=>{ const sp=(r.stages[sk]?.speaker||'').trim(); if(!sp)return; if(!spMap[sp])spMap[sp]=[]; spMap[sp].push({sk,sname:stageNames[i]}); });
-    Object.entries(spMap).forEach(([sp,entries])=>{ if(entries.length>=2)conflictsSame.push({horario:`${r.stages[STAGE_KEYS[0]]?.inicio||'—'}`,speaker:sp,stages:entries.map(e=>e.sname).join(', ')}); });
+  const seen=new Set();
+  STAGE_KEYS.forEach((sk,si)=>{
+    getAgendaRows(sk,currentDay).forEach(({row})=>{
+      const sp=(row.speaker||'').trim(); if(!sp)return;
+      STAGE_KEYS.forEach((sk2,si2)=>{
+        if(si2<=si)return;
+        getAgendaRows(sk2,currentDay).forEach(({row:r2})=>{
+          if((r2.speaker||'').trim()!==sp)return;
+          const ini=timeToMin(row.inicio),fin=timeToMin(row.fin),ini2=timeToMin(r2.inicio),fin2=timeToMin(r2.fin);
+          if(ini<fin2&&fin>ini2){
+            const key=sp+sk+sk2;
+            if(!seen.has(key)){seen.add(key);conflictsSame.push({horario:row.inicio,speaker:sp,stages:stageNames[si]+' vs '+stageNames[si2]});}
+          }
+        });
+      });
+    });
   });
 
-  // Conflictos consecutivos
+  // Conflictos consecutivos: mismo speaker en dos stages con solapamiento o margen <5min
   const conflictsConsec=[];
-  for(let i=0;i<state.principal.length-1;i++){
-    const rowA=state.principal[i], rowB=state.principal[i+1];
-    const spA=new Set(STAGE_KEYS.map(sk=>(rowA.stages[sk]?.speaker||'').trim()).filter(Boolean));
-    STAGE_KEYS.forEach(sk=>{ const sp=(rowB.stages[sk]?.speaker||'').trim(); if(sp&&spA.has(sp))conflictsConsec.push({row1:i+1,row2:i+2,speaker:sp,hora:rowA.stages[sk]?.fin||'—'}); });
-  }
+  const seen2=new Set();
+  STAGE_KEYS.forEach((sk,si)=>{
+    getAgendaRows(sk,currentDay).forEach(({row})=>{
+      const sp=(row.speaker||'').trim(); if(!sp)return;
+      const fin=timeToMin(row.fin);
+      STAGE_KEYS.forEach((sk2,si2)=>{
+        if(sk2===sk)return;
+        getAgendaRows(sk2,currentDay).forEach(({row:r2})=>{
+          if((r2.speaker||'').trim()!==sp)return;
+          const ini2=timeToMin(r2.inicio);
+          if(ini2>=fin&&ini2-fin<5){
+            const key=sp+row.fin+sk2;
+            if(!seen2.has(key)){seen2.add(key);conflictsConsec.push({speaker:sp,hora:row.fin,from:stageNames[si]||sk,to:stageNames[si2]||sk2});}
+          }
+        });
+      });
+    });
+  });
 
   html+=`<div class="tl-section-title" style="margin-top:12px">⚠️ Conflictos — Mismo slot</div><div class="tl-conflict-wrap">`;
   if(!conflictsSame.length)html+=`<div class="tl-no-conflict">✅ Sin conflictos de mismo slot</div>`;
@@ -2008,7 +2031,7 @@ function buildResumen(){
 
   html+=`<div class="tl-section-title" style="margin-top:12px">🟠 Conflictos — Slots consecutivos</div><div class="tl-conflict-wrap">`;
   if(!conflictsConsec.length)html+=`<div class="tl-no-conflict">✅ Sin conflictos consecutivos</div>`;
-  else html+=`<table class="tl-conflict-table"><thead><tr><th>Filas</th><th>Speaker</th><th>Sin tiempo de traslado</th></tr></thead><tbody>${conflictsConsec.map(c=>`<tr><td style="color:#f97316;font-weight:700">Fila ${c.row1}→${c.row2}</td><td style="color:var(--red);font-weight:700">${esc(c.speaker)}</td><td style="color:#f97316">⚠️ Fin ~${esc(c.hora)}</td></tr>`).join('')}</tbody></table>`;
+  else html+=`<table class="tl-conflict-table"><thead><tr><th>Speaker</th><th>Hora</th><th>Traslado</th></tr></thead><tbody>${conflictsConsec.map(c=>`<tr><td style="color:var(--red);font-weight:700">${esc(c.speaker)}</td><td style="color:#f97316;font-weight:700">${esc(c.hora)}</td><td style="color:#f97316">⚠️ ${esc(c.from)} → ${esc(c.to)}</td></tr>`).join('')}</tbody></table>`;
   html+='</div>';
 
   // Alta carga (más de 1 asignación)
@@ -2073,11 +2096,11 @@ async function loadConfig(){
 async function loadAll(){
   setStatus(false);
   try{
-    await Promise.all([loadPrincipal(),loadSpeakers(),loadIdeas(),loadConfig()]);
+    await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
   }catch(e){
     setStatus(false); toast('⚠️ Sin conexión al servidor',true);
-    renderPrincipal(); renderSpeakers(); renderIdeas();
+    renderAgenda(); renderSpeakers(); renderIdeas();
   }
 }
 
@@ -2110,61 +2133,28 @@ function redo() {
 
 // ── MULTI-DÍA ─────────────────────────────────────────────────────────
 let currentDay = 1;
+const DAY_LABELS = {1:'Oct 29',2:'Oct 30',3:'Oct 31',4:'Nov 1'};
+const DAY_NAMES  = {1:'Opening Party',2:'LABITCONF Day 1',3:'LABITCONF Day 2',4:'Experience Day'};
+
 function switchDay(d) {
   if (d === currentDay) return;
-  if (dirty.principal && !confirm(`Hay cambios sin guardar en ${DAY_LABELS[currentDay]||('Día '+currentDay)}. ¿Guardar antes de cambiar?`)) {
-    // save first
-    savePrincipal().then(() => _doSwitchDay(d));
+  if (dirty.principal && !confirm(`Hay cambios sin guardar. ¿Guardar antes de cambiar?`)) {
+    saveAgenda(activeStage).then(() => _doSwitchDay(d));
     return;
   }
   _doSwitchDay(d);
 }
-const DAY_LABELS = {1:'Oct 29',2:'Oct 30',3:'Oct 31',4:'Nov 1'};
-const DAY_NAMES  = {1:'Opening Party',2:'LABITCONF Day 1',3:'LABITCONF Day 2',4:'Experience Day'};
 function _doSwitchDay(d) {
   currentDay = d;
   [1,2,3,4].forEach(n => {
     const b = document.getElementById('dayBtn' + n);
     if (!b) return;
-    if (n === d) {
-      b.style.background = 'var(--red-dim)';
-      b.style.borderColor = 'var(--red)';
-      b.style.color = 'var(--red)';
-    } else {
-      b.style.background = 'var(--bg3)';
-      b.style.borderColor = 'var(--border)';
-      b.style.color = 'var(--text)';
-    }
+    if (n === d) { b.style.background='var(--red-dim)'; b.style.borderColor='var(--red)'; b.style.color='var(--red)'; }
+    else { b.style.background='var(--bg3)'; b.style.borderColor='var(--border)'; b.style.color='var(--text)'; }
   });
-  loadPrincipalDay();
+  renderAgenda();
 }
-async function loadPrincipalDay() {
-  const sheetName = currentDay === 1 ? 'Principal' : `Principal_D${currentDay}`;
-  toast(`⏳ Cargando ${DAY_LABELS[currentDay]||('Día '+currentDay)} — ${DAY_NAMES[currentDay]||''}…`);
-  try {
-    const raw = await gasGet(sheetName);
-    if (!raw || raw.length < 2) { state.principal = []; renderPrincipal(); toast(`Día ${currentDay}: sin datos`); return; }
-    const [,...rows] = raw;
-    state.principal = rows.map(r => {
-      const tipo = String(r[0] || 'Charla');
-      const stages = {};
-      STAGE_KEYS.forEach((sk, i) => {
-        const base = 1 + i * 6;
-        stages[sk] = {
-          speaker: String(r[base] || ''),
-          tema: String(r[base+1] || ''),
-          dur: parseInt(r[base+2]) || 30,
-          inicio: String(r[base+3] || ''),
-          fin: String(r[base+4] || ''),
-          durExt: parseInt(r[base+5]) || 0
-        };
-      });
-      return { tipo, stages };
-    });
-    renderPrincipal();
-    toast(`✅ ${DAY_LABELS[currentDay]||('Día '+currentDay)} cargado`);
-  } catch(e) { toast('⚠️ Error al cargar día: ' + e.message, true); }
-}
+function loadPrincipalDay(){ renderAgenda(); } // compat stub
 
 // ── EXPORT CSV ────────────────────────────────────────────────────────
 function exportCSV() {
@@ -2183,23 +2173,22 @@ function exportCSV() {
 // ── EXPORT ICAL ───────────────────────────────────────────────────────
 function exportICal() {
   const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//LABITCONF 2026//ES'];
-  state.principal.forEach((row) => {
-    STAGE_KEYS.forEach((k, si) => {
-      const sd = row.stages && row.stages[k];
-      const speaker = sd ? (sd.speaker || '') : '';
-      if (!speaker) return;
-      const tema = sd.tema || '';
-      const inicio = sd.inicio || '09:00';
-      const fin = sd.fin || '09:30';
-      const stageName = stageNames[si] || ('Stage ' + (si + 1));
-      lines.push('BEGIN:VEVENT');
-      lines.push('SUMMARY:' + speaker + (tema ? ' — ' + tema : ''));
-      lines.push('LOCATION:' + stageName);
-      lines.push('DESCRIPTION:' + (row.tipo || ''));
-      lines.push('DTSTART:20261101T' + inicio.replace(':', '') + '00');
-      lines.push('DTEND:20261101T' + fin.replace(':', '') + '00');
-      lines.push('END:VEVENT');
-    });
+  const DAY_DATES=['20261029','20261030','20261031','20261101'];
+  STAGE_KEYS.forEach((sk,si)=>{
+    const stageName=stageNames[si]||('Stage '+(si+1));
+    for(let d=1;d<=4;d++){
+      getAgendaRows(sk,d).forEach(({row})=>{
+        if(!row.speaker?.trim())return;
+        const dateStr=DAY_DATES[d-1]||'20261101';
+        lines.push('BEGIN:VEVENT');
+        lines.push('SUMMARY:'+row.speaker+(row.tema?' — '+row.tema:''));
+        lines.push('LOCATION:'+stageName);
+        lines.push('DESCRIPTION:'+(row.tipo||''));
+        lines.push('DTSTART:'+dateStr+'T'+(row.inicio||'09:00').replace(':','')+'00');
+        lines.push('DTEND:'+dateStr+'T'+(row.fin||'09:30').replace(':','')+'00');
+        lines.push('END:VEVENT');
+      });
+    }
   });
   lines.push('END:VCALENDAR');
   const a = document.createElement('a');
@@ -2228,14 +2217,12 @@ function filterCmd(q) {
       <div><div style="font-weight:700;color:#fff">${esc(s.nombre)}</div><div style="font-size:15px;color:#ffffff">${esc(s.temas||'')}</div></div>
     </div>`);
   });
-  state.principal.forEach(row => {
-    const tema = row.stages && row.stages.s1 ? (row.stages.s1.tema || '') : '';
-    if (!q || tema.toLowerCase().includes(q) || (row.tipo||'').toLowerCase().includes(q)) {
-      const inicio = row.stages && row.stages.s1 ? (row.stages.s1.inicio || '') : '';
-      const fin2 = row.stages && row.stages.s1 ? (row.stages.s1.fin || '') : '';
+  getAgendaRows(activeStage,currentDay).slice(0,20).forEach(({row})=>{
+    const tema=row.tema||''; const tipo=row.tipo||'';
+    if(!q||tema.toLowerCase().includes(q)||tipo.toLowerCase().includes(q)||((row.speaker||'').toLowerCase().includes(q))){
       res.push(`<div onclick="switchTab('principal');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
         <span style="color:#6366f1;font-weight:700">📋</span>
-        <div><div style="font-weight:700;color:#fff">${esc(tema||'(sin tema)')}</div><div style="font-size:15px;color:#ffffff">${esc(row.tipo||'')} · ${esc(inicio)} → ${esc(fin2)}</div></div>
+        <div><div style="font-weight:700;color:#fff">${esc(tema||'(sin tema)')}</div><div style="font-size:15px;color:#ffffff">${esc(tipo)} · ${esc(row.inicio||'')} → ${esc(row.fin||'')}</div></div>
       </div>`);
     }
   });
@@ -2273,19 +2260,16 @@ function buildHeatmap() {
   const slots = Math.ceil((cl - ap) / 30);
   if (slots <= 0) return;
   const counts = Array(slots).fill(0);
-  state.principal.forEach(row => {
-    const ini = timeToMin(row.stages?.s1?.inicio || '09:00');
-    const fin = timeToMin(row.stages?.s1?.fin || '09:30');
-    const stagesWithSpeaker = STAGE_KEYS.filter(k => {
-      const v = row.stages && row.stages[k];
-      return v && (v.speaker || '');
-    }).length;
-    for (let s = 0; s < slots; s++) {
-      const slotStart = ap + s * 30, slotEnd = slotStart + 30;
-      if (ini < slotEnd && fin > slotStart) {
-        counts[s] = Math.max(counts[s], stagesWithSpeaker);
+  STAGE_KEYS.forEach(sk => {
+    getAgendaRows(sk, currentDay).forEach(({row}) => {
+      if (!row.speaker?.trim()) return;
+      const ini = timeToMin(row.inicio || '09:00');
+      const fin = timeToMin(row.fin || '09:30');
+      for (let s = 0; s < slots; s++) {
+        const slotStart = ap + s * 30, slotEnd = slotStart + 30;
+        if (ini < slotEnd && fin > slotStart) counts[s]++;
       }
-    }
+    });
   });
   const max = 9;
   const html = counts.map((c, i) => {
@@ -2294,7 +2278,7 @@ function buildHeatmap() {
     const r = Math.round(pct * 220);
     const color = `rgb(${r},${g},34)`;
     const time = minToTime(ap + i * 30);
-    return `<div title="${time}: ${c}/9 stages" style="flex:1;min-width:6px;height:20px;background:${c ? color : '#111'};border-radius:2px;cursor:default"></div>`;
+    return `<div title="${time}: ${c} speakers" style="flex:1;min-width:6px;height:20px;background:${c ? color : '#111'};border-radius:2px;cursor:default"></div>`;
   }).join('');
   const el = document.getElementById('heatmapRow');
   if (el) el.innerHTML = html;
@@ -2304,18 +2288,35 @@ function buildHeatmap() {
 function buildStageSemaphore() {
   const wrap = document.getElementById('stageSemaphoreRow');
   if (!wrap) return;
-  const total = state.principal.length;
   wrap.innerHTML = STAGE_KEYS.map((sk, i) => {
-    const assigned = total ? state.principal.filter(r => (r.stages[sk]?.speaker || '').trim()).length : 0;
-    const pct = total ? Math.round(assigned / total * 100) : 0;
+    const rows = getAgendaRows(sk, currentDay);
+    const assigned = rows.filter(r => r.row.speaker?.trim()).length;
+    const pct = rows.length ? Math.round(assigned / rows.length * 100) : 0;
     const color = STAGE_COLORS[i];
     const bg = STAGE_DIMS[i];
     const name = stageNames[i] || ('Stage ' + (i + 1));
-    return `<div style="flex:1;min-width:80px;max-width:140px;padding:6px 10px;border-radius:6px;border:1px solid ${color};background:${bg};text-align:center;cursor:default" title="${pct}% ocupado">
-      <div style="font-size:15px;font-weight:700;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
-      <div style="font-size:15px;font-weight:800;color:${color}">${pct}%</div>
+    const isActive = sk === activeStage;
+    const isCompare = sk === compareStage;
+    const border = isActive ? `2px solid ${color}` : isCompare ? `2px dashed ${color}` : `1px solid ${color}44`;
+    const bgColor = isActive ? bg : 'transparent';
+    return `<div onclick="selectStage('${sk}',event)" style="flex:1;min-width:70px;max-width:130px;padding:5px 8px;border-radius:6px;border:${border};background:${bgColor};text-align:center;cursor:pointer;transition:all .15s" title="${pct}% ocupado — Clic para ver, Shift+clic para comparar">
+      <div style="font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
+      <div style="font-size:13px;font-weight:800;color:${color}">${pct}%</div>
+      ${isActive?`<div style="font-size:9px;color:${color};margin-top:1px">▶ activo</div>`:''}
+      ${isCompare?`<div style="font-size:9px;color:${color};margin-top:1px">⇄ comp.</div>`:''}
     </div>`;
   }).join('');
+}
+
+function selectStage(sk, event) {
+  if (event && event.shiftKey) {
+    if (sk === activeStage) return;
+    compareStage = (compareStage === sk) ? null : sk;
+  } else {
+    activeStage = sk;
+    if (compareStage === sk) compareStage = null;
+  }
+  renderAgenda();
 }
 
 // ── KANBAN ────────────────────────────────────────────────────────────
