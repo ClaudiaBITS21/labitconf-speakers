@@ -415,7 +415,7 @@ const T={
     secFoto:'Foto de Perfil',secEventos:'Eventos Anteriores',
     lNombre:'Nombre',lApellido:'Apellido',lConfname:'Nombre preferido en Conferencia',
     hConfname:'Alias (apodo) para presentarte en los eventos.<br>Si no se completa se toma por defecto Nombre/Apellido.',
-    lPais:'País de Origen',lMail:'Email',lMail2:'Confirmar Email',lCargo:'Cargo (Rol)',lEmpresa:'Empresa (Referencia)',errMailMatch:'Los emails no coinciden',
+    lPais:'País de Origen',lMail:'Email',lMail2:'Confirmar Email',lCargo:'Cargo (Rol)',lEmpresa:'Empresa (Otros)',errMailMatch:'Los emails no coinciden',
     lWebsite:'Sitio Web',
     hContacto:'Completar al menos uno de: WhatsApp, Telegram y/o Signal.',
     lWhatsapp:'WhatsApp <span style="color:#eab308">(Preferido)</span>',lTelegram:'Telegram',
@@ -427,7 +427,7 @@ const T={
     lEventos:'¿En qué eventos hablaste antes?',hEventosOtros:'Otros eventos no listados',
     lPrimera:'¿Primera vez en LABITCONF?',lPodcast:'¿Disponible para entrevista | podcast?',
     lEmpresaPres:'¿Traés empresa | proyecto que presentás?',
-    temaNum:n=>`Tema ${n}`,temaLevel:'Nivel',temaFormato:'Formato Preferido',temaDur:'Tiempo de presentación',
+    temaNum:n=>`Tema ${n}`,temaLevel:'Nivel',temaFormato:'Formatos Preferidos',temaDur:'Tiempo de presentación',
     hTemaDur:'Sujeto a modificaciones.',
     temaTitle:'Título del Tema',temaAbstract:'Abstract',temaDesc:'Descripción (Detalle)',
     temaTags:'Tags',temaPanel:'Puedo participar en un Panel con otros speakers sobre este tema.',
@@ -458,7 +458,7 @@ const T={
     secFoto:'Profile Photo',secEventos:'Previous Events',
     lNombre:'First Name',lApellido:'Last Name',lConfname:'Preferred Conference Name',
     hConfname:'Alias (nickname) to introduce you at events.<br>If left empty, Name/Surname will be used by default.',
-    lPais:'Country of Origin',lMail:'Email',lMail2:'Confirm Email',lCargo:'Position (Role)',lEmpresa:'Company (Reference)',errMailMatch:'Emails do not match',
+    lPais:'Country of Origin',lMail:'Email',lMail2:'Confirm Email',lCargo:'Position (Role)',lEmpresa:'Company (Other)',errMailMatch:'Emails do not match',
     lWebsite:'Website',
     hContacto:'Complete at least one of: WhatsApp, Telegram and/or Signal.',
     lWhatsapp:'WhatsApp <span style="color:#eab308">(Preferred)</span>',lTelegram:'Telegram',
@@ -470,7 +470,7 @@ const T={
     lEventos:'Which events have you spoken at before?',hEventosOtros:'Other events not listed',
     lPrimera:'First time at LABITCONF?',lPodcast:'Available for interview | podcast?',
     lEmpresaPres:'Are you bringing a company | project to present?',
-    temaNum:n=>`Topic ${n}`,temaLevel:'Level',temaFormato:'Preferred Format',temaDur:'Presentation time',
+    temaNum:n=>`Topic ${n}`,temaLevel:'Level',temaFormato:'Preferred Formats',temaDur:'Presentation time',
     hTemaDur:'Subject to modifications.',
     temaTitle:'Full Title',temaAbstract:'Abstract',temaDesc:'Description (Detail)',
     temaTags:'Tags',temaPanel:'I can participate in a Panel with other speakers about this topic.',
@@ -756,7 +756,7 @@ function toggleEvento(ev,el){
 
 // ── TEMAS ─────────────────────────────────────────────────────────────
 const NIVEL_VALS=[{val:'todos',color:'#9ca3af'},{val:'basico',color:'#22c55e'},{val:'intermedio',color:'#eab308'},{val:'avanzado',color:'#E84010'}];
-const FORMATO_VALS=[{val:'charla',color:'#ffffff'},{val:'panel',color:'#ef4444'},{val:'taller',color:'#ec4899'}];
+const FORMATO_VALS=[{val:'charla',color:'#ffffff'},{val:'panel',color:'#ffffff'},{val:'taller',color:'#ffffff'}];
 
 function addTema(){
   if(temaCount>=3)return;
