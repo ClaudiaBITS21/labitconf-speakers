@@ -695,6 +695,10 @@ function saveStageNames(){
   });
   localStorage.setItem('labitconf_stages',JSON.stringify(stageNames));
   updateStageHeaders();
+  clearTimeout(saveStageNames._t);
+  saveStageNames._t=setTimeout(()=>{
+    gasPost('','set_config',{stageNames}).catch(()=>{});
+  },1000);
 }
 
 function updateStageHeaders(){
@@ -2053,10 +2057,23 @@ async function saveIdeas(){
 function setStatus(ok){ document.getElementById('statusDot').style.background=ok?'#22c55e':'#ef4444'; document.getElementById('statusTxt').textContent=ok?'En línea':'Sin conexión'; }
 
 // ── LOAD ALL ──────────────────────────────────────────────────────────
+async function loadConfig(){
+  try{
+    const r=await fetch(`${GAS_URL}?action=get_config`);
+    const j=await r.json();
+    if(j.ok&&Array.isArray(j.stageNames)&&j.stageNames.length===9){
+      stageNames=j.stageNames;
+      localStorage.setItem('labitconf_stages',JSON.stringify(stageNames));
+      updateStageHeaders();
+      buildStageFilterOptions();
+    }
+  }catch{}
+}
+
 async function loadAll(){
   setStatus(false);
   try{
-    await Promise.all([loadPrincipal(),loadSpeakers(),loadIdeas()]);
+    await Promise.all([loadPrincipal(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
   }catch(e){
     setStatus(false); toast('⚠️ Sin conexión al servidor',true);

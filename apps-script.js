@@ -118,6 +118,11 @@ function doGet(e) {
       const props = PropertiesService.getScriptProperties();
       return respond({ ok:true, sheet, version: props.getProperty('version_'+sheet)||'0' });
     }
+    if (e.parameter.action === 'get_config') {
+      const props = PropertiesService.getScriptProperties();
+      const raw = props.getProperty('config_stageNames');
+      return respond({ ok:true, stageNames: raw ? JSON.parse(raw) : null });
+    }
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const validSheets = [
       'Principal','Principal_D1','Principal_D2','Principal_D3','Principal_D4',
@@ -147,6 +152,13 @@ function doPost(e) {
     const props = PropertiesService.getScriptProperties();
     const writeKey = props.getProperty('write_key');
     if (writeKey && key !== writeKey) return respond({ error:'Clave incorrecta', code:401 });
+
+    if (action === 'set_config') {
+      if (data && Array.isArray(data.stageNames)) {
+        props.setProperty('config_stageNames', JSON.stringify(data.stageNames));
+      }
+      return respond({ ok:true });
+    }
 
     const validSheets = [
       'Principal','Principal_D1','Principal_D2','Principal_D3','Principal_D4',
