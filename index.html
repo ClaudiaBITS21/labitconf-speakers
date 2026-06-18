@@ -825,7 +825,7 @@ function renderAgenda(){
     hdr.innerHTML=`<span style="font-size:15px;font-weight:800;color:${color}">${esc(name)}</span>
       <span style="font-size:13px;color:#fff;font-weight:700">${DAY_LABELS[currentDay]||''}</span>
       <span style="font-size:12px;color:var(--dim)">${rows.length} bloques</span>
-      <input class="stage-inp" id="sname-${si}" value="${esc(name)}" oninput="saveStageNames()" style="font-size:13px;color:${color};margin-left:auto;width:130px" title="Editar nombre">`;
+      <span style="font-size:11px;color:#666;margin-left:auto;margin-right:4px">✏️</span><input class="stage-inp" id="sname-${si}" value="${esc(name)}" oninput="saveStageNames()" style="font-size:13px;color:${color};width:140px;border-bottom:1px solid ${color}66;padding-bottom:1px" title="Editar nombre del stage">`;
     div.appendChild(hdr);
 
     // Table
