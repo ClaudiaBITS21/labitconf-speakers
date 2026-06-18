@@ -1288,14 +1288,20 @@ function addAgendaRow(sk){
   const rows=getAgendaRows(sk,currentDay);
   const last=rows.length?rows[rows.length-1].row:null;
   const inicio=last?.fin||document.getElementById('horaApertura').value||'09:00';
-  // Find insertion point: after last row of this day
+  // Find insertion point: after last row of this day, before next DIA marker
   const dayKey='D'+currentDay;
-  let insertAt=state.agenda[sk].length;
+  const all=state.agenda[sk];
+  let insertAt=all.length;
   let inDay=false;
-  state.agenda[sk].forEach((r,i)=>{
-    if(r.tipo==='DIA'){ inDay=r.dia===dayKey; return; }
-    if(inDay) insertAt=i+1;
-  });
+  for(let i=0;i<all.length;i++){
+    const r=all[i];
+    if(r.tipo==='DIA'){
+      if(inDay){ insertAt=i; break; }
+      inDay=(r.dia===dayKey);
+    } else if(inDay){
+      insertAt=i+1;
+    }
+  }
   pushHistory();
   state.agenda[sk].splice(insertAt,0,newAgendaRow(inicio));
   recalcAgendaTimes(sk,currentDay);
