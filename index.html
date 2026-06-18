@@ -84,8 +84,10 @@ thead th.sub-h{color:#ffffff;background:#111;font-size:16px;font-weight:600;padd
 .col-stk{position:sticky;z-index:3;background:var(--bg);}
 thead .col-stk{z-index:11;background:var(--bg3);}
 .col-stk-sep{box-shadow:3px 0 8px rgba(0,0,0,.5);}
-.stage-inp{background:transparent;border:none;color:var(--red);font-size:15px;font-weight:700;width:100%;outline:none;padding:2px 4px;cursor:text;}
+.stage-inp{background:transparent;border:none;color:var(--red);font-size:15px;font-weight:700;width:calc(100% - 22px);outline:none;padding:2px 4px;cursor:text;}
 .stage-inp:focus{background:var(--red-dim);border-radius:4px;}
+.stage-edit-btn{background:none;border:none;cursor:pointer;color:#666;font-size:13px;padding:1px 3px;border-radius:3px;line-height:1;vertical-align:middle;}
+.stage-edit-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
 tbody tr:hover{background:rgba(255,255,255,.015);}
 td{border:1px solid var(--border);padding:0;vertical-align:middle;}
 td.row-actions{width:40px;text-align:center;padding:2px;}
@@ -116,12 +118,14 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .stage-group-sep{border-left:2px solid #333;}
 
 /* SPEAKER PICKER in table */
-.sp-picker{position:relative;width:100%;height:100%;}
-.sp-cell{padding:4px 6px;min-height:32px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;height:100%;}
+.sp-picker{position:relative;width:100%;height:100%;display:flex;align-items:stretch;}
+.sp-cell{padding:4px 6px;min-height:32px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;height:100%;flex:1;min-width:0;}
 .sp-cell:hover{background:var(--red-dim);}
 .sp-cell-name{font-size:14px;font-weight:700;color:var(--red);line-height:1.3;}
 .sp-cell-badge{font-size:9px;color:#f97316;margin-top:1px;}
 .sp-cell-empty{font-size:14px;color:var(--dim);}
+.sp-clear-btn{background:none;border:none;cursor:pointer;color:#666;font-size:16px;padding:0 5px;line-height:1;align-self:center;flex-shrink:0;}
+.sp-clear-btn:hover{color:#ef4444;}
 .sp-conflict-same{outline:2px solid #ef4444;outline-offset:-1px;}
 .sp-conflict-consec{outline:2px solid #f97316;outline-offset:-1px;}
 
@@ -731,7 +735,7 @@ function buildTableHeaders(){
     th.style.color=STAGE_COLORS[i];
     th.style.borderBottom=`2px solid ${STAGE_COLORS[i]}`;
     if(conflicts)th.classList.add('stage-h-warn');
-    th.innerHTML=`<input class="stage-inp" id="sname-${i}" value="${esc(stageNames[i])}" placeholder="Stage ${i+1}" oninput="saveStageNames()" style="text-align:center;font-size:15px;color:${STAGE_COLORS[i]}"> ${conflicts?'<span style="color:#ef4444;font-size:16px">⚠️</span>':''}`;
+    th.innerHTML=`<input class="stage-inp" id="sname-${i}" value="${esc(stageNames[i])}" placeholder="Stage ${i+1}" oninput="saveStageNames()" style="text-align:center;font-size:15px;color:${STAGE_COLORS[i]}" title="Clic para editar nombre"><button class="stage-edit-btn" onclick="document.getElementById('sname-${i}').focus()" title="Renombrar stage">✏️</button>${conflicts?'<span style="color:#ef4444;font-size:16px">⚠️</span>':''}`;
     r1.appendChild(th);
 
     // Row 2: 5 sub-headers
@@ -921,9 +925,20 @@ function renderSpCell(idx,sk,selected){
   if(selected){
     const assign=getSpeakerAssignments(selected).filter(a=>!(a.rowIdx===idx&&a.sk===sk));
     const badgeHtml=assign.length?`<div class="sp-cell-badge">📍 ${assign.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ')}</div>`:'';
-    return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-name">${esc(selected)}</div>${badgeHtml}</div></div>`;
+    return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-name">${esc(selected)}</div>${badgeHtml}</div><button class="sp-clear-btn" onclick="clearSpeakerCell(${idx},'${sk}',event)" title="Quitar speaker">✕</button></div>`;
   }
   return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-empty">—</div></div></div>`;
+}
+
+function clearSpeakerCell(idx,sk,e){
+  e.stopPropagation();
+  if(!state.principal[idx])return;
+  if(!state.principal[idx].stages[sk])return;
+  pushHistory();
+  state.principal[idx].stages[sk].speaker='';
+  state.principal[idx].stages[sk].tema='';
+  markDirty('principal');
+  renderPrincipal();
 }
 
 function getSpeakerAssignments(name){
@@ -1174,8 +1189,9 @@ function updateStageField(idx,sk,field,val){
   if(!state.principal[idx])return;
   if(!state.principal[idx].stages[sk])state.principal[idx].stages[sk]=newStageData();
   pushHistory();
+  if(field==='Tiempo') field='dur';
   state.principal[idx].stages[sk][field]=val;
-  if(field==='Tiempo'){
+  if(field==='dur'){
     recalcStageTimesFrom(sk,idx);
     // Update dur select color in DOM
     const row=document.querySelector(`tr[data-idx="${idx}"]`);
