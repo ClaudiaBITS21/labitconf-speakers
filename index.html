@@ -1799,7 +1799,7 @@ async function loadSpeakers(){
   try{
     const raw=await gasGet('Speakers');
     if(!raw||raw.length<2){state.speakers=[];renderSpeakers();return;}
-    const[,...rows]=raw;
+    const[,...rows]=raw.filter((r,i)=>i===0||String(r[0]||'').trim()!==''||String(r[1]||'').trim()!=='');
     // Schema nuevo (GAS v3): [0]postulacion_num [1]nombre [2]apellido [3]confname [4]tipo [5]cargo
     // [6]pais [7]idioma [8]mail [9]website [10]foto [11]whatsapp [12]telegram [13]signal
     // [14]linkedin [15]x [16]instagram [17]github [18]nostr [19]empresa [20]notas [21]bio
