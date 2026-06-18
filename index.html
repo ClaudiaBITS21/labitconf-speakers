@@ -1513,6 +1513,7 @@ function renderSpeakers(){
   if(!list.length&&!state.speakersManual.length){ tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers.</td></tr>`; return; }
 
   list.forEach(s=>{
+    try{
     const ri=state.speakers.indexOf(s);
     const tArr=s.temasArr;
     const estArr=s.temasEstadoArr;
@@ -1650,6 +1651,10 @@ function renderSpeakers(){
         </div>
       </td>
     </tr>`;
+  }catch(err){
+    rows+=`<tr><td colspan="13" style="padding:8px;background:#3b0f0f;color:#f87171;font-size:12px">❌ Error renderizando speaker ${s.nombre||''} ${s.apellido||''}: ${err.message}</td></tr>`;
+    console.error('renderSpeakers error for speaker',s,err);
+  }
   });
 
   // Manual speakers section (only in 'all' view)
