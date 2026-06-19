@@ -1567,7 +1567,8 @@ async function saveAgenda(sk){
     return [row.tipo||'Charla',row.speaker||'',row.tema||'',row.dur||30,row.inicio||'',row.fin||'',row.durExt||0,
       row.descripcion||'',row.empresa||'',row.moderador||'',row.nivel||'',row.tags||'',row.visible_web?'true':''];
   });
-  await gasPost(sheetName,'replace_all',data);
+  const res=await gasPost(sheetName,'replace_all',data);
+  if(res.error) throw new Error(stageNames[i]+': '+res.error);
   toast('✅ '+stageNames[i]+' guardado'); markClean('principal');
 }
 
