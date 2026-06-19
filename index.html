@@ -515,6 +515,21 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <div id="toast"></div>
 
+<!-- TEXT EDIT MODAL -->
+<div id="textEditModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeTextModal()">
+  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;width:600px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <span id="textModalLabel" style="font-size:14px;font-weight:700;color:#fff;flex:1"></span>
+      <button onclick="closeTextModal()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;line-height:1">✕</button>
+    </div>
+    <textarea id="textModalArea" rows="8" style="width:100%;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-family:inherit;font-size:14px;padding:10px;resize:vertical;outline:none;box-sizing:border-box" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+      <button class="btn" onclick="closeTextModal()">Cancelar</button>
+      <button class="btn save" onclick="saveTextModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <!-- COMMAND PALETTE -->
 <div id="cmdPalette" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:flex-start;justify-content:center;padding-top:80px;">
   <div style="background:#1a1a1a;border:1px solid #dc2626;border-radius:12px;width:560px;max-width:95vw;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);">
@@ -918,16 +933,16 @@ function makeAgendaRow(row,realIdx,sk){
   tdFin.innerHTML=`<div class="time-end" id="fin-${realIdx}" style="padding:4px 5px;text-align:center">${esc(row.fin||'')}</div>`;
   tr.appendChild(tdFin);
 
-  // Tema
+  // Tema (clic abre modal)
   const tdTema=document.createElement('td');
-  tdTema.style.cssText='padding:0;min-width:120px';
-  tdTema.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','tema',this.value)" placeholder="Tema…">${esc(row.tema||'')}</textarea>`;
+  tdTema.style.cssText='padding:0;min-width:150px;max-width:220px;cursor:pointer';
+  tdTema.innerHTML=`<div id="tema-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','tema','Tema',state.agenda['${sk}'][${realIdx}]?.tema||'')" style="padding:5px 7px;font-size:13px;color:${row.tema?'#fff':'#444'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.tema||'— clic para editar —')}</div>`;
   tr.appendChild(tdTema);
 
-  // Descripción
+  // Descripción (clic abre modal)
   const tdDesc=document.createElement('td');
-  tdDesc.style.cssText='padding:0;min-width:120px';
-  tdDesc.innerHTML=`<textarea class="tema-inp desc-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','descripcion',this.value)" placeholder="Descripción…">${esc(row.descripcion||'')}</textarea>`;
+  tdDesc.style.cssText='padding:0;min-width:150px;max-width:220px;cursor:pointer';
+  tdDesc.innerHTML=`<div id="descripcion-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','descripcion','Descripción',state.agenda['${sk}'][${realIdx}]?.descripcion||'')" style="padding:5px 7px;font-size:13px;color:${row.descripcion?'#fff':'#444'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.descripcion||'— clic para editar —')}</div>`;
   tr.appendChild(tdDesc);
 
   // Speaker
@@ -940,14 +955,14 @@ function makeAgendaRow(row,realIdx,sk){
 
   // Empresa (auto desde speaker, editable)
   const tdEmp=document.createElement('td');
-  tdEmp.style.cssText='padding:0;min-width:90px';
-  tdEmp.innerHTML=`<input class="tema-inp" id="empresa-${realIdx}-${sk}" style="width:100%;padding:4px 5px" value="${esc(row.empresa||'')}" placeholder="Empresa…" onchange="updateAgendaField(${realIdx},'${sk}','empresa',this.value)">`;
+  tdEmp.style.cssText='padding:0;width:80px';
+  tdEmp.innerHTML=`<input class="tema-inp" id="empresa-${realIdx}-${sk}" style="width:100%;padding:4px 5px;font-size:12px" value="${esc(row.empresa||'')}" placeholder="Empresa…" onchange="updateAgendaField(${realIdx},'${sk}','empresa',this.value)">`;
   tr.appendChild(tdEmp);
 
   // Moderador
   const tdMod=document.createElement('td');
-  tdMod.style.cssText='padding:0;min-width:90px';
-  tdMod.innerHTML=`<input class="tema-inp" id="moderador-${realIdx}-${sk}" style="width:100%;padding:4px 5px" value="${esc(row.moderador||'')}" placeholder="Moderador…" onchange="updateAgendaField(${realIdx},'${sk}','moderador',this.value)">`;
+  tdMod.style.cssText='padding:0;width:80px';
+  tdMod.innerHTML=`<input class="tema-inp" id="moderador-${realIdx}-${sk}" style="width:100%;padding:4px 5px;font-size:12px" value="${esc(row.moderador||'')}" placeholder="Moderador…" onchange="updateAgendaField(${realIdx},'${sk}','moderador',this.value)">`;
   tr.appendChild(tdMod);
 
   // Nivel
@@ -2288,6 +2303,32 @@ function exportICal() {
   a.download = 'labitconf2026.ics';
   a.click();
 }
+
+// ── TEXT EDIT MODAL ───────────────────────────────────────────────────
+let _textModalCtx={realIdx:null,sk:null,field:null};
+function openTextModal(realIdx,sk,field,label,val){
+  _textModalCtx={realIdx,sk,field};
+  document.getElementById('textModalLabel').textContent=label;
+  const ta=document.getElementById('textModalArea');
+  ta.value=val||'';
+  ta.style.height='auto';
+  const modal=document.getElementById('textEditModal');
+  modal.style.display='flex';
+  setTimeout(()=>{ta.style.height=ta.scrollHeight+'px';ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);},50);
+}
+function closeTextModal(){
+  document.getElementById('textEditModal').style.display='none';
+}
+function saveTextModal(){
+  const {realIdx,sk,field}=_textModalCtx;
+  const val=document.getElementById('textModalArea').value;
+  updateAgendaField(realIdx,sk,field,val);
+  // Update preview cell
+  const preview=document.getElementById(`${field}-prev-${realIdx}-${sk}`);
+  if(preview)preview.textContent=val||'—';
+  closeTextModal();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('textEditModal').style.display==='flex')closeTextModal();});
 
 // ── COMMAND PALETTE ───────────────────────────────────────────────────
 function openCommandPalette() {
