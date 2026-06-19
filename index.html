@@ -1821,6 +1821,7 @@ function renderSpeakers(){
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
           <span class="sp-tema-card-title" style="flex:1">${esc(t)}</span>
           ${temaEstadoSelectHtml(ri,ti,est)}
+          <button onclick="event.stopPropagation();openStageModal(null,null,'send',${ri},${ti})" title="Enviar a agenda" style="background:none;border:1px solid #444;border-radius:4px;color:#fff;cursor:pointer;font-size:13px;padding:1px 6px">🔀</button>
           ${repHtml}
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
@@ -2504,17 +2505,20 @@ function exportICal() {
 }
 
 // ── STAGE PICK MODAL ─────────────────────────────────────────────────
-let _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null};
-function openStageModal(sk,realIdx,mode){
-  _stagePickCtx={sk,realIdx,mode,destSk:null};
+let _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null,spRi:null,spTi:null};
+function openStageModal(sk,realIdx,mode,spRi,spTi){
+  _stagePickCtx={sk,realIdx,mode,destSk:null,spRi:spRi??null,spTi:spTi??null};
+  const isSend=mode==='send';
   const isMove=mode==='move';
-  document.getElementById('stagePickTitle').textContent=isMove?'↗️ Mover a otro stage':'🔁 Copiar a otro stage';
+  document.getElementById('stagePickTitle').textContent=isSend?'🔀 Enviar a agenda':isMove?'↗️ Mover a otro stage':'🔁 Copiar a otro stage';
   const sub=document.getElementById('stagePickSubtitle');
   sub.style.color='#fff';
-  sub.textContent=isMove
-    ?'Al mover el bloque se eliminará de este stage, viaja para quedar como pendiente al inicio en el stage que selecciones.'
-    :'El bloque se mantiene, solo crea una copia como pendiente al inicio en el stage que selecciones.';
-  document.getElementById('stagePickConfirm').textContent=isMove?'Mover':'Copiar';
+  sub.textContent=isSend
+    ?'Se creará un bloque pendiente al inicio del día en el stage que selecciones.'
+    :isMove
+      ?'Al mover el bloque se eliminará de este stage, viaja para quedar como pendiente al inicio en el stage que selecciones.'
+      :'El bloque se mantiene, solo crea una copia como pendiente al inicio en el stage que selecciones.';
+  document.getElementById('stagePickConfirm').textContent=isSend?'Enviar':isMove?'Mover':'Copiar';
   const list=document.getElementById('stagePickList');
   list.innerHTML='';
   STAGE_KEYS.forEach((key,i)=>{
@@ -2535,17 +2539,49 @@ function openStageModal(sk,realIdx,mode){
 }
 function closeStageModal(){
   document.getElementById('stagePickModal').style.display='none';
-  _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null};
+  _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null,spRi:null,spTi:null};
 }
 function confirmStageAction(){
-  const{sk,realIdx,mode,destSk}=_stagePickCtx;
+  const{sk,realIdx,mode,destSk,spRi,spTi}=_stagePickCtx;
   if(!destSk){toast('⚠️ Seleccioná un stage destino',true);return;}
   pushHistory();
+
+  if(mode==='send'){
+    // Crear bloque desde speaker detail
+    const sp=state.speakers[spRi];
+    if(!sp){toast('⚠️ Speaker no encontrado',true);return;}
+    const tema=sp.temasArr[spTi]||'';
+    const tm=sp._temas[spTi]||{};
+    const rowNew=newAgendaRow('');
+    rowNew.speaker=sp.nombre||'';
+    rowNew.tema=tema;
+    rowNew.empresa=sp.empresa||'';
+    rowNew.nivel=tm.nivel||'';
+    rowNew.tags=tm.tags||'';
+    rowNew.descripcion=tm.abstract||tm.descripcion||'';
+    rowNew.dur=parseInt(tm.duracion)||30;
+    rowNew.notas='[pendiente]';
+    rowNew.inicio='';rowNew.fin='';
+    ensureDaySections(destSk);
+    const dayKey='D'+currentDay;
+    const destAll=state.agenda[destSk];
+    let insertAt=destAll.length;
+    for(let i=0;i<destAll.length;i++){
+      if(destAll[i].tipo==='DIA'&&destAll[i].dia===dayKey){insertAt=i+1;break;}
+    }
+    destAll.splice(insertAt,0,rowNew);
+    recalcAgendaTimes(destSk,currentDay);
+    markDirty('principal',destSk);
+    closeStageModal();
+    renderAgenda();
+    toast(`✅ "${tema||sp.nombre}" enviado como pendiente`);
+    return;
+  }
+
   const rowCopy=JSON.parse(JSON.stringify(state.agenda[sk][realIdx]));
   const existingNotas=(rowCopy.notas||'').replace(/^\[pendiente\]\s*/,'');
   rowCopy.notas='[pendiente]'+(existingNotas?' '+existingNotas:'');
   rowCopy.inicio='';rowCopy.fin='';
-  // Insert at top of current day in destination (right after DIA marker)
   ensureDaySections(destSk);
   const dayKey='D'+currentDay;
   const destAll=state.agenda[destSk];
