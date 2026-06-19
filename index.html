@@ -654,9 +654,14 @@ function markClean(s){ dirty[s]=false; const map={principal:'saveBtnPrincipal',s
 
 // ── GAS ───────────────────────────────────────────────────────────────
 async function gasGet(sheet){
-  const r=await fetch(`${GAS_URL}?sheet=${sheet}`); const j=await r.json();
-  if(j.version)versions[sheet]=j.version;
-  return j.data||j;
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),20000);
+  try{
+    const r=await fetch(`${GAS_URL}?sheet=${sheet}`,{signal:ctrl.signal});
+    const j=await r.json();
+    if(j.version)versions[sheet]=j.version;
+    return j.data||j;
+  }finally{clearTimeout(tid);}
 }
 async function checkVersion(sheet){
   try{ const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheet}`); const j=await r.json(); if(j.version&&j.version!=='0'&&j.version!==versions[sheet]){toast('⚠️ Hay cambios de otro usuario. Actualizá antes de guardar.',true);return false;} return true; }catch{return true;}
@@ -2284,6 +2289,7 @@ async function loadAll(){
   try{
     await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
+    renderAgenda(); renderSpeakers();
   }catch(e){
     setStatus(false); toast('⚠️ Sin conexión al servidor',true);
     renderAgenda(); renderSpeakers(); renderIdeas();
