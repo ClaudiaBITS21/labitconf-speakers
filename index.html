@@ -967,13 +967,13 @@ function makeAgendaRow(row,realIdx,sk){
   // Tema (clic abre modal)
   const tdTema=document.createElement('td');
   tdTema.style.cssText='padding:0;min-width:150px;max-width:220px;cursor:pointer';
-  tdTema.innerHTML=`<div id="tema-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','tema','Tema',state.agenda['${sk}'][${realIdx}]?.tema||'')" style="padding:5px 7px;font-size:13px;color:${row.tema?'#fff':'#444'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.tema||'— clic para editar —')}</div>`;
+  tdTema.innerHTML=`<div id="tema-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','tema','Tema',state.agenda['${sk}'][${realIdx}]?.tema||'')" style="padding:5px 7px;font-size:13px;color:${row.tema?'#fff':'#666'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.tema||'— clic para editar —')}</div>`;
   tr.appendChild(tdTema);
 
   // Descripción (clic abre modal)
   const tdDesc=document.createElement('td');
   tdDesc.style.cssText='padding:0;min-width:150px;max-width:220px;cursor:pointer';
-  tdDesc.innerHTML=`<div id="descripcion-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','descripcion','Descripción',state.agenda['${sk}'][${realIdx}]?.descripcion||'')" style="padding:5px 7px;font-size:13px;color:${row.descripcion?'#fff':'#444'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.descripcion||'— clic para editar —')}</div>`;
+  tdDesc.innerHTML=`<div id="descripcion-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','descripcion','Descripción',state.agenda['${sk}'][${realIdx}]?.descripcion||'')" style="padding:5px 7px;font-size:13px;color:${row.descripcion?'#fff':'#666'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.descripcion||'— clic para editar —')}</div>`;
   tr.appendChild(tdDesc);
 
   // Speaker
@@ -2222,8 +2222,8 @@ async function loadSpeakers(){
       let temasData=[];
       const colT=String(r[temaCol]||'').trim();
       if(colT.startsWith('[')){try{temasData=JSON.parse(colT);}catch(e){temasData=[];}}
-      if(!temasData.length){
-        // fallback schema v1 (tema1/detalle1...)
+      if(!temasData.length&&!isV3){
+        // fallback schema v1 (tema1/detalle1...) — solo para filas NO v3
         [[16,17],[18,19],[20,21],[22,23]].forEach(([ti,di])=>{
           const tt=String(r[ti]||'').trim();
           if(tt)temasData.push({titulo:tt,abstract:'',descripcion:String(r[di]||''),tags:'',nivel:'',formatos:'',duracion:'30',panel:'no',estado:'disponible',stage:'',day:''});
