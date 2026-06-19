@@ -977,14 +977,15 @@ function makeAgendaRow(row,realIdx,sk){
   // Idioma (derivado de los speakers asignados)
   const tdLang=document.createElement('td');
   tdLang.style.cssText='padding:3px 5px;width:42px;text-align:center;vertical-align:middle';
+  tdLang.id=`lang-cell-${realIdx}-${sk}`;
   const langNames=(row.speaker||'').split('|').map(n=>n.trim()).filter(Boolean);
-  const langBadges=langNames.map(n=>{
+  tdLang.innerHTML=langNames.map(n=>{
     const sp=state.speakers.find(s=>s.nombre===n);
-    const lang=(sp?.idioma||'').toUpperCase().trim();
-    if(!lang||lang==='ES') return `<span style="font-size:10px;font-weight:700;color:#eab308;background:rgba(234,179,8,.15);border-radius:3px;padding:1px 4px;display:block;margin:1px 0">ES</span>`;
-    return `<span style="font-size:10px;font-weight:700;color:#60a5fa;background:rgba(96,165,250,.15);border-radius:3px;padding:1px 4px;display:block;margin:1px 0">${lang}</span>`;
+    const lang=(sp?.idioma||'ES').toUpperCase().trim();
+    const isEs=lang==='ES'||lang==='ESPAÑOL'||lang==='ESPANOL';
+    const display=isEs?'SP':lang.substring(0,2);
+    return `<span style="font-size:10px;font-weight:700;color:${isEs?'#eab308':'#60a5fa'};background:${isEs?'rgba(234,179,8,.15)':'rgba(96,165,250,.15)'};border-radius:3px;padding:1px 4px;display:block;margin:1px 0">${display}</span>`;
   }).join('');
-  tdLang.innerHTML=langBadges||'';
   tr.appendChild(tdLang);
 
   // Empresa (auto desde speaker, editable)
@@ -1088,7 +1089,9 @@ function removeSpeakerFromCell(realIdx,sk,name,e){
   pushHistory();
   const names=getSpeakerNames(row).filter(n=>n!==name);
   row.speaker=names.join('|');
-  if(!names.length)row.tema='';
+  if(!names.length){
+    row.tema=''; row.tags=''; row.descripcion=''; row.empresa=''; row.nivel='';
+  }
   markDirty('principal',sk); renderAgenda();
 }
 
@@ -1404,18 +1407,30 @@ function selectSpeakerWithTema(name,tema){
       const conflictClass=getConflictClass(idx,sk);
       cell.className='sc-speaker'+(conflictClass?' '+conflictClass:'');
     }
+    // Refresh lang cell
+    const langTd=document.getElementById(`lang-cell-${idx}-${sk}`);
+    if(langTd){
+      const spNames=(state.agenda[sk]?.[idx]?.speaker||'').split('|').map(n=>n.trim()).filter(Boolean);
+      langTd.innerHTML=spNames.map(n=>{
+        const sp=state.speakers.find(s=>s.nombre===n);
+        const lang=(sp?.idioma||'ES').toUpperCase().trim();
+        const isEs=lang==='ES'||lang==='ESPAÑOL'||lang==='ESPANOL';
+        const display=isEs?'SP':lang.substring(0,2);
+        return `<span style="font-size:10px;font-weight:700;color:${isEs?'#eab308':'#60a5fa'};background:${isEs?'rgba(234,179,8,.15)':'rgba(96,165,250,.15)'};border-radius:3px;padding:1px 4px;display:block;margin:1px 0">${display}</span>`;
+      }).join('');
+    }
   }
   closeSpDrop();
 }
 
 async function selectSpeakerManual(name){
   const n=name.trim(); if(!n)return;
+  if(_spDropCtx.field==='moderador'){ selectSpeakerWithTema(n,''); return; }
   // Add to speakersManual if not exists
   if(!state.speakersManual.some(s=>s.nombre.toLowerCase()===n.toLowerCase())){
     const fecha=new Date().toISOString().slice(0,10);
     state.speakersManual.push({nombre:n,notas:'',fecha});
     markDirty('speakersManual');
-    // Auto-save manual speakers
     try{ await gasPost('SpeakerManual','replace_all',state.speakersManual.map(s=>[s.nombre,s.notas||'',s.fecha||''])); }
     catch(err){ toast('⚠️ No se pudo guardar speaker manual',true); }
   }
