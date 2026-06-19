@@ -350,6 +350,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <button class="btn" onclick="addAgendaRow()">+ Bloque</button>
       <button class="btn" onclick="presetAllStages()" title="Generar bloques de 30' de 09:30 a 18:30 en todos los stages">📋 Preset</button>
       <button class="btn save" id="saveBtnPrincipal" onclick="saveAllStages()">💾 Guardar</button>
+      <button class="btn" onclick="reconcileSpeakerStates()" title="Sincronizar estados de speakers con lo que está en la agenda">🔁 Sincronizar</button>
       <button class="btn" onclick="loadAgenda().then(()=>{STAGE_KEYS.forEach(sk=>[2,3].forEach(d=>recalcAgendaTimes(sk,d)));renderAgenda()})">🔄 Actualizar</button>
       <button class="btn" style="color:#f97316" onclick="debugSheet()" title="Ver qué hay en el sheet">🔍 Debug</button>
       <button class="btn" onclick="exportICal()">📅 iCal</button>
@@ -1451,6 +1452,32 @@ function movePrincipalRow(idx,dir){ moveAgendaRow(activeStage,idx,dir); } // com
 function delAgendaRow(sk,realIdx){
   if(!confirm('¿Eliminar este bloque?'))return;
   pushHistory();
+  const row=state.agenda[sk][realIdx];
+  // Limpiar estado del speaker si era el único bloque que lo tenía
+  if(row&&row.tipo!=='DIA'){
+    getSpeakerNames(row).forEach(name=>{
+      const sp=state.speakers.find(s=>s.nombre===name);
+      if(!sp)return;
+      const tema=row.tema||'';
+      const ti=tema?sp.temasArr.indexOf(tema):-1;
+      if(ti>=0&&sp._temas[ti]){
+        // Solo limpiar si no hay otro bloque en otra fila con este speaker+tema
+        const otherAssign=STAGE_KEYS.some(sk2=>
+          (state.agenda[sk2]||[]).some((r,ri)=>
+            ri!==realIdx&&r.tipo!=='DIA'&&
+            getSpeakerNames(r).some(n=>n===name)&&(r.tema||'')===(tema)
+          )
+        );
+        if(!otherAssign){
+          sp._temas[ti].estado='disponible';
+          sp._temas[ti].stage='';
+          sp._temas[ti].day='';
+        }
+      }
+      sp.temas_estado=sp._temas.map(t=>t.estado||'disponible').join(',');
+      markDirty('speakers');
+    });
+  }
   state.agenda[sk].splice(realIdx,1);
   recalcAgendaTimes(sk,currentDay);
   markDirty('principal',sk); renderAgenda();
@@ -2392,6 +2419,7 @@ async function loadAll(){
     await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
     STAGE_KEYS.forEach(sk=>[2,3].forEach(d=>recalcAgendaTimes(sk,d)));
+    reconcileSpeakerStates();
     saveStateCache();
     try{ renderAgenda(); }catch(e){ console.error('renderAgenda error:',e); }
     try{ renderSpeakers(); }catch(e){ console.error('renderSpeakers error:',e); }
@@ -2450,6 +2478,64 @@ function pushHistory() {
   _histIdx = _history.length - 1;
 }
 function isTabActive(name){ return document.getElementById('tab-'+name)?.classList.contains('active'); }
+function reconcileSpeakerStates(){
+  // Construir mapa de asignaciones reales desde la agenda
+  const assigned={}; // "nombre||tema" -> {sk, day}
+  STAGE_KEYS.forEach((sk,si)=>{
+    (state.agenda[sk]||[]).forEach(row=>{
+      if(row.tipo==='DIA'||!row.speaker)return;
+      const day=row.dia||(()=>{
+        // detectar día buscando el DIA marker anterior
+        const all=state.agenda[sk];
+        let d='';
+        for(let i=0;i<all.length;i++){
+          if(all[i].tipo==='DIA')d=all[i].dia;
+          if(all[i]===row)break;
+        }
+        return d;
+      })();
+      getSpeakerNames(row).forEach(name=>{
+        const key=name+'||'+(row.tema||'');
+        if(!assigned[key]) assigned[key]={sk,day};
+      });
+    });
+  });
+
+  let changed=0;
+  state.speakers.forEach(sp=>{
+    if(!sp._temas)return;
+    sp._temas.forEach((tm,ti)=>{
+      const key=sp.nombre+'||'+(tm.titulo||'');
+      if(assigned[key]){
+        // Está en la agenda — marcar confirmado con stage/day correcto
+        if(tm.estado!=='confirmado'||tm.stage!==assigned[key].sk){
+          tm.estado='confirmado'; tm.stage=assigned[key].sk;
+          const d=assigned[key].day;
+          tm.day=d==='D2'?'oct30':d==='D3'?'oct31':d||'';
+          changed++;
+        }
+      } else {
+        // No está en ningún bloque — limpiar si estaba marcado como confirmado
+        if(tm.estado==='confirmado'||tm.stage){
+          tm.estado='disponible'; tm.stage=''; tm.day='';
+          changed++;
+        }
+      }
+    });
+    sp.temas_estado=sp._temas.map(t=>t.estado||'disponible').join(',');
+    if(sp._temas.every(t=>t.estado!=='confirmado')&&sp.estado==='confirmado')
+      sp.estado='disponible';
+  });
+
+  if(changed>0){
+    markDirty('speakers');
+    toast(`✅ Sincronizado — ${changed} estado(s) corregido(s)`);
+  } else {
+    toast('✓ Todo sincronizado, no hay diferencias');
+  }
+  renderSpeakers();
+}
+
 function refreshAll() {
   renderPrincipal();
   renderSpeakers();
