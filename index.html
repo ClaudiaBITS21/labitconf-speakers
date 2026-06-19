@@ -366,6 +366,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <button class="btn" onclick="presetAllStages()" title="Generar bloques de 30' de 09:30 a 18:30 en todos los stages">📋 Preset</button>
       <button class="btn save" id="saveBtnPrincipal" onclick="saveAllStages()">💾 Guardar</button>
       <button class="btn" onclick="loadAgenda().then(()=>renderAgenda())">🔄 Actualizar</button>
+      <button class="btn" style="color:#f97316" onclick="debugSheet()" title="Ver qué hay en el sheet">🔍 Debug</button>
       <button class="btn" onclick="exportICal()">📅 iCal</button>
     </div>
   </div>
@@ -1546,6 +1547,16 @@ async function saveAllStages(){
   const failed=saveResults.filter(r=>r.status==='rejected');
   if(failed.length) toast(`⚠️ ${failed.length} stage(s) no se guardaron`,true);
   else toast('✅ Todos los stages guardados');
+}
+
+async function debugSheet(){
+  try{
+    const r=await fetch(`${GAS_URL}?sheet=Stage_1`);
+    const j=await r.json();
+    const rows=(j.data||[]).slice(1,5);
+    const info=rows.map((r,i)=>`fila${i+2}: col5="${r[4]}" col6="${r[5]}"`).join('\n');
+    alert('Stage_1 raw (primeras 4 filas):\n'+(info||'(vacío)'));
+  }catch(e){alert('Error: '+e.message);}
 }
 
 async function saveAgenda(sk){
