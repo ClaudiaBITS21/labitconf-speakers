@@ -395,7 +395,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <span style="font-size:12px;color:#555">↵ Enter para agregar rápido — expandí la fila para completar el resto</span>
     </div>
     <div class="sp-filter-bar" style="gap:8px">
-      <input type="text" id="spSearchInput" placeholder="🔍 Buscar…" oninput="spSearchVal=this.value;renderSpeakers()" style="padding:5px 10px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:200px;flex-shrink:0">
+      <input type="text" id="spSearchInput" placeholder="🔍 Buscar (mín. 3 letras)…" oninput="spSearchDebounce(this.value)" style="padding:5px 10px;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;outline:none;width:220px;flex-shrink:0">
       <select id="spFltEstado" class="btn" style="padding:5px 10px;font-size:13px;cursor:pointer;color-scheme:dark" onchange="spFilterEstado=this.value;renderSpeakers()">
         <option value="">Estado: Todos</option>
         <option value="disponible">Disponible</option>
@@ -588,6 +588,12 @@ let spFilterVal = 'all';
 let spSortField = '';
 let spSortDir = 1;
 let spSearchVal = '';
+let _spSearchTimer = null;
+function spSearchDebounce(val){
+  clearTimeout(_spSearchTimer);
+  spSearchVal = val;
+  if(val.length === 0 || val.length >= 3) _spSearchTimer = setTimeout(renderSpeakers, 250);
+}
 let spFilterEstado = '';
 let spFilterFecha = '';
 let spFilterStage = '';
@@ -1690,7 +1696,11 @@ function renderSpeakers(){
   if(spFilterFecha)  list=list.filter(s=>(s._temas||[]).some(t=>t.day===spFilterFecha));
   if(spFilterStage)  list=list.filter(s=>(s._temas||[]).some(t=>t.stage===spFilterStage));
 
-  // Búsqueda texto libre
+  // Búsqueda texto libre — mínimo 3 caracteres
+  if(spSearchVal.trim().length>0&&spSearchVal.trim().length<3){
+    tbody.innerHTML=`<tr><td colspan="13" style="text-align:center;padding:30px;color:var(--dim);font-size:14px">Escribí al menos 3 letras para buscar…</td></tr>`;
+    return;
+  }
   if(spSearchVal.trim()){
     const q=spSearchVal.trim().toLowerCase();
     list=list.filter(s=>{
