@@ -1462,8 +1462,26 @@ function insertAgendaRow(sk,realIdx){
   state.agenda[sk].splice(realIdx+1,0,newAgendaRow(inicio));
   recalcAgendaTimes(sk,currentDay);
   markDirty('principal',sk); renderAgenda();
+  flashNewRow(realIdx+1);
 }
 function insertPrincipalRow(idx){ insertAgendaRow(activeStage,idx); } // compat
+
+function flashNewRow(realIdx){
+  requestAnimationFrame(()=>{
+    const tr=document.querySelector(`tr[data-idx="${realIdx}"]`);
+    if(!tr)return;
+    tr.scrollIntoView({behavior:'smooth',block:'center'});
+    tr.style.transition='background .15s';
+    tr.style.background='rgba(34,197,94,.18)';
+    tr.style.outline='2px solid #22c55e';
+    tr.style.outlineOffset='-1px';
+    setTimeout(()=>{
+      tr.style.background='';
+      tr.style.outline='';
+      tr.style.outlineOffset='';
+    },2000);
+  });
+}
 
 function addAgendaRow(sk){
   sk=sk||activeStage;
