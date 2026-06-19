@@ -1375,7 +1375,7 @@ function selectSpeakerWithTema(name,tema){
   if(tr){
     const cell=tr.querySelector('.sc-speaker');
     if(cell){
-      cell.innerHTML=renderSpCell(idx,sk,name);
+      cell.innerHTML=renderSpCell(idx,sk,state.agenda[sk]?.[idx]?.speaker||'');
       const conflictClass=getConflictClass(idx,sk);
       cell.className='sc-speaker'+(conflictClass?' '+conflictClass:'');
     }
