@@ -90,7 +90,7 @@ thead .col-stk{z-index:11;background:var(--bg3);}
 .stage-edit-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
 tbody tr:hover{background:rgba(255,255,255,.015);}
 td{border:1px solid var(--border);padding:0;vertical-align:middle;}
-td.row-actions{width:40px;text-align:center;padding:2px;}
+td.row-actions{width:52px;min-width:52px;text-align:center;padding:2px;}
 .row-act-wrap{display:flex;flex-direction:column;gap:1px;align-items:center;}
 .row-act-wrap2{display:flex;gap:1px;}
 .del-row,.ins-row,.mv-row{background:none;border:none;cursor:pointer;font-size:16px;padding:2px 5px;border-radius:3px;line-height:1;}
@@ -295,12 +295,6 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 #claveError{color:#ef4444;font-size:15px;margin-bottom:8px;min-height:16px;}
 #claveConfirm{background:var(--red);color:#fff;border:none;padding:9px 22px;border-radius:7px;font-weight:700;cursor:pointer;font-size:14px;width:100%;}
 
-/* LOCK SCREEN */
-#lockScreen{display:none;position:fixed;inset:0;background:#000;z-index:99999;align-items:center;justify-content:center;flex-direction:column;}
-#lockScreen.show{display:flex;}
-#lockBox{background:#0f0f0f;border:1px solid #2d2d2d;border-radius:14px;padding:36px 32px;width:320px;text-align:center;}
-#lockLogo{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px;}
-#lockLogo span{color:var(--red);}
 #lockSub{font-size:14px;color:#666;margin-bottom:24px;}
 #lockInput{width:100%;background:#1a1a1a;border:1px solid #2d2d2d;color:#fff;padding:11px 14px;border-radius:8px;font-size:16px;text-align:center;letter-spacing:.15em;margin-bottom:10px;outline:none;font-family:inherit;}
 #lockInput:focus{border-color:var(--red);}
@@ -316,16 +310,6 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
-<div id="lockScreen">
-  <div id="lockBox">
-    <div id="lockLogo">LABITCONF <span>'26</span></div>
-    <div id="lockSub">Ingresá la clave de acceso</div>
-    <input id="lockInput" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')lockConfirm()">
-    <div id="lockError"></div>
-    <button id="lockBtn" onclick="lockConfirm()">Entrar</button>
-  </div>
-</div>
 
 <!-- NAV -->
 <div class="nav">
@@ -365,7 +349,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <button class="btn" onclick="addAgendaRow()">+ Bloque</button>
       <button class="btn" onclick="presetAllStages()" title="Generar bloques de 30' de 09:30 a 18:30 en todos los stages">📋 Preset</button>
       <button class="btn save" id="saveBtnPrincipal" onclick="saveAllStages()">💾 Guardar</button>
-      <button class="btn" onclick="loadAgenda().then(()=>renderAgenda())">🔄 Actualizar</button>
+      <button class="btn" onclick="loadAgenda().then(()=>{STAGE_KEYS.forEach(sk=>[2,3].forEach(d=>recalcAgendaTimes(sk,d)));renderAgenda()})">🔄 Actualizar</button>
       <button class="btn" style="color:#f97316" onclick="debugSheet()" title="Ver qué hay en el sheet">🔍 Debug</button>
       <button class="btn" onclick="exportICal()">📅 iCal</button>
     </div>
@@ -516,6 +500,19 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <div id="toast"></div>
 
+<!-- STAGE PICK MODAL -->
+<div id="stagePickModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;align-items:center;justify-content:center;" onclick="if(event.target===this)closeStageModal()">
+  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;width:360px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9)">
+    <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px" id="stagePickTitle"></div>
+    <div style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.5" id="stagePickSubtitle"></div>
+    <div id="stagePickList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn" onclick="closeStageModal()">Cancelar</button>
+      <button class="btn save" onclick="confirmStageAction()" id="stagePickConfirm">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <!-- TEXT EDIT MODAL -->
 <div id="textEditModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeTextModal()">
   <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;width:600px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9);">
@@ -568,6 +565,18 @@ const ESTADO_COLOR= {disponible:'#888',confirmado:'#22c55e',revision:'#eab308',r
 const PAIS_INFO={'Argentina':['🇦🇷','ARG'],'Bolivia':['🇧🇴','BOL'],'Brasil':['🇧🇷','BRA'],'Brazil':['🇧🇷','BRA'],'Chile':['🇨🇱','CHI'],'Colombia':['🇨🇴','COL'],'Costa Rica':['🇨🇷','CRI'],'Cuba':['🇨🇺','CUB'],'Ecuador':['🇪🇨','ECU'],'El Salvador':['🇸🇻','SLV'],'España':['🇪🇸','ESP'],'Spain':['🇪🇸','ESP'],'Estados Unidos':['🇺🇸','USA'],'United States':['🇺🇸','USA'],'Guatemala':['🇬🇹','GTM'],'Honduras':['🇭🇳','HON'],'México':['🇲🇽','MEX'],'Mexico':['🇲🇽','MEX'],'Nicaragua':['🇳🇮','NIC'],'Panamá':['🇵🇦','PAN'],'Panama':['🇵🇦','PAN'],'Paraguay':['🇵🇾','PRY'],'Perú':['🇵🇪','PER'],'Peru':['🇵🇪','PER'],'Portugal':['🇵🇹','PRT'],'Puerto Rico':['🇵🇷','PRI'],'República Dominicana':['🇩🇴','DOM'],'Dominican Republic':['🇩🇴','DOM'],'Uruguay':['🇺🇾','URY'],'Venezuela':['🇻🇪','VEN'],'Alemania':['🇩🇪','DEU'],'Germany':['🇩🇪','DEU'],'Australia':['🇦🇺','AUS'],'Austria':['🇦🇹','AUT'],'Bélgica':['🇧🇪','BEL'],'Belgium':['🇧🇪','BEL'],'Canadá':['🇨🇦','CAN'],'Canada':['🇨🇦','CAN'],'China':['🇨🇳','CHN'],'Francia':['🇫🇷','FRA'],'France':['🇫🇷','FRA'],'India':['🇮🇳','IND'],'Italia':['🇮🇹','ITA'],'Italy':['🇮🇹','ITA'],'Japón':['🇯🇵','JPN'],'Japan':['🇯🇵','JPN'],'Noruega':['🇳🇴','NOR'],'Norway':['🇳🇴','NOR'],'Reino Unido':['🇬🇧','GBR'],'United Kingdom':['🇬🇧','GBR'],'Rusia':['🇷🇺','RUS'],'Russia':['🇷🇺','RUS'],'Singapur':['🇸🇬','SGP'],'Singapore':['🇸🇬','SGP'],'Suecia':['🇸🇪','SWE'],'Sweden':['🇸🇪','SWE'],'Suiza':['🇨🇭','CHE'],'Switzerland':['🇨🇭','CHE'],'Turquía':['🇹🇷','TUR'],'Turkey':['🇹🇷','TUR'],'Ucrania':['🇺🇦','UKR'],'Ukraine':['🇺🇦','UKR']};
 function getPaisInfo(p){return PAIS_INFO[p]||['🌍',p?p.slice(0,3).toUpperCase():'???'];};
 
+// Disponibilidad del speaker según rango de fechas vs días del evento
+const EVENT_DAYS = {'oct30':'2026-10-30','oct31':'2026-10-31'};
+function getDispBadges(s){
+  const desde=s.disponible_desde||'';
+  const hasta=s.disponible_hasta||'';
+  if(!desde&&!hasta) return '<span style="font-size:11px;color:#555">Sin fechas</span>';
+  return Object.entries(EVENT_DAYS).map(([key,date])=>{
+    const ok=(!desde||date>=desde)&&(!hasta||date<=hasta);
+    return `<span style="font-size:11px;font-weight:700;padding:1px 5px;border-radius:3px;margin-right:2px;background:${ok?'rgba(34,197,94,.15)':'rgba(239,68,68,.1)'};color:${ok?'#22c55e':'#555'}">${key==='oct30'?'Oct 30':'Oct 31'}</span>`;
+  }).join('');
+}
+
 // ── STATE ─────────────────────────────────────────────────────────────
 const _emptyAgenda = () => { const a={}; STAGE_KEYS.forEach(sk=>a[sk]=[]); return a; };
 let state = { agenda: _emptyAgenda(), principal:[], speakers:[], speakersManual:[], ideas:[] };
@@ -599,7 +608,6 @@ function buildStageFilterOptions(){
     +STAGE_KEYS.map((sk,i)=>`<option value="${sk}"${cur===sk?' selected':''}>${esc(stageNames[i]||'Stage '+(i+1))}</option>`).join('');
 }
 let dirty = {principal:false,speakers:false,speakersManual:false,ideas:false};
-const ACCESS_KEY = 'BTC/2026';
 let writeKey = localStorage.getItem('labitconf_write_key') || '';
 let versions = {Principal:'0',Speakers:'0',SpeakerManual:'0',Ideas:'0'};
 
@@ -778,7 +786,7 @@ const DAY_KEYS = ['D2','D3'];
 
 function newAgendaRow(inicio='09:00',dur=30){
   return {tipo:'Charla',speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0,
-    descripcion:'',empresa:'',moderador:'',nivel:'',tags:'',visible_web:false};
+    descripcion:'',empresa:'',moderador:'',nivel:'',tags:'',visible_web:false,notas:''};
 }
 
 // Returns [{row, realIdx}] for the given stage and day number (1-4)
@@ -839,6 +847,7 @@ function renderAgenda(){
   if(compareStage&&compareStage!==activeStage) stagesToShow.push(compareStage);
 
   stagesToShow.forEach(sk=>{
+    recalcAgendaTimes(sk,currentDay);
     const si=STAGE_KEYS.indexOf(sk);
     const color=STAGE_COLORS[si];
     const name=stageNames[si]||('Stage '+(si+1));
@@ -864,7 +873,7 @@ function renderAgenda(){
     thead.innerHTML=`<tr>
       ${_th('Acc')}${_th('Tipo')}${_th('Tiempo')}${_th('Inicio')}${_th('Fin')}
       ${_th('Tema')}${_th('Descripción')}${_th('Speaker')}${_th('Empresa')}
-      ${_th('Moderador')}${_th('Nivel')}${_th('TAGS')}${_th('Visible')}
+      ${_th('Moderador')}${_th('Nivel')}${_th('TAGS')}${_th('Visible')}${_th('Notas')}
     </tr>`;
     table.appendChild(thead);
     const tbody=document.createElement('tbody');
@@ -895,15 +904,21 @@ function makeAgendaRow(row,realIdx,sk){
   const allRows=getAgendaRows(sk,currentDay);
   const posInDay=allRows.findIndex(r=>r.realIdx===realIdx);
   const isFirst=posInDay===0, isLast=posInDay===allRows.length-1;
+  const isPending=(row.notas||'').startsWith('[pendiente]');
+  if(isPending) tr.style.background='rgba(234,179,8,0.07)';
 
   // Actions
   const tdAct=document.createElement('td');
   tdAct.className='row-actions';
-  tdAct.style.width='40px';
+  tdAct.style.cssText='width:56px;min-width:56px;text-align:center;padding:2px';
   tdAct.innerHTML=`<div class="row-act-wrap">
     <div class="row-act-wrap2">
       <button class="mv-row" onclick="moveAgendaRow('${sk}',${realIdx},-1)" ${isFirst?'disabled':''} title="Subir">▲</button>
       <button class="mv-row" onclick="moveAgendaRow('${sk}',${realIdx},1)" ${isLast?'disabled':''} title="Bajar">▼</button>
+    </div>
+    <div class="row-act-wrap2">
+      <button class="mv-row" onclick="openStageModal('${sk}',${realIdx},'move')" title="Mover a otro stage" style="font-size:13px">↗️</button>
+      <button class="mv-row" onclick="openStageModal('${sk}',${realIdx},'copy')" title="Copiar a otro stage" style="font-size:13px">🔁</button>
     </div>
     <div class="row-act-wrap2">
       <button class="del-row" onclick="delAgendaRow('${sk}',${realIdx})" title="Eliminar">✕</button>
@@ -999,6 +1014,15 @@ function makeAgendaRow(row,realIdx,sk){
   tdVis.innerHTML=`<input type="checkbox" id="vis-${realIdx}-${sk}" ${row.visible_web?'checked':''} onchange="updateAgendaField(${realIdx},'${sk}','visible_web',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--red)">`;
   tr.appendChild(tdVis);
 
+  // Notas de slot
+  const tdNotas=document.createElement('td');
+  tdNotas.style.cssText='padding:0;min-width:80px;max-width:140px';
+  const notasVal=row.notas||'';
+  const notasPreview=notasVal?`<span style="font-size:11px;color:#eab308;cursor:pointer;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;padding:2px 4px" title="${esc(notasVal)}" onclick="openTextModal(${realIdx},'${sk}','notas','Notas del slot','${notasVal.replace(/'/g,"\\'")}')">${esc(notasVal)}</span>`:`<span style="font-size:11px;color:#333;cursor:pointer;padding:2px 4px" onclick="openTextModal(${realIdx},'${sk}','notas','Notas del slot','')">—</span>`;
+  tdNotas.innerHTML=notasPreview;
+  tdNotas.id=`notas-prev-${realIdx}-${sk}`;
+  tr.appendChild(tdNotas);
+
   return tr;
 }
 
@@ -1030,8 +1054,11 @@ function renderSpCell(idx,sk,selected){
     const sp=state.speakers.find(s=>s.nombre===name);
     const apodo=sp?.apodo?` (${sp.apodo})`:'';
     const isAssigned=count>0;
+    const lang=(sp?.idioma||'').toLowerCase();
+    const langBadge=lang&&lang!=='es'?`<span style="font-size:9px;font-weight:700;color:#60a5fa;background:rgba(96,165,250,.15);border-radius:3px;padding:0 3px;margin-left:2px">${lang.toUpperCase()}</span>`:'';
     return `<div style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
       <span style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
+      ${langBadge}
       ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
       <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
     </div>`;
@@ -1186,19 +1213,35 @@ function populateSpDrop(){
     } else {
       temasArr.forEach((tema,ti)=>{
         const est=temasEstado[ti]||'disponible';
-        if(est==='confirmado')return; // ya usado
+        const isConfirmado=est==='confirmado';
         // Filtro por tema keyword
         if(qTemaLow&&!tema.toLowerCase().includes(qTemaLow)&&!(s.detallesArr[ti]||'').toLowerCase().includes(qTemaLow))return;
         const score=qTema?spMatchScore(qTema,s):1;
-        const estBadge=est==='disponible'?'':` <span style="font-size:10px;color:#06b6d4">[${est}]</span>`;
         const detalle=s.detallesArr[ti]?`<div style="font-size:11px;color:#555;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px">${esc(s.detallesArr[ti])}</div>`:'';
         const scoreBadge=qTema&&score>0.1?`<span style="float:right;font-size:10px;color:#f7931a">${Math.round(score*100)}%</span>`:'';
-        items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','${esc(tema).replace(/'/g,"\\'")}')">
-          <div class="sp-item-name">${icon} ${esc(s.nombre)}${estBadge} ${scoreBadge}</div>
-          <div class="sp-item-tema">💬 ${esc(tema)}</div>
-          ${detalle}
-          ${assignTxt}
-        </div>`});
+        if(isConfirmado){
+          // Mostrar en verde como ya asignado, con info de dónde
+          const temaObj=s._temas?.[ti];
+          const stageLabel=temaObj?.stage?stageNames[STAGE_KEYS.indexOf(temaObj.stage)]||temaObj.stage:'';
+          const dayLabel=temaObj?.day==='oct30'?'Oct 30':temaObj?.day==='oct31'?'Oct 31':'';
+          const whereStr=[stageLabel,dayLabel].filter(Boolean).join(' · ');
+          const dupWarning=`<div style="font-size:11px;color:#eab308;margin-top:2px">⚠️ Si lo asignás de nuevo quedará duplicado en ${whereStr||'otro slot'}</div>`;
+          items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','${esc(tema).replace(/'/g,"\\'")}')">
+            <div class="sp-item-name">${icon} ${esc(s.nombre)} ${scoreBadge}</div>
+            <div class="sp-item-tema" style="color:#22c55e">✓ ${esc(tema)}<span style="font-size:10px;color:#22c55e;margin-left:6px">${whereStr}</span></div>
+            ${detalle}
+            ${dupWarning}
+            ${assignTxt}
+          </div>`});
+        } else {
+          const estBadge=est==='disponible'?'':` <span style="font-size:10px;color:#06b6d4">[${est}]</span>`;
+          items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','${esc(tema).replace(/'/g,"\\'")}')">
+            <div class="sp-item-name">${icon} ${esc(s.nombre)}${estBadge} ${scoreBadge}</div>
+            <div class="sp-item-tema">💬 ${esc(tema)}</div>
+            ${detalle}
+            ${assignTxt}
+          </div>`});
+        }
       });
     }
   });
@@ -1458,7 +1501,7 @@ function presetAllStages(){
       while(cur+30<=END){
         const inicio=minToTime(cur), fin=minToTime(cur+30);
         state.agenda[sk].push({tipo:'Charla',speaker:'',tema:'',dur:30,inicio,fin,durExt:0,
-          descripcion:'',empresa:'',moderador:'',nivel:'',tags:'',visible_web:false});
+          descripcion:'',empresa:'',moderador:'',nivel:'',tags:'',visible_web:false,notas:''});
         cur+=30;
       }
     });
@@ -1512,10 +1555,10 @@ async function loadAgenda(){
       const[,...rows]=raw;
       state.agenda[sk]=rows.map(r=>{
         const tipo=String(r[0]||'');
-        if(tipo==='DIA') return {tipo:'DIA',dia:String(r[1]||'D2')};
+        if(tipo==='DIA') return {tipo:'DIA',dia:String(r[1]||'D2'),notas:''};
         const parseT=v=>{const s=String(v||'');const m=s.match(/T(\d{2}):(\d{2})/);if(m)return m[1]+':'+m[2];return s;};
         return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:parseT(r[4]),fin:parseT(r[5]),durExt:parseInt(r[6])||0,
-          descripcion:String(r[7]||''),empresa:String(r[8]||''),moderador:String(r[9]||''),nivel:String(r[10]||''),tags:String(r[11]||''),visible_web:String(r[12]||'')==='true'};
+          descripcion:String(r[7]||''),empresa:String(r[8]||''),moderador:String(r[9]||''),nivel:String(r[10]||''),tags:String(r[11]||''),visible_web:String(r[12]||'')==='true',notas:String(r[13]||'')};
       });
       // Ensure all day markers exist
       DAY_KEYS.forEach(dk=>{ if(!state.agenda[sk].some(r=>r.tipo==='DIA'&&r.dia===dk)) state.agenda[sk].push({tipo:'DIA',dia:dk}); });
@@ -1568,9 +1611,9 @@ async function saveAgenda(sk){
   const i=STAGE_KEYS.indexOf(sk);
   const sheetName='Stage_'+(i+1);
   const data=(state.agenda[sk]||[]).map(row=>{
-    if(row.tipo==='DIA') return ['DIA',row.dia,'',0,'','',0,'','','','','',''];
+    if(row.tipo==='DIA') return ['DIA',row.dia,'',0,'','',0,'','','','','','',''];
     return [row.tipo||'Charla',row.speaker||'',row.tema||'',row.dur||30,row.inicio||'',row.fin||'',row.durExt||0,
-      row.descripcion||'',row.empresa||'',row.moderador||'',row.nivel||'',row.tags||'',row.visible_web?'true':''];
+      row.descripcion||'',row.empresa||'',row.moderador||'',row.nivel||'',row.tags||'',row.visible_web?'true':'',row.notas||''];
   });
   const res=await gasPost(sheetName,'replace_all',data);
   if(res.error) throw new Error(stageNames[i]+': '+res.error);
@@ -1817,7 +1860,7 @@ function renderSpeakers(){
       <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
       <td style="min-width:140px">${temasResumen}</td>
       <td style="font-size:12px;white-space:nowrap">${(()=>{const stages=[...new Set((s._temas||[]).map(t=>t.stage).filter(Boolean))];return stages.length?stages.map(sk=>`<span style="color:var(--red);font-weight:700">${esc(stageNames[STAGE_KEYS.indexOf(sk)]||sk)}</span>`).join(' '):`<span style="color:#333">—</span>`;})()}</td>
-      <td style="font-size:11px;white-space:nowrap">${(()=>{const days=[...new Set((s._temas||[]).map(t=>t.day).filter(d=>d==='oct30'||d==='oct31'))];const DAY_LABEL={oct30:'30',oct31:'31'};return days.length?days.map(d=>`<span style="color:#fff;font-weight:700;margin-right:3px">${DAY_LABEL[d]||d}</span>`).join(''):`<span style="color:#333">—</span>`;})()}</td>
+      <td style="white-space:nowrap">${getDispBadges(s)}</td>
       <td style="font-size:13px;text-align:center"><span title="${esc(s.pais||'')}">${paisInfo[0]} <span style="color:#555;font-size:11px">${paisInfo[1]}</span></span></td>
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
@@ -1840,7 +1883,7 @@ function renderSpeakers(){
             <div class="sp-detail-field"><span class="sp-detail-lbl">Empresa</span><br><span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></div>
             ${s.website?`<div class="sp-detail-field"><span class="sp-detail-lbl">Website</span><br><a href="${esc(s.website)}" target="_blank" class="sp-detail-val">${esc(s.website)}</a></div>`:''}
             <div class="sp-detail-sec-title" style="margin-top:10px">Participación</div>
-            <div class="sp-detail-field"><span class="sp-detail-lbl">Días</span> <span class="sp-detail-val">${esc(s.dias_asiste||'—')}</span></div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Disponible</span> ${getDispBadges(s)}<br><span style="font-size:11px;color:#555">${esc(s.disponible_desde||'')}${s.disponible_desde&&s.disponible_hasta?' → ':''}${esc(s.disponible_hasta||'')}</span></div>
             <div class="sp-detail-field"><span class="sp-detail-lbl">1ra vez</span> <span class="sp-detail-val">${s.primera_vez||'—'}</span> · <span class="sp-detail-lbl">Podcast</span> <span class="sp-detail-val">${s.disponible_podcast||'—'}</span> · <span class="sp-detail-lbl">Empresa</span> <span class="sp-detail-val">${s.trae_empresa||'—'}</span></div>
           </div>
           <div>
@@ -2306,6 +2349,8 @@ async function loadAll(){
   try{
     await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
+    // Recalculate all stage times from horaApertura after load (overrides any stale sheet values)
+    STAGE_KEYS.forEach(sk=>[2,3].forEach(d=>recalcAgendaTimes(sk,d)));
     try{ renderAgenda(); }catch(e){ console.error('renderAgenda error:',e); }
     try{ renderSpeakers(); }catch(e){ console.error('renderSpeakers error:',e); }
     const totalRows=STAGE_KEYS.reduce((s,sk)=>(state.agenda[sk]||[]).length+s,0);
@@ -2409,6 +2454,66 @@ function exportICal() {
   a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(lines.join('\r\n'));
   a.download = 'labitconf2026.ics';
   a.click();
+}
+
+// ── STAGE PICK MODAL ─────────────────────────────────────────────────
+let _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null};
+function openStageModal(sk,realIdx,mode){
+  _stagePickCtx={sk,realIdx,mode,destSk:null};
+  const isMove=mode==='move';
+  document.getElementById('stagePickTitle').textContent=isMove?'↗️ Mover a otro stage':'🔁 Copiar a otro stage';
+  document.getElementById('stagePickSubtitle').textContent=isMove
+    ?'El bloque se eliminará de este stage y aparecerá como pendiente al inicio del día en el destino.'
+    :'El bloque se mantiene aquí y una copia quedará como pendiente al inicio del día en el destino.';
+  document.getElementById('stagePickConfirm').textContent=isMove?'Mover':'Copiar';
+  const list=document.getElementById('stagePickList');
+  list.innerHTML='';
+  STAGE_KEYS.forEach((key,i)=>{
+    if(key===sk)return;
+    const name=stageNames[i]||key;
+    const color=STAGE_COLORS[i]||'#6366f1';
+    const btn=document.createElement('button');
+    btn.style.cssText=`background:#111;border:1px solid ${color}44;border-radius:6px;padding:9px 13px;color:#fff;cursor:pointer;text-align:left;font-size:13px;width:100%;transition:background .15s`;
+    btn.innerHTML=`<span style="color:${color};font-weight:700;margin-right:6px">●</span>${esc(name)}`;
+    btn.onclick=()=>{
+      list.querySelectorAll('button').forEach(b=>b.style.cssText=b.style.cssText.replace(/background:[^;]+/,`background:#111`));
+      btn.style.background=`${color}22`;
+      _stagePickCtx.destSk=key;
+    };
+    list.appendChild(btn);
+  });
+  document.getElementById('stagePickModal').style.display='flex';
+}
+function closeStageModal(){
+  document.getElementById('stagePickModal').style.display='none';
+  _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null};
+}
+function confirmStageAction(){
+  const{sk,realIdx,mode,destSk}=_stagePickCtx;
+  if(!destSk){toast('⚠️ Seleccioná un stage destino',true);return;}
+  pushHistory();
+  const rowCopy=JSON.parse(JSON.stringify(state.agenda[sk][realIdx]));
+  const existingNotas=(rowCopy.notas||'').replace(/^\[pendiente\]\s*/,'');
+  rowCopy.notas='[pendiente]'+(existingNotas?' '+existingNotas:'');
+  rowCopy.inicio='';rowCopy.fin='';
+  // Insert at top of current day in destination (right after DIA marker)
+  ensureDaySections(destSk);
+  const dayKey='D'+currentDay;
+  const destAll=state.agenda[destSk];
+  let insertAt=destAll.length;
+  for(let i=0;i<destAll.length;i++){
+    if(destAll[i].tipo==='DIA'&&destAll[i].dia===dayKey){insertAt=i+1;break;}
+  }
+  destAll.splice(insertAt,0,rowCopy);
+  if(mode==='move'){
+    state.agenda[sk].splice(realIdx,1);
+    recalcAgendaTimes(sk,currentDay);
+  }
+  recalcAgendaTimes(destSk,currentDay);
+  markDirty('principal');
+  closeStageModal();
+  renderAgenda();
+  toast(mode==='move'?'✅ Bloque movido como pendiente':'✅ Copia enviada como pendiente');
 }
 
 // ── TEXT EDIT MODAL ───────────────────────────────────────────────────
@@ -2703,7 +2808,7 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
     const activeTab = document.querySelector('.tab-btn.active')?.dataset?.tab;
-    if (activeTab === 'principal') savePrincipal();
+    if (activeTab === 'principal') saveAllStages();
     else if (activeTab === 'speakers') saveSpeakers();
     else if (activeTab === 'ideas') saveIdeas();
   }
@@ -2729,32 +2834,9 @@ async function init(){
   await loadAll();
 }
 
-// ── LOCK SCREEN ───────────────────────────────────────────────────────
-function lockConfirm() {
-  const input = document.getElementById('lockInput');
-  const err   = document.getElementById('lockError');
-  const k = input.value.trim();
-  if (!k) { err.textContent = 'Ingresá la clave.'; return; }
-  if (k !== ACCESS_KEY) { err.textContent = 'Clave incorrecta.'; input.value=''; input.focus(); return; }
-  // Clave correcta
-  writeKey = k;
-  localStorage.setItem('labitconf_write_key', k);
-  document.getElementById('lockScreen').classList.remove('show');
-  init();
-}
 
-// Arranque: chequear clave antes de mostrar nada
-(function() {
-  const saved = localStorage.getItem('labitconf_write_key');
-  if (saved === ACCESS_KEY) {
-    init(); // ya tiene clave válida guardada
-  } else {
-    localStorage.removeItem('labitconf_write_key');
-    writeKey = '';
-    document.getElementById('lockScreen').classList.add('show');
-    setTimeout(() => document.getElementById('lockInput').focus(), 100);
-  }
-})();
+// Arranque directo — la app es pública de leer; la clave de escritura se pide al guardar
+init();
 </script>
 </body>
 </html>

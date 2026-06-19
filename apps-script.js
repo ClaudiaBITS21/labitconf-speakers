@@ -174,7 +174,7 @@ function doPost(e) {
     let ws = ss.getSheetByName(sheet);
     if (!ws) {
       if (sheet === 'SpeakerManual') { ws = ss.insertSheet(sheet); ws.appendRow(['nombre','notas','fecha']); }
-      else if (sheet.startsWith('Stage_')) { ws = ss.insertSheet(sheet); ws.appendRow(['tipo','speaker','tema','dur','inicio','fin','durExt','descripcion','empresa','moderador','nivel','tags','visible_web']); }
+      else if (sheet.startsWith('Stage_')) { ws = ss.insertSheet(sheet); ws.appendRow(['tipo','speaker','tema','dur','inicio','fin','durExt','descripcion','empresa','moderador','nivel','tags','visible_web','notas']); }
       else if (sheet.startsWith('Principal_D')) {
         ws = ss.insertSheet(sheet);
         const src = ss.getSheetByName('Principal');

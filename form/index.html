@@ -49,6 +49,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 /* PHONE */
 .phone-row{display:flex;gap:8px;}
 .phone-code{width:82px;flex-shrink:0;}
+.phone-country{flex-shrink:0;font-size:13px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:0 8px;cursor:pointer;height:44px;}
+.phone-country:focus{outline:none;border-color:var(--orange);}
+.phone-code-manual{width:72px;flex-shrink:0;}
 /* CHIPS */
 .check-group{display:flex;flex-wrap:wrap;gap:7px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;}
 .check-chip,.radio-chip{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;padding:5px 12px;border-radius:6px;border:1px solid var(--border);font-size:13px;font-weight:700;transition:all .15s;}
@@ -192,10 +195,63 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             <label class="label" id="l-mail"></label>
             <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
           </div>
+          <div class="field" id="f-mail2">
+            <label class="label" id="l-mail2"></label>
+            <input class="inp" id="mail2" type="email" autocomplete="email" maxlength="120">
+          </div>
           <div class="field" id="f-whatsapp">
             <label class="label" id="l-whatsapp"></label>
             <div class="phone-row">
-              <input class="inp phone-code" id="wa-code" type="text" placeholder="54" maxlength="5">
+              <select class="phone-country" id="wa-country" onchange="applyCountryCode()">
+                <option value="">Cód.</option>
+                <option value="971">+971 AE</option>
+                <option value="54">+54 AR</option>
+                <option value="61">+61 AU</option>
+                <option value="43">+43 AT</option>
+                <option value="591">+591 BO</option>
+                <option value="55">+55 BR</option>
+                <option value="1-CA">+1 CA</option>
+                <option value="41">+41 CH</option>
+                <option value="56">+56 CL</option>
+                <option value="86">+86 CN</option>
+                <option value="57">+57 CO</option>
+                <option value="506">+506 CR</option>
+                <option value="53">+53 CU</option>
+                <option value="49">+49 DE</option>
+                <option value="1809">+1 DO</option>
+                <option value="593">+593 EC</option>
+                <option value="34">+34 ES</option>
+                <option value="33">+33 FR</option>
+                <option value="44">+44 GB</option>
+                <option value="502">+502 GT</option>
+                <option value="504">+504 HN</option>
+                <option value="972">+972 IL</option>
+                <option value="39">+39 IT</option>
+                <option value="81">+81 JP</option>
+                <option value="82">+82 KR</option>
+                <option value="52">+52 MX</option>
+                <option value="505">+505 NI</option>
+                <option value="31">+31 NL</option>
+                <option value="47">+47 NO</option>
+                <option value="507">+507 PA</option>
+                <option value="51">+51 PE</option>
+                <option value="48">+48 PL</option>
+                <option value="351">+351 PT</option>
+                <option value="1787">+1 PR</option>
+                <option value="595">+595 PY</option>
+                <option value="7">+7 RU</option>
+                <option value="503">+503 SV</option>
+                <option value="46">+46 SE</option>
+                <option value="65">+65 SG</option>
+                <option value="90">+90 TR</option>
+                <option value="380">+380 UA</option>
+                <option value="1-US">+1 US</option>
+                <option value="598">+598 UY</option>
+                <option value="58">+58 VE</option>
+                <option value="27">+27 ZA</option>
+                <option value="other">Manual</option>
+              </select>
+              <input class="inp phone-code-manual" id="wa-code" type="text" placeholder="54" maxlength="5" oninput="updateWaPreview()">
               <input class="inp" id="wa-num" type="tel" placeholder="1134120000" maxlength="20" oninput="updateWaPreview()">
             </div>
             <div class="hint" id="wa-preview" style="color:#25D366"></div>
@@ -204,18 +260,18 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <!-- Telegram | Signal -->
           <div class="field" id="f-telegram">
             <label class="label" id="l-telegram"></label>
-            <input class="inp" id="telegram" type="text" maxlength="80" oninput="updateTgPreview()">
+            <input class="inp" id="telegram" type="text" maxlength="80" oninput="updateTgPreview()" onblur="normalizeAlias('telegram')">
             <div class="hint" id="tg-preview" style="color:#229ED9"></div>
           </div>
           <div class="field" id="f-signal">
             <label class="label">Signal</label>
-            <input class="inp" id="signal" type="text" maxlength="80">
+            <input class="inp" id="signal" type="text" maxlength="80" onblur="normalizeAlias('signal')">
           </div>
 
           <!-- GitHub | Nostr -->
           <div class="field">
             <label class="label">GitHub</label>
-            <input class="inp" id="github" type="text" maxlength="80" placeholder="https://github.com/usuario">
+            <input class="inp" id="github" type="text" maxlength="80" placeholder="https://github.com/usuario" onblur="normalizeUrl('github')">
           </div>
           <div class="field">
             <label class="label">Nostr</label>
@@ -226,21 +282,21 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <!-- X | Instagram -->
           <div class="field">
             <label class="label">X (Twitter)</label>
-            <input class="inp" id="x" type="text" maxlength="80">
+            <input class="inp" id="x" type="text" maxlength="80" onblur="normalizeAlias('x')">
           </div>
           <div class="field">
             <label class="label">Instagram</label>
-            <input class="inp" id="instagram" type="text" maxlength="80">
+            <input class="inp" id="instagram" type="text" maxlength="80" onblur="normalizeAlias('instagram')">
           </div>
 
           <!-- LinkedIn | Sitio Web -->
           <div class="field">
             <label class="label">LinkedIn</label>
-            <input class="inp" id="linkedin" type="url" placeholder="https://www.linkedin.com/in/usuario/" maxlength="200">
+            <input class="inp" id="linkedin" type="text" maxlength="200" placeholder="https://www.linkedin.com/in/usuario/" onblur="normalizeUrl('linkedin')">
           </div>
           <div class="field">
             <label class="label" id="l-website"></label>
-            <input class="inp" id="website" type="url" placeholder="https://" maxlength="200">
+            <input class="inp" id="website" type="text" maxlength="200" placeholder="https://" onblur="normalizeUrl('website')">
           </div>
 
         </div>
@@ -262,6 +318,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
               </div>
               <input class="inp" id="fotoUrl" type="url" placeholder="https://..." oninput="onFotoUrl(this)">
               <div class="hint">400×400px | JPEG/PNG | MAX 250KB</div>
+              <div id="fotoFallbackMsg" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(234,179,8,.1);border:1px solid #eab308;border-radius:8px;font-size:13px;color:#eab308;line-height:1.4"></div>
             </div>
           </div>
         </div>
@@ -296,12 +353,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <div class="section">
         <div class="section-title" id="sec4Title"></div>
         <div class="grid-2">
-          <div class="field">
-            <label class="label" id="l-disp-desde"></label>
+          <div class="field" id="f-disp-desde">
+            <label class="label required" id="l-disp-desde"></label>
             <input class="inp" id="disp-desde" type="date">
           </div>
-          <div class="field">
-            <label class="label" id="l-disp-hasta"></label>
+          <div class="field" id="f-disp-hasta">
+            <label class="label required" id="l-disp-hasta"></label>
             <input class="inp" id="disp-hasta" type="date">
           </div>
         </div>
@@ -371,8 +428,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 const GAS_URL='https://script.google.com/macros/s/AKfycbwqQHn5o9xxS-wmMGgJews--w_1lstRRiDiBgnlicTchskyjaixflKKfb_JPayR96p3/exec';
 
 // ── PAÍSES ────────────────────────────────────────────────────────────
-const PAISES_ES=['Argentina','Bolivia','Brasil','Chile','Colombia','Costa Rica','Cuba','Ecuador','El Salvador','España','Estados Unidos','Guatemala','Honduras','México','Nicaragua','Panamá','Paraguay','Perú','Portugal','Puerto Rico','República Dominicana','Uruguay','Venezuela','Alemania','Australia','Austria','Bélgica','Canadá','China','Corea del Sur','Francia','India','Italia','Japón','Noruega','Países Bajos','Polonia','Reino Unido','Rusia','Singapur','Sudáfrica','Suecia','Suiza','Turquía','Ucrania','Otro'];
-const PAISES_EN=['Argentina','Bolivia','Brazil','Chile','Colombia','Costa Rica','Cuba','Ecuador','El Salvador','Spain','United States','Guatemala','Honduras','Mexico','Nicaragua','Panama','Paraguay','Peru','Portugal','Puerto Rico','Dominican Republic','Uruguay','Venezuela','Germany','Australia','Austria','Belgium','Canada','China','South Korea','France','India','Italy','Japan','Norway','Netherlands','Poland','United Kingdom','Russia','Singapore','South Africa','Sweden','Switzerland','Turkey','Ukraine','Other'];
+const PAISES_ES=['Alemania','Argentina','Australia','Austria','Bélgica','Bolivia','Brasil','Canadá','Chile','China','Colombia','Corea del Sur','Costa Rica','Cuba','Ecuador','El Salvador','España','Estados Unidos','Francia','Guatemala','Honduras','India','Italia','Japón','México','Nicaragua','Noruega','Países Bajos','Panamá','Paraguay','Perú','Polonia','Portugal','Puerto Rico','Reino Unido','República Dominicana','Rusia','Singapur','Sudáfrica','Suecia','Suiza','Turquía','Ucrania','Uruguay','Venezuela'];
+const PAISES_EN=['Argentina','Australia','Austria','Belgium','Bolivia','Brazil','Canada','Chile','China','Colombia','Costa Rica','Cuba','Dominican Republic','Ecuador','El Salvador','France','Germany','Guatemala','Honduras','India','Italy','Japan','Mexico','Netherlands','Nicaragua','Norway','Panama','Paraguay','Peru','Poland','Portugal','Puerto Rico','Russia','Singapore','South Africa','South Korea','Spain','Sweden','Switzerland','Turkey','Ukraine','United Kingdom','United States','Uruguay','Venezuela'];
 
 function buildPaises(){
   const sel=document.getElementById('pais');
@@ -380,7 +437,7 @@ function buildPaises(){
   const cur=sel.value;
   sel.innerHTML=`<option value="">${lang==='en'?'Select':'Seleccionar'}</option>`
     +list.map(p=>`<option value="${p}"${p===cur?' selected':''}>${p}</option>`).join('')
-    +`<option value="__otro__">${lang==='en'?'Other':'Otro'}</option>`;
+    +`<option value="__otro__">${lang==='en'?'Custom':'Manual'}</option>`;
 }
 function onPaisChange(sel){
   const custom=document.getElementById('pais-custom');
@@ -436,7 +493,7 @@ const T={
     successTitle:'¡Gracias por inscribirte!',
     successSub:'Revisaremos tu propuesta y te contactaremos pronto.\n\nLABITCONF 2026 — Oct 29 / 30 / 31 + Nov 1',
     consent:'Al enviar este formulario consentís que LABITCONF almacene y procese la información ingresada para gestionar tu participación como speaker en el evento.',
-    errRequired:'Este campo es requerido',errMail:'Email inválido',
+    errRequired:'Este campo es requerido',errMail:'Email inválido',errFechas:'La fecha hasta debe ser posterior a desde',errUrl:'Ingresá una URL válida (ej: https://sitio.com)',
     errIdioma:'Seleccioná al menos un idioma',
     errContacto:'Completá al menos uno: WhatsApp, Telegram o Signal.',
     toastError:'Error al enviar. Intentá de nuevo.',
@@ -479,7 +536,7 @@ const T={
     successTitle:'Thank you for registering!',
     successSub:"We'll review your proposal and contact you soon.\n\nLABITCONF 2026 — Oct 29 / 30 / 31 + Nov 1",
     consent:'By submitting this form, you consent to allow LABITCONF to store and process the submitted information to manage your participation as a speaker at the event.',
-    errRequired:'This field is required',errMail:'Invalid email',
+    errRequired:'This field is required',errMail:'Invalid email',errFechas:'The "until" date must be after the "from" date',errUrl:'Enter a valid URL (e.g. https://site.com)',
     errIdioma:'Select at least one language',
     errContacto:'Fill in at least one: WhatsApp, Telegram or Signal.',
     toastError:'Error sending. Please try again.',
@@ -594,6 +651,55 @@ function getRadio(groupId){const c=document.getElementById(groupId)?.querySelect
 function togglePanel(el){el.classList.toggle('checked');const b=el.querySelector('.panel-check-box');if(b)b.textContent=el.classList.contains('checked')?'✓':'';}
 
 // ── WHATSAPP / TELEGRAM PREVIEW ───────────────────────────────────────
+// ── NORMALIZACIÓN DE REDES SOCIALES ──────────────────────────────────
+function normalizeAlias(id){
+  const el=document.getElementById(id);
+  if(!el||!el.value.trim())return;
+  let v=el.value.trim();
+  // Si tiene URL, extraer el último segmento del path
+  if(v.includes('/')){
+    try{
+      const url=v.startsWith('http')?v:'https://'+v;
+      const parts=new URL(url).pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+      v=parts[parts.length-1]||v;
+    }catch{
+      v=v.split('/').filter(Boolean).pop()||v;
+    }
+  }
+  // Quitar @ si ya tiene para re-agregarlo limpio
+  v=v.replace(/^@+/,'');
+  el.value='@'+v;
+}
+function normalizeUrl(id){
+  const el=document.getElementById(id);
+  if(!el||!el.value.trim())return;
+  let v=el.value.trim();
+  if(!v)return;
+  // Si no tiene protocolo, agregar https://
+  if(!/^https?:\/\//i.test(v)){
+    v=v.startsWith('www.')||v.includes('.')?'https://'+v:'';
+  }
+  if(!v){
+    el.classList.add('field-error');
+    const t=T[lang];
+    const fld=el.closest('.field');
+    if(fld&&!fld.querySelector('.err-msg')){
+      const s=document.createElement('span');s.className='err-msg';
+      s.textContent=t.errUrl||'Ingresá una URL válida (ej: https://sitio.com)';
+      fld.appendChild(s);
+    }
+    return;
+  }
+  el.value=v;
+}
+function applyCountryCode(){
+  const sel=document.getElementById('wa-country');
+  const codeEl=document.getElementById('wa-code');
+  if(!sel||!codeEl)return;
+  if(sel.value==='other'){codeEl.value='';codeEl.focus();}
+  else if(sel.value){codeEl.value=sel.value.replace(/^1-.+/,'1');}
+  updateWaPreview();
+}
 function updateWaPreview(){
   const code=(document.getElementById('wa-code').value||'').replace(/\D/g,'');
   const num=(document.getElementById('wa-num').value||'').replace(/\D/g,'');
@@ -629,6 +735,47 @@ function loadFaceApi(){
   return _faceApiLoading;
 }
 
+function centerSquareCrop(img){
+  const SIZE=400;
+  const canvas=document.createElement('canvas');
+  canvas.width=SIZE;canvas.height=SIZE;
+  const ctx=canvas.getContext('2d');
+  const s=Math.min(img.width,img.height);
+  ctx.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,SIZE,SIZE);
+  return canvas.toDataURL('image/jpeg',0.80);
+}
+
+function showFotoFallback(img){
+  const t=lang==='en';
+  const msg=document.getElementById('fotoFallbackMsg');
+  if(!msg)return;
+  msg.style.display='block';
+  msg.innerHTML=`<div style="margin-bottom:8px">${t?'No face detected. If this is your avatar or personal brand image, you can upload it as-is.':'No detectamos una cara. Si es tu avatar o imagen de identidad, podés subirla igual.'}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" onclick="useFotoAsIs()" style="padding:5px 14px;background:var(--orange);color:#000;border:none;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer">${t?'Upload as-is':'Subir igual'}</button>
+      <button type="button" onclick="retryFoto()" style="padding:5px 14px;background:transparent;color:#eab308;border:1px solid #eab308;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer">${t?'Change photo':'Cambiar foto'}</button>
+    </div>`;
+  // Guardar referencia a la imagen actual para poder subirla si elige "subir igual"
+  window._pendingFotoImg=img;
+}
+
+function useFotoAsIs(){
+  if(!window._pendingFotoImg)return;
+  fotoData=centerSquareCrop(window._pendingFotoImg);
+  updateFotoThumb(fotoData);
+  document.getElementById('fotoFallbackMsg').style.display='none';
+  window._pendingFotoImg=null;
+}
+
+function retryFoto(){
+  document.getElementById('fotoFallbackMsg').style.display='none';
+  document.getElementById('fotoFile').value='';
+  fotoData='';
+  updateFotoThumb('');
+  window._pendingFotoImg=null;
+  document.getElementById('fotoFile').click();
+}
+
 async function smartCrop(img){
   const SIZE=400;
   const canvas=document.createElement('canvas');
@@ -641,21 +788,20 @@ async function smartCrop(img){
       const det=await faceapi.detectSingleFace(img,new faceapi.TinyFaceDetectorOptions({scoreThreshold:0.35}));
       if(det){
         const b=det.box;
-        // Recuadro con padding 70% alrededor de la cara
         const pad=Math.max(b.width,b.height)*0.7;
         const cx=b.x+b.width/2, cy=b.y+b.height/2;
         const side=Math.max(b.width,b.height)+pad*2;
         let sx=Math.max(0,cx-side/2), sy=Math.max(0,cy-side/2);
         const sw=Math.min(side,img.width-sx), sh=Math.min(side,img.height-sy);
         ctx.drawImage(img,sx,sy,sw,sh,0,0,SIZE,SIZE);
+        document.getElementById('fotoFallbackMsg').style.display='none';
         return canvas.toDataURL('image/jpeg',0.80);
       }
     }catch(e){console.warn('detect fail:',e);}
   }
-  // Fallback: center square crop
-  const s=Math.min(img.width,img.height);
-  ctx.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,SIZE,SIZE);
-  return canvas.toDataURL('image/jpeg',0.80);
+  // No se detectó cara — avisar al usuario en lugar de procesar silenciosamente
+  showFotoFallback(img);
+  return null;
 }
 
 // ── FOTO ──────────────────────────────────────────────────────────────
@@ -669,9 +815,15 @@ function onFotoFile(input){
   reader.onload=async e=>{
     const img=new Image();
     img.onload=async()=>{
-      fotoData=await smartCrop(img);
-      updateFotoThumb(fotoData);
-      document.getElementById('fotoUrl').value='';
+      const result=await smartCrop(img);
+      if(result){
+        fotoData=result;
+        updateFotoThumb(fotoData);
+        document.getElementById('fotoUrl').value='';
+      } else {
+        // smartCrop retorna null cuando no detecta cara — el fallback ya se mostró
+        updateFotoThumb('');
+      }
     };
     img.src=e.target.result;
   };
@@ -837,8 +989,34 @@ function validate(){
   // Mail válido
   const mailEl=document.getElementById('mail');
   if(mailEl?.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim())){setError('f-mail',t.errMail);ok=false;}
+  // Mail2: opcional pero si está debe ser válido
+  const mail2El=document.getElementById('mail2');
+  if(mail2El?.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail2El.value.trim())){setError('f-mail2',t.errMail);ok=false;}
+  // Fechas de disponibilidad obligatorias
+  const dispDesde=document.getElementById('disp-desde')?.value;
+  const dispHasta=document.getElementById('disp-hasta')?.value;
+  if(!dispDesde){setError('f-disp-desde',t.errRequired);ok=false;}
+  if(!dispHasta){setError('f-disp-hasta',t.errRequired);ok=false;}
+  if(dispDesde&&dispHasta&&dispDesde>dispHasta){setError('f-disp-hasta',t.errFechas||'La fecha hasta debe ser posterior a desde');ok=false;}
+  // confname obligatorio
+  if(!document.getElementById('confname')?.value.trim()){setError('f-confname',t.errRequired);ok=false;}
+  // bio obligatoria
+  if(!document.getElementById('bio')?.value.trim()){setError('f-bio',t.errRequired);ok=false;}
   // Tema 1: título obligatorio
   if(!document.getElementById('tema-titulo-1')?.value.trim()){setError('ft-1',t.errRequired);ok=false;}
+  // Tags: al menos 1 por cada tema con título
+  document.querySelectorAll('.tema-card').forEach(card=>{
+    const n=card.dataset.num;
+    const titulo=(document.getElementById(`tema-titulo-${n}`)?.value||'').trim();
+    if(!titulo)return;
+    const tags=selectedTagsMap[n]||[];
+    if(tags.length===0){
+      const wrap=document.getElementById(`tags-selected-${n}`);
+      const fld=wrap?.closest('.field')||document.getElementById(`tags-preset-${n}`)?.closest('.field');
+      if(fld&&!fld.querySelector('.err-msg')){fld.classList.add('field-error');const s=document.createElement('span');s.className='err-msg';s.textContent=t.errTags||(lang==='en'?'Select at least 1 tag':'Seleccioná al menos 1 tag');fld.appendChild(s);}
+      ok=false;
+    }
+  });
   if(!ok){
     const first=document.querySelector('.field-error');
     if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
@@ -901,7 +1079,7 @@ async function handleSubmit(e){
       cargo:document.getElementById('cargo').value.trim(),
       pais:getPaisValue(),
       idioma:getChecked('idiomaGroup').join(','),
-      mail:document.getElementById('mail').value.trim(),
+      mail:(()=>{const m1=document.getElementById('mail').value.trim();const m2=(document.getElementById('mail2')?.value||'').trim();return m2?`${m1};${m2}`:m1;})(),
       website:document.getElementById('website').value.trim(),
       empresa:document.getElementById('empresa').value.trim(),
       foto:fotoData,
