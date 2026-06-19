@@ -1325,7 +1325,7 @@ function selectSpeakerWithTema(name,tema){
 
   // Auto-fill empresa, nivel, tags desde el speaker seleccionado
   if(name){
-    const sp=state.speakers.find(s=>s.nombre===name);
+    const sp=state.speakers.find(s=>s.nombre===name)||state.speakersManual.find(s=>s.nombre===name);
     if(sp){
       if(sp.empresa&&!state.agenda[sk]?.[idx]?.empresa){
         updateAgendaField(idx,sk,'empresa',sp.empresa);
@@ -2401,11 +2401,14 @@ function pushHistory() {
   if (_history.length > 20) _history.shift();
   _histIdx = _history.length - 1;
 }
+function isTabActive(name){ return document.getElementById('tab-'+name)?.classList.contains('active'); }
 function refreshAll() {
   renderPrincipal();
   renderSpeakers();
   renderIdeas();
-  renderKanban();
+  if(isTabActive('kanban')) renderKanban();
+  if(isTabActive('tiers')) renderTiers();
+  if(isTabActive('resumen')) buildResumen();
 }
 function undo() {
   if (_histIdx <= 0) { toast('Nada que deshacer'); return; }
@@ -2427,8 +2430,9 @@ const DAY_NAMES  = {2:'LABITCONF Day 1',3:'LABITCONF Day 2'};
 
 function switchDay(d) {
   if (d === currentDay) return;
-  if (dirty.principal && !confirm(`Hay cambios sin guardar. ¿Guardar antes de cambiar?`)) {
-    saveAgenda(activeStage).then(() => _doSwitchDay(d));
+  if (dirty.principal) {
+    if (!confirm('Hay cambios sin guardar. ¿Guardar todos los stages antes de cambiar?')) { _doSwitchDay(d); return; }
+    saveAllStages().then(() => _doSwitchDay(d));
     return;
   }
   _doSwitchDay(d);
@@ -2447,9 +2451,9 @@ function loadPrincipalDay(){ renderAgenda(); } // compat stub
 
 // ── EXPORT CSV ────────────────────────────────────────────────────────
 function exportCSV() {
-  const headers = ['Nombre','Apodo','Tipo','País','Idioma','Estado','Temas','Repartos','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas','Oct29','Oct30','Oct31','Nov1'];
+  const headers = ['Nombre','Apodo','Tipo','País','Idioma','Estado','Temas','Repartos','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas','Disp.Oct30','Disp.Oct31'];
   const rows = state.speakers.map(s =>
-    [s.nombre,s.apodo||'',s.tipo,s.pais||'',s.idioma||'es',s.estado||'disponible',s.temas||'',calcSpeakerAssignmentsText(s.nombre||''),s.mail||'',s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',s.empresa||'',s.notas||'',s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'']
+    [s.nombre,s.apodo||'',s.tipo,s.pais||'',s.idioma||'es',s.estado||'disponible',s.temas||'',calcSpeakerAssignmentsText(s.nombre||''),s.mail||'',s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',s.empresa||'',s.notas||'',s.oct30||'',s.oct31||'']
     .map(v => `"${String(v||'').replace(/"/g,'""')}"`)
   );
   const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -2593,14 +2597,17 @@ function filterCmd(q) {
       <div><div style="font-weight:700;color:#fff">${esc(s.nombre)}</div><div style="font-size:15px;color:#ffffff">${esc(s.temas||'')}</div></div>
     </div>`);
   });
-  getAgendaRows(activeStage,currentDay).slice(0,20).forEach(({row})=>{
-    const tema=row.tema||''; const tipo=row.tipo||'';
-    if(!q||tema.toLowerCase().includes(q)||tipo.toLowerCase().includes(q)||((row.speaker||'').toLowerCase().includes(q))){
-      res.push(`<div onclick="switchTab('principal');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
-        <span style="color:#6366f1;font-weight:700">📋</span>
-        <div><div style="font-weight:700;color:#fff">${esc(tema||'(sin tema)')}</div><div style="font-size:15px;color:#ffffff">${esc(tipo)} · ${esc(row.inicio||'')} → ${esc(row.fin||'')}</div></div>
-      </div>`);
-    }
+  STAGE_KEYS.forEach((sk,si)=>{
+    getAgendaRows(sk,currentDay).forEach(({row})=>{
+      const tema=row.tema||''; const tipo=row.tipo||'';
+      if(!q||tema.toLowerCase().includes(q)||tipo.toLowerCase().includes(q)||((row.speaker||'').toLowerCase().includes(q))){
+        const stageName=stageNames[si]||('Stage '+(si+1));
+        res.push(`<div onclick="activeStage='${sk}';switchTab('principal');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
+          <span style="color:#6366f1;font-weight:700">📋</span>
+          <div><div style="font-weight:700;color:#fff">${esc(tema||'(sin tema)')}</div><div style="font-size:15px;color:#aaa">${esc(tipo)} · ${esc(stageName)} · ${esc(row.inicio||'')} → ${esc(row.fin||'')}</div></div>
+        </div>`);
+      }
+    });
   });
   if (!res.length) res.push(`<div style="padding:20px;text-align:center;color:#444">Sin resultados</div>`);
   document.getElementById('cmdResults').innerHTML = res.slice(0, 12).join('');
