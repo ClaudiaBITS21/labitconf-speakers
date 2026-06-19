@@ -442,7 +442,7 @@ const T={
     toastError:'Error al enviar. Intentá de nuevo.',
     hNostr:'npub... y/o @alias',
     siLabel:'Sí',noLabel:'No',
-    nivelLabels:{todos:'Todos',basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'},
+    nivelLabels:{general:'General',intermedio:'Intermedio',avanzado:'Avanzado'},
     formatoLabels:{charla:'Charla',panel:'Panel',taller:'Taller'},
     tagsPreset:TAGS_ES,customTagPlaceholder:'Agregar tag personalizado…',
     placeholderEventosOtros:'Otros eventos…',
@@ -485,7 +485,7 @@ const T={
     toastError:'Error sending. Please try again.',
     hNostr:'npub... and/or @alias',
     siLabel:'Yes',noLabel:'No',
-    nivelLabels:{todos:'All Levels',basico:'Basic',intermedio:'Intermediate',avanzado:'Advanced'},
+    nivelLabels:{general:'General',intermedio:'Intermediate',avanzado:'Advanced'},
     formatoLabels:{charla:'Talk',panel:'Panel',taller:'Workshop'},
     tagsPreset:TAGS_EN,customTagPlaceholder:'Add custom tag…',
     placeholderEventosOtros:'Other events…',
@@ -755,7 +755,7 @@ function toggleEvento(ev,el){
 }
 
 // ── TEMAS ─────────────────────────────────────────────────────────────
-const NIVEL_VALS=[{val:'todos',color:'#9ca3af'},{val:'basico',color:'#22c55e'},{val:'intermedio',color:'#eab308'},{val:'avanzado',color:'#E84010'}];
+const NIVEL_VALS=[{val:'general',color:'#9ca3af'},{val:'intermedio',color:'#eab308'},{val:'avanzado',color:'#E84010'}];
 const FORMATO_VALS=[{val:'charla',color:'#ffffff'},{val:'panel',color:'#ffffff'},{val:'taller',color:'#ffffff'}];
 
 function addTema(){

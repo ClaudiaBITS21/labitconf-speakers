@@ -750,7 +750,8 @@ function calcStageAssignPct(stageIdx){
 const DAY_KEYS = ['D2','D3'];
 
 function newAgendaRow(inicio='09:00',dur=30){
-  return {tipo:'Charla',speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0};
+  return {tipo:'Charla',speaker:'',tema:'',dur,inicio,fin:minToTime(timeToMin(inicio)+dur),durExt:0,
+    descripcion:'',empresa:'',moderador:'',nivel:'',tags:'',visible_web:false};
 }
 
 // Returns [{row, realIdx}] for the given stage and day number (1-4)
@@ -832,20 +833,17 @@ function renderAgenda(){
     const table=document.createElement('table');
     table.style.cssText='width:100%;border-collapse:collapse;';
     const thead=document.createElement('thead');
+    const _th=s=>`<th style="padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border);white-space:nowrap">${s}</th>`;
     thead.innerHTML=`<tr>
-      <th style="width:40px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Acc</th>
-      <th style="width:80px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Tipo</th>
-      <th style="min-width:120px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Speaker</th>
-      <th style="min-width:140px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Tema</th>
-      <th style="width:58px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Dur</th>
-      <th style="width:50px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Inicio</th>
-      <th style="width:50px;padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border)">Fin</th>
+      ${_th('Acc')}${_th('Tipo')}${_th('Tiempo')}${_th('Inicio')}${_th('Fin')}
+      ${_th('Tema')}${_th('Descripción')}${_th('Speaker')}${_th('Empresa')}
+      ${_th('Moderador')}${_th('Nivel')}${_th('TAGS')}${_th('Visible')}
     </tr>`;
     table.appendChild(thead);
     const tbody=document.createElement('tbody');
     tbody.id='agendaTbody-'+sk;
     if(!rows.length){
-      tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--dim);font-size:14px">Sin bloques para este día.</td></tr>`;
+      tbody.innerHTML=`<tr><td colspan="13" style="text-align:center;padding:30px;color:var(--dim);font-size:14px">Sin bloques para este día.</td></tr>`;
     } else {
       rows.forEach(({row,realIdx})=>tbody.appendChild(makeAgendaRow(row,realIdx,sk)));
     }
@@ -894,21 +892,7 @@ function makeAgendaRow(row,realIdx,sk){
   tdTipo.innerHTML=`<select class="cell-sel" style="color:${tc};font-weight:700;font-size:13px;width:100%;padding:4px 3px" onchange="updateAgendaField(${realIdx},'${sk}','tipo',this.value)">${tipoOpts}</select>`;
   tr.appendChild(tdTipo);
 
-  // Speaker
-  const conflictClass=getConflictClass(realIdx,sk);
-  const tdSp=document.createElement('td');
-  tdSp.className='sc-speaker'+(conflictClass?' '+conflictClass:'');
-  tdSp.style.padding='0';
-  tdSp.innerHTML=renderSpCell(realIdx,sk,row.speaker||'');
-  tr.appendChild(tdSp);
-
-  // Tema
-  const tdTema=document.createElement('td');
-  tdTema.style.padding='0';
-  tdTema.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','tema',this.value)" placeholder="Tema…">${esc(row.tema||'')}</textarea>`;
-  tr.appendChild(tdTema);
-
-  // Dur
+  // Tiempo (dur)
   const tdDur=document.createElement('td');
   tdDur.className='sc-dur';
   const dur=row.dur||30;
@@ -929,6 +913,57 @@ function makeAgendaRow(row,realIdx,sk){
   tdFin.className='sc-fin';
   tdFin.innerHTML=`<div class="time-end" id="fin-${realIdx}" style="padding:4px 5px;text-align:center">${esc(row.fin||'')}</div>`;
   tr.appendChild(tdFin);
+
+  // Tema
+  const tdTema=document.createElement('td');
+  tdTema.style.cssText='padding:0;min-width:120px';
+  tdTema.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','tema',this.value)" placeholder="Tema…">${esc(row.tema||'')}</textarea>`;
+  tr.appendChild(tdTema);
+
+  // Descripción
+  const tdDesc=document.createElement('td');
+  tdDesc.style.cssText='padding:0;min-width:120px';
+  tdDesc.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','descripcion',this.value)" placeholder="Descripción…">${esc(row.descripcion||'')}</textarea>`;
+  tr.appendChild(tdDesc);
+
+  // Speaker
+  const conflictClass=getConflictClass(realIdx,sk);
+  const tdSp=document.createElement('td');
+  tdSp.className='sc-speaker'+(conflictClass?' '+conflictClass:'');
+  tdSp.style.padding='0';
+  tdSp.innerHTML=renderSpCell(realIdx,sk,row.speaker||'');
+  tr.appendChild(tdSp);
+
+  // Empresa (auto desde speaker, editable)
+  const tdEmp=document.createElement('td');
+  tdEmp.style.cssText='padding:0;min-width:90px';
+  tdEmp.innerHTML=`<input class="tema-inp" id="empresa-${realIdx}-${sk}" style="width:100%;padding:4px 5px" value="${esc(row.empresa||'')}" placeholder="Empresa…" onchange="updateAgendaField(${realIdx},'${sk}','empresa',this.value)">`;
+  tr.appendChild(tdEmp);
+
+  // Moderador
+  const tdMod=document.createElement('td');
+  tdMod.style.cssText='padding:0;min-width:90px';
+  tdMod.innerHTML=`<input class="tema-inp" id="moderador-${realIdx}-${sk}" style="width:100%;padding:4px 5px" value="${esc(row.moderador||'')}" placeholder="Moderador…" onchange="updateAgendaField(${realIdx},'${sk}','moderador',this.value)">`;
+  tr.appendChild(tdMod);
+
+  // Nivel
+  const tdNivel=document.createElement('td');
+  tdNivel.style.cssText='padding:0;width:90px';
+  const nivelOpts=['','General','Intermedio','Avanzado'].map(n=>`<option value="${n}"${(row.nivel||'')===n?' selected':''}>${n||'—'}</option>`).join('');
+  tdNivel.innerHTML=`<select class="cell-sel" id="nivel-${realIdx}-${sk}" style="width:100%;padding:4px 3px;font-size:12px" onchange="updateAgendaField(${realIdx},'${sk}','nivel',this.value)">${nivelOpts}</select>`;
+  tr.appendChild(tdNivel);
+
+  // TAGS
+  const tdTags=document.createElement('td');
+  tdTags.style.cssText='padding:0;min-width:90px';
+  tdTags.innerHTML=`<input class="tema-inp" id="tags-${realIdx}-${sk}" style="width:100%;padding:4px 5px;font-size:11px" value="${esc(row.tags||'')}" placeholder="tag1, tag2…" onchange="updateAgendaField(${realIdx},'${sk}','tags',this.value)">`;
+  tr.appendChild(tdTags);
+
+  // Visible Web
+  const tdVis=document.createElement('td');
+  tdVis.style.cssText='padding:0;width:52px;text-align:center';
+  tdVis.innerHTML=`<input type="checkbox" id="vis-${realIdx}-${sk}" ${row.visible_web?'checked':''} onchange="updateAgendaField(${realIdx},'${sk}','visible_web',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--red)">`;
+  tr.appendChild(tdVis);
 
   return tr;
 }
@@ -1159,6 +1194,25 @@ function selectSpeakerWithTema(name,tema){
   if(tema)updateStageField(idx,sk,'tema',tema);
   markDirty('principal');
 
+  // Auto-fill empresa, nivel, tags desde el speaker seleccionado
+  if(name){
+    const sp=state.speakers.find(s=>s.nombre===name);
+    if(sp){
+      if(sp.empresa&&!state.agenda[sk]?.[idx]?.empresa){
+        updateAgendaField(idx,sk,'empresa',sp.empresa);
+        const empEl=document.getElementById(`empresa-${idx}-${sk}`);
+        if(empEl)empEl.value=sp.empresa;
+      }
+      const tArr=sp.temasArr;
+      const ti=tema?tArr.indexOf(tema):-1;
+      const tm=ti>=0?sp._temas[ti]:null;
+      if(tm){
+        if(tm.nivel){updateAgendaField(idx,sk,'nivel',tm.nivel);const el=document.getElementById(`nivel-${idx}-${sk}`);if(el)el.value=tm.nivel;}
+        if(tm.tags){updateAgendaField(idx,sk,'tags',tm.tags);const el=document.getElementById(`tags-${idx}-${sk}`);if(el)el.value=tm.tags;}
+      }
+    }
+  }
+
   // Auto-confirmación + grabar stage y day en _temas[i]
   if(name){
     const sp=state.speakers.find(s=>s.nombre===name);
@@ -1353,8 +1407,9 @@ async function loadAgenda(){
       const[,...rows]=raw;
       state.agenda[sk]=rows.map(r=>{
         const tipo=String(r[0]||'');
-        if(tipo==='DIA') return {tipo:'DIA',dia:String(r[1]||'D1')};
-        return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:String(r[4]||''),fin:String(r[5]||''),durExt:parseInt(r[6])||0};
+        if(tipo==='DIA') return {tipo:'DIA',dia:String(r[1]||'D2')};
+        return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:String(r[4]||''),fin:String(r[5]||''),durExt:parseInt(r[6])||0,
+          descripcion:String(r[7]||''),empresa:String(r[8]||''),moderador:String(r[9]||''),nivel:String(r[10]||''),tags:String(r[11]||''),visible_web:String(r[12]||'')==='true'};
       });
       // Ensure all day markers exist
       DAY_KEYS.forEach(dk=>{ if(!state.agenda[sk].some(r=>r.tipo==='DIA'&&r.dia===dk)) state.agenda[sk].push({tipo:'DIA',dia:dk}); });
@@ -1370,8 +1425,9 @@ async function saveAgenda(sk){
   const i=STAGE_KEYS.indexOf(sk);
   const sheetName='Stage_'+(i+1);
   const data=(state.agenda[sk]||[]).map(row=>{
-    if(row.tipo==='DIA') return ['DIA',row.dia,'',0,'','',0];
-    return [row.tipo||'Charla',row.speaker||'',row.tema||'',row.dur||30,row.inicio||'',row.fin||'',row.durExt||0];
+    if(row.tipo==='DIA') return ['DIA',row.dia,'',0,'','',0,'','','','','',''];
+    return [row.tipo||'Charla',row.speaker||'',row.tema||'',row.dur||30,row.inicio||'',row.fin||'',row.durExt||0,
+      row.descripcion||'',row.empresa||'',row.moderador||'',row.nivel||'',row.tags||'',row.visible_web?'true':''];
   });
   await gasPost(sheetName,'replace_all',data);
   toast('✅ '+stageNames[i]+' guardado'); markClean('principal');
