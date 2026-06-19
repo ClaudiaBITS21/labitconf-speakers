@@ -517,7 +517,9 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;width:360px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9)">
     <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px" id="stagePickTitle"></div>
     <div style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.5" id="stagePickSubtitle"></div>
-    <div id="stagePickList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px"></div>
+    <div id="stagePickList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px"></div>
+    <div style="font-size:12px;color:#888;margin-bottom:6px">Día destino</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px" id="stagePickDays"></div>
     <div style="display:flex;justify-content:flex-end;gap:8px">
       <button class="btn" onclick="closeStageModal()">Cancelar</button>
       <button class="btn save" onclick="confirmStageAction()" id="stagePickConfirm">Confirmar</button>
@@ -2537,9 +2539,9 @@ function exportICal() {
 }
 
 // ── STAGE PICK MODAL ─────────────────────────────────────────────────
-let _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null,spRi:null,spTi:null};
+let _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null,destDay:null,spRi:null,spTi:null};
 function openStageModal(sk,realIdx,mode,spRi,spTi){
-  _stagePickCtx={sk,realIdx,mode,destSk:null,spRi:spRi??null,spTi:spTi??null};
+  _stagePickCtx={sk,realIdx,mode,destSk:null,destDay:currentDay,spRi:spRi??null,spTi:spTi??null};
   const isSend=mode==='send';
   const isMove=mode==='move';
   document.getElementById('stagePickTitle').textContent=isSend?'🔀 Enviar a agenda':isMove?'↗️ Mover a otro stage':'🔁 Copiar a otro stage';
@@ -2567,14 +2569,30 @@ function openStageModal(sk,realIdx,mode,spRi,spTi){
     };
     list.appendChild(btn);
   });
+  // Day selector
+  const daysEl=document.getElementById('stagePickDays');
+  daysEl.innerHTML='';
+  [{day:2,label:'Oct 30'},{day:3,label:'Oct 31'}].forEach(({day,label})=>{
+    const b=document.createElement('button');
+    b.className='btn';
+    b.textContent=label;
+    const active=day===_stagePickCtx.destDay;
+    b.style.cssText=`flex:1;font-weight:700;${active?'background:#f7931a;color:#000;border-color:#f7931a':'background:#111;color:#fff;border-color:#444'}`;
+    b.onclick=()=>{
+      _stagePickCtx.destDay=day;
+      daysEl.querySelectorAll('button').forEach(x=>{x.style.background='#111';x.style.color='#fff';x.style.borderColor='#444';});
+      b.style.background='#f7931a';b.style.color='#000';b.style.borderColor='#f7931a';
+    };
+    daysEl.appendChild(b);
+  });
   document.getElementById('stagePickModal').style.display='flex';
 }
 function closeStageModal(){
   document.getElementById('stagePickModal').style.display='none';
   _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null,spRi:null,spTi:null};
 }
-function insertAtEndOfDay(sk, row){
-  const dayKey='D'+currentDay;
+function insertAtEndOfDay(sk, row, dayNum){
+  const dayKey='D'+(dayNum||currentDay);
   const all=state.agenda[sk];
   let insertAt=all.length;
   let inDay=false;
@@ -2590,7 +2608,8 @@ function insertAtEndOfDay(sk, row){
   all.splice(insertAt,0,row);
 }
 function confirmStageAction(){
-  const{sk,realIdx,mode,destSk,spRi,spTi}=_stagePickCtx;
+  const{sk,realIdx,mode,destSk,destDay,spRi,spTi}=_stagePickCtx;
+  const targetDay=destDay||currentDay;
   if(!destSk){toast('⚠️ Seleccioná un stage destino',true);return;}
   pushHistory();
 
@@ -2611,8 +2630,8 @@ function confirmStageAction(){
     rowNew.notas='[pendiente]';
     rowNew.inicio='';rowNew.fin='';
     ensureDaySections(destSk);
-    insertAtEndOfDay(destSk,rowNew);
-    recalcAgendaTimes(destSk,currentDay);
+    insertAtEndOfDay(destSk,rowNew,targetDay);
+    recalcAgendaTimes(destSk,targetDay);
     markDirty('principal',destSk);
     closeStageModal();
     renderAgenda();
@@ -2625,12 +2644,12 @@ function confirmStageAction(){
   rowCopy.notas='[pendiente]'+(existingNotas?' '+existingNotas:'');
   rowCopy.inicio='';rowCopy.fin='';
   ensureDaySections(destSk);
-  insertAtEndOfDay(destSk,rowCopy);
+  insertAtEndOfDay(destSk,rowCopy,targetDay);
   if(mode==='move'){
     state.agenda[sk].splice(realIdx,1);
     recalcAgendaTimes(sk,currentDay);
   }
-  recalcAgendaTimes(destSk,currentDay);
+  recalcAgendaTimes(destSk,targetDay);
   markDirty('principal',destSk);
   if(mode==='move') markDirty('principal',sk);
   closeStageModal();
