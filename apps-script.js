@@ -121,7 +121,9 @@ function doGet(e) {
     if (e.parameter.action === 'get_config') {
       const props = PropertiesService.getScriptProperties();
       const raw = props.getProperty('config_stageNames');
-      return respond({ ok:true, stageNames: raw ? JSON.parse(raw) : null });
+      return respond({ ok:true, stageNames: raw ? JSON.parse(raw) : null,
+        apertura: props.getProperty('config_apertura')||'',
+        cierre:   props.getProperty('config_cierre')||'' });
     }
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const validSheets = [
@@ -156,9 +158,9 @@ function doPost(e) {
     if (writeKey && key !== writeKey) return respond({ error:'Clave incorrecta', code:401 });
 
     if (action === 'set_config') {
-      if (data && Array.isArray(data.stageNames)) {
-        props.setProperty('config_stageNames', JSON.stringify(data.stageNames));
-      }
+      if (data && Array.isArray(data.stageNames)) props.setProperty('config_stageNames', JSON.stringify(data.stageNames));
+      if (data && data.apertura) props.setProperty('config_apertura', data.apertura);
+      if (data && data.cierre)   props.setProperty('config_cierre',   data.cierre);
       return respond({ ok:true });
     }
 

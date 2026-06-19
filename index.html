@@ -357,9 +357,9 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 <div class="tab-content active" id="tab-principal">
   <div class="config-bar">
     <span class="config-label">Apertura</span>
-    <input type="text" class="time-input green" id="horaApertura" value="09:00" placeholder="HH:MM" oninput="recalcAgendaTimes(activeStage,currentDay)">
+    <input type="text" class="time-input green" id="horaApertura" value="09:30" placeholder="HH:MM" oninput="recalcAgendaTimes(activeStage,currentDay);saveStageNames()">
     <span class="config-label">Cierre</span>
-    <input type="text" class="time-input red" id="horaCierre" value="20:00" placeholder="HH:MM" oninput="updateGlobalProgress()">
+    <input type="text" class="time-input red" id="horaCierre" value="18:30" placeholder="HH:MM" oninput="updateGlobalProgress();saveStageNames()">
     <span style="color:var(--dim);font-size:15px" id="totalMin">—</span>
     <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;">
       <button class="btn" onclick="addAgendaRow()">+ Bloque</button>
@@ -664,7 +664,9 @@ function saveStageNames(){
   updateStageHeaders();
   clearTimeout(saveStageNames._t);
   saveStageNames._t=setTimeout(()=>{
-    gasPost('','set_config',{stageNames}).catch(()=>{});
+    const apertura=document.getElementById('horaApertura')?.value||'09:30';
+    const cierre=document.getElementById('horaCierre')?.value||'18:30';
+    gasPost('','set_config',{stageNames,apertura,cierre}).catch(()=>{});
   },1000);
 }
 
@@ -2170,11 +2172,16 @@ async function loadConfig(){
   try{
     const r=await fetch(`${GAS_URL}?action=get_config`);
     const j=await r.json();
-    if(j.ok&&Array.isArray(j.stageNames)&&j.stageNames.length===9){
-      stageNames=j.stageNames;
-      localStorage.setItem('labitconf_stages',JSON.stringify(stageNames));
-      updateStageHeaders();
-      buildStageFilterOptions();
+    if(j.ok){
+      if(Array.isArray(j.stageNames)&&j.stageNames.length===9){
+        stageNames=j.stageNames;
+        localStorage.setItem('labitconf_stages',JSON.stringify(stageNames));
+        updateStageHeaders();
+        buildStageFilterOptions();
+      }
+      if(j.apertura){const el=document.getElementById('horaApertura');if(el)el.value=j.apertura;}
+      if(j.cierre){const el=document.getElementById('horaCierre');if(el)el.value=j.cierre;}
+      updateGlobalProgress();
     }
   }catch{}
 }
