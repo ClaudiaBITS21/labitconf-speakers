@@ -2462,9 +2462,11 @@ function openStageModal(sk,realIdx,mode){
   _stagePickCtx={sk,realIdx,mode,destSk:null};
   const isMove=mode==='move';
   document.getElementById('stagePickTitle').textContent=isMove?'↗️ Mover a otro stage':'🔁 Copiar a otro stage';
-  document.getElementById('stagePickSubtitle').textContent=isMove
-    ?'El bloque se eliminará de este stage y aparecerá como pendiente al inicio del día en el destino.'
-    :'El bloque se mantiene aquí y una copia quedará como pendiente al inicio del día en el destino.';
+  const sub=document.getElementById('stagePickSubtitle');
+  sub.style.color='#fff';
+  sub.textContent=isMove
+    ?'Al mover el bloque se eliminará de este stage, viaja para quedar como pendiente al inicio en el stage que selecciones.'
+    :'El bloque se mantiene, solo crea una copia como pendiente al inicio en el stage que selecciones.';
   document.getElementById('stagePickConfirm').textContent=isMove?'Mover':'Copiar';
   const list=document.getElementById('stagePickList');
   list.innerHTML='';
