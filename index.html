@@ -793,12 +793,11 @@ function getAgendaRows(sk, dayNum){
   return result;
 }
 
-// Ensure all 4 day sections exist in a stage array
+// Ensure all day sections exist — D2 at start so existing rows fall inside it, D3 at end
 function ensureDaySections(sk){
-  DAY_KEYS.forEach(dk=>{
-    if(!(state.agenda[sk]||[]).some(r=>r.tipo==='DIA'&&r.dia===dk))
-      state.agenda[sk].push({tipo:'DIA',dia:dk});
-  });
+  const arr=state.agenda[sk]||[];
+  if(!arr.some(r=>r.tipo==='DIA'&&r.dia==='D2')) arr.unshift({tipo:'DIA',dia:'D2'});
+  if(!arr.some(r=>r.tipo==='DIA'&&r.dia==='D3')) arr.push({tipo:'DIA',dia:'D3'});
 }
 
 // Recalc inicio/fin for all rows of sk/dayNum from scratch
@@ -1648,8 +1647,9 @@ async function loadAgenda(){
         return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:parseT(r[4]),fin:parseT(r[5]),durExt:parseInt(r[6])||0,
           descripcion:String(r[7]||''),empresa:String(r[8]||''),moderador:String(r[9]||''),nivel:String(r[10]||''),tags:String(r[11]||''),visible_web:String(r[12]||'')==='true',notas:String(r[13]||'')};
       });
-      // Ensure all day markers exist
-      DAY_KEYS.forEach(dk=>{ if(!state.agenda[sk].some(r=>r.tipo==='DIA'&&r.dia===dk)) state.agenda[sk].push({tipo:'DIA',dia:dk}); });
+      // Ensure all day markers exist — D2 al inicio, D3 al final
+      if(!state.agenda[sk].some(r=>r.tipo==='DIA'&&r.dia==='D2')) state.agenda[sk].unshift({tipo:'DIA',dia:'D2'});
+      if(!state.agenda[sk].some(r=>r.tipo==='DIA'&&r.dia==='D3')) state.agenda[sk].push({tipo:'DIA',dia:'D3'});
     }catch(e){
       console.error('Error loading',sheetName,e);
       state.agenda[sk]=DAY_KEYS.map(dk=>({tipo:'DIA',dia:dk}));
