@@ -2317,20 +2317,46 @@ async function loadConfig(){
   }catch{}
 }
 
+const CACHE_KEY='labitconf_state_cache';
+function saveStateCache(){
+  try{ localStorage.setItem(CACHE_KEY,JSON.stringify({agenda:state.agenda,speakers:state.speakers,speakersManual:state.speakersManual,ideas:state.ideas,ts:Date.now()})); }catch{}
+}
+function loadStateCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY);
+    if(!raw)return null;
+    const parsed=JSON.parse(raw);
+    hydrateState(parsed);
+    return parsed;
+  }catch{return null;}
+}
+
 async function loadAll(){
   setStatus(false,true);
   try{
     await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
-    // Recalculate all stage times from horaApertura after load (overrides any stale sheet values)
     STAGE_KEYS.forEach(sk=>[2,3].forEach(d=>recalcAgendaTimes(sk,d)));
+    saveStateCache();
     try{ renderAgenda(); }catch(e){ console.error('renderAgenda error:',e); }
     try{ renderSpeakers(); }catch(e){ console.error('renderSpeakers error:',e); }
     const totalRows=STAGE_KEYS.reduce((s,sk)=>(state.agenda[sk]||[]).length+s,0);
     toast(`✅ Cargado: ${state.speakers.length} speakers, ${totalRows} filas de agenda`);
   }catch(e){
     console.error('loadAll error:',e);
-    setStatus(false); toast('⚠️ Error: '+e.message,true);
+    const cache=loadStateCache();
+    if(cache){
+      state.agenda=cache.agenda||state.agenda;
+      state.speakers=cache.speakers||[];
+      state.speakersManual=cache.speakersManual||[];
+      state.ideas=cache.ideas||[];
+      const age=Math.round((Date.now()-(cache.ts||0))/60000);
+      setStatus(false);
+      toast(`⚠️ Sin conexión — mostrando caché de hace ${age} min`,true);
+    } else {
+      setStatus(false); toast('⚠️ Sin conexión y sin caché local',true);
+    }
+    STAGE_KEYS.forEach(sk=>[2,3].forEach(d=>recalcAgendaTimes(sk,d)));
     try{ renderAgenda(); }catch(e2){}
     try{ renderSpeakers(); }catch(e2){}
     try{ renderIdeas(); }catch(e2){}
@@ -2433,7 +2459,7 @@ function exportCSV() {
 // ── EXPORT ICAL ───────────────────────────────────────────────────────
 function exportICal() {
   const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//LABITCONF 2026//ES'];
-  const DAY_DATES={2:'20261030',3:'20261031'};
+  const DAY_DATES={2:EVENT_DAYS.oct30.replace(/-/g,''),3:EVENT_DAYS.oct31.replace(/-/g,'')};
   STAGE_KEYS.forEach((sk,si)=>{
     const stageName=stageNames[si]||('Stage '+(si+1));
     for(let d=2;d<=3;d++){
@@ -2545,6 +2571,16 @@ function saveTextModal(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('textEditModal').style.display==='flex')closeTextModal();});
 
 // ── COMMAND PALETTE ───────────────────────────────────────────────────
+function highlightAgendaRow(realIdx){
+  const tr=document.querySelector(`tr[data-idx="${realIdx}"]`);
+  if(!tr)return;
+  tr.scrollIntoView({behavior:'smooth',block:'center'});
+  tr.style.transition='outline .1s';
+  tr.style.outline='2px solid #f7931a';
+  tr.style.outlineOffset='1px';
+  setTimeout(()=>{tr.style.outline='';tr.style.outlineOffset='';},2000);
+}
+
 function openCommandPalette() {
   const p = document.getElementById('cmdPalette');
   p.style.display = 'flex';
@@ -2565,11 +2601,11 @@ function filterCmd(q) {
     </div>`);
   });
   STAGE_KEYS.forEach((sk,si)=>{
-    getAgendaRows(sk,currentDay).forEach(({row})=>{
+    getAgendaRows(sk,currentDay).forEach(({row,realIdx})=>{
       const tema=row.tema||''; const tipo=row.tipo||'';
       if(!q||tema.toLowerCase().includes(q)||tipo.toLowerCase().includes(q)||((row.speaker||'').toLowerCase().includes(q))){
         const stageName=stageNames[si]||('Stage '+(si+1));
-        res.push(`<div onclick="activeStage='${sk}';switchTab('principal');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
+        res.push(`<div onclick="activeStage='${sk}';switchTab('principal');document.getElementById('cmdPalette').style.display='none';setTimeout(()=>highlightAgendaRow(${realIdx}),120)" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
           <span style="color:#6366f1;font-weight:700">📋</span>
           <div><div style="font-weight:700;color:#fff">${esc(tema||'(sin tema)')}</div><div style="font-size:15px;color:#aaa">${esc(tipo)} · ${esc(stageName)} · ${esc(row.inicio||'')} → ${esc(row.fin||'')}</div></div>
         </div>`);
