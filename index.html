@@ -1224,12 +1224,14 @@ function selectSpeakerWithTema(name,tema){
       const tArr=sp.temasArr;
       const ti=tema?tArr.indexOf(tema):-1;
       const tm=ti>=0?sp._temas[ti]:null;
+      const row=state.agenda[sk]?.[idx];
       if(tm){
-        if(tm.nivel){updateAgendaField(idx,sk,'nivel',tm.nivel);const el=document.getElementById(`nivel-${idx}-${sk}`);if(el)el.value=tm.nivel;}
-        if(tm.tags){updateAgendaField(idx,sk,'tags',tm.tags);const el=document.getElementById(`tags-${idx}-${sk}`);if(el)el.value=tm.tags;}
+        if(tm.nivel&&!row?.nivel){updateAgendaField(idx,sk,'nivel',tm.nivel);const el=document.getElementById(`nivel-${idx}-${sk}`);if(el)el.value=tm.nivel;}
+        if(tm.tags&&!row?.tags){updateAgendaField(idx,sk,'tags',tm.tags);const el=document.getElementById(`tags-${idx}-${sk}`);if(el)el.value=tm.tags;}
         const desc=tm.abstract||tm.descripcion||'';
-        if(desc){updateAgendaField(idx,sk,'descripcion',desc);const el=document.querySelector(`#agendaTbody-${sk} tr[data-idx="${idx}"] .desc-inp`);if(el)el.value=desc;}
+        if(desc&&!row?.descripcion){updateAgendaField(idx,sk,'descripcion',desc);const el=document.getElementById(`descripcion-prev-${idx}-${sk}`);if(el)el.textContent=desc;}
       }
+      if(!row?.tema&&tema){const el=document.getElementById(`tema-prev-${idx}-${sk}`);if(el){el.textContent=tema;el.style.color='#fff';}}
     }
   }
 
