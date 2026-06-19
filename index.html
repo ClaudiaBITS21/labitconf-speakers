@@ -2555,6 +2555,22 @@ function closeStageModal(){
   document.getElementById('stagePickModal').style.display='none';
   _stagePickCtx={sk:null,realIdx:null,mode:null,destSk:null,spRi:null,spTi:null};
 }
+function insertAtEndOfDay(sk, row){
+  const dayKey='D'+currentDay;
+  const all=state.agenda[sk];
+  let insertAt=all.length;
+  let inDay=false;
+  for(let i=0;i<all.length;i++){
+    const r=all[i];
+    if(r.tipo==='DIA'){
+      if(inDay){insertAt=i;break;}
+      inDay=(r.dia===dayKey);
+    } else if(inDay){
+      insertAt=i+1;
+    }
+  }
+  all.splice(insertAt,0,row);
+}
 function confirmStageAction(){
   const{sk,realIdx,mode,destSk,spRi,spTi}=_stagePickCtx;
   if(!destSk){toast('⚠️ Seleccioná un stage destino',true);return;}
@@ -2577,13 +2593,7 @@ function confirmStageAction(){
     rowNew.notas='[pendiente]';
     rowNew.inicio='';rowNew.fin='';
     ensureDaySections(destSk);
-    const dayKey='D'+currentDay;
-    const destAll=state.agenda[destSk];
-    let insertAt=destAll.length;
-    for(let i=0;i<destAll.length;i++){
-      if(destAll[i].tipo==='DIA'&&destAll[i].dia===dayKey){insertAt=i+1;break;}
-    }
-    destAll.splice(insertAt,0,rowNew);
+    insertAtEndOfDay(destSk,rowNew);
     recalcAgendaTimes(destSk,currentDay);
     markDirty('principal',destSk);
     closeStageModal();
@@ -2597,13 +2607,7 @@ function confirmStageAction(){
   rowCopy.notas='[pendiente]'+(existingNotas?' '+existingNotas:'');
   rowCopy.inicio='';rowCopy.fin='';
   ensureDaySections(destSk);
-  const dayKey='D'+currentDay;
-  const destAll=state.agenda[destSk];
-  let insertAt=destAll.length;
-  for(let i=0;i<destAll.length;i++){
-    if(destAll[i].tipo==='DIA'&&destAll[i].dia===dayKey){insertAt=i+1;break;}
-  }
-  destAll.splice(insertAt,0,rowCopy);
+  insertAtEndOfDay(destSk,rowCopy);
   if(mode==='move'){
     state.agenda[sk].splice(realIdx,1);
     recalcAgendaTimes(sk,currentDay);
