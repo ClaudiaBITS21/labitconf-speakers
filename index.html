@@ -793,6 +793,16 @@ function getAgendaRows(sk, dayNum){
   return result;
 }
 
+function insertAtStartOfDay(sk, row, dayNum){
+  const dayKey='D'+(dayNum||currentDay);
+  const all=state.agenda[sk];
+  let insertAt=all.length;
+  for(let i=0;i<all.length;i++){
+    if(all[i].tipo==='DIA'&&all[i].dia===dayKey){ insertAt=i+1; break; }
+  }
+  all.splice(insertAt,0,row);
+}
+
 // Ensure all day sections exist — D2 at start so existing rows fall inside it, D3 at end
 function ensureDaySections(sk){
   const arr=state.agenda[sk]||[];
@@ -2758,7 +2768,7 @@ function confirmStageAction(){
     rowNew.notas='[pendiente]';
     rowNew.inicio='';rowNew.fin='';
     ensureDaySections(destSk);
-    insertAtEndOfDay(destSk,rowNew,targetDay);
+    insertAtStartOfDay(destSk,rowNew,targetDay);
     recalcAgendaTimes(destSk,targetDay);
     markDirty('principal',destSk);
     closeStageModal();
@@ -2772,7 +2782,7 @@ function confirmStageAction(){
   rowCopy.notas='[pendiente]'+(existingNotas?' '+existingNotas:'');
   rowCopy.inicio='';rowCopy.fin='';
   ensureDaySections(destSk);
-  insertAtEndOfDay(destSk,rowCopy,targetDay);
+  insertAtStartOfDay(destSk,rowCopy,targetDay);
   if(mode==='move'){
     state.agenda[sk].splice(realIdx,1);
     recalcAgendaTimes(sk,currentDay);
