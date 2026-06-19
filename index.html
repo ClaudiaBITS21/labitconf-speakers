@@ -1127,8 +1127,8 @@ async function openSpDrop(idx,sk,e,field='speaker'){
   const dd=document.getElementById('spDropdown');
   if(_spDropCtx.idx===idx&&_spDropCtx.sk===sk&&_spDropCtx.field===field&&dd.classList.contains('open')){closeSpDrop();return;}
   _spDropCtx={idx,sk,field};
-  const cell=e.currentTarget.closest('.sp-picker').querySelector('.sp-cell');
-  const r=cell.getBoundingClientRect();
+  const anchor=e.currentTarget.closest('.sp-picker')?.querySelector('.sp-cell')||e.currentTarget;
+  const r=anchor.getBoundingClientRect();
   dd.style.top=(r.bottom+2)+'px';
   dd.style.left=r.left+'px';
   dd.style.width=Math.max(r.width,240)+'px';
