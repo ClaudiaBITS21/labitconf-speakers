@@ -1354,7 +1354,8 @@ function selectSpeakerWithTema(name,tema){
   } else if(!name){
     updateStageField(idx,sk,'speaker','');
   }
-  if(tema&&!state.agenda[sk]?.[idx]?.tema)updateStageField(idx,sk,'tema',tema);
+  const prevTema=state.agenda[sk]?.[idx]?.tema||'';
+  if(tema&&!prevTema)updateStageField(idx,sk,'tema',tema);
   markDirty('principal',sk);
 
   // Auto-fill empresa, nivel, tags desde el speaker seleccionado
@@ -1376,7 +1377,7 @@ function selectSpeakerWithTema(name,tema){
         const desc=tm.abstract||tm.descripcion||'';
         if(desc&&!row?.descripcion){updateAgendaField(idx,sk,'descripcion',desc);const el=document.getElementById(`descripcion-prev-${idx}-${sk}`);if(el)el.textContent=desc;}
       }
-      if(!row?.tema&&tema){const el=document.getElementById(`tema-prev-${idx}-${sk}`);if(el){el.textContent=tema;el.style.color='#fff';}}
+      if(!prevTema&&tema){const el=document.getElementById(`tema-prev-${idx}-${sk}`);if(el){el.textContent=tema;el.style.color='#fff';}}
     }
   }
 
