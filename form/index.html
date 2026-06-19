@@ -996,8 +996,20 @@ function addTema(){
 }
 
 function removeTema(btn){
+  const removedNum=parseInt(btn.closest('.tema-card').dataset.num);
   btn.closest('.tema-card').remove();temaCount--;
-  let i=0;document.querySelectorAll('.tema-card').forEach(c=>{i++;c.dataset.num=i;const l=c.querySelector('.tema-num');if(l)l.textContent=T[lang].temaNum(i);});
+  // Reasignar selectedTagsMap con los números nuevos
+  const newMap={};
+  let i=0;
+  document.querySelectorAll('.tema-card').forEach(c=>{
+    i++;
+    const oldNum=parseInt(c.dataset.num);
+    if(selectedTagsMap[oldNum])newMap[i]=selectedTagsMap[oldNum];
+    c.dataset.num=i;
+    const l=c.querySelector('.tema-num');if(l)l.textContent=T[lang].temaNum(i);
+  });
+  Object.keys(selectedTagsMap).forEach(k=>delete selectedTagsMap[k]);
+  Object.assign(selectedTagsMap,newMap);
   document.getElementById('addTemaBtn').style.display=temaCount>=3?'none':'flex';
 }
 
