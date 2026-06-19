@@ -923,7 +923,7 @@ function makeAgendaRow(row,realIdx,sk){
   // Descripción
   const tdDesc=document.createElement('td');
   tdDesc.style.cssText='padding:0;min-width:120px';
-  tdDesc.innerHTML=`<textarea class="tema-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','descripcion',this.value)" placeholder="Descripción…">${esc(row.descripcion||'')}</textarea>`;
+  tdDesc.innerHTML=`<textarea class="tema-inp desc-inp" rows="1" onchange="updateAgendaField(${realIdx},'${sk}','descripcion',this.value)" placeholder="Descripción…">${esc(row.descripcion||'')}</textarea>`;
   tr.appendChild(tdDesc);
 
   // Speaker
@@ -1209,6 +1209,8 @@ function selectSpeakerWithTema(name,tema){
       if(tm){
         if(tm.nivel){updateAgendaField(idx,sk,'nivel',tm.nivel);const el=document.getElementById(`nivel-${idx}-${sk}`);if(el)el.value=tm.nivel;}
         if(tm.tags){updateAgendaField(idx,sk,'tags',tm.tags);const el=document.getElementById(`tags-${idx}-${sk}`);if(el)el.value=tm.tags;}
+        const desc=tm.abstract||tm.descripcion||'';
+        if(desc){updateAgendaField(idx,sk,'descripcion',desc);const el=document.querySelector(`#agendaTbody-${sk} tr[data-idx="${idx}"] .desc-inp`);if(el)el.value=desc;}
       }
     }
   }
