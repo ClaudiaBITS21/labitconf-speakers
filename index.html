@@ -1458,7 +1458,8 @@ async function loadAgenda(){
       state.agenda[sk]=rows.map(r=>{
         const tipo=String(r[0]||'');
         if(tipo==='DIA') return {tipo:'DIA',dia:String(r[1]||'D2')};
-        return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:String(r[4]||''),fin:String(r[5]||''),durExt:parseInt(r[6])||0,
+        const parseT=v=>{const s=String(v||'');const m=s.match(/T(\d{2}):(\d{2})/);if(m)return m[1]+':'+m[2];return s;};
+        return {tipo:tipo||'Charla',speaker:String(r[1]||''),tema:String(r[2]||''),dur:parseInt(r[3])||30,inicio:parseT(r[4]),fin:parseT(r[5]),durExt:parseInt(r[6])||0,
           descripcion:String(r[7]||''),empresa:String(r[8]||''),moderador:String(r[9]||''),nivel:String(r[10]||''),tags:String(r[11]||''),visible_web:String(r[12]||'')==='true'};
       });
       // Ensure all day markers exist
