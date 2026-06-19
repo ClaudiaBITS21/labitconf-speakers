@@ -707,6 +707,7 @@ function updateStageHeaders(){
 function buildTableHeaders(){
   const r1=document.getElementById('headerRow1');
   const r2=document.getElementById('headerRow2');
+  if(!r1||!r2)return;
   // Remove old stage headers
   while(r1.children.length>2)r1.removeChild(r1.lastChild);
   while(r2.children.length>2)r2.removeChild(r2.lastChild);
