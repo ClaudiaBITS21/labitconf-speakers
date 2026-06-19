@@ -363,6 +363,23 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           </div>
         </div>
         <div class="hint" style="margin-top:6px" id="h-disp"></div>
+        <div class="field" style="margin-top:12px" id="f-dias">
+          <label class="label" id="l-dias"></label>
+          <div class="check-group" id="diasGroup">
+            <label class="check-chip" style="--c:#f7931a">
+              <input type="checkbox" value="oct29" onchange="syncChip(this)"> Oct 29
+            </label>
+            <label class="check-chip" style="--c:#f7931a">
+              <input type="checkbox" value="oct30" onchange="syncChip(this)"> Oct 30
+            </label>
+            <label class="check-chip" style="--c:#f7931a">
+              <input type="checkbox" value="oct31" onchange="syncChip(this)"> Oct 31
+            </label>
+            <label class="check-chip" style="--c:#f7931a">
+              <input type="checkbox" value="nov1" onchange="syncChip(this)"> Nov 1
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- PERFIL -->
@@ -998,6 +1015,8 @@ function validate(){
   if(!dispDesde){setError('f-disp-desde',t.errRequired);ok=false;}
   if(!dispHasta){setError('f-disp-hasta',t.errRequired);ok=false;}
   if(dispDesde&&dispHasta&&dispDesde>dispHasta){setError('f-disp-hasta',t.errFechas||'La fecha hasta debe ser posterior a desde');ok=false;}
+  // idioma obligatorio
+  if(getChecked('idiomaGroup').length===0){setError('f-idioma',t.errIdioma||'Seleccioná al menos un idioma');ok=false;}
   // confname obligatorio
   if(!document.getElementById('confname')?.value.trim()){setError('f-confname',t.errRequired);ok=false;}
   // bio obligatoria

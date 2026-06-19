@@ -320,6 +320,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">❓ Ideas</button>
   <button class="tab-btn" data-tab="kanban" onclick="switchTab('kanban')">🗂️ Kanban</button>
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
+  <button class="tab-btn" data-tab="canvas" onclick="switchTab('canvas')">🗓️ Canvas</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
     <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(2)" title="LABITCONF Day 1">Oct 30</button>
@@ -489,6 +490,17 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <div id="tiersBoard" style="display:flex;gap:16px;padding:18px;overflow-x:auto;min-height:calc(100vh - 120px)"></div>
 </div>
 
+<!-- TAB CANVAS -->
+<div class="tab-content" id="tab-canvas">
+  <div class="toolbar">
+    <span style="font-size:13px;color:#aaa">Vista visual de todos los stages · Día <span id="canvasDayLabel" style="color:#f7931a;font-weight:700"></span></span>
+    <button class="btn" style="margin-left:auto" onclick="renderCanvas()">🔄 Actualizar</button>
+  </div>
+  <div id="canvasWrap" style="overflow:auto;padding:16px 0 32px 0;min-height:calc(100vh - 120px)">
+    <div id="canvasGrid"></div>
+  </div>
+</div>
+
 <!-- SPEAKER DROPDOWN (shared, positioned via JS) -->
 <div id="spDropdown" class="sp-drop">
   <div class="sp-drop-search" style="display:flex;flex-direction:column;gap:4px">
@@ -648,6 +660,7 @@ function switchTab(name){
   if(name==='resumen') buildResumen();
   if(name==='kanban') renderKanban();
   if(name==='tiers') renderTiers();
+  if(name==='canvas') renderCanvas();
   if(name==='speakers') renderSpeakers();
 }
 
@@ -2423,6 +2436,7 @@ function refreshAll() {
   renderIdeas();
   if(isTabActive('kanban')) renderKanban();
   if(isTabActive('tiers')) renderTiers();
+  if(isTabActive('canvas')) renderCanvas();
   if(isTabActive('resumen')) buildResumen();
 }
 function undo() {
@@ -2867,6 +2881,81 @@ function tiersDrop(e, newTier) {
   renderTiers();
   renderSpeakers();
   toast('✅ Tier actualizado');
+}
+
+// ── CANVAS ────────────────────────────────────────────────────────────
+function renderCanvas(){
+  const grid=document.getElementById('canvasGrid');
+  if(!grid) return;
+  const lbl=document.getElementById('canvasDayLabel');
+  if(lbl) lbl.textContent=currentDay===2?'Oct 30':'Oct 31';
+
+  const PX_MIN=2;
+  const RANGE_START=timeToMin(horaApertura||'09:00')-15;
+  const RANGE_END=Math.max(RANGE_START+600, ...STAGE_KEYS.flatMap(sk=>
+    getAgendaRows(sk,currentDay).map(({row})=>timeToMin(row.fin||'')||0)
+  ))+30;
+  const RANGE=RANGE_END-RANGE_START;
+  const H=RANGE*PX_MIN;
+
+  const TIPO_COLOR={
+    'Apertura':'#c2410c','Cierre':'#c2410c','Break':'#374151','Charla':'#1d4ed8',
+    'Panel':'#6d28d9','Taller':'#065f46','AMA':'#9d174d','Mesa Redonda':'#0e7490',
+    'Lightning Talk':'#1e40af','Networking':'#374151',
+  };
+
+  // time axis
+  let timeHtml='<div style="width:44px;flex-shrink:0;padding-top:28px;position:relative">';
+  for(let m=RANGE_START;m<=RANGE_END;m+=30){
+    const top=(m-RANGE_START)*PX_MIN;
+    if(m%60===0) timeHtml+=`<div style="position:absolute;top:${top}px;right:4px;font-size:10px;color:#6b7280;transform:translateY(-50%)">${minToTime(m)}</div>`;
+  }
+  timeHtml+='</div>';
+
+  // stage columns
+  const colsHtml=STAGE_KEYS.map((sk,i)=>{
+    const rows=getAgendaRows(sk,currentDay);
+    // grid lines background
+    let bgLines='';
+    for(let m=RANGE_START;m<=RANGE_END;m+=30){
+      const top=(m-RANGE_START)*PX_MIN;
+      bgLines+=`<div style="position:absolute;left:0;right:0;top:${top}px;border-top:1px solid ${m%60===0?'#1f2937':'#111827'};pointer-events:none"></div>`;
+    }
+    let blocks='';
+    rows.forEach(({row})=>{
+      if(!row.tipo||row.tipo==='DIA') return;
+      const s=timeToMin(row.inicio||'');
+      if(!s) return;
+      const dur=parseInt(row.dur)||30;
+      const top=(s-RANGE_START)*PX_MIN;
+      const h=Math.max(dur*PX_MIN-2,12);
+      const isPending=(row.notas||'').includes('[pendiente]');
+      const bg=isPending?'#78350f':(TIPO_COLOR[row.tipo]||'#1e3a8a');
+      const border=isPending?'1px solid #fbbf24':'1px solid rgba(255,255,255,.1)';
+      const spNames=(row.speaker||'').split('|').filter(Boolean).join(', ');
+      const tooltip=`${row.tipo} · ${dur}min\n${row.tema||''}\n${spNames}${isPending?' · [pendiente]':''}`;
+      blocks+=`<div title="${tooltip.trim()}" style="position:absolute;left:2px;right:2px;top:${top}px;height:${h}px;background:${bg};border-radius:3px;padding:2px 4px;overflow:hidden;border:${border};box-sizing:border-box">
+        <div style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3">${row.tema||row.tipo}</div>
+        ${h>22&&spNames?`<div style="font-size:9px;color:rgba(255,255,255,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${spNames}</div>`:''}
+      </div>`;
+    });
+    const name=stageNames[i]||`Stage ${i+1}`;
+    return `<div style="flex:1;min-width:140px;border-left:1px solid #1f2937">
+      <div style="padding:5px 6px;font-size:11px;font-weight:700;color:#f7931a;background:#0a0a0a;position:sticky;top:50px;z-index:2;border-bottom:1px solid #1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${name}">${name}</div>
+      <div style="position:relative;height:${H}px">${bgLines}${blocks}</div>
+    </div>`;
+  }).join('');
+
+  const legend=Object.entries(TIPO_COLOR).map(([k,c])=>`<span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#9ca3af"><span style="width:10px;height:10px;border-radius:2px;background:${c};flex-shrink:0"></span>${k}</span>`).join('');
+
+  grid.innerHTML=`
+    <div style="padding:0 16px 8px;display:flex;flex-wrap:wrap;gap:10px">${legend}
+      <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#9ca3af"><span style="width:10px;height:10px;border-radius:2px;background:#78350f;border:1px solid #fbbf24;flex-shrink:0"></span>Pendiente</span>
+    </div>
+    <div style="display:flex;padding-left:0;min-width:max-content">
+      ${timeHtml}
+      <div style="display:flex;flex:1">${colsHtml}</div>
+    </div>`;
 }
 
 // ── CLOSE ALL DROPS ───────────────────────────────────────────────────
