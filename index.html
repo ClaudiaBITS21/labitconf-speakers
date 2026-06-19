@@ -1605,9 +1605,10 @@ function updateGlobalProgress(){
   const ap=timeToMin(document.getElementById('horaApertura')?.value||'09:00');
   const cl=timeToMin(document.getElementById('horaCierre')?.value||'20:00');
   const total=cl-ap;
-  const hrs=(total/60).toFixed(1).replace(/\.0$/,'');
+  const h=String(Math.floor(total/60)).padStart(2,'0');
+  const m=String(total%60).padStart(2,'0');
   const el=document.getElementById('totalMin');
-  if(el)el.textContent=`${hrs} hs disponibles`;
+  if(el)el.textContent=`${h}:${m} Horas`;
 }
 
 function buildStageProgressBars(){
