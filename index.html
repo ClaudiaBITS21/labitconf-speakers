@@ -1160,6 +1160,12 @@ function spMatchScore(query,s){
   return best;
 }
 
+function spDisplayName(s){
+  const full=[s.nombre,s.apellido||''].filter(Boolean).join(' ');
+  const alias=s.confname||s.apodo||'';
+  return alias?`${full} (${alias})`:full;
+}
+
 function populateSpDrop(){
   const list=document.getElementById('spDropList');
   const qSp=(document.getElementById('spDropSearch')?.value||'').toLowerCase().trim();
@@ -1207,7 +1213,7 @@ function populateSpDrop(){
       const score=qTema?spMatchScore(qTema,s):1;
       if(qTema&&score<0.05)return;
       items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','')">
-        <div class="sp-item-name">${icon} ${esc(s.nombre)} <span style="font-size:11px;color:#555">[sin temas]</span></div>
+        <div class="sp-item-name">${icon} ${esc(spDisplayName(s))} <span style="font-size:11px;color:#555">[sin temas]</span></div>
         ${assignTxt}
       </div>`});
     } else {
@@ -1227,7 +1233,7 @@ function populateSpDrop(){
           const whereStr=[stageLabel,dayLabel].filter(Boolean).join(' · ');
           const dupWarning=`<div style="font-size:11px;color:#eab308;margin-top:2px">⚠️ Si lo asignás de nuevo quedará duplicado en ${whereStr||'otro slot'}</div>`;
           items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','${esc(tema).replace(/'/g,"\\'")}')">
-            <div class="sp-item-name">${icon} ${esc(s.nombre)} ${scoreBadge}</div>
+            <div class="sp-item-name">${icon} ${esc(spDisplayName(s))} ${scoreBadge}</div>
             <div class="sp-item-tema" style="color:#22c55e">✓ ${esc(tema)}<span style="font-size:10px;color:#22c55e;margin-left:6px">${whereStr}</span></div>
             ${detalle}
             ${dupWarning}
@@ -1236,7 +1242,7 @@ function populateSpDrop(){
         } else {
           const estBadge=est==='disponible'?'':` <span style="font-size:10px;color:#06b6d4">[${est}]</span>`;
           items.push({score,html:`<div class="sp-item${blockedRow?' sp-conflict-same':''}" onclick="selectSpeakerWithTema('${esc(s.nombre).replace(/'/g,"\\'")}','${esc(tema).replace(/'/g,"\\'")}')">
-            <div class="sp-item-name">${icon} ${esc(s.nombre)}${estBadge} ${scoreBadge}</div>
+            <div class="sp-item-name">${icon} ${esc(spDisplayName(s))}${estBadge} ${scoreBadge}</div>
             <div class="sp-item-tema">💬 ${esc(tema)}</div>
             ${detalle}
             ${assignTxt}
