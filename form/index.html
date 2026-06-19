@@ -502,6 +502,7 @@ const T={
     lPrimera:'¿Primera vez en LABITCONF?',lPodcast:'¿Disponible para entrevista | podcast?',
     lEmpresaPres:'¿Traés empresa | proyecto que presentás?',
     temaNum:n=>`Tema ${n}`,temaLevel:'Nivel',temaFormato:'Formatos Preferidos',temaDur:'Tiempo de presentación',
+    hTemaFormato:'Si seleccionás Panel, podés ser considerado para participar en un panel con otros speakers sobre este tema.',
     hTemaDur:'Sujeto a modificaciones.',
     temaTitle:'Título del Tema',temaAbstract:'Abstract',temaDesc:'Descripción (Detalle)',
     temaTags:'Tags',temaPanel:'Puedo participar en un Panel con otros speakers sobre este tema.',
@@ -545,6 +546,7 @@ const T={
     lPrimera:'First time at LABITCONF?',lPodcast:'Available for interview | podcast?',
     lEmpresaPres:'Are you bringing a company | project to present?',
     temaNum:n=>`Topic ${n}`,temaLevel:'Level',temaFormato:'Preferred Formats',temaDur:'Presentation time',
+    hTemaFormato:'If you select Panel, you may be considered to participate in a panel with other speakers on this topic.',
     hTemaDur:'Subject to modifications.',
     temaTitle:'Full Title',temaAbstract:'Abstract',temaDesc:'Description (Detail)',
     temaTags:'Tags',temaPanel:'I can participate in a Panel with other speakers about this topic.',
@@ -949,7 +951,8 @@ function addTema(){
       <div class="field"><label class="label tema-level-lbl">${req(t.temaLevel)}</label>
         <div class="radio-group" id="nivel-${n}">${nivelesHtml}</div></div>
       <div class="field"><label class="label tema-formato-lbl">${t.temaFormato}</label>
-        <div class="check-group" id="formato-${n}">${formatosHtml}</div></div>
+        <div class="check-group" id="formato-${n}">${formatosHtml}</div>
+        <div class="hint tema-formato-hint" style="margin-top:6px">${t.hTemaFormato}</div></div>
       <div style="max-width:220px"><div class="field">
         <label class="label tema-dur-lbl">${t.temaDur}</label>
         <select class="sel" id="dur-${n}">${durHtml}</select>
