@@ -2370,6 +2370,29 @@ async function loadAll(){
   }
 }
 
+// ── HYDRATE ───────────────────────────────────────────────────────────
+// JSON.stringify strips getters — re-attach them after parse (undo/redo)
+function hydrateSpeaker(sp){
+  Object.defineProperties(sp,{
+    temasArr:     {get(){return this._temas.map(t=>t.titulo).filter(Boolean);},configurable:true},
+    detallesArr:  {get(){return this._temas.map(t=>t.descripcion||'');},configurable:true},
+    abstractsArr: {get(){return this._temas.map(t=>t.abstract||'');},configurable:true},
+    tagsArr:      {get(){return this._temas.map(t=>t.tags||'');},configurable:true},
+    temas:        {get(){return this.temasArr.join(', ');},configurable:true},
+    displayName:  {get(){return this.confname||this.apodo||this.nombre||'';},configurable:true},
+    temasEstadoArr:{get(){
+      if(this._temas.length>0&&this._temas[0].estado){return this._temas.map(t=>t.estado||'disponible');}
+      const arr=(this.temas_estado||'').split(',').map(s=>s.trim());
+      const n=this.temasArr.length||1; while(arr.length<n)arr.push('disponible'); return arr;
+    },configurable:true},
+  });
+  return sp;
+}
+function hydrateState(raw){
+  (raw.speakers||[]).forEach(hydrateSpeaker);
+  return raw;
+}
+
 // ── UNDO / REDO ───────────────────────────────────────────────────────
 let _history = [], _histIdx = -1;
 function pushHistory() {
@@ -2387,13 +2410,13 @@ function refreshAll() {
 function undo() {
   if (_histIdx <= 0) { toast('Nada que deshacer'); return; }
   _histIdx--;
-  state = JSON.parse(_history[_histIdx]);
+  state = hydrateState(JSON.parse(_history[_histIdx]));
   refreshAll(); toast('↩️ Deshecho');
 }
 function redo() {
   if (_histIdx >= _history.length - 1) { toast('Nada que rehacer'); return; }
   _histIdx++;
-  state = JSON.parse(_history[_histIdx]);
+  state = hydrateState(JSON.parse(_history[_histIdx]));
   refreshAll(); toast('↪️ Rehecho');
 }
 
