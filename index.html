@@ -1144,7 +1144,7 @@ async function openSpDrop(idx,sk,e,field='speaker'){
 
 function closeSpDrop(){
   document.getElementById('spDropdown').classList.remove('open');
-  _spDropCtx={idx:null,sk:null};
+  _spDropCtx={idx:null,sk:null,field:'speaker'};
 }
 document.addEventListener('click',e=>{
   if(!e.target.closest('#spDropdown')&&!e.target.closest('.sp-picker'))closeSpDrop();
