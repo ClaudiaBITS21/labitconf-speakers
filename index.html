@@ -359,11 +359,13 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <span class="config-label">Apertura</span>
     <input type="text" class="time-input green" id="horaApertura" value="09:00" placeholder="HH:MM" oninput="recalcAgendaTimes(activeStage,currentDay)">
     <span class="config-label">Cierre</span>
-    <input type="text" class="time-input red" id="horaCierre" value="20:00" placeholder="HH:MM">
+    <input type="text" class="time-input red" id="horaCierre" value="20:00" placeholder="HH:MM" oninput="updateGlobalProgress()">
     <span style="color:var(--dim);font-size:15px" id="totalMin">—</span>
     <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;">
       <button class="btn" onclick="addAgendaRow()">+ Bloque</button>
+      <button class="btn" onclick="presetAllStages()" title="Generar bloques de 30' de 09:30 a 18:30 en todos los stages">📋 Preset</button>
       <button class="btn save" id="saveBtnPrincipal" onclick="saveAgenda(activeStage)">💾 Guardar</button>
+      <button class="btn save" onclick="saveAllStages()" title="Guardar todos los stages">💾 Todos</button>
       <button class="btn" onclick="loadAgenda().then(()=>renderAgenda())">🔄 Actualizar</button>
       <button class="btn" onclick="exportICal()">📅 iCal</button>
     </div>
@@ -1365,6 +1367,27 @@ function addAgendaRow(sk){
 }
 function addPrincipalRow(){ addAgendaRow(activeStage); } // compat
 
+function presetAllStages(){
+  if(!confirm('¿Generar bloques de 30\' (09:30–18:30) en TODOS los stages para los 2 días?\nSe reemplaza el contenido actual.'))return;
+  const START=timeToMin('09:30'), END=timeToMin('18:30');
+  STAGE_KEYS.forEach(sk=>{
+    state.agenda[sk]=[];
+    DAY_KEYS.forEach(dk=>{
+      state.agenda[sk].push({tipo:'DIA',dia:dk});
+      let cur=START;
+      while(cur+30<=END){
+        const inicio=minToTime(cur), fin=minToTime(cur+30);
+        state.agenda[sk].push({tipo:'Charla',speaker:'',tema:'',dur:30,inicio,fin,durExt:0,
+          descripcion:'',empresa:'',moderador:'',nivel:'',tags:'',visible_web:false});
+        cur+=30;
+      }
+    });
+  });
+  markDirty('principal');
+  renderAgenda();
+  toast('✅ Preset generado en los 9 stages — guardá cada stage para persistir');
+}
+
 // ── TIME RECALC (compat stubs) ────────────────────────────────────────
 function recalcAllTimes(){ recalcAgendaTimes(activeStage,currentDay); }
 function recalcStageTimesFrom(sk,fromIdx){ recalcAgendaTimes(sk,currentDay); }
@@ -1420,6 +1443,12 @@ async function loadAgenda(){
       state.agenda[sk]=DAY_KEYS.map(dk=>({tipo:'DIA',dia:dk}));
     }
   }));
+}
+
+async function saveAllStages(){
+  toast('⏳ Guardando todos los stages…');
+  for(const sk of STAGE_KEYS){ await saveAgenda(sk); }
+  toast('✅ Todos los stages guardados');
 }
 
 async function saveAgenda(sk){
