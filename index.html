@@ -632,6 +632,7 @@ function switchTab(name){
   if(name==='resumen') buildResumen();
   if(name==='kanban') renderKanban();
   if(name==='tiers') renderTiers();
+  if(name==='speakers') renderSpeakers();
 }
 
 // ── CLAVE ─────────────────────────────────────────────────────────────
@@ -1515,23 +1516,30 @@ async function loadAgenda(){
 }
 
 async function saveAllStages(){
-  // Verificar si algún stage fue modificado por otro usuario
-  const changed=[];
-  for(const sk of STAGE_KEYS){
+  // Verificar versiones en paralelo
+  const versionResults=await Promise.allSettled(STAGE_KEYS.map(async sk=>{
     const sheetName='Stage_'+(STAGE_KEYS.indexOf(sk)+1);
-    try{
-      const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheetName}`);
-      const j=await r.json();
-      if(j.version&&j.version!=='0'&&versions[sheetName]&&j.version!==versions[sheetName])
+    const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheetName}`);
+    const j=await r.json();
+    return {sk,sheetName,version:j.version};
+  }));
+  const changed=[];
+  versionResults.forEach(res=>{
+    if(res.status==='fulfilled'){
+      const {sk,sheetName,version}=res.value;
+      if(version&&version!=='0'&&versions[sheetName]&&version!==versions[sheetName])
         changed.push(stageNames[STAGE_KEYS.indexOf(sk)]||sheetName);
-    }catch{}
-  }
+    }
+  });
   if(changed.length){
     if(!confirm(`⚠️ Otro usuario modificó: ${changed.join(', ')}.\n¿Guardar igual y pisar esos cambios?`))return;
   }
   toast('⏳ Guardando todos los stages…');
-  for(const sk of STAGE_KEYS){ await saveAgenda(sk); }
-  toast('✅ Todos los stages guardados');
+  // Guardar en paralelo
+  const saveResults=await Promise.allSettled(STAGE_KEYS.map(sk=>saveAgenda(sk)));
+  const failed=saveResults.filter(r=>r.status==='rejected');
+  if(failed.length) toast(`⚠️ ${failed.length} stage(s) no se guardaron`,true);
+  else toast('✅ Todos los stages guardados');
 }
 
 async function saveAgenda(sk){
