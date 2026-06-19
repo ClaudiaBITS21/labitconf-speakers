@@ -1462,6 +1462,20 @@ async function loadAgenda(){
 }
 
 async function saveAllStages(){
+  // Verificar si algún stage fue modificado por otro usuario
+  const changed=[];
+  for(const sk of STAGE_KEYS){
+    const sheetName='Stage_'+(STAGE_KEYS.indexOf(sk)+1);
+    try{
+      const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheetName}`);
+      const j=await r.json();
+      if(j.version&&j.version!=='0'&&versions[sheetName]&&j.version!==versions[sheetName])
+        changed.push(stageNames[STAGE_KEYS.indexOf(sk)]||sheetName);
+    }catch{}
+  }
+  if(changed.length){
+    if(!confirm(`⚠️ Otro usuario modificó: ${changed.join(', ')}.\n¿Guardar igual y pisar esos cambios?`))return;
+  }
   toast('⏳ Guardando todos los stages…');
   for(const sk of STAGE_KEYS){ await saveAgenda(sk); }
   toast('✅ Todos los stages guardados');
