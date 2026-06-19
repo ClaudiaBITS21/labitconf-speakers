@@ -579,7 +579,7 @@ function getDispBadges(s){
 
 // ── STATE ─────────────────────────────────────────────────────────────
 const _emptyAgenda = () => { const a={}; STAGE_KEYS.forEach(sk=>a[sk]=[]); return a; };
-let state = { agenda: _emptyAgenda(), principal:[], speakers:[], speakersManual:[], ideas:[] };
+let state = { agenda: _emptyAgenda(), speakers:[], speakersManual:[], ideas:[] };
 let activeStage = 's1';
 let compareStage = null;
 let stageNames = JSON.parse(localStorage.getItem('labitconf_stages') || 'null') ||
@@ -712,49 +712,6 @@ function updateStageHeaders(){
   });
 }
 
-// ── BUILD HEADERS ─────────────────────────────────────────────────────
-function buildTableHeaders(){
-  const r1=document.getElementById('headerRow1');
-  const r2=document.getElementById('headerRow2');
-  if(!r1||!r2)return;
-  // Remove old stage headers
-  while(r1.children.length>2)r1.removeChild(r1.lastChild);
-  while(r2.children.length>2)r2.removeChild(r2.lastChild);
-
-  STAGE_KEYS.forEach((sk,i)=>{
-    const conflicts=detectConflictsForStage(i);
-    const assignPct=calcStageAssignPct(i);
-    let borderClass='';
-    if(assignPct>=90)borderClass=' stage-h-full';
-    else if(assignPct<30&&getAgendaRows(STAGE_KEYS[i],currentDay).length>0)borderClass=' stage-h-low';
-    const warnIcon=conflicts?'⚠️ ':'';
-
-    // Row 1: stage name spanning 5 cols
-    const th=document.createElement('th');
-    th.id='stageH-'+i;
-    th.colSpan=5;
-    th.className='stage-h stage-group-sep'+borderClass;
-    th.style.minWidth='400px';
-    th.style.textAlign='center';
-    th.style.color=STAGE_COLORS[i];
-    th.style.borderBottom=`2px solid ${STAGE_COLORS[i]}`;
-    if(conflicts)th.classList.add('stage-h-warn');
-    th.innerHTML=`<input class="stage-inp" id="sname-${i}" value="${esc(stageNames[i])}" placeholder="Stage ${i+1}" oninput="saveStageNames()" style="text-align:center;font-size:15px;color:${STAGE_COLORS[i]}" title="Clic para editar nombre"><button class="stage-edit-btn" onclick="document.getElementById('sname-${i}').focus()" title="Renombrar stage">✏️</button>${conflicts?'<span style="color:#ef4444;font-size:16px">⚠️</span>':''}`;
-    r1.appendChild(th);
-
-    // Row 2: 5 sub-headers
-    const subLabels=['Speaker','Tema','Tiempo','Inicio','Fin'];
-    subLabels.forEach((lbl,si)=>{
-      const th2=document.createElement('th');
-      th2.className='sub-h'+(si===0?' stage-group-sep':'');
-      th2.textContent=lbl;
-      if(lbl==='Speaker')th2.style.minWidth='110px';
-      else if(lbl==='Tema')th2.style.minWidth='130px';
-      else{th2.style.width='60px';th2.style.minWidth='52px';}
-      r2.appendChild(th2);
-    });
-  });
-}
 
 function detectConflictsForStage(stageIdx){
   const sk=STAGE_KEYS[stageIdx];
@@ -2613,28 +2570,6 @@ function filterCmd(q) {
   document.getElementById('cmdResults').innerHTML = res.slice(0, 12).join('');
 }
 
-// ── AGENDA FILTERS ────────────────────────────────────────────────────
-let agendaFilters = { tipo: '', stage: '', q: '' };
-let _agendaFiltersVisible = false;
-
-function toggleAgendaFilters() {
-  _agendaFiltersVisible = !_agendaFiltersVisible;
-  const el = document.getElementById('agendaFilterBar');
-  if (el) el.style.display = _agendaFiltersVisible ? 'flex' : 'none';
-}
-
-function applyAgendaFilters() {
-  agendaFilters.tipo = document.getElementById('afTipo')?.value || '';
-  agendaFilters.q = (document.getElementById('afQ')?.value || '').toLowerCase().trim();
-  renderPrincipal();
-}
-
-function clearAgendaFilters() {
-  agendaFilters = { tipo: '', stage: '', q: '' };
-  const t = document.getElementById('afTipo'); if (t) t.value = '';
-  const q = document.getElementById('afQ'); if (q) q.value = '';
-  renderPrincipal();
-}
 
 // ── HEATMAP ───────────────────────────────────────────────────────────
 function buildHeatmap() {
@@ -2865,7 +2800,6 @@ document.addEventListener('keydown', e => {
 
 // ── INIT ──────────────────────────────────────────────────────────────
 async function init(){
-  buildTableHeaders();
   buildStageProgressBars();
   renderPrincipal();
   pushHistory();
