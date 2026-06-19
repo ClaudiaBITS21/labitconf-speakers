@@ -1147,11 +1147,10 @@ function populateSpDrop(){
 
   // Filtrar y puntuar speakers
   let spList=state.speakers.filter(s=>{
-    if(!s.nombre)return false;
+    if(!s.nombre&&!s.confname&&!s.displayName)return false;
     if(s.estado==='rechazado')return false;
-    // Filtro por nombre, apellido o apodo
     if(qSp){
-      const haystack=[s.nombre,s.apellido||'',s.apodo||''].join(' ').toLowerCase();
+      const haystack=[s.nombre,s.apellido||'',s.apodo||'',s.confname||''].join(' ').toLowerCase();
       if(!haystack.includes(qSp))return false;
     }
     return true;
