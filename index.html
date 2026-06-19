@@ -3060,10 +3060,15 @@ function renderCanvas(){
   if(lbl) lbl.textContent=currentDay===2?'Oct 30':'Oct 31';
 
   const PX_MIN=2;
-  const RANGE_START=timeToMin(horaApertura||'09:00')-15;
-  const RANGE_END=Math.max(RANGE_START+600, ...STAGE_KEYS.flatMap(sk=>
-    getAgendaRows(sk,currentDay).map(({row})=>timeToMin(row.fin||'')||0)
-  ))+30;
+  const allRows=STAGE_KEYS.flatMap(sk=>getAgendaRows(sk,currentDay).map(({row})=>row)).filter(r=>r.tipo&&r.tipo!=='DIA'&&r.inicio);
+  if(!allRows.length){
+    grid.innerHTML='<div style="padding:40px;text-align:center;color:#555;font-size:14px">Sin bloques para este día.</div>';
+    return;
+  }
+  const minStart=Math.min(...allRows.map(r=>timeToMin(r.inicio||'')).filter(Boolean));
+  const maxEnd=Math.max(...allRows.map(r=>timeToMin(r.fin||'')||timeToMin(r.inicio||'')+30));
+  const RANGE_START=minStart-5;
+  const RANGE_END=maxEnd+15;
   const RANGE=RANGE_END-RANGE_START;
   const H=RANGE*PX_MIN;
 
