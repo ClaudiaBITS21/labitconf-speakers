@@ -614,6 +614,7 @@ function buildStageFilterOptions(){
     +STAGE_KEYS.map((sk,i)=>`<option value="${sk}"${cur===sk?' selected':''}>${esc(stageNames[i]||'Stage '+(i+1))}</option>`).join('');
 }
 let dirty = {principal:false,speakers:false,speakersManual:false,ideas:false};
+let dirtyStages = Object.fromEntries(STAGE_KEYS.map(sk=>[sk,false]));
 let writeKey = localStorage.getItem('labitconf_write_key') || '';
 let versions = {Principal:'0',Speakers:'0',SpeakerManual:'0',Ideas:'0'};
 
@@ -664,8 +665,27 @@ function pedirClave(motivo){
 }
 
 // ── DIRTY ─────────────────────────────────────────────────────────────
-function markDirty(s){ dirty[s]=true; const map={principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'}; const b=document.getElementById(map[s]||''); if(b)b.classList.add('dirty'); }
-function markClean(s){ dirty[s]=false; const map={principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'}; const b=document.getElementById(map[s]||''); if(b)b.classList.remove('dirty'); const el=document.getElementById('lastSaveTxt'); if(el){const now=new Date(); el.textContent=`Guardado ${now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}`; el.style.display='';} }
+function markDirty(s, sk){
+  dirty[s]=true;
+  if(s==='principal'){
+    if(sk) dirtyStages[sk]=true;
+    else STAGE_KEYS.forEach(k=>dirtyStages[k]=true);
+  }
+  const map={principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'};
+  const b=document.getElementById(map[s]||''); if(b)b.classList.add('dirty');
+}
+function markClean(s, sk){
+  if(s==='principal' && sk){
+    dirtyStages[sk]=false;
+    if(STAGE_KEYS.some(k=>dirtyStages[k])) return; // otros stages aún dirty
+  } else {
+    if(s==='principal') STAGE_KEYS.forEach(k=>dirtyStages[k]=false);
+  }
+  dirty[s]=false;
+  const map={principal:'saveBtnPrincipal',speakers:'saveBtnSpeakers',ideas:'saveBtnIdeas'};
+  const b=document.getElementById(map[s]||''); if(b)b.classList.remove('dirty');
+  const el=document.getElementById('lastSaveTxt'); if(el){const now=new Date(); el.textContent=`Guardado ${now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}`; el.style.display='';}
+}
 
 // ── GAS ───────────────────────────────────────────────────────────────
 async function gasGet(sheet){
@@ -1040,7 +1060,7 @@ function clearSpeakerCell(realIdx,sk,e){
   if(!row||row.tipo==='DIA')return;
   pushHistory();
   row.speaker=''; row.tema='';
-  markDirty('principal'); renderAgenda();
+  markDirty('principal',sk); renderAgenda();
 }
 function removeSpeakerFromCell(realIdx,sk,name,e){
   e.stopPropagation();
@@ -1050,7 +1070,7 @@ function removeSpeakerFromCell(realIdx,sk,name,e){
   const names=getSpeakerNames(row).filter(n=>n!==name);
   row.speaker=names.join('|');
   if(!names.length)row.tema='';
-  markDirty('principal'); renderAgenda();
+  markDirty('principal',sk); renderAgenda();
 }
 
 function getSpeakerNames(row){ return (row.speaker||'').split('|').map(n=>n.trim()).filter(Boolean); }
@@ -1284,7 +1304,7 @@ function selectSpeakerWithTema(name,tema){
     updateStageField(idx,sk,'speaker','');
   }
   if(tema&&!state.agenda[sk]?.[idx]?.tema)updateStageField(idx,sk,'tema',tema);
-  markDirty('principal');
+  markDirty('principal',sk);
 
   // Auto-fill empresa, nivel, tags desde el speaker seleccionado
   if(name){
@@ -1373,7 +1393,7 @@ function updateAgendaField(realIdx,sk,field,val){
   if(field==='dur')val=parseInt(val)||30;
   row[field]=val;
   if(field==='dur') recalcAgendaTimes(sk,currentDay);
-  markDirty('principal');
+  markDirty('principal',sk);
 }
 
 // Compat alias used by selectSpeakerWithTema
@@ -1409,7 +1429,7 @@ function moveAgendaRow(sk,realIdx,dir){
   pushHistory();
   [all[realIdx],all[targetRealIdx]]=[all[targetRealIdx],all[realIdx]];
   recalcAgendaTimes(sk,currentDay);
-  markDirty('principal'); renderAgenda();
+  markDirty('principal',sk); renderAgenda();
 }
 function movePrincipalRow(idx,dir){ moveAgendaRow(activeStage,idx,dir); } // compat
 
@@ -1418,7 +1438,7 @@ function delAgendaRow(sk,realIdx){
   pushHistory();
   state.agenda[sk].splice(realIdx,1);
   recalcAgendaTimes(sk,currentDay);
-  markDirty('principal'); renderAgenda();
+  markDirty('principal',sk); renderAgenda();
 }
 function delPrincipalRow(idx){ delAgendaRow(activeStage,idx); } // compat
 
@@ -1428,7 +1448,7 @@ function insertAgendaRow(sk,realIdx){
   pushHistory();
   state.agenda[sk].splice(realIdx+1,0,newAgendaRow(inicio));
   recalcAgendaTimes(sk,currentDay);
-  markDirty('principal'); renderAgenda();
+  markDirty('principal',sk); renderAgenda();
 }
 function insertPrincipalRow(idx){ insertAgendaRow(activeStage,idx); } // compat
 
@@ -1455,7 +1475,7 @@ function addAgendaRow(sk){
   pushHistory();
   state.agenda[sk].splice(insertAt,0,newAgendaRow(inicio));
   recalcAgendaTimes(sk,currentDay);
-  markDirty('principal'); renderAgenda();
+  markDirty('principal',sk); renderAgenda();
 }
 function addPrincipalRow(){ addAgendaRow(activeStage); } // compat
 
@@ -1539,8 +1559,10 @@ async function loadAgenda(){
 }
 
 async function saveAllStages(){
-  // Verificar versiones en paralelo
-  const versionResults=await Promise.allSettled(STAGE_KEYS.map(async sk=>{
+  const stagesToSave=STAGE_KEYS.filter(sk=>dirtyStages[sk]);
+  if(!stagesToSave.length){ toast('Sin cambios pendientes en agenda'); return; }
+  // Verificar versiones solo de los stages modificados
+  const versionResults=await Promise.allSettled(stagesToSave.map(async sk=>{
     const sheetName='Stage_'+(STAGE_KEYS.indexOf(sk)+1);
     const r=await fetch(`${GAS_URL}?action=get_version&sheet=${sheetName}`);
     const j=await r.json();
@@ -1557,12 +1579,11 @@ async function saveAllStages(){
   if(changed.length){
     if(!confirm(`⚠️ Otro usuario modificó: ${changed.join(', ')}.\n¿Guardar igual y pisar esos cambios?`))return;
   }
-  toast('⏳ Guardando todos los stages…');
-  // Guardar en paralelo
-  const saveResults=await Promise.allSettled(STAGE_KEYS.map(sk=>saveAgenda(sk)));
+  toast(`⏳ Guardando ${stagesToSave.length} stage(s)…`);
+  const saveResults=await Promise.allSettled(stagesToSave.map(sk=>saveAgenda(sk)));
   const failed=saveResults.filter(r=>r.status==='rejected');
   if(failed.length) toast(`⚠️ ${failed.length} stage(s) no se guardaron`,true);
-  else toast('✅ Todos los stages guardados');
+  else toast(`✅ ${stagesToSave.length} stage(s) guardados`);
 }
 
 async function debugSheet(){
@@ -1586,7 +1607,7 @@ async function saveAgenda(sk){
   });
   const res=await gasPost(sheetName,'replace_all',data);
   if(res.error) throw new Error(stageNames[i]+': '+res.error);
-  toast('✅ '+stageNames[i]+' guardado'); markClean('principal');
+  toast('✅ '+stageNames[i]+' guardado'); markClean('principal',sk);
 }
 
 // Compat stubs
@@ -2538,7 +2559,8 @@ function confirmStageAction(){
     recalcAgendaTimes(sk,currentDay);
   }
   recalcAgendaTimes(destSk,currentDay);
-  markDirty('principal');
+  markDirty('principal',destSk);
+  if(mode==='move') markDirty('principal',sk);
   closeStageModal();
   renderAgenda();
   toast(mode==='move'?'✅ Bloque movido como pendiente':'✅ Copia enviada como pendiente');
@@ -2816,7 +2838,7 @@ function closeAllSpDrops() { closeSpDrop(); }
 
 // ── AUTO-SAVE ─────────────────────────────────────────────────────────
 setInterval(() => {
-  if (dirty.principal) savePrincipal();
+  if (dirty.principal) saveAllStages();
   if (dirty.speakers) saveSpeakers();
   if (dirty.ideas) saveIdeas();
 }, 3 * 60 * 1000);
