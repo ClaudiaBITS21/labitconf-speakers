@@ -1079,7 +1079,7 @@ function getSpeakerAssignments(name){
 }
 
 // ── SPEAKER DROPDOWN ──────────────────────────────────────────────────
-function openSpDrop(idx,sk,e){
+async function openSpDrop(idx,sk,e){
   e.stopPropagation();
   const dd=document.getElementById('spDropdown');
   if(_spDropCtx.idx===idx&&_spDropCtx.sk===sk&&dd.classList.contains('open')){closeSpDrop();return;}
@@ -1092,7 +1092,11 @@ function openSpDrop(idx,sk,e){
   dd.classList.add('open');
   const search=document.getElementById('spDropSearch');
   search.value='';
-  populateSpDrop('');
+  if(!state.speakers.length){
+    document.getElementById('spDropList').innerHTML='<div style="padding:12px;color:#555;font-size:13px">Cargando speakers…</div>';
+    await loadSpeakers();
+  }
+  populateSpDrop();
   search.focus();
 }
 
