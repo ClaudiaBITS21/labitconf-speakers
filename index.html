@@ -1138,7 +1138,8 @@ function populateSpDrop(){
 
   // Sin query: mostrar placeholder hasta que escriban
   if(!qSp&&!qTema){
-    list.innerHTML=`<div style="padding:16px;text-align:center;color:#555;font-size:13px">Escribí un nombre para buscar…</div>`;
+    const cnt=state.speakers.length;
+    list.innerHTML=`<div style="padding:16px;text-align:center;color:#555;font-size:13px">Escribí un nombre para buscar… (${cnt} speakers cargados)</div>`;
     return;
   }
 
