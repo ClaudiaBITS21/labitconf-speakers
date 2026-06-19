@@ -561,8 +561,8 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSn
 // ── CONSTANTS ─────────────────────────────────────────────────────────
 const STAGE_KEYS = ['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
 const N_STAGES = 9;
-const TIPOS = ['Panel','Charla','Fire Talk','Share Talk','Apertura','Cierre','Break'];
-const TIPO_COLORS = {Panel:'#f87171',Charla:'#6366f1','Fire Talk':'#f97316','Share Talk':'#22c55e',Apertura:'#dc2626',Cierre:'#ef4444',Break:'#888'};
+const TIPOS = ['Apertura','Cierre','Break','Charla','Panel','Fire Talk','Share Talk','Pendiente'];
+const TIPO_COLORS = {Apertura:'#dc2626',Cierre:'#ef4444',Break:'#6b7280',Charla:'#6366f1',Panel:'#f87171','Fire Talk':'#f97316','Share Talk':'#22c55e',Pendiente:'#78350f'};
 const STAGE_COLORS = ['#6366f1','#0ea5e9','#22c55e','#f59e0b','#ec4899','#14b8a6','#f97316','#a78bfa','#fb7185'];
 const STAGE_DIMS   = ['rgba(99,102,241,.15)','rgba(14,165,233,.15)','rgba(34,197,94,.15)','rgba(245,158,11,.15)','rgba(236,72,153,.15)','rgba(20,184,166,.15)','rgba(249,115,22,.15)','rgba(167,139,250,.15)','rgba(251,113,133,.15)'];
 const DUR_OPTIONS = [15,20,25,30,40];
@@ -3068,9 +3068,8 @@ function renderCanvas(){
   const H=RANGE*PX_MIN;
 
   const TIPO_COLOR={
-    'Apertura':'#c2410c','Cierre':'#c2410c','Break':'#374151','Charla':'#1d4ed8',
-    'Panel':'#6d28d9','Taller':'#065f46','AMA':'#9d174d','Mesa Redonda':'#0e7490',
-    'Lightning Talk':'#1e40af','Networking':'#374151',
+    'Apertura':'#dc2626','Cierre':'#ef4444','Break':'#6b7280','Charla':'#6366f1',
+    'Panel':'#f87171','Fire Talk':'#f97316','Share Talk':'#22c55e','Pendiente':'#78350f',
   };
 
   // time axis
