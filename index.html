@@ -318,13 +318,12 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="speakers" onclick="switchTab('speakers')">🎙️ Speakers</button>
   <button class="tab-btn" data-tab="resumen" onclick="switchTab('resumen')">📊 Resumen</button>
   <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">❓ Ideas</button>
-  <button class="tab-btn" data-tab="kanban" onclick="switchTab('kanban')">🗂️ Kanban</button>
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
-  <button class="tab-btn" data-tab="canvas" onclick="switchTab('canvas')">🗓️ Canvas</button>
+  <button class="tab-btn" data-tab="canvas" onclick="switchTab('canvas')">🗓️ Kanban</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
-    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(2)" title="LABITCONF Day 1">Oct 30</button>
-    <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(3)" title="LABITCONF Day 2">Oct 31</button>
+    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(2)" title="LABITCONF Day 1">Vie (30/Oct)</button>
+    <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(3)" title="LABITCONF Day 2">Sáb (31/Oct)</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
     <button class="btn" style="padding:3px 10px;font-size:15px" onclick="openCommandPalette()" title="Ctrl+K">🔍</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
@@ -475,13 +474,6 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB KANBAN -->
-<div class="tab-content" id="tab-kanban">
-  <div class="toolbar">
-    <span style="font-size:16px;color:#ffffff">Arrastrá las tarjetas para cambiar el estado.</span>
-    <button class="btn" style="margin-left:auto" onclick="renderKanban()">🔄 Recalcular</button>
-  </div>
-  <div id="kanbanBoard" style="display:flex;gap:16px;padding:18px;overflow-x:auto;min-height:calc(100vh - 120px)"></div>
-</div>
 
 <div class="tab-content" id="tab-tiers">
   <div class="toolbar">
@@ -634,7 +626,7 @@ let writeKey = localStorage.getItem('labitconf_write_key') || '';
 let versions = {Principal:'0',Speakers:'0',SpeakerManual:'0',Ideas:'0'};
 
 // Active dropdown context
-let _spDropCtx = {idx:null,sk:null};
+let _spDropCtx = {idx:null,sk:null,field:'speaker'};
 
 // ── UTILS ─────────────────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -871,7 +863,7 @@ function renderAgenda(){
     const _th=s=>`<th style="padding:5px 4px;font-size:12px;color:#fff;background:var(--bg3);border:1px solid var(--border);white-space:nowrap">${s}</th>`;
     thead.innerHTML=`<tr>
       ${_th('Acc')}${_th('Tipo')}${_th('Tiempo')}${_th('Inicio')}${_th('Fin')}
-      ${_th('Tema')}${_th('Descripción')}${_th('Speaker')}${_th('Empresa')}
+      ${_th('Tema')}${_th('Descripción')}${_th('Speaker')}${_th('Lang')}${_th('Empresa')}
       ${_th('Moderador')}${_th('Nivel')}${_th('TAGS')}${_th('Visible')}${_th('Notas')}
     </tr>`;
     table.appendChild(thead);
@@ -982,6 +974,19 @@ function makeAgendaRow(row,realIdx,sk){
   tdSp.innerHTML=renderSpCell(realIdx,sk,row.speaker||'');
   tr.appendChild(tdSp);
 
+  // Idioma (derivado de los speakers asignados)
+  const tdLang=document.createElement('td');
+  tdLang.style.cssText='padding:3px 5px;width:42px;text-align:center;vertical-align:middle';
+  const langNames=(row.speaker||'').split('|').map(n=>n.trim()).filter(Boolean);
+  const langBadges=langNames.map(n=>{
+    const sp=state.speakers.find(s=>s.nombre===n);
+    const lang=(sp?.idioma||'').toUpperCase().trim();
+    if(!lang||lang==='ES') return `<span style="font-size:10px;font-weight:700;color:#eab308;background:rgba(234,179,8,.15);border-radius:3px;padding:1px 4px;display:block;margin:1px 0">ES</span>`;
+    return `<span style="font-size:10px;font-weight:700;color:#60a5fa;background:rgba(96,165,250,.15);border-radius:3px;padding:1px 4px;display:block;margin:1px 0">${lang}</span>`;
+  }).join('');
+  tdLang.innerHTML=langBadges||'';
+  tr.appendChild(tdLang);
+
   // Empresa (auto desde speaker, editable)
   const tdEmp=document.createElement('td');
   tdEmp.style.cssText='padding:0;width:80px';
@@ -990,8 +995,9 @@ function makeAgendaRow(row,realIdx,sk){
 
   // Moderador
   const tdMod=document.createElement('td');
-  tdMod.style.cssText='padding:0;width:80px';
-  tdMod.innerHTML=`<input class="tema-inp" id="moderador-${realIdx}-${sk}" style="width:100%;padding:4px 5px;font-size:12px" value="${esc(row.moderador||'')}" placeholder="Moderador…" onchange="updateAgendaField(${realIdx},'${sk}','moderador',this.value)">`;
+  tdMod.style.cssText='padding:0;width:100px';
+  tdMod.id=`mod-cell-${realIdx}-${sk}`;
+  tdMod.innerHTML=renderModCell(realIdx,sk,row.moderador||'');
   tr.appendChild(tdMod);
 
   // Nivel
@@ -1053,11 +1059,8 @@ function renderSpCell(idx,sk,selected){
     const sp=state.speakers.find(s=>s.nombre===name);
     const apodo=sp?.apodo?` (${sp.apodo})`:'';
     const isAssigned=count>0;
-    const lang=(sp?.idioma||'').toLowerCase();
-    const langBadge=lang&&lang!=='es'?`<span style="font-size:9px;font-weight:700;color:#60a5fa;background:rgba(96,165,250,.15);border-radius:3px;padding:0 3px;margin-left:2px">${lang.toUpperCase()}</span>`:'';
     return `<div style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
       <span style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
-      ${langBadge}
       ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
       <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
     </div>`;
@@ -1104,12 +1107,23 @@ function getSpeakerAssignments(name){
   return res;
 }
 
+function renderModCell(idx,sk,value){
+  const name=(value||'').trim();
+  if(!name) return `<div class="sp-cell sp-cell-empty" style="cursor:pointer;padding:4px 6px;font-size:13px;color:var(--dim)" onclick="openSpDrop(${idx},'${sk}',event,'moderador')">—</div>`;
+  const sp=state.speakers.find(s=>s.nombre===name);
+  const apodo=sp?.apodo?` (${sp.apodo})`:'';
+  return `<div style="display:flex;align-items:center;gap:3px;padding:4px 6px;cursor:pointer" onclick="openSpDrop(${idx},'${sk}',event,'moderador')">
+    <span style="font-size:12px;font-weight:700;color:#c084fc">${esc(name)}${esc(apodo)}</span>
+    <button onclick="event.stopPropagation();updateAgendaField(${idx},'${sk}','moderador','');document.getElementById('mod-cell-${idx}-${sk}').innerHTML=renderModCell(${idx},'${sk}','')" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 2px;line-height:1" title="Quitar">✕</button>
+  </div>`;
+}
+
 // ── SPEAKER DROPDOWN ──────────────────────────────────────────────────
-async function openSpDrop(idx,sk,e){
+async function openSpDrop(idx,sk,e,field='speaker'){
   e.stopPropagation();
   const dd=document.getElementById('spDropdown');
-  if(_spDropCtx.idx===idx&&_spDropCtx.sk===sk&&dd.classList.contains('open')){closeSpDrop();return;}
-  _spDropCtx={idx,sk};
+  if(_spDropCtx.idx===idx&&_spDropCtx.sk===sk&&_spDropCtx.field===field&&dd.classList.contains('open')){closeSpDrop();return;}
+  _spDropCtx={idx,sk,field};
   const cell=e.currentTarget.closest('.sp-picker').querySelector('.sp-cell');
   const r=cell.getBoundingClientRect();
   dd.style.top=(r.bottom+2)+'px';
@@ -1309,8 +1323,16 @@ function selectSpeaker(name){
 }
 
 function selectSpeakerWithTema(name,tema){
-  const {idx,sk}=_spDropCtx;
+  const {idx,sk,field}=_spDropCtx;
   if(idx===null)return;
+  // Si es campo moderador: solo grabar nombre y refrescar celda
+  if(field==='moderador'){
+    updateAgendaField(idx,sk,'moderador',name||'');
+    closeSpDrop();
+    const tdMod=document.getElementById(`mod-cell-${idx}-${sk}`);
+    if(tdMod)tdMod.innerHTML=renderModCell(idx,sk,name||'');
+    return;
+  }
   // Multi-speaker: append if not already present
   const currentNames=getSpeakerNames(state.agenda[sk]?.[idx]||{});
   if(name&&!currentNames.includes(name)&&currentNames.length<5){
