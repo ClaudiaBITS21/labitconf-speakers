@@ -926,10 +926,17 @@ function makeAgendaRow(row,realIdx,sk){
   tdIni.innerHTML=`<div class="time-start" id="ini-${realIdx}" style="padding:4px 5px;text-align:center">${esc(row.inicio||'')}</div>`;
   tr.appendChild(tdIni);
 
-  // Fin
+  // Fin + Ext
   const tdFin=document.createElement('td');
   tdFin.className='sc-fin';
-  tdFin.innerHTML=`<div class="time-end" id="fin-${realIdx}" style="padding:4px 5px;text-align:center">${esc(row.fin||'')}</div>`;
+  const ext=parseInt(row.durExt)||0;
+  const extBadge=ext>0?`<span style="font-size:10px;color:#f97316;font-weight:700;margin-left:3px">+${ext}'</span>`:'';
+  tdFin.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:2px;padding:2px 4px">
+    <div class="time-end" id="fin-${realIdx}">${esc(row.fin||'')}</div>${extBadge}
+    <input type="number" min="0" max="60" step="5" value="${ext||''}" placeholder="0" title="Extensión posible (min)"
+      style="width:32px;font-size:10px;background:#1a1a1a;border:1px solid #333;border-radius:3px;color:#f97316;text-align:center;padding:1px 2px;margin-left:2px"
+      onchange="updateAgendaField(${realIdx},'${sk}','durExt',parseInt(this.value)||0);renderAgenda()">
+  </div>`;
   tr.appendChild(tdFin);
 
   // Tema (clic abre modal)
