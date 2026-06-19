@@ -380,6 +380,13 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
             </label>
           </div>
         </div>
+        <div id="aviso-vuelos" style="margin-top:14px;padding:12px 14px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.35);border-radius:8px;display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">✈️</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#eab308;margin-bottom:4px" id="aviso-vuelos-titulo"></div>
+            <div style="font-size:12px;color:#9ca3af;line-height:1.6" id="aviso-vuelos-cuerpo"></div>
+          </div>
+        </div>
       </div>
 
       <!-- PERFIL -->
@@ -496,6 +503,8 @@ const T={
     lFoto:'Foto de Perfil (subir y/o compartir enlace)',
     lIdioma:'¿En qué idioma podés presentar?',
     lDispDesde:'Disponible desde',lDispHasta:'Hasta',hDisp:'Dato estimado de disponibilidad de viaje.',
+    avisoVuelosTitulo:'⚠️ Posibles afectaciones en vuelos — Oct 24 al Nov 11',
+    avisoVuelosCuerpo:'El aeropuerto de Buenos Aires podría tener restricciones operativas entre el 24/25 de octubre y el 11 de noviembre de 2026. Esto puede implicar: cambios de horario, escalas técnicas adicionales, menor frecuencia de vuelos y cancelaciones de algunas aerolíneas internacionales. Tené esto en cuenta al planificar tu viaje y consultá con tu aerolínea antes de confirmar fechas.',
     lDias:'Días del evento que asistís',
     lBio:'Biografía Corta',
     lEventos:'¿En qué eventos hablaste antes?',hEventosOtros:'Otros eventos no listados',
@@ -540,6 +549,8 @@ const T={
     lFoto:'Profile Photo (upload and/or share link)',
     lIdioma:'Which language(s) can you present in?',
     lDispDesde:'Available from',lDispHasta:'Until',hDisp:'Estimated travel availability.',
+    avisoVuelosTitulo:'⚠️ Possible flight disruptions — Oct 24 to Nov 11',
+    avisoVuelosCuerpo:'Buenos Aires airport may face operational restrictions between October 24/25 and November 11, 2026. This could mean: schedule changes, additional technical stopovers, reduced flight frequency, and cancellations by some international airlines. Please keep this in mind when planning your trip and check with your airline before confirming dates.',
     lDias:'Event days you will attend',
     lBio:'Short Bio',
     lEventos:'Which events have you spoken at before?',hEventosOtros:'Other events not listed',
@@ -601,6 +612,7 @@ function applyTranslations(){
   setReq('l-idioma',t.lIdioma,true);
   setTxt('l-disp-desde',t.lDispDesde);setTxt('l-disp-hasta',t.lDispHasta);
   setTxt('h-disp',t.hDisp);setTxt('l-dias',t.lDias);
+  setTxt('aviso-vuelos-titulo',t.avisoVuelosTitulo);setTxt('aviso-vuelos-cuerpo',t.avisoVuelosCuerpo);
   setReq('l-bio',t.lBio,true);
   setTxt('l-eventos',t.lEventos);setAttr('eventosOtros','placeholder',t.placeholderEventosOtros);
   setTxt('h-eventos-otros',t.hEventosOtros);
