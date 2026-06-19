@@ -1433,7 +1433,7 @@ async function selectSpeakerManual(name){
     try{ await gasPost('SpeakerManual','replace_all',state.speakersManual.map(s=>[s.nombre,s.notas||'',s.fecha||''])); }
     catch(err){ toast('⚠️ No se pudo guardar speaker manual',true); }
   }
-  selectSpeaker(n);
+  selectSpeakerWithTema(n,'');
 }
 
 // ── UPDATE HELPERS ────────────────────────────────────────────────────
