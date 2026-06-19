@@ -2247,7 +2247,10 @@ async function saveIdeas(){
 }
 
 // ── STATUS ────────────────────────────────────────────────────────────
-function setStatus(ok){ document.getElementById('statusDot').style.background=ok?'#22c55e':'#ef4444'; document.getElementById('statusTxt').textContent=ok?'En línea':'Sin conexión'; }
+function setStatus(ok,loading){
+  document.getElementById('statusDot').style.background=loading?'#eab308':ok?'#22c55e':'#ef4444';
+  document.getElementById('statusTxt').textContent=loading?'Cargando…':ok?'En línea':'Sin conexión';
+}
 
 // ── LOAD ALL ──────────────────────────────────────────────────────────
 async function loadConfig(){
@@ -2269,7 +2272,7 @@ async function loadConfig(){
 }
 
 async function loadAll(){
-  setStatus(false);
+  setStatus(false,true);
   try{
     await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
@@ -2411,7 +2414,7 @@ document.getElementById('cmdPalette').addEventListener('click', e => {
 function filterCmd(q) {
   q = (q || '').toLowerCase().trim();
   const res = [];
-  state.speakers.filter(s => !q || [s.nombre, s.temas, s.empresa].join(' ').toLowerCase().includes(q)).slice(0, 8).forEach(s => {
+  state.speakers.filter(s => !q || [s.nombre,s.apellido||'',s.confname||'',s.apodo||'',s.temas,s.empresa].join(' ').toLowerCase().includes(q)).slice(0, 8).forEach(s => {
     res.push(`<div onclick="switchTab('speakers');document.getElementById('cmdPalette').style.display='none'" style="padding:10px 20px;cursor:pointer;border-bottom:1px solid #2d2d2d;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='rgba(220,38,38,.1)'" onmouseout="this.style.background=''">
       <span style="color:#dc2626;font-weight:700">🎙️</span>
       <div><div style="font-weight:700;color:#fff">${esc(s.nombre)}</div><div style="font-size:15px;color:#ffffff">${esc(s.temas||'')}</div></div>
