@@ -1108,7 +1108,7 @@ async function handleSubmit(e){
       cargo:document.getElementById('cargo').value.trim(),
       pais:getPaisValue(),
       idioma:getChecked('idiomaGroup').join(','),
-      mail:(()=>{const m1=document.getElementById('mail').value.trim();const m2=(document.getElementById('mail2')?.value||'').trim();return m2?`${m1};${m2}`:m1;})(),
+      mail:document.getElementById('mail').value.trim(),
       website:document.getElementById('website').value.trim(),
       empresa:document.getElementById('empresa').value.trim(),
       foto:fotoData,
