@@ -2290,10 +2290,16 @@ async function loadAll(){
   try{
     await Promise.all([loadAgenda(),loadSpeakers(),loadIdeas(),loadConfig()]);
     setStatus(true);
-    renderAgenda(); renderSpeakers();
+    try{ renderAgenda(); }catch(e){ console.error('renderAgenda error:',e); }
+    try{ renderSpeakers(); }catch(e){ console.error('renderSpeakers error:',e); }
+    const totalRows=STAGE_KEYS.reduce((s,sk)=>(state.agenda[sk]||[]).length+s,0);
+    toast(`✅ Cargado: ${state.speakers.length} speakers, ${totalRows} filas de agenda`);
   }catch(e){
-    setStatus(false); toast('⚠️ Sin conexión al servidor',true);
-    renderAgenda(); renderSpeakers(); renderIdeas();
+    console.error('loadAll error:',e);
+    setStatus(false); toast('⚠️ Error: '+e.message,true);
+    try{ renderAgenda(); }catch(e2){}
+    try{ renderSpeakers(); }catch(e2){}
+    try{ renderIdeas(); }catch(e2){}
   }
 }
 
