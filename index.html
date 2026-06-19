@@ -126,7 +126,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-cell-empty{font-size:14px;color:var(--dim);}
 .sp-clear-btn{background:none;border:none;cursor:pointer;color:#666;font-size:16px;padding:0 5px;line-height:1;align-self:center;flex-shrink:0;}
 .sp-clear-btn:hover{color:#ef4444;}
-.sp-conflict-same{outline:2px solid #ef4444;outline-offset:-1px;}
+.sp-conflict-same{background:rgba(234,179,8,.18)!important;outline:1px solid #eab308;outline-offset:-1px;}
 .sp-conflict-consec{outline:2px solid #f97316;outline-offset:-1px;}
 
 /* SPEAKER DROPDOWN */
@@ -445,6 +445,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
           <th onclick="setSortSp('idioma')" style="cursor:pointer;user-select:none">Idioma <span id="srt-idioma"></span></th>
           <th onclick="setSortSp('mail')" style="cursor:pointer;user-select:none">Mail <span id="srt-mail"></span></th>
           <th>Contacto</th>
+          <th onclick="setSortSp('_assignCount')" style="cursor:pointer;user-select:none;text-align:center">Asig <span id="srt-_assignCount"></span></th>
           <th style="width:28px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
@@ -997,27 +998,42 @@ function makeAgendaRow(row,realIdx,sk){
 function getConflictClass(realIdx,sk){
   const row=state.agenda[sk]?.[realIdx];
   if(!row||!row.speaker?.trim())return '';
-  const name=row.speaker.trim();
+  const names=getSpeakerNames(row);
   const ini=timeToMin(row.inicio), fin=timeToMin(row.fin);
-  for(const sk2 of STAGE_KEYS){
-    if(sk2===sk)continue;
-    const rows2=getAgendaRows(sk2,currentDay);
-    for(const {row:r2} of rows2){
-      if((r2.speaker||'').trim()!==name)continue;
-      const ini2=timeToMin(r2.inicio), fin2=timeToMin(r2.fin);
-      if(ini<fin2&&fin>ini2) return 'sp-conflict-same';
+  for(const name of names){
+    for(const sk2 of STAGE_KEYS){
+      if(sk2===sk)continue;
+      for(const {row:r2} of getAgendaRows(sk2,currentDay)){
+        if(!getSpeakerNames(r2).some(n=>n.toLowerCase()===name.toLowerCase()))continue;
+        if(ini<timeToMin(r2.fin)&&fin>timeToMin(r2.inicio)) return 'sp-conflict-same';
+      }
     }
   }
   return '';
 }
 
 function renderSpCell(idx,sk,selected){
-  if(selected){
-    const assign=getSpeakerAssignments(selected).filter(a=>!(a.rowIdx===idx&&a.sk===sk));
-    const badgeHtml=assign.length?`<div class="sp-cell-badge">📍 ${assign.map(a=>`${stageNames[STAGE_KEYS.indexOf(a.sk)]||a.sk} ${a.inicio}`).join(', ')}</div>`:'';
-    return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-name">${esc(selected)}</div>${badgeHtml}</div><button class="sp-clear-btn" onclick="clearSpeakerCell(${idx},'${sk}',event)" title="Quitar speaker">✕</button></div>`;
-  }
-  return `<div class="sp-picker"><div class="sp-cell" onclick="openSpDrop(${idx},'${sk}',event)"><div class="sp-cell-empty">—</div></div></div>`;
+  const names=selected?selected.split('|').map(n=>n.trim()).filter(Boolean):[];
+  const canAdd=names.length<5;
+  const chipsHtml=names.map(name=>{
+    const assigns=getSpeakerAssignments(name).filter(a=>!(a.rowIdx===idx&&a.sk===sk));
+    const count=assigns.length;
+    const countColor=count===0?'#fff':count===1?'#22c55e':count===2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';
+    const sp=state.speakers.find(s=>s.nombre===name);
+    const apodo=sp?.apodo?` (${sp.apodo})`:'';
+    const isAssigned=count>0;
+    return `<div style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
+      <span style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
+      ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
+      <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
+    </div>`;
+  }).join('');
+  return `<div class="sp-picker">
+    <div class="sp-cell" onclick="${canAdd?`openSpDrop(${idx},'${sk}',event)`:''}" style="${canAdd?'cursor:pointer':'cursor:default'}">
+      ${names.length?chipsHtml:`<div class="sp-cell-empty" style="cursor:pointer" onclick="openSpDrop(${idx},'${sk}',event)">—</div>`}
+      ${canAdd&&names.length?`<div style="font-size:10px;color:#555;margin-top:2px">+ agregar</div>`:''}
+    </div>
+  </div>`;
 }
 
 function clearSpeakerCell(realIdx,sk,e){
@@ -1025,18 +1041,29 @@ function clearSpeakerCell(realIdx,sk,e){
   const row=state.agenda[sk]?.[realIdx];
   if(!row||row.tipo==='DIA')return;
   pushHistory();
-  row.speaker='';
-  row.tema='';
-  markDirty('principal');
-  renderAgenda();
+  row.speaker=''; row.tema='';
+  markDirty('principal'); renderAgenda();
 }
+function removeSpeakerFromCell(realIdx,sk,name,e){
+  e.stopPropagation();
+  const row=state.agenda[sk]?.[realIdx];
+  if(!row||row.tipo==='DIA')return;
+  pushHistory();
+  const names=getSpeakerNames(row).filter(n=>n!==name);
+  row.speaker=names.join('|');
+  if(!names.length)row.tema='';
+  markDirty('principal'); renderAgenda();
+}
+
+function getSpeakerNames(row){ return (row.speaker||'').split('|').map(n=>n.trim()).filter(Boolean); }
 
 function getSpeakerAssignments(name){
   const res=[];
+  const nm=name.trim().toLowerCase();
   STAGE_KEYS.forEach(sk=>{
     (state.agenda[sk]||[]).forEach((row,realIdx)=>{
       if(row.tipo==='DIA')return;
-      if((row.speaker||'').trim()===name.trim())
+      if(getSpeakerNames(row).some(n=>n.toLowerCase()===nm))
         res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||''});
     });
   });
@@ -1101,6 +1128,12 @@ function populateSpDrop(){
   const qTemaLow=qTema.toLowerCase();
   let html='';
 
+  // Sin query: mostrar placeholder hasta que escriban
+  if(!qSp&&!qTema){
+    list.innerHTML=`<div style="padding:16px;text-align:center;color:#555;font-size:13px">Escribí un nombre para buscar…</div>`;
+    return;
+  }
+
   // Sin asignar
   html+=`<div class="sp-item" data-name="" onclick="selectSpeaker('')"><span style="color:var(--dim);font-size:14px">— Sin asignar —</span></div>`;
 
@@ -1108,8 +1141,11 @@ function populateSpDrop(){
   let spList=state.speakers.filter(s=>{
     if(!s.nombre)return false;
     if(s.estado==='rechazado')return false;
-    // Filtro por nombre de speaker
-    if(qSp&&!s.nombre.toLowerCase().includes(qSp))return false;
+    // Filtro por nombre, apellido o apodo
+    if(qSp){
+      const haystack=[s.nombre,s.apellido||'',s.apodo||''].join(' ').toLowerCase();
+      if(!haystack.includes(qSp))return false;
+    }
     return true;
   });
 
@@ -1215,8 +1251,15 @@ function selectSpeaker(name){
 function selectSpeakerWithTema(name,tema){
   const {idx,sk}=_spDropCtx;
   if(idx===null)return;
-  updateStageField(idx,sk,'speaker',name);
-  if(tema)updateStageField(idx,sk,'tema',tema);
+  // Multi-speaker: append if not already present
+  const currentNames=getSpeakerNames(state.agenda[sk]?.[idx]||{});
+  if(name&&!currentNames.includes(name)&&currentNames.length<5){
+    const newNames=[...currentNames,name];
+    updateStageField(idx,sk,'speaker',newNames.join('|'));
+  } else if(!name){
+    updateStageField(idx,sk,'speaker','');
+  }
+  if(tema&&!state.agenda[sk]?.[idx]?.tema)updateStageField(idx,sk,'tema',tema);
   markDirty('principal');
 
   // Auto-fill empresa, nivel, tags desde el speaker seleccionado
@@ -1537,12 +1580,12 @@ function setSortSp(field){
 
 const ESTADOS=[
   {v:'disponible', l:'Disponible'},
-  {v:'confirmado', l:'✅ Confirmado'},
-  {v:'revision',   l:'🔍 Revisión'},
-  {v:'respaldo',   l:'🔶 Respaldo'},
-  {v:'pendiente',  l:'🌸 Pendiente'},
-  {v:'rechazado',  l:'❌ Rechazado'},
+  {v:'confirmado', l:'Asignado'},
+  {v:'revision',   l:'Revisar'},
+  {v:'respaldo',   l:'Respaldo'},
+  {v:'rechazado',  l:'Rechazado'},
 ];
+const ESTADO_LABEL={disponible:'Disponible',confirmado:'Asignado',revision:'Revisar',revisar:'Revisar',respaldo:'Respaldo',rechazado:'Rechazado',pendiente:'Pendiente',manual:'Manual'};
 function estadoSelectHtml(ri,val,isManual=false,field='estado'){
   const v=val||'disponible';
   const cls='est-'+(ESTADO_COLOR[v]?v:'disponible');
@@ -1736,7 +1779,7 @@ function renderSpeakers(){
         <div style="display:flex;align-items:center;gap:7px">
           ${s.foto?`<img src="${esc(s.foto)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid #333" onerror="this.style.display='none'">`:`<div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;border:1px solid #333;flex-shrink:0"></div>`}
           <div>
-            <div style="color:var(--red);font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
+            <div style="color:${(()=>{const e=s.estado||'disponible';return e==='confirmado'?'#22c55e':e==='rechazado'?'#ef4444':e==='revision'||e==='revisar'?'#eab308':e==='respaldo'?'#f97316':'var(--red)'})()};font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
             ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
           </div>
         </div>
@@ -1749,6 +1792,7 @@ function renderSpeakers(){
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
       <td style="font-size:12px">${contactHtml}</td>
+      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.displayName||s.nombre||'').trim();const count=nm?getSpeakerAssignments(nm).length:0;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#333">—</span>`;})()}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
     </tr>
     <tr class="sp-detail-row" id="sp-detail-${ri}">
