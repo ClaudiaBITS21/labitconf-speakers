@@ -818,6 +818,13 @@ function recalcAgendaTimes(sk, dayNum){
   all.forEach((row,i)=>{
     if(row.tipo==='DIA'){ inDay=(row.dia==='D'+dayNum); if(inDay)cur=ap; return; }
     if(!inDay)return;
+    // Bloques pendientes (sin horario asignado) quedan fuera de la cadena
+    if((row.notas||'').startsWith('[pendiente]')){
+      row.inicio='';row.fin='';
+      const iniEl=document.getElementById('ini-'+i);const finEl=document.getElementById('fin-'+i);
+      if(iniEl)iniEl.textContent='';if(finEl)finEl.textContent='';
+      return;
+    }
     row.inicio=minToTime(cur);
     cur+=row.dur||30;
     row.fin=minToTime(cur);
