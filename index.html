@@ -1498,6 +1498,10 @@ function moveAgendaRow(sk,realIdx,dir){
   if(targetPos<0||targetPos>=rows.length)return;
   const targetRealIdx=rows[targetPos].realIdx;
   pushHistory();
+  // Al mover con flechas, el bloque entra en la cadena de horarios
+  if(all[realIdx]&&(all[realIdx].notas||'').startsWith('[pendiente]')){
+    all[realIdx].notas=all[realIdx].notas.replace(/^\[pendiente\]\s*/,'').trim();
+  }
   [all[realIdx],all[targetRealIdx]]=[all[targetRealIdx],all[realIdx]];
   recalcAgendaTimes(sk,currentDay);
   markDirty('principal',sk); renderAgenda();
