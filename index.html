@@ -270,10 +270,21 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 /* IDEAS */
 .ideas-table{border-collapse:collapse;width:100%;}
 .ideas-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 10px;text-align:left;font-size:15px;font-weight:700;color:#ffffff;position:sticky;top:0;z-index:10;}
-.ideas-table tbody td{border:1px solid var(--border);padding:8px 10px;vertical-align:top;font-size:16px;}
-.ideas-table tbody tr:hover{background:var(--red-dim);}
+.ideas-table tbody td{border:1px solid var(--border);padding:6px 8px;vertical-align:top;font-size:14px;}
+.ideas-table tbody tr:hover{background:rgba(255,255,255,.025);}
 .idea-del{background:none;border:none;color:var(--dim);cursor:pointer;font-size:16px;padding:3px;}
 .idea-del:hover{color:#ef4444;}
+.idea-cat-chip{display:inline-block;border-radius:4px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap;}
+.idea-cat-charlas{background:rgba(99,102,241,.2);color:#818cf8;}
+.idea-cat-speakers{background:rgba(34,197,94,.2);color:#4ade80;}
+.idea-cat-miscelaneas{background:rgba(245,158,11,.2);color:#fbbf24;}
+.idea-cat-sel{background:transparent;border:none;font-size:12px;font-weight:700;cursor:pointer;outline:none;font-family:inherit;padding:2px 4px;border-radius:4px;}
+.idea-cat-sel.idea-cat-charlas{color:#818cf8;}
+.idea-cat-sel.idea-cat-speakers{color:#4ade80;}
+.idea-cat-sel.idea-cat-miscelaneas{color:#fbbf24;}
+.idea-editable{width:100%;background:transparent;border:none;color:#fff;font-size:14px;font-family:inherit;resize:none;outline:none;padding:2px 3px;min-height:22px;overflow:hidden;}
+.idea-editable:focus{background:rgba(232,64,16,.08);box-shadow:inset 0 0 0 1px var(--red);border-radius:3px;}
+.idea-flt-btn.active{background:var(--red-dim);border-color:var(--red);color:var(--red);}
 
 /* TOAST */
 #toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid #22c55e;color:#22c55e;padding:9px 16px;border-radius:7px;font-size:16px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
@@ -464,9 +475,24 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
       <div class="form-grid">
         <div class="form-field"><label class="form-label">Idea</label><input class="form-input" id="idea-titulo" placeholder="Título"></div>
         <div class="form-field"><label class="form-label">¿Quién propone?</label><input class="form-input" id="idea-prop" placeholder="—"></div>
+        <div class="form-field"><label class="form-label">Categoría</label>
+          <select class="form-select" id="idea-cat">
+            <option value="Charlas">💬 Charlas</option>
+            <option value="Speakers">🎙️ Speakers</option>
+            <option value="Misceláneas">✨ Misceláneas</option>
+          </select>
+        </div>
         <div class="form-field" style="grid-column:1/-1"><label class="form-label">Detalle</label><textarea class="form-ta" id="idea-detalle" placeholder="Descripción, contexto…"></textarea></div>
       </div>
       <button class="form-btn" onclick="addIdea()">Agregar idea</button>
+    </div>
+    <!-- Filtro categoría -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <span style="font-size:13px;color:#888;font-weight:700">Filtrar:</span>
+      <button class="btn idea-flt-btn active" data-cat="" onclick="setIdeaFilter(this,'')">Todas</button>
+      <button class="btn idea-flt-btn" data-cat="Charlas" onclick="setIdeaFilter(this,'Charlas')" style="color:#818cf8;border-color:#6366f133">💬 Charlas</button>
+      <button class="btn idea-flt-btn" data-cat="Speakers" onclick="setIdeaFilter(this,'Speakers')" style="color:#4ade80;border-color:#22c55e33">🎙️ Speakers</button>
+      <button class="btn idea-flt-btn" data-cat="Misceláneas" onclick="setIdeaFilter(this,'Misceláneas')" style="color:#fbbf24;border-color:#f59e0b33">✨ Misceláneas</button>
     </div>
     <div id="ideasList"><div class="empty"><div class="empty-icon">💡</div>No hay ideas aún.</div></div>
   </div>
@@ -2412,28 +2438,89 @@ function buildResumen(){
 }
 
 // ── IDEAS ─────────────────────────────────────────────────────────────
+let ideaFilterCat = '';
+
+function setIdeaFilter(btn, cat){
+  ideaFilterCat = cat;
+  document.querySelectorAll('.idea-flt-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  renderIdeas();
+}
+
+const IDEA_CAT_CLASS = {
+  'Charlas':'idea-cat-charlas',
+  'Speakers':'idea-cat-speakers',
+  'Misceláneas':'idea-cat-miscelaneas',
+  'Miscelaneas':'idea-cat-miscelaneas'
+};
+const IDEA_CATS = ['Charlas','Speakers','Misceláneas'];
+
+function ideaCatClass(cat){ return IDEA_CAT_CLASS[cat]||'idea-cat-miscelaneas'; }
+
+function updateIdeaField(i, field, val){
+  state.ideas[i][field]=val;
+  markDirty('ideas');
+  if(field==='categoria'){
+    const sel=document.getElementById('idea-cat-sel-'+i);
+    if(sel) sel.className='idea-cat-sel '+ideaCatClass(val);
+  }
+}
+
+function autoResizeTextarea(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
 function renderIdeas(){
   const wrap=document.getElementById('ideasList');
-  if(!state.ideas.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">💡</div>No hay ideas aún.</div>';return;}
-  wrap.innerHTML=`<table class="ideas-table"><thead><tr><th>Idea</th><th>Quién</th><th>Detalle</th><th style="width:32px"></th></tr></thead><tbody>
-    ${state.ideas.map((idea,i)=>`<tr>
-      <td style="font-weight:700;white-space:nowrap">${esc(idea.titulo)}</td>
-      <td style="white-space:nowrap;color:var(--red)">${esc(idea.prop||'—')}</td>
-      <td style="color:#ffffff">${esc(idea.detalle||'')}</td>
-      <td><button class="idea-del" onclick="delIdea(${i})">✕</button></td>
-    </tr>`).join('')}
+  const indexed = ideaFilterCat
+    ? state.ideas.map((d,i)=>({d,i})).filter(({d})=>(d.categoria||'Misceláneas')===ideaFilterCat)
+    : state.ideas.map((d,i)=>({d,i}));
+  if(!indexed.length){wrap.innerHTML='<div class="empty"><div class="empty-icon">💡</div>No hay ideas'+(ideaFilterCat?' en esta categoría':'  aún.')+'</div>';return;}
+  wrap.innerHTML=`<table class="ideas-table"><thead><tr>
+    <th style="width:140px">Categoría</th>
+    <th style="min-width:160px">Idea</th>
+    <th style="width:120px">Quién</th>
+    <th>Detalle</th>
+    <th style="width:32px"></th>
+  </tr></thead><tbody>
+    ${indexed.map(({d:idea,i})=>{
+      const cc=ideaCatClass(idea.categoria||'Misceláneas');
+      const catOpts=IDEA_CATS.map(c=>`<option value="${c}"${(idea.categoria||'')=== c?' selected':''}>${c}</option>`).join('');
+      return `<tr>
+        <td><select id="idea-cat-sel-${i}" class="idea-cat-sel ${cc}" onchange="updateIdeaField(${i},'categoria',this.value)">${catOpts}</select></td>
+        <td><textarea class="idea-editable" rows="1" oninput="autoResizeTextarea(this);updateIdeaField(${i},'titulo',this.value)" style="font-weight:700">${esc(idea.titulo)}</textarea></td>
+        <td><textarea class="idea-editable" rows="1" oninput="autoResizeTextarea(this);updateIdeaField(${i},'prop',this.value)">${esc(idea.prop||'')}</textarea></td>
+        <td><textarea class="idea-editable" rows="2" oninput="autoResizeTextarea(this);updateIdeaField(${i},'detalle',this.value)">${esc(idea.detalle||'')}</textarea></td>
+        <td><button class="idea-del" onclick="delIdea(${i})" title="Eliminar">✕</button></td>
+      </tr>`;
+    }).join('')}
   </tbody></table>`;
+  wrap.querySelectorAll('.idea-editable').forEach(autoResizeTextarea);
 }
-function addIdea(){ const t=document.getElementById('idea-titulo').value.trim(); if(!t){toast('⚠️ Título requerido',true);return;} state.ideas.push({titulo:t,prop:document.getElementById('idea-prop').value.trim(),detalle:document.getElementById('idea-detalle').value.trim()}); ['idea-titulo','idea-prop','idea-detalle'].forEach(id=>document.getElementById(id).value=''); markDirty('ideas');renderIdeas();toast('✅ Idea agregada'); }
+
+function addIdea(){
+  const t=document.getElementById('idea-titulo').value.trim();
+  if(!t){toast('⚠️ Título requerido',true);return;}
+  state.ideas.push({
+    titulo:t,
+    prop:document.getElementById('idea-prop').value.trim(),
+    categoria:document.getElementById('idea-cat').value||'Misceláneas',
+    detalle:document.getElementById('idea-detalle').value.trim()
+  });
+  ['idea-titulo','idea-prop','idea-detalle'].forEach(id=>document.getElementById(id).value='');
+  markDirty('ideas');renderIdeas();toast('✅ Idea agregada');
+}
 function delIdea(i){ state.ideas.splice(i,1);markDirty('ideas');renderIdeas(); }
 
 async function loadIdeas(){
-  try{ const raw=await gasGet('Ideas'); if(!raw||raw.length<2){state.ideas=[];renderIdeas();return;} const[,...rows]=raw; state.ideas=rows.map(r=>({titulo:String(r[0]||''),prop:String(r[1]||''),detalle:String(r[2]||'')})); renderIdeas(); }
-  catch(e){toast('⚠️ Error ideas: '+e.message,true);}
+  try{
+    const raw=await gasGet('Ideas');
+    if(!raw||raw.length<2){state.ideas=[];renderIdeas();return;}
+    const[,...rows]=raw;
+    state.ideas=rows.map(r=>({titulo:String(r[0]||''),prop:String(r[1]||''),detalle:String(r[2]||''),categoria:String(r[3]||'Misceláneas')}));
+    renderIdeas();
+  }catch(e){toast('⚠️ Error ideas: '+e.message,true);}
 }
 async function saveIdeas(){
   if(!(await checkVersion('Ideas')))return;
-  await gasPost('Ideas','replace_all',state.ideas.map(i=>[i.titulo,i.prop||'',i.detalle||'']));
+  await gasPost('Ideas','replace_all',state.ideas.map(i=>[i.titulo,i.prop||'',i.detalle||'',i.categoria||'Misceláneas']));
   toast('✅ Ideas guardadas'); markClean('ideas');
 }
 
