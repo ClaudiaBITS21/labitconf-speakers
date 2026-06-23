@@ -960,7 +960,10 @@ function addTema(){
         <div class="radio-group" id="nivel-${n}">${nivelesHtml}</div></div>
       <div class="field"><label class="label tema-formato-lbl">${t.temaFormato}</label>
         <div class="check-group" id="formato-${n}">${formatosHtml}</div>
-        <div class="hint tema-formato-hint" style="margin-top:6px">${t.hTemaFormato}</div></div>
+        <div class="panel-check-wrap" id="panel-wrap-${n}" onclick="togglePanel(this)" style="margin-top:8px">
+          <div class="panel-check-box"></div>
+          <span class="panel-check-txt">${t.temaPanel}</span>
+        </div></div>
       <div style="max-width:220px"><div class="field">
         <label class="label tema-dur-lbl">${t.temaDur}</label>
         <select class="sel" id="dur-${n}">${durHtml}</select>
@@ -986,10 +989,6 @@ function addTema(){
           </div>
           <div class="tags-selected-wrap" id="tags-selected-${n}"></div>
         </div></div>
-      <div class="panel-check-wrap" id="panel-wrap-${n}" onclick="togglePanel(this)">
-        <div class="panel-check-box"></div>
-        <span class="panel-check-txt">${t.temaPanel}</span>
-      </div>
     </div>`;
   document.getElementById('temasWrap').appendChild(card);
   buildTagsPreset(n);
