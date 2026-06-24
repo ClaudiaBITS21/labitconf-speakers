@@ -1526,13 +1526,31 @@ function moveAgendaRow(sk,realIdx,dir){
   if(targetPos<0||targetPos>=rows.length)return;
   const targetRealIdx=rows[targetPos].realIdx;
   pushHistory();
-  // Al mover con flechas, el bloque entra en la cadena de horarios
   if(all[realIdx]&&(all[realIdx].notas||'').startsWith('[pendiente]')){
     all[realIdx].notas=all[realIdx].notas.replace(/^\[pendiente\]\s*/,'').trim();
   }
   [all[realIdx],all[targetRealIdx]]=[all[targetRealIdx],all[realIdx]];
   recalcAgendaTimes(sk,currentDay);
-  markDirty('principal',sk); renderAgenda();
+  markDirty('principal',sk);
+  renderAgenda();
+  // Tras render, resaltar la fila movida y hacer scroll hacia ella
+  const newRows=getAgendaRows(sk,currentDay);
+  const newPos=newRows.findIndex(r=>r.realIdx===targetRealIdx);
+  if(newPos>=0){
+    const tbody=document.getElementById('agendaTbody-'+sk);
+    if(tbody){
+      const tr=tbody.querySelector(`tr[data-idx="${targetRealIdx}"]`);
+      if(tr){
+        tr.style.transition='background .15s';
+        tr.style.background='rgba(232,64,16,.25)';
+        tr.scrollIntoView({block:'nearest',behavior:'smooth'});
+        // Foco en el botón de la misma dirección para poder seguir apretando
+        const btn=tr.querySelector(`.mv-row[onclick*="moveAgendaRow('${sk}',${targetRealIdx},${dir})"]`);
+        if(btn&&!btn.disabled) btn.focus({preventScroll:true});
+        setTimeout(()=>{ tr.style.background=''; tr.style.transition=''; },600);
+      }
+    }
+  }
 }
 function movePrincipalRow(idx,dir){ moveAgendaRow(activeStage,idx,dir); } // compat
 
