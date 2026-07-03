@@ -330,6 +330,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">❓ Ideas</button>
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
   <button class="tab-btn" data-tab="canvas" onclick="switchTab('canvas')">🗓️ Kanban</button>
+  <button class="tab-btn" data-tab="landing" onclick="switchTab('landing')">🌐 Landing</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
     <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(2)" title="LABITCONF Day 1">Vie (30/Oct)</button>
@@ -442,10 +443,12 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
           <th onclick="setSortSp('mail')" style="cursor:pointer;user-select:none">Mail <span id="srt-mail"></span></th>
           <th>Contacto</th>
           <th onclick="setSortSp('_assignCount')" style="cursor:pointer;user-select:none;text-align:center">Asig <span id="srt-_assignCount"></span></th>
+          <th style="width:42px;text-align:center" title="Habilitado para Landing pública">🌐</th>
+          <th style="width:60px;text-align:center" title="Correos de confirmación">✉️</th>
           <th style="width:28px"></th>
         </tr></thead>
         <tbody id="speakersTableBody">
-          <tr><td colspan="13" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers aún.</td></tr>
+          <tr><td colspan="15" style="text-align:center;padding:40px;color:var(--dim)">No hay speakers aún.</td></tr>
         </tbody>
       </table>
     </div>
@@ -519,6 +522,14 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <div id="canvasWrap" style="overflow:auto;padding:16px 0 32px 0;min-height:calc(100vh - 120px)">
     <div id="canvasGrid"></div>
   </div>
+</div>
+
+<div class="tab-content" id="tab-landing">
+  <div class="toolbar">
+    <span style="font-size:13px;color:#aaa">Speakers marcados para landing — solo <span style="color:#22c55e">confirmados</span> con <span style="color:var(--red)">🌐</span></span>
+    <button class="btn" style="margin-left:auto" onclick="renderLanding()">🔄 Actualizar</button>
+  </div>
+  <div id="landingGrid" style="padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px"></div>
 </div>
 
 <!-- SPEAKER DROPDOWN (shared, positioned via JS) -->
@@ -684,6 +695,7 @@ function switchTab(name){
   if(name==='tiers') renderTiers();
   if(name==='canvas') renderCanvas();
   if(name==='speakers') renderSpeakers();
+  if(name==='landing') renderLanding();
 }
 
 // ── CLAVE ─────────────────────────────────────────────────────────────
@@ -2025,10 +2037,15 @@ function renderSpeakers(){
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
       <td style="font-size:12px">${contactHtml}</td>
       <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.displayName||s.nombre||'').trim();const count=nm?getSpeakerAssignments(nm).length:0;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#333">—</span>`;})()}</td>
+      <td style="text-align:center" onclick="event.stopPropagation()"><span title="${s.landing==='si'?'En landing':'Sin landing'}" style="cursor:pointer;font-size:16px;opacity:${s.landing==='si'?'1':'0.2'}" onclick="toggleLanding(${ri})">${s.landing==='si'?'🌐':'🌐'}</span></td>
+      <td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
+        <span title="📧 Confirmar como Speaker&#10;Envía mail: bienvenida + confirmación de participación&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;opacity:${s.mail_ok==='si'?'1':'0.25'};margin-right:4px" onclick="previewMail(${ri},'speaker')">📧</span>
+        <span title="🗓️ Confirmar Charla Asignada&#10;Envía mail: tema + stage + horario confirmados&#10;Estado: ${s.landing_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;opacity:${s.landing_ok==='si'?'1':'0.25'}" onclick="previewMail(${ri},'charla')">🗓️</span>
+      </td>
       <td style="text-align:center" onclick="event.stopPropagation()"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
     </tr>
     <tr class="sp-detail-row" id="sp-detail-${ri}">
-      <td colspan="11" style="background:#080808;border:1px solid #222;padding:16px">
+      <td colspan="15" style="background:#080808;border:1px solid #222;padding:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
           <div>
             <div class="sp-detail-sec-title">Datos</div>
@@ -2209,6 +2226,95 @@ function addSpeaker(){
 }
 function updateSpeaker(ri,field,val){ if(state.speakers[ri]){pushHistory();state.speakers[ri][field]=val;} }
 function delSpeaker(i){ if(!confirm('¿Eliminar este speaker?'))return; state.speakers.splice(i,1); markDirty('speakers'); renderSpeakers(); }
+
+function previewMail(i, tipo){
+  const s=state.speakers[i];
+  const nm=s.displayName||s.nombre||'';
+  const mail=s.mail||'';
+  const temas=(s._temas||[]).filter(t=>t.estado==='confirmado').map(t=>t.titulo).filter(Boolean);
+  const bloques=(()=>{
+    const out=[];
+    STAGE_KEYS.forEach((sk,si)=>{
+      (state.agenda[sk]||[]).forEach(row=>{
+        if(row.tipo==='DIA')return;
+        const tema=(row.tema||'').trim();
+        if(!tema)return;
+        const spName=nm.trim().toLowerCase();
+        if(tema.toLowerCase().includes(spName)||spName.split(' ').some(w=>w.length>3&&tema.toLowerCase().includes(w))){
+          out.push(`  • ${stageNames[si]||sk} — ${row.inicio||'?'}–${row.fin||'?'} — ${tema}`);
+        }
+      });
+    });
+    return out;
+  })();
+
+  let asunto,cuerpo;
+  if(tipo==='speaker'){
+    asunto=`¡Confirmado como Speaker en LABITCONF '26!`;
+    cuerpo=`Hola ${nm},\n\nQueremos confirmarte que estás seleccionado como Speaker en LABITCONF '26.\n\nTu participación es muy importante para nosotros. En los próximos días te estaremos enviando más detalles sobre logística, fechas y formato.\n\n${temas.length?`Temas propuestos confirmados:\n${temas.map(t=>`  • ${t}`).join('\n')}\n\n`:''
+}¡Gracias por ser parte!\n\nEquipo LABITCONF`;
+  } else {
+    asunto=`Tu charla está confirmada en LABITCONF '26`;
+    cuerpo=`Hola ${nm},\n\nTu charla está oficialmente confirmada en la agenda de LABITCONF '26.\n\n${bloques.length?`Bloque(s) asignado(s):\n${bloques.join('\n')}\n\n`:'(Aún sin bloque asignado en agenda)\n\n'
+}Por favor confirmanos tu asistencia respondiendo este mail.\n\n¡Nos vemos en LABITCONF!\n\nEquipo LABITCONF`;
+  }
+
+  const ya=tipo==='speaker'?s.mail_ok==='si':s.landing_ok==='si';
+  const confirmMsg=`PARA: ${mail||'(sin mail cargado)'}\nASUNTO: ${asunto}\n\n${cuerpo}\n\n${'─'.repeat(40)}\n${ya?'⚠️  Este mail ya fue marcado como enviado. ¿Marcar de nuevo?':'✉️  ¿Marcar este mail como enviado?'}`;
+
+  if(confirm(confirmMsg)){
+    if(tipo==='speaker') s.mail_ok='si';
+    else s.landing_ok='si';
+    markDirty('speakers');
+    renderSpeakers();
+    toast(`✅ ${tipo==='speaker'?'Mail speaker':'Mail charla'} marcado para ${nm}`);
+  }
+}
+
+function toggleLanding(i){
+  const s=state.speakers[i];
+  s.landing=s.landing==='si'?'':'si';
+  markDirty('speakers');
+  renderSpeakers();
+}
+
+function renderLanding(){
+  const grid=document.getElementById('landingGrid');
+  if(!grid)return;
+  const confirmed=state.speakers.filter(s=>s.estado==='confirmado'&&s.landing==='si');
+  if(!confirmed.length){grid.innerHTML='<div style="color:#555;grid-column:1/-1;padding:40px 0;text-align:center">Sin speakers marcados para landing.<br>Confirmá speakers y activá 🌐 en la tabla.</div>';return;}
+  grid.innerHTML=confirmed.map(s=>{
+    const nm=esc(s.displayName||s.nombre||'');
+    const bloques=(()=>{
+      const allBlocks=[];
+      STAGE_KEYS.forEach((sk,si)=>{
+        (state.agenda[sk]||[]).forEach(row=>{
+          if(row.tipo==='DIA')return;
+          const tema=(row.tema||'').trim();
+          if(!tema)return;
+          const spName=(s.displayName||s.nombre||'').trim().toLowerCase();
+          if(tema.toLowerCase().includes(spName)||spName.includes(tema.toLowerCase())){
+            allBlocks.push(`<div style="font-size:11px;color:#888;margin-top:4px"><span style="color:var(--red)">${esc(stageNames[si]||sk)}</span> · ${esc(row.inicio||'')}–${esc(row.fin||'')} · <span style="color:#aaa">${esc(tema)}</span></div>`);
+          }
+        });
+      });
+      return allBlocks.join('');
+    })();
+    const temas=(s._temas||[]).filter(t=>t.estado==='confirmado').map(t=>`<span style="background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:2px 7px;font-size:11px;color:#ccc">${esc(t.titulo||'')}</span>`).join(' ');
+    return `<div style="background:#111;border:1px solid #222;border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:10px">
+        ${s.foto?`<img src="${esc(s.foto)}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #333" onerror="this.style.display='none'">`:`<div style="width:52px;height:52px;border-radius:50%;background:#1a1a1a;border:2px solid #333;flex-shrink:0"></div>`}
+        <div>
+          <div style="font-weight:700;font-size:15px;color:#22c55e">${nm}</div>
+          ${s.cargo?`<div style="font-size:12px;color:#888">${esc(s.cargo)}${s.empresa?` · ${esc(s.empresa)}`:''}</div>`:''}
+          ${s.pais?`<div style="font-size:11px;color:#555">${esc(s.pais)}</div>`:''}
+        </div>
+      </div>
+      ${temas?`<div style="display:flex;flex-wrap:wrap;gap:4px">${temas}</div>`:''}
+      ${bloques||'<div style="font-size:11px;color:#444">Sin bloques asignados en agenda</div>'}
+    </div>`;
+  }).join('');
+}
 function delManualSpeaker(i){ if(!confirm('¿Eliminar este speaker manual?'))return; state.speakersManual.splice(i,1); markDirty('speakersManual'); renderSpeakers(); }
 
 async function importarDelForm(){
@@ -2295,6 +2401,9 @@ async function loadSpeakers(){
         estado:String(r[tcS]||'disponible'),
         oct29:String(r[t29]||''),oct30:String(r[t30]||''),
         oct31:String(r[t31]||''),nov1:String(r[tn1]||''),
+        landing:isV3?String(r[36]||''):'',
+        mail_ok:isV3?String(r[37]||''):'',
+        landing_ok:isV3?String(r[38]||''):'',
         get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
         get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
         get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
@@ -2347,7 +2456,10 @@ async function saveSpeakers(){
     JSON.stringify(s._temas||[]),                   // [29]
     s.temas_estado||'',                             // [30]
     s.estado||'disponible',                         // [31]
-    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'' // [32-35]
+    s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'', // [32-35]
+    s.landing||'',                                   // [36]
+    s.mail_ok||'',                                   // [37]
+    s.landing_ok||''                                 // [38]
   ]);
   await gasPost('Speakers','replace_all',data);
   // Also save manual if dirty

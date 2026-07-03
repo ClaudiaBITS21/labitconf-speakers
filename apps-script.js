@@ -43,8 +43,10 @@
 //   [29] oct31
 //   [30] nov1
 //
+//   [36] landing           ('' / 'si') — habilitado para la landing pública
+//
 //   SpeakerManual — [nombre, notas, fecha]
-//   Ideas         — [titulo, prop, detalle]
+//   Ideas         — [titulo, prop, detalle, categoria]
 // ═══════════════════════════════════════════════════════════════════
 
 const SHEET_ID   = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
@@ -114,6 +116,12 @@ function savePhotoToDrive(base64DataUrl, counter, confname) {
 function doGet(e) {
   try {
     const sheet = (e.parameter.sheet || 'Principal').trim();
+
+    // ── LANDING API (público, sin clave) ──────────────────────────
+    if (e.parameter.action === 'landing') {
+      return respondCors(buildLandingPayload());
+    }
+
     if (e.parameter.action === 'get_version') {
       const props = PropertiesService.getScriptProperties();
       return respond({ ok:true, sheet, version: props.getProperty('version_'+sheet)||'0' });
@@ -142,6 +150,116 @@ function doGet(e) {
     const props = PropertiesService.getScriptProperties();
     return respond({ ok:true, sheet, data: ws.getDataRange().getValues(), version: props.getProperty('version_'+sheet)||'0' });
   } catch(err) { return respond({ error:err.message }, 500); }
+}
+
+// ── LANDING BUILDER ──────────────────────────────────────────────────
+function buildLandingPayload() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const props = PropertiesService.getScriptProperties();
+
+  // Stage names guardados en config
+  let stageNames = ['Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6','Stage 7','Stage 8','Stage 9'];
+  try {
+    const raw = props.getProperty('config_stageNames');
+    if (raw) stageNames = JSON.parse(raw);
+  } catch(e) {}
+
+  // Leer Speakers — filtrar confirmados con landing=si
+  const spSheet = ss.getSheetByName('Speakers');
+  if (!spSheet) return { ok:false, error:'Sin hoja Speakers' };
+  const spData = spSheet.getDataRange().getValues();
+  const spHeaders = spData[0];
+
+  const confirmed = [];
+  for (let i = 1; i < spData.length; i++) {
+    const r = spData[i];
+    const estado  = String(r[31]||'').trim().toLowerCase();
+    const landing = String(r[36]||'').trim().toLowerCase();
+    if (estado !== 'confirmado' || landing !== 'si') continue;
+
+    let temas = [];
+    try { temas = JSON.parse(String(r[29]||'[]')); } catch(e) {}
+    const temasEstado = String(r[30]||'').split(',').map(x=>x.trim());
+    // Solo temas confirmados
+    const temasConf = temas.filter((_,idx) => (temasEstado[idx]||'disponible') === 'confirmado');
+
+    confirmed.push({
+      _nombre: String(r[1]||'').trim(),
+      nombre:      String(r[1]||'').trim(),
+      apellido:    String(r[2]||'').trim(),
+      confname:    String(r[3]||'').trim(),
+      tipo:        String(r[4]||'').trim(),
+      cargo:       String(r[5]||'').trim(),
+      pais:        String(r[6]||'').trim(),
+      idioma:      String(r[7]||'').trim(),
+      foto:        String(r[10]||'').trim(),
+      linkedin:    String(r[14]||'').trim(),
+      x:           String(r[15]||'').trim(),
+      instagram:   String(r[16]||'').trim(),
+      github:      String(r[17]||'').trim(),
+      nostr:       String(r[18]||'').trim(),
+      empresa:     String(r[19]||'').trim(),
+      bio:         String(r[21]||'').trim(),
+      website:     String(r[9]||'').trim(),
+      temas:       temasConf,
+      bloques:     []
+    });
+  }
+
+  if (!confirmed.length) return { ok:true, speakers:[], generated_at: new Date().toISOString() };
+
+  // Indexar speakers por nombre para lookup rápido
+  const byName = {};
+  confirmed.forEach(sp => { byName[sp._nombre.toLowerCase()] = sp; });
+
+  // Leer Stage_1..Stage_9 y extraer bloques
+  const DIA_LABEL = { D2:'Oct 30', D3:'Oct 31' };
+  for (let si = 1; si <= 9; si++) {
+    const ws = ss.getSheetByName('Stage_'+si);
+    if (!ws) continue;
+    const rows = ws.getDataRange().getValues();
+    const stageName = stageNames[si-1] || ('Stage '+si);
+    const stageKey  = 's'+si;
+    let currentDia  = '';
+
+    for (let ri = 1; ri < rows.length; ri++) {
+      const row = rows[ri];
+      const tipo    = String(row[0]||'').trim();
+      if (tipo === 'DIA') { currentDia = String(row[1]||'').trim(); continue; }
+      const speakerRaw = String(row[1]||'').trim();
+      if (!speakerRaw) continue;
+      // Puede ser multi-speaker separado por |
+      speakerRaw.split('|').map(n=>n.trim()).filter(Boolean).forEach(nombre => {
+        const sp = byName[nombre.toLowerCase()];
+        if (!sp) return;
+        sp.bloques.push({
+          stage_key:   stageKey,
+          stage_name:  stageName,
+          dia:         currentDia,
+          dia_label:   DIA_LABEL[currentDia] || currentDia,
+          tipo:        tipo,
+          tema:        String(row[2]||'').trim(),
+          inicio:      String(row[4]||'').trim(),
+          fin:         String(row[5]||'').trim()
+        });
+      });
+    }
+  }
+
+  // Limpiar campo interno _nombre antes de devolver
+  confirmed.forEach(sp => { delete sp._nombre; });
+
+  return {
+    ok: true,
+    generated_at: new Date().toISOString(),
+    speakers: confirmed
+  };
+}
+
+function respondCors(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ── POST ────────────────────────────────────────────────────────────
@@ -299,6 +417,12 @@ function handleFormSubmit(ss, d) {
         merged[30] = temasEstadoArr.join(',');
         spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
         PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+        // Flodesk: también agregar al segmento si aún no estaba
+        if (mail) {
+          const textoDetectar = [String(d.bio||''), String(temasArr[0]?temasArr[0].abstract||temasArr[0].titulo:'')].join(' ').trim();
+          const idioma = detectarIdioma(textoDetectar);
+          llamarFlodesk(mail, nombre, String(d.apellido||'').trim(), idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
+        }
         return respond({ ok:true, actualizado:true, msg:'Tus datos fueron actualizados. ¡Gracias!' });
       }
     }
@@ -317,6 +441,18 @@ function handleFormSubmit(ss, d) {
   }
   spSheet.appendRow(row);
   PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+
+  // ── Flodesk: detectar idioma y agregar al segmento de postulados ──
+  if (mail) {
+    const textoDetectar = [
+      String(d.bio || ''),
+      String(d.temas && d.temas[0] ? d.temas[0].abstract || d.temas[0].titulo : '')
+    ].join(' ').trim();
+    const idioma = detectarIdioma(textoDetectar);
+    const segmento = idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES;
+    llamarFlodesk(mail, nombre, String(d.apellido || '').trim(), segmento);
+  }
+
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
 }
 
@@ -348,6 +484,41 @@ function backupPrincipal() {
 function installBackupTrigger() {
   ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='backupPrincipal').forEach(t=>ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('backupPrincipal').timeBased().everyDays(1).atHour(3).create();
+}
+
+// ── FLODESK ─────────────────────────────────────────────────────────
+const FLODESK_SEGMENT_ES = '6a46ec15f305fe60db28f7fd';
+const FLODESK_SEGMENT_EN = '6a46ed923ef4b125b4d45e6d';
+
+function llamarFlodesk(email, nombre, apellido, segmentoId) {
+  try {
+    const apiKey = PropertiesService.getScriptProperties().getProperty('flodesk_api_key');
+    if (!apiKey || !email) return;
+
+    const b64 = Utilities.base64Encode(apiKey + ':');
+    const headers = { Authorization: 'Basic ' + b64, 'Content-Type': 'application/json' };
+
+    // Upsert subscriber + agregar al segmento en una sola llamada
+    UrlFetchApp.fetch('https://api.flodesk.com/v1/subscribers', {
+      method: 'POST',
+      headers: headers,
+      payload: JSON.stringify({ email: email, first_name: nombre || '', last_name: apellido || '', segment_ids: [segmentoId] }),
+      muteHttpExceptions: true
+    });
+
+    Logger.log('Flodesk OK: ' + email + ' → ' + segmentoId);
+  } catch(e) {
+    Logger.log('Flodesk error: ' + e.message);
+  }
+}
+
+function detectarIdioma(texto) {
+  try {
+    const lang = LanguageApp.detectLanguage(texto || '');
+    return lang === 'en' ? 'en' : 'es';
+  } catch(e) {
+    return 'es';
+  }
 }
 
 // ── HELPER ──────────────────────────────────────────────────────────
