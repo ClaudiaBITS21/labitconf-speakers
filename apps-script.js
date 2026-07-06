@@ -417,12 +417,10 @@ function handleFormSubmit(ss, d) {
         merged[30] = temasEstadoArr.join(',');
         spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
         PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
-        // Flodesk: también agregar al segmento si aún no estaba
-        if (mail) {
-          const textoDetectar = [String(d.bio||''), String(temasArr[0]?temasArr[0].abstract||temasArr[0].titulo:'')].join(' ').trim();
-          const idioma = detectarIdioma(textoDetectar);
-          llamarFlodesk(mail, nombre, String(d.apellido||'').trim(), idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
-        }
+        // Flodesk: siempre notificar aunque sea duplicado
+        const textoDetectar2 = [String(d.bio||''), String(temasArr[0]?temasArr[0].abstract||temasArr[0].titulo:'')].join(' ').trim();
+        const idioma2 = detectarIdioma(textoDetectar2);
+        llamarFlodesk(mail, nombre, String(d.apellido||'').trim(), idioma2 === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
         return respond({ ok:true, actualizado:true, msg:'Tus datos fueron actualizados. ¡Gracias!' });
       }
     }
@@ -498,7 +496,15 @@ function llamarFlodesk(email, nombre, apellido, segmentoId) {
     const b64 = Utilities.base64Encode(apiKey + ':');
     const headers = { Authorization: 'Basic ' + b64, 'Content-Type': 'application/json' };
 
-    // Upsert subscriber + agregar al segmento en una sola llamada
+    // Remover del segmento primero (para que el workflow se dispare de nuevo)
+    UrlFetchApp.fetch('https://api.flodesk.com/v1/subscribers/' + encodeURIComponent(email) + '/segments/remove', {
+      method: 'POST',
+      headers: headers,
+      payload: JSON.stringify({ segment_ids: [segmentoId] }),
+      muteHttpExceptions: true
+    });
+
+    // Upsert subscriber + agregar al segmento (dispara el workflow)
     UrlFetchApp.fetch('https://api.flodesk.com/v1/subscribers', {
       method: 'POST',
       headers: headers,
