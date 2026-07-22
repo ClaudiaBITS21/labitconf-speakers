@@ -115,15 +115,7 @@ function notificarTelegram(d, counter, idioma) {
     if (ig)  redes.push('📸 <a href="https://instagram.com/' + ig.replace(/^@/,'') + '">Instagram</a>');
     if (gh)  redes.push('💻 <a href="https://github.com/' + gh.replace(/^@/,'') + '">GitHub</a>');
     if (web) redes.push('🌐 <a href="' + web + '">Web</a>');
-    if (redes.length > 0) { lines.push('🔗 <b>Redes:</b> ' + redes.join(' · ')); lines.push(''); }
-
-    const nombreEnc = encodeURIComponent(nombre);
-    lines.push('🔍 <b>Buscar:</b>');
-    lines.push('<a href="https://www.google.com/search?q=' + nombreEnc + '+bitcoin">Google</a> · ' +
-               '<a href="https://x.com/search?q=' + nombreEnc + '">𝕏</a> · ' +
-               '<a href="https://www.linkedin.com/search/results/people/?keywords=' + nombreEnc + '">LinkedIn</a>');
-    lines.push('');
-    lines.push('🗂️ <a href="' + sheetUrl + '">Ver en Sheet</a>');
+    if (redes.length > 0) { lines.push('🔗 <b>Redes:</b> ' + redes.join(' · ')); }
 
     const text = lines.join('\n');
     const payload = JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'HTML', disable_web_page_preview: true });
