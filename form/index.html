@@ -193,11 +193,13 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
           <!-- Email | WhatsApp -->
           <div class="field" id="f-mail">
             <label class="label" id="l-mail"></label>
-            <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120">
+            <input class="inp" id="mail" type="email" autocomplete="email" maxlength="120" onblur="normalizeEmail('mail')">
+            <div class="hint" id="mail-hint" style="display:none"></div>
           </div>
           <div class="field" id="f-mail2">
             <label class="label" id="l-mail2"></label>
-            <input class="inp" id="mail2" type="email" autocomplete="email" maxlength="120">
+            <input class="inp" id="mail2" type="email" autocomplete="email" maxlength="120" onblur="normalizeEmail('mail2')">
+            <div class="hint" id="mail2-hint" style="display:none"></div>
           </div>
           <div class="field" id="f-whatsapp">
             <label class="label" id="l-whatsapp"></label>
@@ -679,6 +681,47 @@ function togglePanel(el){el.classList.toggle('checked');const b=el.querySelector
 
 // ── WHATSAPP / TELEGRAM PREVIEW ───────────────────────────────────────
 // ── NORMALIZACIÓN DE REDES SOCIALES ──────────────────────────────────
+// ── CORRECCIÓN DE TYPOS EN EMAIL ─────────────────────────────────────
+const EMAIL_TYPOS = {
+  // gmail
+  'gmal.com':'gmail.com','gmial.com':'gmail.com','gmai.com':'gmail.com',
+  'gmail.co':'gmail.com','gmail.cm':'gmail.com','gmail.con':'gmail.com',
+  'gmail.cmo':'gmail.com','gmaill.com':'gmail.com','gmali.com':'gmail.com',
+  'gnail.com':'gmail.com','gimail.com':'gmail.com','gmail.om':'gmail.com',
+  // hotmail
+  'hotmal.com':'hotmail.com','hotmial.com':'hotmail.com','hotmail.co':'hotmail.com',
+  'hotmail.cm':'hotmail.com','hotmail.con':'hotmail.com','homail.com':'hotmail.com',
+  // outlook
+  'outllok.com':'outlook.com','outlok.com':'outlook.com','outlook.co':'outlook.com',
+  'outloook.com':'outlook.com',
+  // yahoo
+  'yaho.com':'yahoo.com','yahooo.com':'yahoo.com','yahoo.co':'yahoo.com',
+  'yahoo.cm':'yahoo.com','yhoo.com':'yahoo.com',
+  // icloud
+  'iclod.com':'icloud.com','icloud.co':'icloud.com',
+};
+function normalizeEmail(id) {
+  const el = document.getElementById(id);
+  if (!el || !el.value.trim()) return;
+  let v = el.value.trim().toLowerCase();
+  const atIdx = v.lastIndexOf('@');
+  if (atIdx < 1) return;
+  const local = v.slice(0, atIdx);
+  const domain = v.slice(atIdx + 1);
+  const fixed = EMAIL_TYPOS[domain];
+  if (fixed) {
+    const corrected = local + '@' + fixed;
+    el.value = corrected;
+    const t = window.T || {};
+    const hint = document.getElementById(id + '-hint');
+    if (hint) {
+      hint.textContent = (t.emailCorrected || '✓ Corregido automáticamente a') + ' ' + corrected;
+      hint.style.color = '#22c55e';
+      hint.style.display = 'block';
+      setTimeout(() => { hint.style.display = 'none'; }, 5000);
+    }
+  }
+}
 function normalizeAlias(id){
   const el=document.getElementById(id);
   if(!el||!el.value.trim())return;
