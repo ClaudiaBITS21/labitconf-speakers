@@ -51,7 +51,7 @@
 
 const SHEET_ID        = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
 const PHOTO_FOLDER_ID = '14pa1CpZr2ao5yoqIGPiAfaaUrDR5RcL9';
-const TG_CHAT_ID      = '8118552507';
+const TG_CHAT_ID      = '-5505014894'; // grupo LABITCONF_bot
 
 function notificarTelegram(d, counter, idioma) {
   try {
