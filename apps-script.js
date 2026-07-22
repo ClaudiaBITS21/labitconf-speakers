@@ -339,19 +339,30 @@ function handleFormSubmit(ss, d) {
   })));
   const temasEstado = Array(temasArr.length || 1).fill('disponible').join(',');
 
-  // ── 2. Número correlativo + foto (definir ANTES del row) ──
+  // ── 2. Número correlativo ──
   const counter = parseInt(PropertiesService.getScriptProperties().getProperty('postulacion_counter')||'0') + 1;
   PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(counter));
-
-  const fotoRaw = String(d.foto||'').trim();
-  const confnameForFile = String(d.confname||d.nombre||'speaker').trim();
-  const fotoUrl = fotoRaw.startsWith('data:') ? savePhotoToDrive(fotoRaw, counter, confnameForFile) : fotoRaw;
 
   // ── 3. Días ──
   const diasArr = String(d.dias||'').split(',').map(x=>x.trim());
   const hasDia = key => diasArr.includes(key) ? 'si' : '';
 
-  // ── 4. Row completo ──
+  // ── 4. Flodesk PRIMERO — antes de cualquier operación lenta (foto/Drive) ──
+  if (mail) {
+    const textoDetectar = [
+      String(d.bio || ''),
+      String(d.temas && d.temas[0] ? d.temas[0].abstract || d.temas[0].titulo : '')
+    ].join(' ').trim();
+    const idioma = detectarIdioma(textoDetectar);
+    llamarFlodesk(mail, nombre, String(d.apellido || '').trim(), idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
+  }
+
+  // ── 5. Foto a Drive (puede ser lenta — va después de Flodesk) ──
+  const fotoRaw = String(d.foto||'').trim();
+  const confnameForFile = String(d.confname||d.nombre||'speaker').trim();
+  const fotoUrl = fotoRaw.startsWith('data:') ? savePhotoToDrive(fotoRaw, counter, confnameForFile) : fotoRaw;
+
+  // ── 6. Row completo ──
   const row = [
     counter,                                                                              // [0]  postulacion_num
     nombre,                                                                               // [1]  nombre
@@ -391,16 +402,14 @@ function handleFormSubmit(ss, d) {
     hasDia('nov1'),                                                                       // [35]
   ];
 
-  // ── 5. Anti-duplicado por mail: fusionar si ya existe ──
+  // ── 7. Anti-duplicado por mail: fusionar si ya existe ──
   if (mail) {
     const allData = spSheet.getDataRange().getValues();
     for (let i = 1; i < allData.length; i++) {
       if (String(allData[i][8]||'').trim().toLowerCase() === mail) {
         const existing = allData[i];
-        // Temas existentes
         let existingTemas = [];
         try { existingTemas = JSON.parse(String(existing[29]||'[]')); } catch(e) {}
-        // Agregar solo temas nuevos (por título)
         const existingTitles = existingTemas.map(t => String(t.titulo||'').toLowerCase());
         temasArr.forEach(t => {
           const titulo = String(t.titulo||'').trim();
@@ -408,7 +417,6 @@ function handleFormSubmit(ss, d) {
         });
         let temasEstadoArr = String(existing[30]||'').split(',').map(x=>x.trim()).filter(Boolean);
         while (temasEstadoArr.length < existingTemas.length) temasEstadoArr.push('disponible');
-        // Fusionar campos simples: solo si estaban vacíos
         const merged = [...existing];
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28].forEach(col => {
           if (!String(merged[col]||'').trim() && String(row[col]||'').trim()) merged[col] = row[col];
@@ -417,16 +425,12 @@ function handleFormSubmit(ss, d) {
         merged[30] = temasEstadoArr.join(',');
         spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
         PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
-        // Flodesk: siempre notificar aunque sea duplicado
-        const textoDetectar2 = [String(d.bio||''), String(temasArr[0]?temasArr[0].abstract||temasArr[0].titulo:'')].join(' ').trim();
-        const idioma2 = detectarIdioma(textoDetectar2);
-        llamarFlodesk(mail, nombre, String(d.apellido||'').trim(), idioma2 === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
         return respond({ ok:true, actualizado:true, msg:'Tus datos fueron actualizados. ¡Gracias!' });
       }
     }
   }
 
-  // ── 6. Nuevo speaker ──
+  // ── 8. Nuevo speaker ──
   if (spSheet.getLastRow() === 0) {
     spSheet.appendRow([
       'postulacion_num','nombre','apellido','confname','tipo','cargo','pais','idioma','mail',
@@ -439,17 +443,6 @@ function handleFormSubmit(ss, d) {
   }
   spSheet.appendRow(row);
   PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
-
-  // ── Flodesk: detectar idioma y agregar al segmento de postulados ──
-  if (mail) {
-    const textoDetectar = [
-      String(d.bio || ''),
-      String(d.temas && d.temas[0] ? d.temas[0].abstract || d.temas[0].titulo : '')
-    ].join(' ').trim();
-    const idioma = detectarIdioma(textoDetectar);
-    const segmento = idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES;
-    llamarFlodesk(mail, nombre, String(d.apellido || '').trim(), segmento);
-  }
 
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
 }
