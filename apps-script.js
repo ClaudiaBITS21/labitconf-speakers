@@ -49,8 +49,92 @@
 //   Ideas         — [titulo, prop, detalle, categoria]
 // ═══════════════════════════════════════════════════════════════════
 
-const SHEET_ID   = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
+const SHEET_ID        = '1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY';
 const PHOTO_FOLDER_ID = '14pa1CpZr2ao5yoqIGPiAfaaUrDR5RcL9';
+const TG_CHAT_ID      = '8118552507';
+
+function notificarTelegram(d, counter, idioma) {
+  try {
+    const token = PropertiesService.getScriptProperties().getProperty('telegram_bot_token');
+    if (!token) return;
+
+    const nombre   = [String(d.nombre||''), String(d.apellido||'')].filter(Boolean).join(' ');
+    const confname = String(d.confname||nombre).trim();
+    const pais     = String(d.pais||'').trim();
+    const cargo    = String(d.cargo||'').trim();
+    const empresa  = String(d.empresa||'').trim();
+    const mail     = String(d.mail||'').trim();
+    const bio      = String(d.bio||'').trim();
+    const wa       = String(d.whatsapp||'').trim();
+    const tg       = String(d.telegram||'').trim();
+    const x        = String(d.x||'').trim().replace(/^@/,'');
+    const li       = String(d.linkedin||'').trim();
+    const gh       = String(d.github||'').trim();
+    const web      = String(d.website||'').trim();
+    const ig       = String(d.instagram||'').trim();
+    const primera  = String(d.primera_vez||'').trim();
+    const podcast  = String(d.disponible_podcast||'').trim();
+    const temas    = Array.isArray(d.temas) ? d.temas.filter(t=>(t.titulo||'').trim()) : [];
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit#gid=1070281154';
+    const bandera  = idioma === 'en' ? '🇺🇸' : '🇦🇷';
+
+    let lines = [];
+    lines.push('🎤 <b>Nuevo Speaker #' + String(counter).padStart(3,'0') + '</b> ' + bandera);
+    lines.push('');
+    lines.push('👤 <b>' + nombre + '</b>' + (confname !== nombre ? ' (' + confname + ')' : ''));
+    if (cargo || empresa) lines.push('🏢 ' + [cargo, empresa].filter(Boolean).join(' | '));
+    if (pais) lines.push('🌍 ' + pais);
+    lines.push('');
+    lines.push('📧 <code>' + mail + '</code>');
+    if (wa)  lines.push('📱 WhatsApp: ' + wa);
+    if (tg)  lines.push('💬 Telegram: ' + (tg.startsWith('@') ? tg : '@' + tg));
+    if (primera === 'si') lines.push('⭐ Primera vez en LABITCONF');
+    if (podcast === 'si') lines.push('🎙️ Disponible para podcast');
+    lines.push('');
+
+    if (bio) {
+      lines.push('📝 <b>Bio:</b>');
+      lines.push('<i>' + bio.slice(0,400) + (bio.length > 400 ? '...' : '') + '</i>');
+      lines.push('');
+    }
+
+    if (temas.length > 0) {
+      lines.push('🎯 <b>Tema' + (temas.length > 1 ? 's' : '') + ':</b>');
+      temas.forEach((t, i) => {
+        lines.push((i+1) + '. <b>' + t.titulo + '</b>');
+        if (t.abstract) lines.push('   ' + t.abstract.slice(0,200));
+        const meta = [t.formatos, t.duracion ? t.duracion+'min' : '', t.nivel].filter(Boolean).join(' · ');
+        if (meta) lines.push('   📌 ' + meta);
+      });
+      lines.push('');
+    }
+
+    const redes = [];
+    if (x)   redes.push('𝕏 <a href="https://x.com/' + x + '">@' + x + '</a>');
+    if (li)  redes.push('💼 <a href="' + li + '">LinkedIn</a>');
+    if (ig)  redes.push('📸 <a href="https://instagram.com/' + ig.replace(/^@/,'') + '">Instagram</a>');
+    if (gh)  redes.push('💻 <a href="https://github.com/' + gh.replace(/^@/,'') + '">GitHub</a>');
+    if (web) redes.push('🌐 <a href="' + web + '">Web</a>');
+    if (redes.length > 0) { lines.push('🔗 <b>Redes:</b> ' + redes.join(' · ')); lines.push(''); }
+
+    const nombreEnc = encodeURIComponent(nombre);
+    lines.push('🔍 <b>Buscar:</b>');
+    lines.push('<a href="https://www.google.com/search?q=' + nombreEnc + '+bitcoin">Google</a> · ' +
+               '<a href="https://x.com/search?q=' + nombreEnc + '">𝕏</a> · ' +
+               '<a href="https://www.linkedin.com/search/results/people/?keywords=' + nombreEnc + '">LinkedIn</a>');
+    lines.push('');
+    lines.push('🗂️ <a href="' + sheetUrl + '">Ver en Sheet</a>');
+
+    const text = lines.join('\n');
+    const payload = JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'HTML', disable_web_page_preview: true });
+    UrlFetchApp.fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
+      method: 'POST',
+      contentType: 'application/json',
+      payload: payload,
+      muteHttpExceptions: true
+    });
+  } catch(e) { Logger.log('Telegram error: ' + e.message); }
+}
 
 // Sube una foto (base64 data URL) a Drive via REST API y devuelve URL de miniatura
 function savePhotoToDrive(base64DataUrl, counter, confname) {
@@ -347,7 +431,7 @@ function handleFormSubmit(ss, d) {
   const diasArr = String(d.dias||'').split(',').map(x=>x.trim());
   const hasDia = key => diasArr.includes(key) ? 'si' : '';
 
-  // ── 4. Flodesk PRIMERO — antes de cualquier operación lenta (foto/Drive) ──
+  // ── 4. Flodesk + Telegram PRIMERO — antes de cualquier operación lenta (foto/Drive) ──
   if (mail) {
     const textoDetectar = [
       String(d.bio || ''),
@@ -355,6 +439,7 @@ function handleFormSubmit(ss, d) {
     ].join(' ').trim();
     const idioma = detectarIdioma(textoDetectar);
     llamarFlodesk(mail, nombre, String(d.apellido || '').trim(), idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
+    notificarTelegram(d, counter, idioma);
   }
 
   // ── 5. Foto a Drive (puede ser lenta — va después de Flodesk) ──
