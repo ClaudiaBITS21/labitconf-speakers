@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LABITCONF 2026 — Speakers MKT</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
+
+/* HEADER */
+.header { background: #111; border-bottom: 1px solid #222; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 16px; font-weight: 700; color: #fff; }
+.logo span { color: #f97316; }
+.stats { font-size: 13px; color: #666; }
+.stats b { color: #fff; }
+
+/* FILTROS */
+.filters { padding: 16px 24px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #1a1a1a; }
+.filter-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #333; background: transparent; color: #888; cursor: pointer; font-size: 13px; font-family: inherit; transition: all .15s; }
+.filter-btn.active { background: #f97316; border-color: #f97316; color: #fff; font-weight: 600; }
+.filter-btn:hover:not(.active) { border-color: #555; color: #ccc; }
+.search { margin-left: auto; padding: 6px 14px; border-radius: 20px; border: 1px solid #333; background: #1a1a1a; color: #e0e0e0; font-size: 13px; font-family: inherit; outline: none; width: 220px; }
+.search::placeholder { color: #555; }
+
+/* GRID */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 20px 24px; }
+
+/* CARD */
+.card { background: #111; border: 1px solid #222; border-radius: 12px; overflow: hidden; transition: border-color .15s, transform .15s; position: relative; }
+.card:hover { border-color: #333; transform: translateY(-2px); }
+.card.publicado { border-color: #166534; background: #0a1a0f; }
+.card.publicado .card-overlay { display: flex; }
+
+.card-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,.6); align-items: center; justify-content: center; border-radius: 12px; z-index: 2; }
+.overlay-badge { background: #22c55e; color: #fff; font-weight: 700; font-size: 13px; padding: 6px 16px; border-radius: 20px; display: flex; align-items: center; gap: 6px; }
+
+.card-foto { width: 100%; height: 200px; object-fit: cover; background: #1a1a1a; display: block; }
+.card-foto-placeholder { width: 100%; height: 200px; background: linear-gradient(135deg, #1a1a1a 0%, #222 100%); display: flex; align-items: center; justify-content: center; font-size: 48px; color: #333; }
+
+.card-body { padding: 16px; }
+.card-num { font-size: 11px; color: #555; font-weight: 600; letter-spacing: .5px; margin-bottom: 4px; }
+.card-nombre { font-size: 17px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 2px; }
+.card-cargo { font-size: 12px; color: #f97316; font-weight: 500; margin-bottom: 2px; }
+.card-empresa { font-size: 12px; color: #666; margin-bottom: 8px; }
+.card-pais { font-size: 12px; color: #555; margin-bottom: 10px; }
+.card-bio { font-size: 12px; color: #777; line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.card-redes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.red-link { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; border: 1px solid #2a2a2a; color: #888; text-decoration: none; font-size: 11px; font-weight: 500; transition: all .15s; }
+.red-link:hover { border-color: #444; color: #ccc; }
+.red-link.x     { border-color: #1a1a2a; }
+.red-link.x:hover { border-color: #1d9bf0; color: #1d9bf0; }
+.red-link.li    { border-color: #1a2030; }
+.red-link.li:hover { border-color: #0077b5; color: #0077b5; }
+.red-link.ig    { border-color: #2a1a2a; }
+.red-link.ig:hover { border-color: #e1306c; color: #e1306c; }
+.red-link.web   { border-color: #1e2a1a; }
+.red-link.web:hover { border-color: #22c55e; color: #22c55e; }
+
+.card-manual { display: inline-block; font-size: 10px; background: #1a1a2a; color: #6366f1; padding: 2px 8px; border-radius: 10px; margin-bottom: 10px; font-weight: 600; }
+
+/* PUBLICADO TOGGLE */
+.pub-row { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px solid #1a1a1a; }
+.pub-label { flex: 1; font-size: 12px; color: #555; }
+.toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; inset: 0; background: #222; border-radius: 22px; cursor: pointer; transition: .2s; border: 1px solid #333; }
+.toggle-slider:before { content: ''; position: absolute; width: 16px; height: 16px; left: 2px; top: 2px; background: #555; border-radius: 50%; transition: .2s; }
+.toggle input:checked + .toggle-slider { background: #166534; border-color: #22c55e; }
+.toggle input:checked + .toggle-slider:before { background: #22c55e; transform: translateX(18px); }
+
+/* LOADING / EMPTY */
+.loading { text-align: center; padding: 60px 24px; color: #555; font-size: 14px; }
+.empty { text-align: center; padding: 60px 24px; color: #555; }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">LABITCONF <span>2026</span> — Speakers MKT</div>
+  <div class="stats" id="stats">Cargando...</div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFiltro('todos')">Todos <span id="cnt-todos"></span></button>
+  <button class="filter-btn" onclick="setFiltro('pendientes')">⏳ Pendientes <span id="cnt-pendientes"></span></button>
+  <button class="filter-btn" onclick="setFiltro('publicados')">✅ Publicados <span id="cnt-publicados"></span></button>
+  <input class="search" type="text" placeholder="Buscar speaker..." oninput="buscar(this.value)" id="searchInput">
+</div>
+
+<div id="grid" class="grid">
+  <div class="loading">Cargando speakers...</div>
+</div>
+
+<script>
+const GAS = 'https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSng2rgzbRSroALHOra43wK2QhlJZ_s-1xKHyv9An_g1ZA/exec';
+const KEY = 'BTC/2026';
+
+let speakers = [];
+let mktEstado = {}; // { num: { publicado, rowIndex } }
+let filtro = 'todos';
+let busqueda = '';
+
+async function gasGet(sheet) {
+  const r = await fetch(`${GAS}?action=get_data&sheet=${sheet}&key=${KEY}`);
+  return r.json();
+}
+async function gasPost(data) {
+  await fetch(GAS, { method: 'POST', body: JSON.stringify(data) });
+}
+
+async function init() {
+  const [spRes, mktRes] = await Promise.all([gasGet('Speakers'), gasGet('MKT')]);
+
+  // Speakers (skip header row 0)
+  speakers = (spRes.data || []).slice(1).map(r => ({
+    num:      r[0], nombre: r[1], apellido: r[2], confname: r[3],
+    cargo:    r[5], pais: r[6], idioma: r[7], mail: r[8],
+    web:      r[9], foto: r[10], wa: r[11], tg: r[12],
+    linkedin: r[14], x: r[15], instagram: r[16], github: r[17],
+    empresa:  r[19], notas: r[20], bio: r[21],
+    manual:   (r[20] || '').toLowerCase() === 'manual'
+  })).filter(s => s.nombre);
+
+  // MKT estado
+  const mktRows = (mktRes.data || []).slice(1);
+  mktRows.forEach((r, i) => {
+    mktEstado[r[0]] = { publicado: r[1] === 'si', rowIndex: i + 2 };
+  });
+
+  render();
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  let lista = speakers;
+
+  if (busqueda) {
+    const q = busqueda.toLowerCase();
+    lista = lista.filter(s =>
+      `${s.nombre} ${s.apellido} ${s.empresa} ${s.cargo} ${s.pais}`.toLowerCase().includes(q)
+    );
+  }
+  if (filtro === 'publicados')  lista = lista.filter(s => mktEstado[s.num]?.publicado);
+  if (filtro === 'pendientes')  lista = lista.filter(s => !mktEstado[s.num]?.publicado);
+
+  const total     = speakers.length;
+  const publicados = speakers.filter(s => mktEstado[s.num]?.publicado).length;
+  const pendientes = total - publicados;
+
+  document.getElementById('stats').innerHTML = `<b>${publicados}</b> publicados de <b>${total}</b>`;
+  document.getElementById('cnt-todos').textContent = `(${total})`;
+  document.getElementById('cnt-publicados').textContent = `(${publicados})`;
+  document.getElementById('cnt-pendientes').textContent = `(${pendientes})`;
+
+  if (!lista.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔍</div><div>No hay speakers</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = lista.map(s => cardHTML(s)).join('');
+}
+
+function cardHTML(s) {
+  const pub = mktEstado[s.num]?.publicado || false;
+  const x   = (s.x || '').replace(/^@/, '');
+  const li  = s.linkedin ? (s.linkedin.startsWith('http') ? s.linkedin : 'https://' + s.linkedin) : '';
+  const ig  = (s.instagram || '').replace(/^@/, '');
+  const web = s.web ? (s.web.startsWith('http') ? s.web : 'https://' + s.web) : '';
+  const nombre = s.confname || `${s.nombre} ${s.apellido}`.trim();
+
+  const fotoEl = s.foto
+    ? `<img class="card-foto" src="${s.foto}" alt="${nombre}" onerror="this.parentNode.innerHTML='<div class=\\'card-foto-placeholder\\'>👤</div>'">`
+    : `<div class="card-foto-placeholder">👤</div>`;
+
+  const redes = [
+    x   ? `<a class="red-link x"   href="https://x.com/${x}"       target="_blank">𝕏 @${x}</a>` : '',
+    li  ? `<a class="red-link li"  href="${li}"                     target="_blank">💼 LinkedIn</a>` : '',
+    ig  ? `<a class="red-link ig"  href="https://instagram.com/${ig}" target="_blank">📸 IG</a>` : '',
+    web ? `<a class="red-link web" href="${web}"                    target="_blank">🌐 Web</a>` : '',
+  ].filter(Boolean).join('');
+
+  return `
+<div class="card ${pub ? 'publicado' : ''}" id="card-${s.num}">
+  ${pub ? `<div class="card-overlay"><div class="overlay-badge">✓ Publicado</div></div>` : ''}
+  ${fotoEl}
+  <div class="card-body">
+    <div class="card-num">#${String(s.num).padStart(3,'0')} ${s.idioma === 'en' ? '🇺🇸' : '🇦🇷'}</div>
+    <div class="card-nombre">${nombre}</div>
+    ${s.cargo   ? `<div class="card-cargo">${s.cargo}</div>` : ''}
+    ${s.empresa ? `<div class="card-empresa">${s.empresa}</div>` : ''}
+    ${s.pais    ? `<div class="card-pais">📍 ${s.pais}</div>` : ''}
+    ${s.bio     ? `<div class="card-bio">${s.bio}</div>` : ''}
+    ${s.manual  ? `<span class="card-manual">✦ Manual</span>` : ''}
+    ${redes     ? `<div class="card-redes">${redes}</div>` : ''}
+    <div class="pub-row">
+      <span class="pub-label">${pub ? '✅ Publicado' : '⏳ Pendiente'}</span>
+      <label class="toggle">
+        <input type="checkbox" ${pub ? 'checked' : ''} onchange="togglePublicado('${s.num}', this.checked)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+</div>`;
+}
+
+async function togglePublicado(num, checked) {
+  const estado = mktEstado[num];
+  const fecha = new Date().toISOString().slice(0,10);
+
+  if (estado) {
+    // actualizar fila existente
+    await gasPost({ action:'update', sheet:'MKT', key:KEY, rowIndex: estado.rowIndex, data:[num, checked?'si':'no','','',fecha] });
+    mktEstado[num].publicado = checked;
+  } else {
+    // nueva fila
+    await gasPost({ action:'append', sheet:'MKT', key:KEY, data:[num, checked?'si':'no','','',fecha] });
+    // releer para obtener rowIndex
+    const r = await gasGet('MKT');
+    const rows = (r.data||[]).slice(1);
+    rows.forEach((row,i) => { mktEstado[row[0]] = { publicado: row[1]==='si', rowIndex: i+2 }; });
+  }
+  render();
+}
+
+function setFiltro(f) {
+  filtro = f;
+  document.querySelectorAll('.filter-btn').forEach((b,i) => b.classList.toggle('active', ['todos','pendientes','publicados'][i]===f || (i===0&&f==='todos')));
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const txt = b.textContent.trim().split(' ')[0];
+    b.classList.toggle('active',
+      (f==='todos'&&txt==='Todos') || (f==='pendientes'&&txt==='⏳') || (f==='publicados'&&txt==='✅')
+    );
+  });
+  render();
+}
+
+function buscar(q) { busqueda = q; render(); }
+
+init();
+</script>
+</body>
+</html>
