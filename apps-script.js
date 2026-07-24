@@ -643,7 +643,7 @@ function rellenarFotosDesdePerfil() {
 
     for (const { red, handle } of fuentes) {
       try {
-        const avatarUrl = 'https://unavatar.io/' + red + '/' + encodeURIComponent(handle);
+        const avatarUrl = 'https://unavatar.io/' + red + '/' + encodeURIComponent(handle) + '?fallback=404';
         Logger.log('#' + num + ' ' + nombre + ' — probando ' + red + '/@' + handle + '...');
 
         const imgRes = UrlFetchApp.fetch(avatarUrl, { muteHttpExceptions: true, followRedirects: true });
