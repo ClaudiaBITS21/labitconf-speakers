@@ -624,7 +624,7 @@ function rellenarFotosDesdePerfil() {
     const igRaw = String(row[16] || '').trim();
 
     const xHandle = xRaw.replace(/^@/,'').replace(/^https?:\/\/(x|twitter)\.com\//,'').split(/[/?]/)[0];
-    const liSlug  = liRaw.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//,'').split(/[/?]/)[0];
+    const liSlug  = liRaw.replace(/^https?:\/\/(www\.|[a-z]{2}\.)?linkedin\.com\/in\//,'').split(/[/?]/)[0];
     const igHandle = igRaw.replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//,'').split(/[/?]/)[0];
 
     // Orden de prioridad
