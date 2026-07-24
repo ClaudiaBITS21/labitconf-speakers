@@ -598,6 +598,78 @@ function detectarIdioma(texto) {
   }
 }
 
+// ── FOTOS DESDE X (unavatar.io) ─────────────────────────────────────
+// Ejecutar manualmente desde el editor GAS: Run → rellenarFotosDesdeX
+function rellenarFotosDesdeX() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ws = ss.getSheetByName('Speakers');
+  const data = ws.getDataRange().getValues();
+  const token = ScriptApp.getOAuthToken();
+
+  let actualizados = 0;
+  let saltados = 0;
+
+  for (let i = 1; i < data.length; i++) {
+    const row     = data[i];
+    const num     = row[0];
+    const foto    = String(row[10] || '').trim();
+    const xHandle = String(row[15] || '').trim().replace(/^@/, '').replace(/^https?:\/\/(x|twitter)\.com\//,'').split('/')[0];
+    const nombre  = String(row[3] || row[1] || 'speaker').trim();
+
+    if (foto) { Logger.log('#' + num + ' ' + nombre + ' — ya tiene foto, salteando'); saltados++; continue; }
+    if (!xHandle) { Logger.log('#' + num + ' ' + nombre + ' — sin handle X, salteando'); saltados++; continue; }
+
+    try {
+      const avatarUrl = 'https://unavatar.io/x/' + encodeURIComponent(xHandle);
+      Logger.log('#' + num + ' ' + nombre + ' — descargando foto de @' + xHandle + '...');
+
+      const imgRes = UrlFetchApp.fetch(avatarUrl, { muteHttpExceptions: true, followRedirects: true });
+      if (imgRes.getResponseCode() !== 200) {
+        Logger.log('  Error HTTP ' + imgRes.getResponseCode() + ' para @' + xHandle);
+        continue;
+      }
+
+      const contentType = imgRes.getHeaders()['Content-Type'] || 'image/jpeg';
+      const bytes = imgRes.getContent();
+      const ext   = contentType.includes('png') ? 'png' : 'jpg';
+      const safeName = String(nombre).replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+      const filename = String(num).padStart(4,'0') + '-' + safeName + '.' + ext;
+
+      // Subir a Drive
+      const uploadRes = UrlFetchApp.fetch(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&fields=id',
+        { method:'POST', contentType: contentType, payload: bytes, headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
+      );
+      const uploadJson = JSON.parse(uploadRes.getContentText());
+      if (!uploadJson.id) { Logger.log('  Error upload Drive: ' + uploadRes.getContentText()); continue; }
+      const fileId = uploadJson.id;
+
+      // Renombrar y mover a carpeta
+      UrlFetchApp.fetch(
+        'https://www.googleapis.com/drive/v3/files/' + fileId + '?addParents=' + PHOTO_FOLDER_ID + '&fields=id',
+        { method:'PATCH', contentType:'application/json', payload: JSON.stringify({ name: filename }), headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
+      );
+
+      // Hacer público
+      UrlFetchApp.fetch(
+        'https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions',
+        { method:'POST', contentType:'application/json', payload: JSON.stringify({ role:'reader', type:'anyone' }), headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
+      );
+
+      const fotoUrl = 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
+      ws.getRange(i + 1, 11).setValue(fotoUrl); // columna [10] = columna 11 en Sheets
+      Logger.log('  ✅ Foto guardada: ' + fotoUrl);
+      actualizados++;
+
+      Utilities.sleep(1000); // pausa para no saturar unavatar.io
+    } catch(e) {
+      Logger.log('  Error en #' + num + ': ' + e.message);
+    }
+  }
+
+  Logger.log('─── Resultado: ' + actualizados + ' fotos actualizadas, ' + saltados + ' salteados ───');
+}
+
 // ── HELPER ──────────────────────────────────────────────────────────
 function respond(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
