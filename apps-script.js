@@ -598,76 +598,109 @@ function detectarIdioma(texto) {
   }
 }
 
-// ── FOTOS DESDE X (unavatar.io) ─────────────────────────────────────
-// Ejecutar manualmente desde el editor GAS: Run → rellenarFotosDesdeX
-function rellenarFotosDesdeX() {
+// ── FOTOS DESDE REDES SOCIALES (unavatar.io) ────────────────────────
+// Ejecutar manualmente desde el editor GAS: Run → rellenarFotosDesdePerfil
+// Busca foto en orden: X → LinkedIn → Instagram. Descarga, guarda en Drive, actualiza Sheet.
+function rellenarFotosDesdePerfil() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const ws = ss.getSheetByName('Speakers');
   const data = ws.getDataRange().getValues();
   const token = ScriptApp.getOAuthToken();
 
   let actualizados = 0;
-  let saltados = 0;
+  let sinFuente = 0;
 
   for (let i = 1; i < data.length; i++) {
-    const row     = data[i];
-    const num     = row[0];
-    const foto    = String(row[10] || '').trim();
-    const xHandle = String(row[15] || '').trim().replace(/^@/, '').replace(/^https?:\/\/(x|twitter)\.com\//,'').split('/')[0];
-    const nombre  = String(row[3] || row[1] || 'speaker').trim();
+    const row    = data[i];
+    const num    = row[0];
+    const foto   = String(row[10] || '').trim();
+    const nombre = String(row[3] || row[1] || 'speaker').trim();
 
-    if (foto) { Logger.log('#' + num + ' ' + nombre + ' — ya tiene foto, salteando'); saltados++; continue; }
-    if (!xHandle) { Logger.log('#' + num + ' ' + nombre + ' — sin handle X, salteando'); saltados++; continue; }
+    if (foto) { Logger.log('#' + num + ' ' + nombre + ' — ya tiene foto ✓'); continue; }
 
-    try {
-      const avatarUrl = 'https://unavatar.io/x/' + encodeURIComponent(xHandle);
-      Logger.log('#' + num + ' ' + nombre + ' — descargando foto de @' + xHandle + '...');
+    // Extraer handles/slugs de cada red
+    const xRaw  = String(row[15] || '').trim();
+    const liRaw = String(row[14] || '').trim();
+    const igRaw = String(row[16] || '').trim();
 
-      const imgRes = UrlFetchApp.fetch(avatarUrl, { muteHttpExceptions: true, followRedirects: true });
-      if (imgRes.getResponseCode() !== 200) {
-        Logger.log('  Error HTTP ' + imgRes.getResponseCode() + ' para @' + xHandle);
-        continue;
-      }
+    const xHandle = xRaw.replace(/^@/,'').replace(/^https?:\/\/(x|twitter)\.com\//,'').split(/[/?]/)[0];
+    const liSlug  = liRaw.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//,'').split(/[/?]/)[0];
+    const igHandle = igRaw.replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//,'').split(/[/?]/)[0];
 
-      const contentType = imgRes.getHeaders()['Content-Type'] || 'image/jpeg';
-      const bytes = imgRes.getContent();
-      const ext   = contentType.includes('png') ? 'png' : 'jpg';
-      const safeName = String(nombre).replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
-      const filename = String(num).padStart(4,'0') + '-' + safeName + '.' + ext;
+    // Orden de prioridad
+    const fuentes = [];
+    if (xHandle)  fuentes.push({ red: 'x',        handle: xHandle });
+    if (liSlug)   fuentes.push({ red: 'linkedin',  handle: liSlug });
+    if (igHandle) fuentes.push({ red: 'instagram', handle: igHandle });
 
-      // Subir a Drive
-      const uploadRes = UrlFetchApp.fetch(
-        'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&fields=id',
-        { method:'POST', contentType: contentType, payload: bytes, headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
-      );
-      const uploadJson = JSON.parse(uploadRes.getContentText());
-      if (!uploadJson.id) { Logger.log('  Error upload Drive: ' + uploadRes.getContentText()); continue; }
-      const fileId = uploadJson.id;
-
-      // Renombrar y mover a carpeta
-      UrlFetchApp.fetch(
-        'https://www.googleapis.com/drive/v3/files/' + fileId + '?addParents=' + PHOTO_FOLDER_ID + '&fields=id',
-        { method:'PATCH', contentType:'application/json', payload: JSON.stringify({ name: filename }), headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
-      );
-
-      // Hacer público
-      UrlFetchApp.fetch(
-        'https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions',
-        { method:'POST', contentType:'application/json', payload: JSON.stringify({ role:'reader', type:'anyone' }), headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
-      );
-
-      const fotoUrl = 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
-      ws.getRange(i + 1, 11).setValue(fotoUrl); // columna [10] = columna 11 en Sheets
-      Logger.log('  ✅ Foto guardada: ' + fotoUrl);
-      actualizados++;
-
-      Utilities.sleep(1000); // pausa para no saturar unavatar.io
-    } catch(e) {
-      Logger.log('  Error en #' + num + ': ' + e.message);
+    if (!fuentes.length) {
+      Logger.log('#' + num + ' ' + nombre + ' — sin redes sociales, no se puede obtener foto');
+      sinFuente++;
+      continue;
     }
+
+    let fotoGuardada = '';
+
+    for (const { red, handle } of fuentes) {
+      try {
+        const avatarUrl = 'https://unavatar.io/' + red + '/' + encodeURIComponent(handle);
+        Logger.log('#' + num + ' ' + nombre + ' — probando ' + red + '/@' + handle + '...');
+
+        const imgRes = UrlFetchApp.fetch(avatarUrl, { muteHttpExceptions: true, followRedirects: true });
+        if (imgRes.getResponseCode() !== 200) {
+          Logger.log('  HTTP ' + imgRes.getResponseCode() + ' en ' + red + ', probando siguiente...');
+          continue;
+        }
+
+        const contentType = imgRes.getHeaders()['Content-Type'] || 'image/jpeg';
+        // Descartar si devuelve un placeholder SVG o HTML (no es imagen real)
+        if (contentType.includes('svg') || contentType.includes('html')) {
+          Logger.log('  Respuesta no es imagen (' + contentType + '), probando siguiente...');
+          continue;
+        }
+
+        const bytes    = imgRes.getContent();
+        const ext      = contentType.includes('png') ? 'png' : 'jpg';
+        const safeName = String(nombre).replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+        const filename = String(num).padStart(4,'0') + '-' + safeName + '.' + ext;
+
+        // Subir a Drive
+        const uploadRes = UrlFetchApp.fetch(
+          'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&fields=id',
+          { method:'POST', contentType: contentType, payload: bytes, headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
+        );
+        const uploadJson = JSON.parse(uploadRes.getContentText());
+        if (!uploadJson.id) { Logger.log('  Error subiendo a Drive: ' + uploadRes.getContentText()); continue; }
+        const fileId = uploadJson.id;
+
+        // Mover a carpeta y renombrar
+        UrlFetchApp.fetch(
+          'https://www.googleapis.com/drive/v3/files/' + fileId + '?addParents=' + PHOTO_FOLDER_ID + '&fields=id',
+          { method:'PATCH', contentType:'application/json', payload: JSON.stringify({ name: filename }), headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
+        );
+
+        // Hacer pública
+        UrlFetchApp.fetch(
+          'https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions',
+          { method:'POST', contentType:'application/json', payload: JSON.stringify({ role:'reader', type:'anyone' }), headers:{ Authorization:'Bearer '+token }, muteHttpExceptions:true }
+        );
+
+        fotoGuardada = 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
+        ws.getRange(i + 1, 11).setValue(fotoGuardada);
+        Logger.log('  ✅ Foto guardada desde ' + red + ': ' + fotoGuardada);
+        actualizados++;
+        break; // no seguir buscando en otras redes
+
+      } catch(e) {
+        Logger.log('  Error con ' + red + ': ' + e.message);
+      }
+    }
+
+    if (!fotoGuardada) Logger.log('  ⚠️ No se encontró foto para #' + num + ' ' + nombre);
+    Utilities.sleep(1200); // pausa entre speakers
   }
 
-  Logger.log('─── Resultado: ' + actualizados + ' fotos actualizadas, ' + saltados + ' salteados ───');
+  Logger.log('════ Resultado: ' + actualizados + ' fotos guardadas | ' + sinFuente + ' sin redes sociales ════');
 }
 
 // ── HELPER ──────────────────────────────────────────────────────────
