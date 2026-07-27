@@ -338,6 +338,38 @@ function respondCors(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// ── BOT TELEGRAM POLLING ─────────────────────────────────────────────
+// Ejecutar setupTelegramPolling UNA VEZ para activar el trigger cada minuto
+function setupTelegramPolling() {
+  // Eliminar triggers previos de pollTelegram
+  ScriptApp.getProjectTriggers()
+    .filter(t => t.getHandlerFunction() === 'pollTelegram')
+    .forEach(t => ScriptApp.deleteTrigger(t));
+  // Crear trigger cada minuto
+  ScriptApp.newTrigger('pollTelegram').timeBased().everyMinutes(1).create();
+  Logger.log('✅ Polling activado — el bot responderá comandos cada ~1 minuto');
+}
+
+function pollTelegram() {
+  const token = PropertiesService.getScriptProperties().getProperty('telegram_bot_token');
+  if (!token) return;
+
+  const props  = PropertiesService.getScriptProperties();
+  const offset = Number(props.getProperty('tg_offset') || '0');
+
+  const r = UrlFetchApp.fetch(
+    `https://api.telegram.org/bot${token}/getUpdates?offset=${offset}&timeout=0&limit=20`,
+    { muteHttpExceptions: true }
+  );
+  const data = JSON.parse(r.getContentText());
+  if (!data.ok || !data.result.length) return;
+
+  for (const update of data.result) {
+    handleTelegramCommand(update);
+    props.setProperty('tg_offset', String(update.update_id + 1));
+  }
+}
+
 // ── BOT TELEGRAM COMMANDS ────────────────────────────────────────────
 function handleTelegramCommand(update) {
   const msg   = update.message || update.channel_post;
