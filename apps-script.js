@@ -338,10 +338,82 @@ function respondCors(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// ── BOT TELEGRAM COMMANDS ────────────────────────────────────────────
+function handleTelegramCommand(update) {
+  const msg   = update.message || update.channel_post;
+  if (!msg || !msg.text) return;
+  const chatId = String(msg.chat.id);
+  const text   = msg.text.trim();
+  const token  = PropertiesService.getScriptProperties().getProperty('telegram_bot_token');
+  if (!token) return;
+
+  const ss   = SpreadsheetApp.openById(SHEET_ID);
+  const ws   = ss.getSheetByName('Speakers');
+  const rows = ws.getDataRange().getValues().slice(1).filter(r => r[0]);
+
+  function tgSend(txt) {
+    UrlFetchApp.fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
+      method: 'POST', contentType: 'application/json; charset=utf-8',
+      payload: JSON.stringify({ chat_id: chatId, text: txt, parse_mode: 'HTML' }),
+      muteHttpExceptions: true
+    });
+  }
+
+  if (text.startsWith('/stats')) {
+    const total = rows.length;
+    const confirmados = rows.filter(r => String(r[31]||'').toLowerCase() === 'confirmado').length;
+    const pendientes  = total - confirmados;
+    tgSend(`📊 <b>LABITCONF 2026 — Stats</b>\n\n👥 Total speakers: <b>${total}</b>\n✅ Confirmados: <b>${confirmados}</b>\n⏳ Pendientes: <b>${pendientes}</b>`);
+
+  } else if (text.startsWith('/lista')) {
+    const lines = rows.map(r => `#${String(r[0]).padStart(3,'0')} ${r[3]||r[1]+' '+r[2]} — ${r[19]||'—'}`);
+    const chunks = [];
+    let chunk = '📋 <b>Speakers LABITCONF 2026</b>\n\n';
+    for (const l of lines) {
+      if ((chunk + l + '\n').length > 3800) { chunks.push(chunk); chunk = ''; }
+      chunk += l + '\n';
+    }
+    if (chunk) chunks.push(chunk);
+    chunks.forEach(c => tgSend(c));
+
+  } else if (text.startsWith('/speaker')) {
+    const num = text.split(' ')[1];
+    const row = rows.find(r => String(r[0]) === String(num));
+    if (!row) { tgSend('❌ Speaker #' + num + ' no encontrado'); return; }
+    const nombre = row[3] || row[1] + ' ' + row[2];
+    const x  = row[15] ? `\n𝕏 @${String(row[15]).replace(/^@/,'')}` : '';
+    const li = row[14] ? `\n💼 ${row[14]}` : '';
+    tgSend(`👤 <b>#${String(row[0]).padStart(3,'0')} ${nombre}</b>\n${row[5]||''} @ ${row[19]||''}\n📍 ${row[6]||''}\n📧 ${row[8]||''}${x}${li}\n\n${String(row[21]||'').slice(0,400)}`);
+
+  } else if (text.startsWith('/pendientes')) {
+    const pend = rows.filter(r => String(r[31]||'').toLowerCase() !== 'confirmado');
+    const lines = pend.map(r => `#${String(r[0]).padStart(3,'0')} ${r[3]||r[1]+' '+r[2]}`);
+    tgSend(`⏳ <b>Pendientes (${lines.length})</b>\n\n` + lines.join('\n'));
+
+  } else if (text.startsWith('/buscar')) {
+    const q = text.slice(7).trim().toLowerCase();
+    if (!q) { tgSend('Uso: /buscar nombre'); return; }
+    const found = rows.filter(r => `${r[1]} ${r[2]} ${r[3]} ${r[19]}`.toLowerCase().includes(q));
+    if (!found.length) { tgSend('🔍 No se encontró "' + q + '"'); return; }
+    const lines = found.map(r => `#${String(r[0]).padStart(3,'0')} ${r[3]||r[1]+' '+r[2]} — ${r[19]||'—'}`);
+    tgSend(`🔍 Resultados para "<b>${q}</b>":\n\n` + lines.join('\n'));
+
+  } else if (text.startsWith('/ayuda') || text.startsWith('/start')) {
+    tgSend(`🤖 <b>LABITCONF Bot — Comandos</b>\n\n/stats — Totales y confirmados\n/lista — Todos los speakers\n/speaker 25 — Datos de un speaker\n/pendientes — Sin confirmar\n/buscar Bruno — Buscar por nombre`);
+  }
+}
+
 // ── POST ────────────────────────────────────────────────────────────
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
+
+    // Detectar si es un update de Telegram
+    if (payload.update_id !== undefined) {
+      handleTelegramCommand(payload);
+      return ContentService.createTextOutput('ok');
+    }
+
     const { sheet, action, data, rowIndex, key } = payload;
     const ss = SpreadsheetApp.openById(SHEET_ID);
 
