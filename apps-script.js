@@ -707,6 +707,40 @@ function detectarIdioma(texto) {
   }
 }
 
+// ── NOTIFICACIONES TELEGRAM BULK ────────────────────────────────────
+// Envía notificaciones para todos los speakers desde DESDE_NUM en adelante
+function notificarTelegramBulk() {
+  const DESDE_NUM = 23; // ← cambiar si necesitás otro rango
+
+  const ss   = SpreadsheetApp.openById(SHEET_ID);
+  const ws   = ss.getSheetByName('Speakers');
+  const data = ws.getDataRange().getValues().slice(1).filter(r => r[0]);
+
+  let enviados = 0;
+  for (const row of data) {
+    const num = Number(row[0]);
+    if (num < DESDE_NUM) continue;
+
+    const d = {
+      nombre: row[1], apellido: row[2], confname: row[3],
+      cargo: row[5], pais: row[6], idioma: row[7],
+      mail: row[8], website: row[9],
+      whatsapp: row[11], telegram: row[12],
+      linkedin: row[14], x: row[15], instagram: row[16],
+      empresa: row[19], bio: row[21],
+      temas: (() => { try { return JSON.parse(row[29]||'[]'); } catch(e) { return []; } })()
+    };
+
+    const textoDetectar = [String(d.bio||''), String(d.temas&&d.temas[0] ? d.temas[0].abstract||d.temas[0].titulo : '')].join(' ').trim();
+    const idioma = detectarIdioma(textoDetectar);
+    notificarTelegram(d, num, idioma);
+    Logger.log('✅ Enviado #' + num + ' ' + (d.confname || d.nombre));
+    enviados++;
+    Utilities.sleep(500);
+  }
+  Logger.log('════ ' + enviados + ' notificaciones enviadas ════');
+}
+
 // ── NOTIFICACIÓN TELEGRAM MANUAL ────────────────────────────────────
 // Cambiar NUM por el número del speaker y ejecutar desde el editor GAS
 function notificarTelegramManual() {
