@@ -351,19 +351,24 @@ function setupTelegramPolling() {
 }
 
 function pollTelegram() {
-  const token = PropertiesService.getScriptProperties().getProperty('telegram_bot_token');
-  if (!token) return;
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('telegram_bot_token');
+  if (!token) { Logger.log('❌ telegram_bot_token no encontrado en Script Properties'); return; }
 
-  const props  = PropertiesService.getScriptProperties();
   const offset = Number(props.getProperty('tg_offset') || '0');
+  Logger.log('pollTelegram — token OK, offset=' + offset);
 
   const r = UrlFetchApp.fetch(
-    `https://api.telegram.org/bot${token}/getUpdates?offset=${offset}&timeout=0&limit=20`,
+    'https://api.telegram.org/bot' + token + '/getUpdates?offset=' + offset + '&timeout=0&limit=20',
     { muteHttpExceptions: true }
   );
-  const data = JSON.parse(r.getContentText());
-  if (!data.ok || !data.result.length) return;
+  const raw = r.getContentText();
+  Logger.log('Telegram response: ' + raw.slice(0, 300));
 
+  const data = JSON.parse(raw);
+  if (!data.ok || !data.result.length) { Logger.log('Sin updates nuevos'); return; }
+
+  Logger.log('Updates recibidos: ' + data.result.length);
   for (const update of data.result) {
     handleTelegramCommand(update);
     props.setProperty('tg_offset', String(update.update_id + 1));
