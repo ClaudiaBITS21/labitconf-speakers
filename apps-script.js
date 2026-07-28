@@ -55,7 +55,7 @@ const TG_CHAT_ID      = '-5505014894'; // grupo LABITCONF_bot
 
 function notificarTelegram(d, counter, idioma) {
   try {
-    const token = PropertiesService.getScriptProperties().getProperty('telegram_bot_token');
+    const token = PropertiesService.getScriptProperties().getProperty('LABITCONF_speakers_bot');
     if (!token) return;
 
     const nombre   = [String(d.nombre||''), String(d.apellido||'')].filter(Boolean).join(' ');
@@ -352,8 +352,8 @@ function setupTelegramPolling() {
 
 function pollTelegram() {
   const props = PropertiesService.getScriptProperties();
-  const token = props.getProperty('telegram_bot_token');
-  if (!token) { Logger.log('❌ telegram_bot_token no encontrado en Script Properties'); return; }
+  const token = props.getProperty('LABITCONF_speakers_bot');
+  if (!token) { Logger.log('❌ LABITCONF_speakers_bot no encontrado en Script Properties'); return; }
 
   const offset = Number(props.getProperty('tg_offset') || '0');
   Logger.log('pollTelegram — token OK, offset=' + offset);
@@ -381,7 +381,7 @@ function handleTelegramCommand(update) {
   if (!msg || !msg.text) return;
   const chatId = String(msg.chat.id);
   const text   = msg.text.trim();
-  const token  = PropertiesService.getScriptProperties().getProperty('telegram_bot_token');
+  const token  = PropertiesService.getScriptProperties().getProperty('LABITCONF_speakers_bot');
   if (!token) return;
 
   const ss   = SpreadsheetApp.openById(SHEET_ID);
