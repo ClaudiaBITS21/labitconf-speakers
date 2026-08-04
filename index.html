@@ -2004,7 +2004,7 @@ function renderSpeakers(){
           <span style="font-size:11px;color:#555">Día:</span>${dayChipsHtml}
           ${stageName?`<span style="font-size:11px;color:#f97316;margin-left:4px">Stage: ${stageName}</span>`:''}
         </div>
-        ${tm.abstract?`<div style="font-size:12px;color:#666;margin-bottom:4px">${esc(tm.abstract)}</div>`:''}
+        ${tm.abstract?`<div style="font-size:12px;color:#666;margin-bottom:4px;word-break:break-word;white-space:normal">${esc(tm.abstract)}</div>`:''}
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
           ${tm.nivel?`<span class="sp-tema-tag" style="color:#eab308">${esc(tm.nivel)}</span>`:''}
           ${tm.duracion?`<span class="sp-tema-tag">${esc(tm.duracion)} min</span>`:''}
