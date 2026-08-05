@@ -460,6 +460,13 @@ function doPost(e) {
     const writeKey = props.getProperty('write_key');
     if (writeKey && key !== writeKey) return respond({ error:'Clave incorrecta', code:401 });
 
+    if (action === 'confirmar_speaker') {
+      const { mail, nombre, apellido } = data || {};
+      if (!mail) return respond({ error: 'mail requerido' }, 400);
+      llamarFlodesk(mail, nombre || '', apellido || '', FLODESK_CONFIRMADO_EN);
+      return respond({ ok: true, msg: 'Speaker confirmado en Flodesk' });
+    }
+
     if (action === 'set_config') {
       if (data && Array.isArray(data.stageNames)) props.setProperty('config_stageNames', JSON.stringify(data.stageNames));
       if (data && data.apertura) props.setProperty('config_apertura', data.apertura);
@@ -665,8 +672,9 @@ function installBackupTrigger() {
 }
 
 // ── FLODESK ─────────────────────────────────────────────────────────
-const FLODESK_SEGMENT_ES = '6a46ec15f305fe60db28f7fd';
-const FLODESK_SEGMENT_EN = '6a46ed923ef4b125b4d45e6d';
+const FLODESK_SEGMENT_ES      = '6a46ec15f305fe60db28f7fd';
+const FLODESK_SEGMENT_EN      = '6a46ed923ef4b125b4d45e6d';
+const FLODESK_CONFIRMADO_EN   = '6a7369a6fed38eba22be9aef';
 
 function llamarFlodesk(email, nombre, apellido, segmentoId) {
   try {

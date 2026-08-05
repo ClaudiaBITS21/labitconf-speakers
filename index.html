@@ -2263,11 +2263,24 @@ function previewMail(i, tipo){
   const confirmMsg=`PARA: ${mail||'(sin mail cargado)'}\nASUNTO: ${asunto}\n\n${cuerpo}\n\n${'─'.repeat(40)}\n${ya?'⚠️  Este mail ya fue marcado como enviado. ¿Marcar de nuevo?':'✉️  ¿Marcar este mail como enviado?'}`;
 
   if(confirm(confirmMsg)){
-    if(tipo==='speaker') s.mail_ok='si';
-    else s.landing_ok='si';
+    if(tipo==='speaker'){
+      s.mail_ok='si';
+      // Disparar Flodesk workflow 2026_Speaker_Confirmado_EN
+      if(mail){
+        fetch(GAS_URL,{method:'POST',body:JSON.stringify({
+          action:'confirmar_speaker', key:writeKey,
+          data:{ mail, nombre: s.nombre||'', apellido: s.apellido||'' }
+        })}).catch(()=>{});
+        toast(`✅ Mail de confirmación enviado vía Flodesk a ${nm}`);
+      } else {
+        toast(`⚠️ Sin mail cargado — no se envió a Flodesk`);
+      }
+    } else {
+      s.landing_ok='si';
+      toast(`✅ Mail charla marcado para ${nm}`);
+    }
     markDirty('speakers');
     renderSpeakers();
-    toast(`✅ ${tipo==='speaker'?'Mail speaker':'Mail charla'} marcado para ${nm}`);
   }
 }
 
