@@ -2058,7 +2058,7 @@ function renderSpeakers(){
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
       <td style="font-size:12px">${contactHtml}</td>
-      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.nombre||'').trim();const count=nm?getSpeakerAssignments(nm).length:0;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#333">—</span>`;})()}</td>
+      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.nombre||'').trim();const assigns=nm?getSpeakerAssignments(nm):[];const count=assigns.length;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';const tip=`Buscando: "${nm}"\nEncontrado: ${count} bloque(s)\n${assigns.map(a=>a.sk+' '+a.inicio).join('\n')}`;return count>0?`<span title="${esc(tip)}" style="color:${col}">${count}</span>`:`<span title="${esc(tip)}" style="color:#333">—</span>`;})()}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><span title="${s.landing==='si'?'En landing':'Sin landing'}" style="cursor:pointer;font-size:16px;opacity:${s.landing==='si'?'1':'0.2'}" onclick="toggleLanding(${ri})">${s.landing==='si'?'🌐':'🌐'}</span></td>
       <td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
         <span title="📧 Confirmar como Speaker&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;margin-right:4px;opacity:${s.mail_ok==='si'?'1':'0.25'}" onclick="previewMail(${ri},'speaker')">📧</span>
