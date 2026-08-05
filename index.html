@@ -2039,7 +2039,7 @@ function renderSpeakers(){
       <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.displayName||s.nombre||'').trim();const count=nm?getSpeakerAssignments(nm).length:0;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#333">—</span>`;})()}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><span title="${s.landing==='si'?'En landing':'Sin landing'}" style="cursor:pointer;font-size:16px;opacity:${s.landing==='si'?'1':'0.2'}" onclick="toggleLanding(${ri})">${s.landing==='si'?'🌐':'🌐'}</span></td>
       <td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
-        <span title="📧 Confirmar como Speaker&#10;Envía mail: bienvenida + confirmación de participación&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;opacity:${s.mail_ok==='si'?'1':'0.25'};margin-right:4px" onclick="previewMail(${ri},'speaker')">📧</span>
+        <span title="📧 Confirmar como Speaker&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':s.mail_ok==='error'?'❌ Error — reenviar':s.mail_ok==='enviando'?'⏳ Enviando...':'Pendiente'}" style="cursor:pointer;font-size:15px;margin-right:4px;${s.mail_ok==='error'?'color:#ef4444;opacity:1;':s.mail_ok==='enviando'?'opacity:0.6;animation:pulse 1s infinite;':s.mail_ok==='si'?'opacity:1;':'opacity:0.25;'}" onclick="previewMail(${ri},'speaker')">${s.mail_ok==='error'?'⚠️':s.mail_ok==='enviando'?'⏳':'📧'}</span>
         <span title="🗓️ Confirmar Charla Asignada&#10;Envía mail: tema + stage + horario confirmados&#10;Estado: ${s.landing_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;opacity:${s.landing_ok==='si'?'1':'0.25'}" onclick="previewMail(${ri},'charla')">🗓️</span>
       </td>
       <td style="text-align:center" onclick="event.stopPropagation()"><button class="del-row" onclick="delSpeaker(${ri})">✕</button></td>
@@ -2259,28 +2259,63 @@ function previewMail(i, tipo){
 }Por favor confirmanos tu asistencia respondiendo este mail.\n\n¡Nos vemos en LABITCONF!\n\nEquipo LABITCONF`;
   }
 
+  // Paso 1 — preview del mail
   const ya=tipo==='speaker'?s.mail_ok==='si':s.landing_ok==='si';
-  const confirmMsg=`PARA: ${mail||'(sin mail cargado)'}\nASUNTO: ${asunto}\n\n${cuerpo}\n\n${'─'.repeat(40)}\n${ya?'⚠️  Este mail ya fue marcado como enviado. ¿Marcar de nuevo?':'✉️  ¿Marcar este mail como enviado?'}`;
+  const previewMsg=`PARA: ${mail||'(sin mail cargado)'}\nASUNTO: ${asunto}\n\n${cuerpo}`;
+  if(!confirm(previewMsg)) return;
 
-  if(confirm(confirmMsg)){
-    if(tipo==='speaker'){
-      s.mail_ok='si';
-      // Disparar Flodesk workflow 2026_Speaker_Confirmado_EN
-      if(mail){
-        fetch(GAS_URL,{method:'POST',body:JSON.stringify({
-          action:'confirmar_speaker', key:writeKey,
-          data:{ mail, nombre: s.nombre||'', apellido: s.apellido||'' }
-        })}).catch(()=>{});
-        toast(`✅ Mail de confirmación enviado vía Flodesk a ${nm}`);
-      } else {
-        toast(`⚠️ Sin mail cargado — no se envió a Flodesk`);
-      }
-    } else {
-      s.landing_ok='si';
-      toast(`✅ Mail charla marcado para ${nm}`);
-    }
+  // Paso 2 — reconfirmación explícita
+  const reconfMsg=ya
+    ? `⚠️ Este mail ya fue enviado antes.\n\n¿Querés enviarlo de nuevo a ${mail||'(sin mail)'}?`
+    : `✉️ ¿Confirmás el envío a:\n${mail||'(sin mail cargado)'}?`;
+  if(!confirm(reconfMsg)) return;
+
+  if(!mail){
+    toast('⚠️ Sin mail cargado — no se puede enviar',true);
+    return;
+  }
+
+  if(tipo==='speaker'){
+    _enviarConfirmacionFlodesk(i, nm, mail, s.nombre||'', s.apellido||'');
+  } else {
+    s.landing_ok='si';
     markDirty('speakers');
     renderSpeakers();
+    toast(`✅ Mail charla marcado para ${nm}`);
+  }
+}
+
+async function _enviarConfirmacionFlodesk(i, nm, mail, nombre, apellido){
+  const s=state.speakers[i];
+  // Marcar como "enviando" visualmente
+  s.mail_ok='enviando';
+  renderSpeakers();
+  toast(`⏳ Enviando confirmación a ${nm}...`);
+
+  try {
+    // Timeout largo: 45 segundos
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),45000);
+    const r=await fetch(GAS_URL,{
+      method:'POST',
+      signal:ctrl.signal,
+      body:JSON.stringify({action:'confirmar_speaker',key:writeKey,data:{mail,nombre,apellido}})
+    });
+    clearTimeout(tid);
+    const j=await r.json();
+    if(j.ok){
+      s.mail_ok='si';
+      markDirty('speakers');
+      renderSpeakers();
+      toast(`✅ Confirmación enviada a ${nm} (${mail})`);
+    } else {
+      throw new Error(j.error||'Error GAS');
+    }
+  } catch(err){
+    s.mail_ok='error';
+    markDirty('speakers');
+    renderSpeakers();
+    toast(`❌ No se pudo enviar a ${nm} — ${err.name==='AbortError'?'timeout':'error de red'}. Quedó marcado con alerta.`,true);
   }
 }
 
