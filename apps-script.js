@@ -191,6 +191,13 @@ function savePhotoToDrive(base64DataUrl, counter, confname) {
 // ── GET ─────────────────────────────────────────────────────────────
 function doGet(e) {
   try {
+    // Sin parámetros → servir el panel HTML
+    if (!e.parameter.sheet && !e.parameter.action) {
+      return HtmlService.createHtmlOutputFromFile('index')
+        .setTitle('LABITCONF Speakers 2026')
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    }
+
     const sheet = (e.parameter.sheet || 'Principal').trim();
 
     // ── LANDING API (público, sin clave) ──────────────────────────

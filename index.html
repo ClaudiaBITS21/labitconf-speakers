@@ -954,6 +954,7 @@ function makeAgendaRow(row,realIdx,sk){
   const hasData=!!(row.speaker||row.tema||row.descripcion||row.moderador);
   if(isPending) tr.style.background='rgba(234,179,8,0.07)';
   else if(hasData) tr.style.background='rgba(255,255,255,0.04)';
+  else tr.style.background='rgba(255,255,255,0.015)';
 
   // Actions
   const tdAct=document.createElement('td');
@@ -1119,8 +1120,8 @@ function renderSpCell(idx,sk,selected){
     const apodo=sp?.apodo?` (${sp.apodo})`:'';
     const tooltipSp=[sp?.nombre,sp?.apellido,sp?.confname].filter(Boolean).join(' | ');
     const isAssigned=count>0;
-    return `<div title="${esc(tooltipSp||name)}" style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
-      <span style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
+    return `<div style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
+      <span title="${esc(tooltipSp||name)}" style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'};cursor:help">${esc(name)}${esc(apodo)}</span>
       ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
       <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
     </div>`;
@@ -2064,7 +2065,7 @@ function renderSpeakers(){
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
       <td style="font-size:12px">${contactHtml}</td>
-      <td style="text-align:center;font-weight:700;font-size:13px;cursor:pointer" onclick="event.stopPropagation();(()=>{const nm='${esc(s.nombre||'')}';const assigns=getSpeakerAssignments(nm);alert('Nombre buscado: '+nm+'\\nBloques encontrados: '+assigns.length+'\\n'+assigns.map(a=>a.sk+' '+a.inicio).join('\\n'));})()">${(()=>{const nm=(s.nombre||'').trim();const assigns=nm?getSpeakerAssignments(nm):[];const count=assigns.length;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#555">—</span>`;})()}</td>
+      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.nombre||'').trim();const assigns=nm?getSpeakerAssignments(nm):[];const count=assigns.length;const col=count===0?'#555':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#555" title="Buscando: ${esc(nm)}">—</span>`;})()}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><span title="${s.landing==='si'?'En landing':'Sin landing'}" style="cursor:pointer;font-size:16px;opacity:${s.landing==='si'?'1':'0.2'}" onclick="toggleLanding(${ri})">${s.landing==='si'?'🌐':'🌐'}</span></td>
       <td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
         <span title="📧 Confirmar como Speaker&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;margin-right:4px;opacity:${s.mail_ok==='si'?'1':'0.25'}" onclick="previewMail(${ri},'speaker')">📧</span>
