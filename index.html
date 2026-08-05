@@ -2259,15 +2259,13 @@ function previewMail(i, tipo){
 }Por favor confirmanos tu asistencia respondiendo este mail.\n\n¡Nos vemos en LABITCONF!\n\nEquipo LABITCONF`;
   }
 
-  // Paso 1 — preview del mail
+  // Paso 1 — confirmar destinatario
   const ya=tipo==='speaker'?s.mail_ok==='si':s.landing_ok==='si';
-  const previewMsg=`PARA: ${mail||'(sin mail cargado)'}\nASUNTO: ${asunto}\n\n${cuerpo}`;
-  if(!confirm(previewMsg)) return;
+  const paso1=`📧 Enviar mail de confirmación de Speaker\n\nDestinatario: ${nm}\nMail: ${mail||'(sin mail cargado)'}\n\n${ya?'⚠️ Ya fue enviado antes.':''}\n¿Continuar?`;
+  if(!confirm(paso1)) return;
 
   // Paso 2 — reconfirmación explícita
-  const reconfMsg=ya
-    ? `⚠️ Este mail ya fue enviado antes.\n\n¿Querés enviarlo de nuevo a ${mail||'(sin mail)'}?`
-    : `✉️ ¿Confirmás el envío a:\n${mail||'(sin mail cargado)'}?`;
+  const reconfMsg=`¿Confirmás el envío a ${mail||'(sin mail)'}?\n\nFlodesk enviará el mail automáticamente.`;
   if(!confirm(reconfMsg)) return;
 
   if(!mail){
