@@ -889,3 +889,24 @@ function rellenarFotosDesdePerfil() {
 function respond(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
+
+// Ejecutar desde el editor GAS para limpiar mail_ok de un speaker por email
+function limpiarMailOk() {
+  const MAIL_BUSCAR = 'mathey.matias@gmail.com'; // cambiá si necesitás otro
+  const COL_MAIL    = 8;   // columna H (0-indexed → col 9 en sheets)
+  const COL_MAIL_OK = 37;  // columna AL (0-indexed → col 38 en sheets)
+
+  const ss   = SpreadsheetApp.getActiveSpreadsheet();
+  const hoja = ss.getSheetByName('Speakers');
+  if (!hoja) { Logger.log('Hoja Speakers no encontrada'); return; }
+
+  const data = hoja.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][COL_MAIL]).trim().toLowerCase() === MAIL_BUSCAR.toLowerCase()) {
+      hoja.getRange(i + 1, COL_MAIL_OK + 1).setValue('');
+      Logger.log('mail_ok limpiado en fila ' + (i + 1) + ' — ' + data[i][0]);
+      return;
+    }
+  }
+  Logger.log('Speaker no encontrado con mail: ' + MAIL_BUSCAR);
+}
