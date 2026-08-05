@@ -469,6 +469,19 @@ function doPost(e) {
       const apellido= String((data||{}).apellido|| '').trim();
       if (!mail) return ContentService.createTextOutput(JSON.stringify({ error:'mail requerido' })).setMimeType(ContentService.MimeType.JSON);
       llamarFlodesk(mail, nombre, apellido, FLODESK_CONFIRMADO_EN);
+      // Guardar mail_ok='si' directo en el sheet (no depende del botón Guardar del panel)
+      try {
+        const wsSp = ss.getSheetByName('Speakers');
+        if (wsSp) {
+          const vals = wsSp.getDataRange().getValues();
+          for (let i = 1; i < vals.length; i++) {
+            if (String(vals[i][8]||'').trim().toLowerCase() === mail.toLowerCase()) {
+              wsSp.getRange(i + 1, 38).setValue('si'); // col AL = mail_ok
+              break;
+            }
+          }
+        }
+      } catch(e) { Logger.log('mail_ok write error: ' + e); }
       return ContentService.createTextOutput(JSON.stringify({ ok:true })).setMimeType(ContentService.MimeType.JSON);
     }
 

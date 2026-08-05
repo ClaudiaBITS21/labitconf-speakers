@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LABITCONF 2026 — Speakers</title>
+<title>LABITCONF 2026 — Speakers v82</title>
 <style>
 :root {
   --bg:#000000; --bg2:#0f0f0f; --bg3:#1a1a1a; --border:#2d2d2d;
@@ -392,11 +392,9 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <div class="toolbar-sep"></div>
     <button class="btn" onclick="importarDelForm()">📥 Importar Form</button>
     <button class="btn" onclick="exportCSV()">📥 CSV</button>
+    <a href="https://app-labitconf.github.io/LABITCONF-speakers/form/" target="_blank" class="btn" style="display:inline-flex;align-items:center;gap:6px;color:var(--red);border-color:var(--red)">+ Inscripción ↗</a>
   </div>
   <div style="padding:18px">
-    <div style="padding:8px 0 4px">
-      <a href="https://app-labitconf.github.io/LABITCONF-speakers/form/" target="_blank" class="btn" style="display:inline-flex;align-items:center;gap:6px;color:var(--red);border-color:var(--red)">+ Inscripción de Speaker ↗</a>
-    </div>
     <!-- QUICK ADD -->
     <div style="display:flex;align-items:center;gap:6px;padding:10px 0 6px;flex-wrap:wrap">
       <input type="text" id="qaName" placeholder="Nombre del speaker…" onkeydown="if(event.key==='Enter')quickAddSpeaker()"
@@ -952,9 +950,10 @@ function makeAgendaRow(row,realIdx,sk){
   const isFirst=posInDay===0, isLast=posInDay===allRows.length-1;
   const isPending=(row.notas||'').startsWith('[pendiente]');
   const hasData=!!(row.speaker||row.tema||row.descripcion||row.moderador);
-  if(isPending) tr.style.background='rgba(234,179,8,0.07)';
-  else if(hasData) tr.style.background='rgba(255,255,255,0.04)';
-  else tr.style.background='rgba(255,255,255,0.015)';
+  const hasTime=!!(row.inicio&&row.inicio.trim());
+  if(hasData&&!hasTime) tr.style.background='rgba(56,189,248,0.09)';
+  else if(hasData) tr.style.background='rgba(255,255,255,0.05)';
+  else tr.style.background='rgba(255,255,255,0.055)';
 
   // Actions
   const tdAct=document.createElement('td');
@@ -1109,19 +1108,22 @@ function getConflictClass(realIdx,sk){
 }
 
 function renderSpCell(idx,sk,selected){
-  const names=selected?selected.split('|').map(n=>n.trim()).filter(Boolean):[];
+  const rawTokens=selected?selected.split('|').map(n=>n.trim()).filter(Boolean):[];
+  const names=rawTokens.map(t=>parseSpToken(t).name).filter(Boolean);
   const canAdd=names.length<5;
   const chipsHtml=names.map(name=>{
     const assigns=getSpeakerAssignments(name).filter(a=>!(a.rowIdx===idx&&a.sk===sk));
     const count=assigns.length;
     const countColor=count===0?'#fff':count===1?'#22c55e':count===2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';
-    const _nl=name.toLowerCase();
-    const sp=state.speakers.find(s=>s.nombre===name)||state.speakers.find(s=>(s.nombre||'').toLowerCase()===_nl)||state.speakers.find(s=>(s.confname||'').toLowerCase()===_nl)||state.speakers.find(s=>(s.apellido||'').toLowerCase()===_nl);
+    const _nl=normStr(name);
+    const sp=state.speakers.find(s=>normStr(s.nombre)===_nl)||state.speakers.find(s=>normStr(s.confname)===_nl)||state.speakers.find(s=>normStr(s.apellido)===_nl)||state.speakers.find(s=>normStr(s.apodo)===_nl);
     const apodo=sp?.apodo?` (${sp.apodo})`:'';
-    const tooltipSp=[sp?.nombre,sp?.apellido,sp?.confname].filter(Boolean).join(' | ');
+    const fullName=[sp?.nombre,sp?.apellido].filter(Boolean).join(' ');
+    const alias=sp?.confname||sp?.apodo||'';
+    const tooltipSp=fullName?(alias?`${fullName} (${alias})`:fullName):'';
     const isAssigned=count>0;
     return `<div style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
-      <span title="${esc(tooltipSp||name)}" style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'};cursor:help">${esc(name)}${esc(apodo)}</span>
+      <span title="${esc(tooltipSp||name)}" style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
       ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
       <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
     </div>`;
@@ -1147,50 +1149,58 @@ function removeSpeakerFromCell(realIdx,sk,name,e){
   const row=state.agenda[sk]?.[realIdx];
   if(!row||row.tipo==='DIA')return;
   pushHistory();
-  const names=getSpeakerNames(row).filter(n=>n!==name);
-  row.speaker=names.join('|');
+  const tokens=getSpeakerRawTokens(row).filter(t=>parseSpToken(t).name!==name);
+  row.speaker=tokens.join('|');
   if(!names.length){
     row.tema=''; row.tags=''; row.descripcion=''; row.empresa=''; row.nivel='';
   }
   markDirty('principal',sk); renderAgenda();
 }
 
-function getSpeakerNames(row){ return (row.speaker||'').split('|').map(n=>n.trim()).filter(Boolean); }
+function parseSpToken(token){const m=(token||'').match(/^\[(\d+)\](.+)$/);return m?{id:m[1],name:m[2].trim()}:{id:null,name:(token||'').trim()};}
+function getSpeakerRawTokens(row){return(row.speaker||'').split('|').map(t=>t.trim()).filter(Boolean);}
+function getSpeakerNames(row){return getSpeakerRawTokens(row).map(t=>parseSpToken(t).name).filter(Boolean);}
+
+function normStr(s){ return (s||'').toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,''); }
 
 function getSpeakerAssignments(name){
   const res=[];
-  const nm=name.trim().toLowerCase();
+  const nm=normStr(name);
   if(!nm) return res;
-  // Encontrar el speaker por nombre, confname o apellido (cascada)
-  const sp=state.speakers.find(s=>(s.nombre||'').toLowerCase()===nm)
-          ||state.speakers.find(s=>(s.confname||'').toLowerCase()===nm)
-          ||state.speakers.find(s=>(s.apellido||'').toLowerCase()===nm);
-  // Armar set de variantes sin duplicados
+  // Encontrar el speaker por nombre, confname o apellido (cascada, con normalización de acentos)
+  const sp=state.speakers.find(s=>normStr(s.nombre)===nm)
+          ||state.speakers.find(s=>normStr(s.confname)===nm)
+          ||state.speakers.find(s=>normStr(s.apellido)===nm);
+  // Armar set de variantes normalizadas sin duplicados
   const variants=new Set();
-  const addVar=v=>{if(!v)return;const vl=v.toLowerCase().trim();if(vl)variants.add(vl);};
+  const addVar=v=>{const vl=normStr(v);if(vl)variants.add(vl);};
   addVar(nm);
   if(sp){
     addVar(sp.nombre);
     addVar(sp.apellido);
     addVar(sp.confname);
+    addVar(sp.apodo);
     // palabras largas de cada campo
     [sp.nombre,sp.confname].forEach(f=>(f||'').split(/\s+/).forEach(w=>{if(w.length>3)addVar(w);}));
   }
-  // Para cada bloque de agenda, verificar si algún nombre del bloque matchea alguna variante
+  const spId=sp?.postulacion_num?String(sp.postulacion_num):null;
+  // Para cada bloque de agenda, verificar si algún token matchea por ID o por nombre
   STAGE_KEYS.forEach(sk=>{
+    let dayCtx='';
     (state.agenda[sk]||[]).forEach((row,realIdx)=>{
-      if(row.tipo==='DIA') return;
-      const matched=getSpeakerNames(row).some(n=>{
-        const nl=n.toLowerCase().trim();
-        // 1. match exacto
+      if(row.tipo==='DIA'){dayCtx=row.speaker||'';return;}
+      const matched=getSpeakerRawTokens(row).some(token=>{
+        const parsed=parseSpToken(token);
+        // 1. match por ID (infalible)
+        if(spId && parsed.id && parsed.id===spId) return true;
+        // 2. match por nombre normalizado
+        const nl=normStr(parsed.name);
         if(variants.has(nl)) return true;
-        // 2. el bloque contiene alguna variante (nombre parcial)
         for(const v of variants){ if(v.length>3 && nl.includes(v)) return true; }
-        // 3. alguna variante contiene el nombre del bloque
         for(const v of variants){ if(nl.length>3 && v.includes(nl)) return true; }
         return false;
       });
-      if(matched) res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||''});
+      if(matched) res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||'',day:dayCtx});
     });
   });
   return res;
@@ -1423,10 +1433,12 @@ function selectSpeakerWithTema(name,tema){
     return;
   }
   // Multi-speaker: append if not already present
-  const currentNames=getSpeakerNames(state.agenda[sk]?.[idx]||{});
-  if(name&&!currentNames.includes(name)&&currentNames.length<5){
-    const newNames=[...currentNames,name];
-    updateStageField(idx,sk,'speaker',newNames.join('|'));
+  const currentTokens=getSpeakerRawTokens(state.agenda[sk]?.[idx]||{});
+  const currentNames=currentTokens.map(t=>parseSpToken(t).name);
+  if(name&&!currentNames.includes(name)&&currentTokens.length<5){
+    const sp2=state.speakers.find(s=>s.nombre===name)||state.speakersManual?.find(s=>s.nombre===name);
+    const newToken=sp2?.postulacion_num?`[${sp2.postulacion_num}]${name}`:name;
+    updateStageField(idx,sk,'speaker',[...currentTokens,newToken].join('|'));
   } else if(!name){
     updateStageField(idx,sk,'speaker','');
   }
@@ -2011,7 +2023,7 @@ function renderSpeakers(){
       const tm=s._temas[ti]||{};
       const est=estArr[ti]||'disponible';
       const col=ESTADO_COLOR[est]||'#888';
-      const tags=(tm.tags||'').split(',').filter(Boolean).map(tg=>`<span class="sp-tema-tag">#${esc(tg.trim())}</span>`).join('');
+      const tags=(tm.tags||'').split(',').filter(Boolean).map(tg=>`<span class="sp-tema-tag">#${esc(tg.trim())}</span>`).join('<span style="color:#444;margin:0 2px">/</span>');
       // Stage y día del tema (del _temas[ti])
       const tmStage=tm.stage||'';
       const tmDay=tm.day||'';
@@ -2052,14 +2064,32 @@ function renderSpeakers(){
         <div style="display:flex;align-items:center;gap:7px">
           ${s.foto?`<img src="${esc(s.foto)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid #333" onerror="this.style.display='none'">`:`<div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;border:1px solid #333;flex-shrink:0"></div>`}
           <div>
-            <div title="${esc([s.nombre,s.apellido,s.confname].filter(Boolean).join(' / '))}" style="color:${(()=>{const e=s.estado||'disponible';return e==='confirmado'?'#22c55e':e==='rechazado'?'#ef4444':e==='revision'||e==='revisar'?'#eab308':e==='respaldo'?'#f97316':'var(--red)'})()};font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
+            <div title="${esc([[s.nombre,s.apellido].filter(Boolean).join(' '),s.confname||s.apodo].filter(Boolean).join(' | '))}" style="color:${(()=>{const e=s.estado||'disponible';return e==='confirmado'?'#22c55e':e==='rechazado'?'#ef4444':e==='revision'||e==='revisar'?'#eab308':e==='respaldo'?'#f97316':'var(--red)'})()};font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
             ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
           </div>
         </div>
       </td>
       <td onclick="event.stopPropagation()">${estadoSelectHtml(ri,s.estado||'disponible')}</td>
       <td style="min-width:140px">${temasResumen}</td>
-      <td style="font-size:12px;white-space:nowrap">${(()=>{const stages=[...new Set((s._temas||[]).map(t=>t.stage).filter(Boolean))];return stages.length?stages.map(sk=>`<span style="color:var(--red);font-weight:700">${esc(stageNames[STAGE_KEYS.indexOf(sk)]||sk)}</span>`).join(' '):`<span style="color:#333">—</span>`;})()}</td>
+      <td style="font-size:12px;white-space:nowrap">${(()=>{
+        if(!tArr.length)return'<span style="color:#333">—</span>';
+        const DAY_COLOR={'D2':'#0ea5e9','D3':'#22c55e'};
+        const DAY_LABEL={'D2':'Oct 30','D3':'Oct 31'};
+        return tArr.map((t,ti)=>{
+          const asgn=assigns.find(a=>normStr(a.tema)===normStr(t));
+          const sk=asgn?.sk||'';
+          const day=asgn?.day||'';
+          const si=STAGE_KEYS.indexOf(sk);
+          const col=sk?(STAGE_COLORS[si]||'#888'):'';
+          const sname=sk?(stageNames[si]||sk):'';
+          const dayCol=DAY_COLOR[day]||'';
+          const dayLbl=DAY_LABEL[day]||'';
+          return`<div style="display:flex;align-items:center;gap:4px;line-height:1.7">`
+            +(sk?`<span style="color:${col};font-weight:700;font-size:11px">${esc(sname)}</span>`:'<span style="color:#333;font-size:11px">—</span>')
+            +(dayLbl?`<span style="font-size:10px;color:${dayCol};font-weight:600">${dayLbl}</span>`:'')
+            +`</div>`;
+        }).join('');
+      })()}</td>
       <td style="white-space:nowrap">${getDispBadges(s)}</td>
       <td style="font-size:13px;text-align:center"><span title="${esc(s.pais||'')}">${paisInfo[0]} <span style="color:#555;font-size:11px">${paisInfo[1]}</span></span></td>
       <td style="text-align:center">${idiomaHtml}</td>
@@ -2075,6 +2105,7 @@ function renderSpeakers(){
     </tr>
     <tr class="sp-detail-row" id="sp-detail-${ri}">
       <td colspan="15" style="background:#080808;border:1px solid #222;padding:16px">
+        ${s.bio?`<div style="margin-bottom:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border-left:3px solid #333;border-radius:4px"><span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px">Bio</span><div style="font-size:13px;color:#aaa;margin-top:4px;white-space:pre-wrap;line-height:1.6">${esc(s.bio)}</div></div>`:''}
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
           <div>
             <div class="sp-detail-sec-title">Datos</div>
@@ -2336,6 +2367,7 @@ async function _enviarConfirmacionFlodesk(i, nm, mail, nombre, apellido){
       s.mail_ok='si';
       markDirty('speakers');
       renderSpeakers();
+      saveSpeakers();
       toast(`✅ Confirmación enviada a ${nm} (${mail})`);
     } else {
       throw new Error(j.error||'Error GAS');
