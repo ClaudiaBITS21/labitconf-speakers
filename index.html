@@ -1157,10 +1157,28 @@ function getSpeakerNames(row){ return (row.speaker||'').split('|').map(n=>n.trim
 function getSpeakerAssignments(name){
   const res=[];
   const nm=name.trim().toLowerCase();
+  // Build flexible variants: confname, nombre, apellido, each word >3 chars
+  const sp=state.speakers.find(s=>(s.nombre||'').toLowerCase()===nm);
+  const variants=new Set([nm]);
+  if(sp){
+    const confname=(sp.confname||'').toLowerCase().trim();
+    const apellido=(sp.apellido||'').toLowerCase().trim();
+    if(confname){ variants.add(confname); confname.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);}); }
+    if(apellido) variants.add(apellido);
+    nm.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);});
+  }
   STAGE_KEYS.forEach(sk=>{
     (state.agenda[sk]||[]).forEach((row,realIdx)=>{
       if(row.tipo==='DIA')return;
-      if(getSpeakerNames(row).some(n=>n.toLowerCase()===nm))
+      if(getSpeakerNames(row).some(n=>{
+        const nl=n.toLowerCase().trim();
+        for(const v of variants){
+          if(v===nl) return true;
+          if(v.length>3 && nl.includes(v)) return true;
+          if(nl.length>3 && v.includes(nl)) return true;
+        }
+        return false;
+      }))
         res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||''});
     });
   });
@@ -2284,6 +2302,8 @@ function previewMail(i, tipo){
 }
 
 async function _enviarConfirmacionFlodesk(i, nm, mail, nombre, apellido){
+  if(!writeKey) await pedirClave();
+  if(!writeKey) return; // usuario canceló
   const s=state.speakers[i];
   // Marcar como "enviando" visualmente
   s.mail_ok='enviando';

@@ -456,16 +456,18 @@ function doPost(e) {
 
     if (action === 'speaker_form_submit') return handleFormSubmit(ss, payload.data || {});
 
+    if (action === 'confirmar_speaker') {
+      const mail    = String((data||{}).mail    || '').trim();
+      const nombre  = String((data||{}).nombre  || '').trim();
+      const apellido= String((data||{}).apellido|| '').trim();
+      if (!mail) return ContentService.createTextOutput(JSON.stringify({ error:'mail requerido' })).setMimeType(ContentService.MimeType.JSON);
+      llamarFlodesk(mail, nombre, apellido, FLODESK_CONFIRMADO_EN);
+      return ContentService.createTextOutput(JSON.stringify({ ok:true })).setMimeType(ContentService.MimeType.JSON);
+    }
+
     const props = PropertiesService.getScriptProperties();
     const writeKey = props.getProperty('write_key');
     if (writeKey && key !== writeKey) return respond({ error:'Clave incorrecta', code:401 });
-
-    if (action === 'confirmar_speaker') {
-      const { mail, nombre, apellido } = data || {};
-      if (!mail) return respond({ error: 'mail requerido' }, 400);
-      llamarFlodesk(mail, nombre || '', apellido || '', FLODESK_CONFIRMADO_EN);
-      return respond({ ok: true, msg: 'Speaker confirmado en Flodesk' });
-    }
 
     if (action === 'set_config') {
       if (data && Array.isArray(data.stageNames)) props.setProperty('config_stageNames', JSON.stringify(data.stageNames));
