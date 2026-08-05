@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1114,9 +1114,10 @@ function renderSpCell(idx,sk,selected){
     const assigns=getSpeakerAssignments(name).filter(a=>!(a.rowIdx===idx&&a.sk===sk));
     const count=assigns.length;
     const countColor=count===0?'#fff':count===1?'#22c55e':count===2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';
-    const sp=state.speakers.find(s=>s.nombre===name);
+    const _nl=name.toLowerCase();
+    const sp=state.speakers.find(s=>s.nombre===name)||state.speakers.find(s=>(s.nombre||'').toLowerCase()===_nl)||state.speakers.find(s=>(s.confname||'').toLowerCase()===_nl)||state.speakers.find(s=>(s.apellido||'').toLowerCase()===_nl);
     const apodo=sp?.apodo?` (${sp.apodo})`:'';
-    const tooltipSp=[sp?.nombre,sp?.apellido,sp?.confname].filter(Boolean).join(' / ');
+    const tooltipSp=[sp?.nombre,sp?.apellido,sp?.confname].filter(Boolean).join(' | ');
     const isAssigned=count>0;
     return `<div title="${esc(tooltipSp||name)}" style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
       <span style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
@@ -1158,32 +1159,37 @@ function getSpeakerNames(row){ return (row.speaker||'').split('|').map(n=>n.trim
 function getSpeakerAssignments(name){
   const res=[];
   const nm=name.trim().toLowerCase();
-  // buscar por nombre o confname (doble control)
+  if(!nm) return res;
+  // Encontrar el speaker por nombre, confname o apellido (cascada)
   const sp=state.speakers.find(s=>(s.nombre||'').toLowerCase()===nm)
-          ||state.speakers.find(s=>(s.confname||'').toLowerCase()===nm);
-  const variants=new Set([nm]);
+          ||state.speakers.find(s=>(s.confname||'').toLowerCase()===nm)
+          ||state.speakers.find(s=>(s.apellido||'').toLowerCase()===nm);
+  // Armar set de variantes sin duplicados
+  const variants=new Set();
+  const addVar=v=>{if(!v)return;const vl=v.toLowerCase().trim();if(vl)variants.add(vl);};
+  addVar(nm);
   if(sp){
-    const nombre2=(sp.nombre||'').toLowerCase().trim();
-    const confname=(sp.confname||'').toLowerCase().trim();
-    const apellido=(sp.apellido||'').toLowerCase().trim();
-    if(nombre2){ variants.add(nombre2); nombre2.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);}); }
-    if(confname){ variants.add(confname); confname.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);}); }
-    if(apellido) variants.add(apellido);
-    nm.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);});
+    addVar(sp.nombre);
+    addVar(sp.apellido);
+    addVar(sp.confname);
+    // palabras largas de cada campo
+    [sp.nombre,sp.confname].forEach(f=>(f||'').split(/\s+/).forEach(w=>{if(w.length>3)addVar(w);}));
   }
+  // Para cada bloque de agenda, verificar si algún nombre del bloque matchea alguna variante
   STAGE_KEYS.forEach(sk=>{
     (state.agenda[sk]||[]).forEach((row,realIdx)=>{
-      if(row.tipo==='DIA')return;
-      if(getSpeakerNames(row).some(n=>{
+      if(row.tipo==='DIA') return;
+      const matched=getSpeakerNames(row).some(n=>{
         const nl=n.toLowerCase().trim();
-        for(const v of variants){
-          if(v===nl) return true;
-          if(v.length>3 && nl.includes(v)) return true;
-          if(nl.length>3 && v.includes(nl)) return true;
-        }
+        // 1. match exacto
+        if(variants.has(nl)) return true;
+        // 2. el bloque contiene alguna variante (nombre parcial)
+        for(const v of variants){ if(v.length>3 && nl.includes(v)) return true; }
+        // 3. alguna variante contiene el nombre del bloque
+        for(const v of variants){ if(nl.length>3 && v.includes(nl)) return true; }
         return false;
-      }))
-        res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||''});
+      });
+      if(matched) res.push({rowIdx:realIdx,sk,inicio:row.inicio||'',tema:row.tema||''});
     });
   });
   return res;
@@ -2058,7 +2064,7 @@ function renderSpeakers(){
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
       <td style="font-size:12px">${contactHtml}</td>
-      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.nombre||'').trim();const assigns=nm?getSpeakerAssignments(nm):[];const count=assigns.length;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';const tip=`Buscando: "${nm}"\nEncontrado: ${count} bloque(s)\n${assigns.map(a=>a.sk+' '+a.inicio).join('\n')}`;return count>0?`<span title="${esc(tip)}" style="color:${col}">${count}</span>`:`<span title="${esc(tip)}" style="color:#333">—</span>`;})()}</td>
+      <td style="text-align:center;font-weight:700;font-size:13px;cursor:pointer" onclick="event.stopPropagation();(()=>{const nm='${esc(s.nombre||'')}';const assigns=getSpeakerAssignments(nm);alert('Nombre buscado: '+nm+'\\nBloques encontrados: '+assigns.length+'\\n'+assigns.map(a=>a.sk+' '+a.inicio).join('\\n'));})()">${(()=>{const nm=(s.nombre||'').trim();const assigns=nm?getSpeakerAssignments(nm):[];const count=assigns.length;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#555">—</span>`;})()}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><span title="${s.landing==='si'?'En landing':'Sin landing'}" style="cursor:pointer;font-size:16px;opacity:${s.landing==='si'?'1':'0.2'}" onclick="toggleLanding(${ri})">${s.landing==='si'?'🌐':'🌐'}</span></td>
       <td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
         <span title="📧 Confirmar como Speaker&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;margin-right:4px;opacity:${s.mail_ok==='si'?'1':'0.25'}" onclick="previewMail(${ri},'speaker')">📧</span>
