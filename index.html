@@ -1157,12 +1157,15 @@ function getSpeakerNames(row){ return (row.speaker||'').split('|').map(n=>n.trim
 function getSpeakerAssignments(name){
   const res=[];
   const nm=name.trim().toLowerCase();
-  // Build flexible variants: confname, nombre, apellido, each word >3 chars
-  const sp=state.speakers.find(s=>(s.nombre||'').toLowerCase()===nm);
+  // buscar por nombre o confname (doble control)
+  const sp=state.speakers.find(s=>(s.nombre||'').toLowerCase()===nm)
+          ||state.speakers.find(s=>(s.confname||'').toLowerCase()===nm);
   const variants=new Set([nm]);
   if(sp){
+    const nombre2=(sp.nombre||'').toLowerCase().trim();
     const confname=(sp.confname||'').toLowerCase().trim();
     const apellido=(sp.apellido||'').toLowerCase().trim();
+    if(nombre2){ variants.add(nombre2); nombre2.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);}); }
     if(confname){ variants.add(confname); confname.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);}); }
     if(apellido) variants.add(apellido);
     nm.split(/\s+/).forEach(w=>{if(w.length>3)variants.add(w);});
@@ -2041,7 +2044,7 @@ function renderSpeakers(){
         <div style="display:flex;align-items:center;gap:7px">
           ${s.foto?`<img src="${esc(s.foto)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid #333" onerror="this.style.display='none'">`:`<div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;border:1px solid #333;flex-shrink:0"></div>`}
           <div>
-            <div style="color:${(()=>{const e=s.estado||'disponible';return e==='confirmado'?'#22c55e':e==='rechazado'?'#ef4444':e==='revision'||e==='revisar'?'#eab308':e==='respaldo'?'#f97316':'var(--red)'})()};font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
+            <div title="${esc([s.nombre,s.apellido,s.confname].filter(Boolean).join(' / '))}" style="color:${(()=>{const e=s.estado||'disponible';return e==='confirmado'?'#22c55e':e==='rechazado'?'#ef4444':e==='revision'||e==='revisar'?'#eab308':e==='respaldo'?'#f97316':'var(--red)'})()};font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
             ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
           </div>
         </div>
@@ -2054,7 +2057,7 @@ function renderSpeakers(){
       <td style="text-align:center">${idiomaHtml}</td>
       <td style="font-size:12px;color:#888">${esc(s.mail||'')}</td>
       <td style="font-size:12px">${contactHtml}</td>
-      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.displayName||s.nombre||'').trim();const count=nm?getSpeakerAssignments(nm).length:0;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#333">—</span>`;})()}</td>
+      <td style="text-align:center;font-weight:700;font-size:13px">${(()=>{const nm=(s.nombre||'').trim();const count=nm?getSpeakerAssignments(nm).length:0;const col=count===0?'#444':count<=2?'#22c55e':count===3?'#eab308':count===4?'#f97316':'#ef4444';return count>0?`<span style="color:${col}">${count}</span>`:`<span style="color:#333">—</span>`;})()}</td>
       <td style="text-align:center" onclick="event.stopPropagation()"><span title="${s.landing==='si'?'En landing':'Sin landing'}" style="cursor:pointer;font-size:16px;opacity:${s.landing==='si'?'1':'0.2'}" onclick="toggleLanding(${ri})">${s.landing==='si'?'🌐':'🌐'}</span></td>
       <td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
         <span title="📧 Confirmar como Speaker&#10;Estado: ${s.mail_ok==='si'?'✅ Enviado':'Pendiente'}" style="cursor:pointer;font-size:15px;margin-right:4px;opacity:${s.mail_ok==='si'?'1':'0.25'}" onclick="previewMail(${ri},'speaker')">📧</span>
