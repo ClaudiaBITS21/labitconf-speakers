@@ -75,36 +75,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .empty { text-align: center; padding: 60px 24px; color: #555; }
 .empty-icon { font-size: 48px; margin-bottom: 12px; }
 
-/* RANKING */
-.ranking-wrap { padding: 20px 24px; max-width: 900px; margin: 0 auto; }
-.ranking-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-.ranking-tab { padding: 7px 20px; border-radius: 20px; border: 1px solid #333; background: transparent; color: #888; cursor: pointer; font-size: 13px; font-family: inherit; transition: all .15s; }
-.ranking-tab.active { background: #f97316; border-color: #f97316; color: #fff; font-weight: 600; }
-.ranking-title { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
-
-.rank-row { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: #111; border: 1px solid #222; border-radius: 10px; margin-bottom: 8px; transition: border-color .15s; }
-.rank-row:hover { border-color: #333; }
-.rank-pos { font-size: 22px; font-weight: 800; color: #333; min-width: 36px; text-align: center; font-variant-numeric: tabular-nums; }
-.rank-pos.gold   { color: #f59e0b; }
-.rank-pos.silver { color: #94a3b8; }
-.rank-pos.bronze { color: #cd7c4e; }
-.rank-foto { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #1a1a1a; flex-shrink: 0; }
-.rank-foto-ph { width: 44px; height: 44px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.rank-info { flex: 1; min-width: 0; }
-.rank-nombre { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.rank-sub { font-size: 12px; color: #555; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.rank-redes { display: flex; gap: 6px; flex-shrink: 0; }
-.rank-badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid #222; color: #666; }
-.rank-badge.has-x  { border-color: #1d3a5a; color: #1d9bf0; }
-.rank-badge.has-li { border-color: #1a2a3a; color: #0077b5; }
-.rank-badge.has-ig { border-color: #3a1a2a; color: #e1306c; }
-.rank-badge.has-web{ border-color: #1a2a1a; color: #22c55e; }
-.rank-score { min-width: 56px; text-align: right; flex-shrink: 0; }
-.rank-score-num { font-size: 20px; font-weight: 800; color: #f97316; font-variant-numeric: tabular-nums; }
-.rank-score-lbl { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: .5px; }
-.rank-sort-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-.sort-btn { padding: 4px 12px; border-radius: 12px; border: 1px solid #2a2a2a; background: transparent; color: #666; font-size: 12px; cursor: pointer; font-family: inherit; transition: all .15s; }
-.sort-btn.active { background: #1a1a1a; border-color: #444; color: #ccc; }
 </style>
 </head>
 <body>
@@ -118,8 +88,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <button class="filter-btn active" onclick="setFiltro('todos')">Todos <span id="cnt-todos"></span></button>
   <button class="filter-btn" onclick="setFiltro('pendientes')">⏳ Pendientes <span id="cnt-pendientes"></span></button>
   <button class="filter-btn" onclick="setFiltro('publicados')">✅ Publicados <span id="cnt-publicados"></span></button>
-  <button class="filter-btn" onclick="setFiltro('ranking')" style="margin-left:8px;border-color:#f97316;color:#f97316">🏆 Ranking</button>
-  <input class="search" type="text" placeholder="Buscar speaker..." oninput="buscar(this.value)" id="searchInput">
+<input class="search" type="text" placeholder="Buscar speaker..." oninput="buscar(this.value)" id="searchInput">
 </div>
 
 <div id="grid" class="grid">
@@ -259,178 +228,16 @@ async function togglePublicado(num, checked) {
 
 function setFiltro(f) {
   filtro = f;
-  const keys = ['todos','pendientes','publicados','ranking'];
   document.querySelectorAll('.filter-btn').forEach(b => {
-    const txt = b.textContent.trim();
+    const txt = b.textContent.trim().split(' ')[0];
     b.classList.toggle('active',
-      (f==='todos'&&txt.startsWith('Todos')) ||
-      (f==='pendientes'&&txt.startsWith('⏳')) ||
-      (f==='publicados'&&txt.startsWith('✅')) ||
-      (f==='ranking'&&txt.startsWith('🏆'))
+      (f==='todos'&&txt==='Todos') || (f==='pendientes'&&txt==='⏳') || (f==='publicados'&&txt==='✅')
     );
   });
-  const searchInput = document.getElementById('searchInput');
-  if (f === 'ranking') {
-    searchInput.style.display = 'none';
-    document.getElementById('grid').style.display = 'none';
-    renderRanking();
-  } else {
-    searchInput.style.display = '';
-    document.getElementById('grid').style.display = '';
-    const rankWrap = document.getElementById('ranking-wrap');
-    if (rankWrap) rankWrap.remove();
-    render();
-  }
+  render();
 }
 
 function buscar(q) { busqueda = q; render(); }
-
-// ── RANKING ──────────────────────────────────────────────────────────────────
-
-let rankingTab = 'ecosistema'; // 'ecosistema' | 'redes'
-let sortRed = 'total';         // 'total' | 'x' | 'li' | 'ig' | 'web'
-
-function scoreEcosistema(s) {
-  let score = 0;
-  const x   = (s.x   || '').replace(/^@/,'').trim();
-  const li  = (s.linkedin || '').trim();
-  const ig  = (s.instagram || '').replace(/^@/,'').trim();
-  const web = (s.web || '').trim();
-
-  if (x)   score += 40;  // X/Twitter = principal en ecosistema Bitcoin
-  if (li)  score += 20;
-  if (web) score += 15;
-  if (ig)  score += 10;
-  if (s.foto && s.foto.trim()) score += 8;
-  if (s.bio && s.bio.trim().length > 80) score += 8;
-  if (s.cargo && s.cargo.trim()) score += 5;
-  if (s.empresa && s.empresa.trim()) score += 4;
-  if (mktEstado[s.num]?.publicado) score += 10;
-  return score;
-}
-
-function scoreRedes(s) {
-  const x   = (s.x   || '').replace(/^@/,'').trim();
-  const li  = (s.linkedin || '').trim();
-  const ig  = (s.instagram || '').replace(/^@/,'').trim();
-  const web = (s.web || '').trim();
-  return { x: x?1:0, li: li?1:0, ig: ig?1:0, web: web?1:0, total: (x?1:0)+(li?1:0)+(ig?1:0)+(web?1:0) };
-}
-
-function renderRanking() {
-  const existing = document.getElementById('ranking-wrap');
-  if (existing) existing.remove();
-
-  const wrap = document.createElement('div');
-  wrap.id = 'ranking-wrap';
-  wrap.className = 'ranking-wrap';
-  document.body.appendChild(wrap);
-
-  wrap.innerHTML = `
-  <div class="ranking-tabs">
-    <button class="ranking-tab ${rankingTab==='ecosistema'?'active':''}" onclick="switchRankTab('ecosistema')">🌐 Reputación Ecosistema</button>
-    <button class="ranking-tab ${rankingTab==='redes'?'active':''}" onclick="switchRankTab('redes')">📊 Por Redes</button>
-  </div>
-  <div id="ranking-content"></div>`;
-
-  renderRankingContent();
-}
-
-function switchRankTab(tab) {
-  rankingTab = tab;
-  document.querySelectorAll('.ranking-tab').forEach(b => {
-    b.classList.toggle('active', (tab==='ecosistema'&&b.textContent.includes('Ecosistema')) || (tab==='redes'&&b.textContent.includes('Redes')));
-  });
-  renderRankingContent();
-}
-
-function renderRankingContent() {
-  const el = document.getElementById('ranking-content');
-  if (!el) return;
-
-  if (rankingTab === 'ecosistema') {
-    const ranked = [...speakers]
-      .map(s => ({ s, score: scoreEcosistema(s) }))
-      .sort((a,b) => b.score - a.score)
-      .slice(0, 10);
-
-    el.innerHTML = `
-      <div class="ranking-title">Top 10 · Score = X(40) + LinkedIn(20) + Web(15) + Instagram(10) + Foto/Bio/Cargo + Publicado</div>
-      ${ranked.map((item, i) => rankRowHTML(item.s, i, item.score, 'pts', 'ecosistema')).join('')}`;
-
-  } else {
-    const sortBtns = `
-      <div class="rank-sort-bar">
-        <span style="font-size:12px;color:#555;align-self:center">Ordenar por:</span>
-        <button class="sort-btn ${sortRed==='total'?'active':''}" onclick="setSortRed('total')">Todas las redes</button>
-        <button class="sort-btn ${sortRed==='x'?'active':''}" onclick="setSortRed('x')">𝕏 Twitter</button>
-        <button class="sort-btn ${sortRed==='li'?'active':''}" onclick="setSortRed('li')">LinkedIn</button>
-        <button class="sort-btn ${sortRed==='ig'?'active':''}" onclick="setSortRed('ig')">Instagram</button>
-        <button class="sort-btn ${sortRed==='web'?'active':''}" onclick="setSortRed('web')">Web</button>
-      </div>`;
-
-    const ranked = [...speakers]
-      .map(s => ({ s, sc: scoreRedes(s) }))
-      .filter(item => item.sc[sortRed] > 0)
-      .sort((a,b) => b.sc[sortRed] - a.sc[sortRed] || b.sc.total - a.sc.total)
-      .slice(0, 10);
-
-    const label = sortRed==='total' ? 'redes' : sortRed==='x'?'𝕏':sortRed==='li'?'LinkedIn':sortRed==='ig'?'IG':'Web';
-    el.innerHTML = sortBtns + `
-      <div class="ranking-title">Top 10 · Plataformas activas${sortRed!=='total'?' con '+label:''}</div>
-      ${ranked.map((item,i) => rankRowHTML(item.s, i, sortRed==='total'?item.sc.total:1, sortRed==='total'?'redes':'✓', 'redes')).join('')}`;
-  }
-}
-
-function setSortRed(red) {
-  sortRed = red;
-  document.querySelectorAll('.sort-btn').forEach(b => {
-    b.classList.toggle('active',
-      (red==='total'&&b.textContent.includes('Todas'))||
-      (red==='x'&&b.textContent.includes('Twitter'))||
-      (red==='li'&&b.textContent.includes('LinkedIn'))||
-      (red==='ig'&&b.textContent.includes('Instagram'))||
-      (red==='web'&&b.textContent.includes('Web'))
-    );
-  });
-  renderRankingContent();
-}
-
-function rankRowHTML(s, i, score, scoreLabel, mode) {
-  const posClass = i===0?'gold':i===1?'silver':i===2?'bronze':'';
-  const nombre = s.confname || `${s.nombre} ${s.apellido}`.trim();
-  const x   = (s.x || '').replace(/^@/,'').trim();
-  const li  = s.linkedin ? (s.linkedin.startsWith('http')?s.linkedin:'https://'+s.linkedin) : '';
-  const ig  = (s.instagram || '').replace(/^@/,'').trim();
-  const web = s.web ? (s.web.startsWith('http')?s.web:'https://'+s.web) : '';
-
-  const fotoEl = s.foto
-    ? `<img class="rank-foto" src="${s.foto}" alt="${nombre}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
-    : '';
-  const fotoPh = `<div class="rank-foto-ph" style="${s.foto?'display:none':''}">👤</div>`;
-
-  const badges = [
-    x   ? `<a class="rank-badge has-x"  href="https://x.com/${x}"          target="_blank">𝕏</a>` : '',
-    li  ? `<a class="rank-badge has-li" href="${li}"                         target="_blank">in</a>` : '',
-    ig  ? `<a class="rank-badge has-ig" href="https://instagram.com/${ig}"   target="_blank">IG</a>` : '',
-    web ? `<a class="rank-badge has-web" href="${web}"                        target="_blank">🌐</a>` : '',
-  ].filter(Boolean).join('');
-
-  return `
-<div class="rank-row">
-  <div class="rank-pos ${posClass}">${i+1}</div>
-  ${fotoEl}${fotoPh}
-  <div class="rank-info">
-    <div class="rank-nombre">${nombre}</div>
-    <div class="rank-sub">${[s.cargo, s.empresa, s.pais].filter(Boolean).join(' · ')}</div>
-  </div>
-  <div class="rank-redes">${badges}</div>
-  <div class="rank-score">
-    <div class="rank-score-num">${score}</div>
-    <div class="rank-score-lbl">${scoreLabel}</div>
-  </div>
-</div>`;
-}
 
 init();
 </script>
