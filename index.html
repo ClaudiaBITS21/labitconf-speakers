@@ -623,7 +623,9 @@ function getDispBadges(s){
 // ── STATE ─────────────────────────────────────────────────────────────
 const _emptyAgenda = () => { const a={}; STAGE_KEYS.forEach(sk=>a[sk]=[]); return a; };
 let state = { agenda: _emptyAgenda(), speakers:[], speakersManual:[], ideas:[] };
-let activeStage = 's1';
+let stageOrder = JSON.parse(localStorage.getItem('labitconf_stageOrder') || 'null') || [0,1,2,3,4,5,6,7,8];
+let inactiveStages = JSON.parse(localStorage.getItem('labitconf_inactiveStages') || 'null') || [];
+let activeStage = 's' + (stageOrder[0] + 1);
 let compareStage = null;
 let stageNames = JSON.parse(localStorage.getItem('labitconf_stages') || 'null') ||
   ['Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6','Stage 7','Stage 8','Stage 9'];
@@ -2778,6 +2780,14 @@ async function loadConfig(){
         updateStageHeaders();
         buildStageFilterOptions();
       }
+      if(Array.isArray(j.stageOrder)&&j.stageOrder.length===9){
+        stageOrder=j.stageOrder;
+        localStorage.setItem('labitconf_stageOrder',JSON.stringify(stageOrder));
+      }
+      if(Array.isArray(j.inactiveStages)){
+        inactiveStages=j.inactiveStages;
+        localStorage.setItem('labitconf_inactiveStages',JSON.stringify(inactiveStages));
+      }
       if(j.apertura){const el=document.getElementById('horaApertura');if(el)el.value=j.apertura;}
       if(j.cierre){const el=document.getElementById('horaCierre');if(el)el.value=j.cierre;}
       updateGlobalProgress();
@@ -3240,7 +3250,8 @@ function buildHeatmap() {
 function buildStageSemaphore() {
   const wrap = document.getElementById('stageSemaphoreRow');
   if (!wrap) return;
-  wrap.innerHTML = STAGE_KEYS.map((sk, i) => {
+  wrap.innerHTML = stageOrder.map(i => {
+    const sk = STAGE_KEYS[i];
     const rows = getAgendaRows(sk, currentDay);
     const assigned = rows.filter(r => r.row.speaker?.trim()).length;
     const pct = rows.length ? Math.round(assigned / rows.length * 100) : 0;
@@ -3249,11 +3260,13 @@ function buildStageSemaphore() {
     const name = stageNames[i] || ('Stage ' + (i + 1));
     const isActive = sk === activeStage;
     const isCompare = sk === compareStage;
+    const isInactive = inactiveStages.includes(i);
     const border = isActive ? `2px solid ${color}` : isCompare ? `2px dashed ${color}` : `1px solid ${color}44`;
     const bgColor = isActive ? bg : 'transparent';
-    return `<div onclick="selectStage('${sk}',event)" style="flex:1;min-width:70px;max-width:130px;padding:5px 8px;border-radius:6px;border:${border};background:${bgColor};text-align:center;cursor:pointer;transition:all .15s" title="${pct}% ocupado — Clic para ver, Shift+clic para comparar">
-      <div style="font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
-      <div style="font-size:13px;font-weight:800;color:${color}">${pct}%</div>
+    const opacity = isInactive ? 'opacity:0.35;' : '';
+    return `<div onclick="selectStage('${sk}',event)" style="flex:1;min-width:70px;max-width:130px;padding:5px 8px;border-radius:6px;border:${border};background:${bgColor};text-align:center;cursor:pointer;transition:all .15s;${opacity}" title="${pct}% ocupado — Clic para ver, Shift+clic para comparar${isInactive?' (inactivo)':''}">
+      <div style="font-size:12px;font-weight:700;color:${isInactive?'#555':'#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
+      <div style="font-size:13px;font-weight:800;color:${isInactive?'#444':color}">${pct}%</div>
       ${isCompare?`<div style="font-size:9px;color:${color};margin-top:1px">⇄ comp.</div>`:''}
     </div>`;
   }).join('');

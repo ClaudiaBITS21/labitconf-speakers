@@ -212,7 +212,12 @@ function doGet(e) {
     if (e.parameter.action === 'get_config') {
       const props = PropertiesService.getScriptProperties();
       const raw = props.getProperty('config_stageNames');
-      return respond({ ok:true, stageNames: raw ? JSON.parse(raw) : null,
+      const rawOrder = props.getProperty('config_stageOrder');
+      const rawInactive = props.getProperty('config_inactiveStages');
+      return respond({ ok:true,
+        stageNames: raw ? JSON.parse(raw) : null,
+        stageOrder: rawOrder ? JSON.parse(rawOrder) : null,
+        inactiveStages: rawInactive ? JSON.parse(rawInactive) : null,
         apertura: props.getProperty('config_apertura')||'',
         cierre:   props.getProperty('config_cierre')||'' });
     }
@@ -490,7 +495,9 @@ function doPost(e) {
     if (writeKey && key !== writeKey) return respond({ error:'Clave incorrecta', code:401 });
 
     if (action === 'set_config') {
-      if (data && Array.isArray(data.stageNames)) props.setProperty('config_stageNames', JSON.stringify(data.stageNames));
+      if (data && Array.isArray(data.stageNames))    props.setProperty('config_stageNames',    JSON.stringify(data.stageNames));
+      if (data && Array.isArray(data.stageOrder))    props.setProperty('config_stageOrder',    JSON.stringify(data.stageOrder));
+      if (data && Array.isArray(data.inactiveStages))props.setProperty('config_inactiveStages',JSON.stringify(data.inactiveStages));
       if (data && data.apertura) props.setProperty('config_apertura', data.apertura);
       if (data && data.cierre)   props.setProperty('config_cierre',   data.cierre);
       return respond({ ok:true });
@@ -910,23 +917,65 @@ function respond(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
-// Ejecutar desde el editor GAS para limpiar mail_ok de un speaker por email
-function limpiarMailOk() {
-  const MAIL_BUSCAR = 'mathey.matias@gmail.com'; // cambiá si necesitás otro
-  const COL_MAIL    = 8;   // columna H (0-indexed → col 9 en sheets)
-  const COL_MAIL_OK = 37;  // columna AL (0-indexed → col 38 en sheets)
+// Ejecutar desde el editor GAS para resetear el flujo de mail de confirmación
+// Limpia mail_ok en el sheet + saca del segmento Flodesk para que el workflow se re-dispare
+function resetearMailConfirmacion() {
+  const MAILS = [
+    'mathey.matias@gmail.com',
+    'rodolfo@COMPLETAR.com'  // ← reemplazá con el email real de Rodolfo
+  ];
+  const COL_MAIL    = 8;
+  const COL_MAIL_OK = 37;
+  const SEGMENTO_ID = '6a7369a6fed38eba22be9aef'; // 2026_Speaker_Confirmado_EN
 
-  const ss   = SpreadsheetApp.getActiveSpreadsheet();
-  const hoja = ss.getSheetByName('Speakers');
+  const props    = PropertiesService.getScriptProperties();
+  const apiKey   = props.getProperty('flodesk_api_key');
+  const ss       = SpreadsheetApp.openById(SHEET_ID);
+  const hoja     = ss.getSheetByName('Speakers');
   if (!hoja) { Logger.log('Hoja Speakers no encontrada'); return; }
 
   const data = hoja.getDataRange().getValues();
-  for (let i = 1; i < data.length; i++) {
-    if (String(data[i][COL_MAIL]).trim().toLowerCase() === MAIL_BUSCAR.toLowerCase()) {
-      hoja.getRange(i + 1, COL_MAIL_OK + 1).setValue('');
-      Logger.log('mail_ok limpiado en fila ' + (i + 1) + ' — ' + data[i][0]);
-      return;
+
+  for (const mail of MAILS) {
+    if (mail.includes('COMPLETAR')) { Logger.log('⚠️ Completá el email de Rodolfo antes de correr'); continue; }
+
+    // 1. Limpiar mail_ok en el sheet
+    let encontrado = false;
+    for (let i = 1; i < data.length; i++) {
+      if (String(data[i][COL_MAIL]).trim().toLowerCase() === mail.toLowerCase()) {
+        hoja.getRange(i + 1, COL_MAIL_OK + 1).setValue('');
+        Logger.log('✅ mail_ok limpiado: ' + mail + ' (fila ' + (i+1) + ')');
+        encontrado = true;
+        break;
+      }
+    }
+    if (!encontrado) Logger.log('⚠️ No encontrado en sheet: ' + mail);
+
+    // 2. Sacar del segmento Flodesk para que el workflow se re-dispare
+    try {
+      const url = 'https://api.flodesk.com/v1/subscribers/' + encodeURIComponent(mail) + '/segments/' + SEGMENTO_ID;
+      const resp = UrlFetchApp.fetch(url, {
+        method: 'delete',
+        headers: { 'Authorization': 'Basic ' + Utilities.base64Encode(apiKey + ':'), 'Content-Type': 'application/json' },
+        muteHttpExceptions: true
+      });
+      Logger.log('Flodesk DELETE segmento → ' + mail + ': HTTP ' + resp.getResponseCode());
+    } catch(e) {
+      Logger.log('Error Flodesk: ' + e.message);
     }
   }
-  Logger.log('Speaker no encontrado con mail: ' + MAIL_BUSCAR);
+  Logger.log('Listo. Recargá el panel y volvé a clickear 📧 para re-enviar.');
+}
+
+// Ejecutar desde el editor GAS para probar el envío del email de confirmación
+// Agrega Somoswhabbit@gmail.com al segmento Flodesk → dispara el workflow de email
+function probarEmailConfirmacion() {
+  const MAIL_PRUEBA  = 'Somoswhabbit@gmail.com';
+  const NOMBRE       = 'Test';
+  const APELLIDO     = 'Speaker';
+  const SEGMENTO_ID  = '6a7369a6fed38eba22be9aef'; // 2026_Speaker_Confirmado_EN
+
+  Logger.log('Enviando confirmación de prueba a: ' + MAIL_PRUEBA);
+  llamarFlodesk(MAIL_PRUEBA, NOMBRE, APELLIDO, SEGMENTO_ID);
+  Logger.log('✅ Listo. Revisá la bandeja de ' + MAIL_PRUEBA);
 }
