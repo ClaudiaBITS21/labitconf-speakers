@@ -317,6 +317,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .stage-h-full{border-bottom:2px solid #22c55e !important;}
 .stage-h-low{border-bottom:2px solid #f97316 !important;}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -391,7 +392,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
     <button class="btn" onclick="loadAll()">🔄 Actualizar</button>
     <div class="toolbar-sep"></div>
     <button class="btn" onclick="importarDelForm()">📥 Importar Form</button>
-    <button class="btn" onclick="exportCSV()">📥 CSV</button>
+    <button class="btn" onclick="exportExcelTemas()">📥 Excel</button>
     <a href="https://app-labitconf.github.io/LABITCONF-speakers/form/" target="_blank" class="btn" style="display:inline-flex;align-items:center;gap:6px;color:var(--red);border-color:var(--red)">+ Inscripción ↗</a>
   </div>
   <div style="padding:18px">
@@ -2983,18 +2984,34 @@ function _doSwitchDay(d) {
 }
 function loadPrincipalDay(){ renderAgenda(); } // compat stub
 
-// ── EXPORT CSV ────────────────────────────────────────────────────────
-function exportCSV() {
-  const headers = ['Nombre','Apodo','Tipo','País','Idioma','Estado','Temas','Repartos','Mail','WhatsApp','Telegram','Signal','LinkedIn','Empresa','Notas','Disp.Oct30','Disp.Oct31'];
-  const rows = state.speakers.map(s =>
-    [s.nombre,s.apodo||'',s.tipo,s.pais||'',s.idioma||'es',s.estado||'disponible',s.temas||'',calcSpeakerAssignmentsText(s.nombre||''),s.mail||'',s.whatsapp||'',s.telegram||'',s.signal||'',s.linkedin||'',s.empresa||'',s.notas||'',s.oct30||'',s.oct31||'']
-    .map(v => `"${String(v||'').replace(/"/g,'""')}"`)
-  );
-  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,﻿' + encodeURIComponent(csv);
-  a.download = 'speakers_labitconf2026.csv';
-  a.click();
+// ── EXPORT EXCEL POR TEMAS ────────────────────────────────────────────
+function exportExcelTemas() {
+  const headers = ['Nombre','Apellido','Apodo','Estado','País','Idioma','Empresa','Tema','Descripción','Estado Tema','Mail'];
+  const data = [headers];
+
+  state.speakers.forEach(s => {
+    const temas = s._temas && s._temas.length ? s._temas : [];
+    const base = [
+      s.nombre||'', s.apellido||'', s.apodo||'',
+      s.estado||'disponible', s.pais||'', s.idioma||'es', s.empresa||''
+    ];
+    if (!temas.length) {
+      data.push([...base, '', '', '', s.mail||'']);
+    } else {
+      temas.forEach((t, i) => {
+        // Primera fila del speaker lleva los datos; las siguientes quedan vacías en las cols base
+        const rowBase = i === 0 ? base : Array(base.length).fill('');
+        data.push([...rowBase, t.titulo||'', t.abstract||t.descripcion||'', t.estado||'disponible', i === 0 ? s.mail||'' : '']);
+      });
+    }
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  // Ancho de columnas
+  ws['!cols'] = [20,20,15,15,12,8,20,40,60,15,30].map(w=>({wch:w}));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Speakers');
+  XLSX.writeFile(wb, 'speakers_labitconf2026_temas.xlsx');
 }
 
 // ── EXPORT ICAL ───────────────────────────────────────────────────────
