@@ -2002,7 +2002,7 @@ function renderSpeakers(){
       ?tArr.map((t,ti)=>{const col=ESTADO_COLOR[estArr[ti]||'disponible']||'#888';const trunc=t.length>28?t.slice(0,26)+'…':t;return `<div style="display:flex;align-items:center;gap:5px;line-height:1.7"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span class="sp-tema-tooltip" style="font-size:12px;color:#ccc">${esc(trunc)}${t.length>28?`<span class="sp-tooltip-txt">${esc(t)}</span>`:''}</span></div>`;}).join('')
       :`<span style="color:#444;font-size:12px">—</span>`;
 
-    const tierHtml=(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#555'};background:transparent;border:1px solid ${tc[t]||'#333'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="">—</option><option value="1"${t==='1'?' selected':''} style="color:#22c55e">N1</option><option value="2"${t==='2'?' selected':''} style="color:#eab308">N2</option><option value="3"${t==='3'?' selected':''} style="color:#ef4444">N3</option></select>`;})();
+    const tierHtml=(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#888'};background:#1a1a1a;border:1px solid ${tc[t]||'#333'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="" style="background:#1a1a1a;color:#888">—</option><option value="1"${t==='1'?' selected':''} style="background:#1a1a1a;color:#22c55e">N1</option><option value="2"${t==='2'?' selected':''} style="background:#1a1a1a;color:#eab308">N2</option><option value="3"${t==='3'?' selected':''} style="background:#1a1a1a;color:#ef4444">N3</option></select>`;})();
     // Contacto: flechas de enlace
     function socialLink(url,label,color){if(!url)return'';return `<a href="${esc(url)}" target="_blank" class="sp-link-arrow" style="color:${color}">${label} ↗</a>`;}
     const contactHtml=[
@@ -2986,12 +2986,14 @@ function loadPrincipalDay(){ renderAgenda(); } // compat stub
 
 // ── EXPORT EXCEL POR TEMAS ────────────────────────────────────────────
 function exportExcelTemas() {
-  const headers = ['Nombre','Apellido','Apodo','Estado','País','Tema','Descripción','Estado Tema'];
+  const TIER_LABEL = {'1':'N1','2':'N2','3':'N3'};
+  const headers = ['Nombre','Apellido','Apodo','Estado','País','Tier','Tema','Descripción','Estado Tema'];
   const data = [headers];
 
   state.speakers.forEach(s => {
     const temas = s._temas && s._temas.length ? s._temas : [];
-    const base = [s.nombre||'', s.apellido||'', s.apodo||'', s.estado||'disponible', s.pais||''];
+    const tierLabel = TIER_LABEL[s.tier||''] || '';
+    const base = [s.nombre||'', s.apellido||'', s.apodo||'', s.estado||'disponible', s.pais||'', tierLabel];
     if (!temas.length) {
       data.push([...base, '', '', '']);
     } else {
@@ -3004,7 +3006,7 @@ function exportExcelTemas() {
 
   const ws = XLSX.utils.aoa_to_sheet(data);
   // Ancho de columnas
-  ws['!cols'] = [20,20,15,15,12,40,60,15].map(w=>({wch:w}));
+  ws['!cols'] = [20,20,15,15,12,8,40,60,15].map(w=>({wch:w}));
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Speakers');
   XLSX.writeFile(wb, 'speakers_labitconf2026_temas.xlsx');
