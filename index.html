@@ -3630,9 +3630,11 @@ function renderPlanning() {
 
   // Active stages (respecting stageOrder + inactiveStages filtering for planning — show first 6)
   // Use stageOrder to pick which stages to show
-  const activeIdxs = stageOrder.filter(i => !inactiveStages.includes(i)).slice(0,6);
-  // If merge: treat idx 0 and 1 (Pastilla+Visión) as one column
-  let cols = activeIdxs.map(i => ({ idx: i, sk: STAGE_KEYS[i], name: stageNames[i]||('Stage '+(i+1)) }));
+  // Active stages first, then inactive grayed at end — all in stageOrder
+  const activeIdxs   = stageOrder.filter(i => !inactiveStages.includes(i));
+  const inactiveIdxs = stageOrder.filter(i =>  inactiveStages.includes(i));
+  const orderedIdxs  = [...activeIdxs, ...inactiveIdxs];
+  let cols = orderedIdxs.map(i => ({ idx: i, sk: STAGE_KEYS[i], name: stageNames[i]||('Stage '+(i+1)), inactive: inactiveStages.includes(i) }));
 
   const PLAN_COLORS = ['#f97316','#8b5cf6','#0ea5e9','#10b981','#f59e0b','#ec4899','#6366f1','#14b8a6','#84cc16'];
 
@@ -3649,9 +3651,11 @@ function renderPlanning() {
   html += `<thead><tr>`;
   html += `<th style="width:54px;padding:8px 6px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;color:#64748b;font-weight:600;position:sticky;left:0;z-index:2">Hora</th>`;
   colDefs.forEach((col, ci) => {
-    const color = PLAN_COLORS[ci % PLAN_COLORS.length];
+    const isInact = col.inactive || (col.merged && col.merged.every(c=>c.inactive));
+    const color = isInact ? '#adb5bd' : PLAN_COLORS[ci % PLAN_COLORS.length];
+    const bgH = isInact ? '#f1f3f5' : '#f8fafc';
     const span = col.merged ? 2 : 1;
-    html += `<th colspan="${span}" style="padding:10px 8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:13px;font-weight:700;color:${color};text-align:center;min-width:${col.merged?260:130}px">${esc(col.name)}</th>`;
+    html += `<th colspan="${span}" style="padding:10px 8px;background:${bgH};border:1px solid #e2e8f0;font-size:13px;font-weight:700;color:${color};text-align:center;min-width:${col.merged?260:130}px;opacity:${isInact?'.5':'1'}">${esc(col.name)}${isInact?' <span style="font-size:10px;font-weight:400">(inactivo)</span>':''}</th>`;
   });
   html += `</tr></thead><tbody>`;
 
@@ -3661,16 +3665,16 @@ function renderPlanning() {
     html += `<td style="padding:4px 6px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;color:#64748b;font-weight:600;text-align:center;position:sticky;left:0;z-index:1;white-space:nowrap">${slot}</td>`;
 
     colDefs.forEach((col, ci) => {
+      const isInact = col.inactive || (col.merged && col.merged.every(c=>c.inactive));
       if (col.merged) {
-        // merged cell: combine data from both sub-cols
         const cell0 = (planDraft[planKey(planDay, col.merged[0].sk)]||{})[slot];
         const cell1 = (planDraft[planKey(planDay, col.merged[1].sk)]||{})[slot];
         const cell = cell0 || cell1 || null;
         const sk = cell0 ? col.merged[0].sk : col.merged[1].sk;
-        html += planCell(slot, sk, planDay, cell, 2, PLAN_COLORS[ci % PLAN_COLORS.length]);
+        html += planCell(slot, sk, planDay, cell, 2, PLAN_COLORS[ci % PLAN_COLORS.length], isInact);
       } else {
         const cell = (planDraft[planKey(planDay, col.sk)]||{})[slot] || null;
-        html += planCell(slot, col.sk, planDay, cell, 1, PLAN_COLORS[ci % PLAN_COLORS.length]);
+        html += planCell(slot, col.sk, planDay, cell, 1, PLAN_COLORS[ci % PLAN_COLORS.length], isInact);
       }
     });
 
@@ -3681,14 +3685,15 @@ function renderPlanning() {
   grid.innerHTML = html;
 }
 
-function planCell(slot, sk, day, cell, colspan, accentColor) {
+function planCell(slot, sk, day, cell, colspan, accentColor, inactive) {
   const k = planKey(day, sk);
   const isEmpty = !cell || (!cell.text && !cell.speaker && !cell.tema);
   const cellState = cell ? cell.state : 'empty';
 
-  let bg = '#fff', border = '1px solid #e2e8f0', textColor = '#374151';
+  let bg = inactive ? '#f5f5f5' : '#fff', border = '1px solid #e2e8f0', textColor = '#374151';
   let badge = '';
-  if (cellState === 'original' && !isEmpty) {
+  if (inactive) { border = '1px solid #e9ecef'; }
+  else if (cellState === 'original' && !isEmpty) {
     bg = '#f0fdf4'; border = '1px solid #bbf7d0'; badge = `<span style="font-size:9px;background:#dcfce7;color:#166534;border-radius:3px;padding:1px 4px;float:right">✓</span>`;
   } else if (cellState === 'edited') {
     bg = '#eff6ff'; border = '1px solid #bfdbfe'; badge = `<span style="font-size:9px;background:#dbeafe;color:#1e40af;border-radius:3px;padding:1px 4px;float:right">✎</span>`;
@@ -3700,12 +3705,15 @@ function planCell(slot, sk, day, cell, colspan, accentColor) {
   const speaker = cell ? (cell.speaker||'') : '';
   const displayTema = tema ? `<div style="font-size:12px;font-weight:600;color:#111;line-height:1.3;margin-bottom:2px">${esc(tema)}</div>` : '';
   const displaySpeaker = speaker ? `<div style="font-size:11px;color:#6b7280;font-style:italic">${esc(speaker)}</div>` : '';
-  const placeholder = isEmpty ? `<span style="font-size:11px;color:#d1d5db">+ agregar</span>` : '';
+  const placeholder = isEmpty ? `<span style="font-size:11px;color:${inactive?'#ced4da':'#d1d5db'}">${inactive?'—':'+ agregar'}</span>` : '';
+  const opacityStyle = inactive ? 'opacity:.45;' : '';
 
   const skSafe = sk.replace(/'/g,"\\'");
   const slotSafe = slot.replace(/'/g,"\\'");
+  const clickHandler = inactive ? '' : `onclick="planOpenEdit('${slotSafe}','${skSafe}',${day})"`;
+  const hoverStyle = inactive ? '' : `onmouseenter="this.style.filter='brightness(0.96)'" onmouseleave="this.style.filter=''"`;
 
-  return `<td colspan="${colspan}" onclick="planOpenEdit('${slotSafe}','${skSafe}',${day})" style="padding:5px 7px;background:${bg};border:${border};vertical-align:top;cursor:pointer;min-width:${colspan>1?240:120}px;max-width:${colspan>1?300:180}px;transition:background .1s" onmouseenter="this.style.filter='brightness(0.96)'" onmouseleave="this.style.filter=''">
+  return `<td colspan="${colspan}" ${clickHandler} style="padding:5px 7px;background:${bg};border:${border};vertical-align:top;${inactive?'':'cursor:pointer;'}min-width:${colspan>1?240:120}px;max-width:${colspan>1?300:180}px;transition:background .1s;${opacityStyle}" ${hoverStyle}>
     ${badge}
     ${displayTema}${displaySpeaker}${placeholder}
   </td>`;
