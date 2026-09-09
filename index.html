@@ -188,7 +188,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-detail-sec-title{font-size:11px;font-weight:800;color:var(--red);letter-spacing:.06em;margin-bottom:6px;border-bottom:1px solid #222;padding-bottom:3px;}
 .sp-detail-field{margin-bottom:4px;}
 .sp-detail-lbl{font-size:11px;color:#555;font-weight:700;}
-.sp-detail-val{font-size:13px;color:#ccc;}
+.sp-detail-val{font-size:13px;color:var(--dim);}
 .sp-detail-val a{color:#60a5fa;text-decoration:none;}
 .sp-detail-val a:hover{text-decoration:underline;}
 .sp-tema-card{background:#f0f2f6;border:1px solid #cbd1da;border-radius:6px;padding:10px 12px;margin-bottom:6px;}
@@ -211,7 +211,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-estado-sel.est-manual{background:rgba(6,182,212,.2);color:#06b6d4;}
 /* Tema estado inline */
 .tema-est-sel{border:none;border-radius:4px;font-size:12px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;}
-.tema-est-sel.est-disponible{background:rgba(255,255,255,.06);color:#888;border:1px solid #333;}
+.tema-est-sel.est-disponible{background:var(--bg2);color:var(--dim);border:1px solid var(--border);}
 .tema-est-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
 .tema-est-sel.est-revision{background:rgba(234,179,8,.2);color:#eab308;}
 .tema-est-sel.est-respaldo{background:rgba(249,115,22,.2);color:#f97316;}
@@ -2015,7 +2015,7 @@ function renderSpeakers(){
 
     // Resumen compacto de temas (truncado con tooltip)
     const temasResumen=tArr.length
-      ?tArr.map((t,ti)=>{const col=ESTADO_COLOR[estArr[ti]||'disponible']||'#888';const trunc=t.length>28?t.slice(0,26)+'…':t;return `<div style="display:flex;align-items:center;gap:5px;line-height:1.7"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span class="sp-tema-tooltip" style="font-size:12px;color:#ccc">${esc(trunc)}${t.length>28?`<span class="sp-tooltip-txt">${esc(t)}</span>`:''}</span></div>`;}).join('')
+      ?tArr.map((t,ti)=>{const col=ESTADO_COLOR[estArr[ti]||'disponible']||'#888';const trunc=t.length>28?t.slice(0,26)+'…':t;return `<div style="display:flex;align-items:center;gap:5px;line-height:1.7"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span class="sp-tema-tooltip" style="font-size:12px;color:var(--dim)">${esc(trunc)}${t.length>28?`<span class="sp-tooltip-txt">${esc(t)}</span>`:''}</span></div>`;}).join('')
       :`<span style="color:#444;font-size:12px">—</span>`;
 
     const tierHtml=(()=>{const tc={1:'#16a34a',2:'#b45309',3:'#dc2626'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#6b7280'};background:#f5f7fa;border:1px solid ${tc[t]||'#cbd1da'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="" style="background:#f5f7fa;color:#6b7280">—</option><option value="1"${t==='1'?' selected':''} style="background:#f5f7fa;color:#16a34a">N1</option><option value="2"${t==='2'?' selected':''} style="background:#f5f7fa;color:#b45309">N2</option><option value="3"${t==='3'?' selected':''} style="background:#f5f7fa;color:#dc2626">N3</option></select>`;})();
@@ -2124,7 +2124,7 @@ function renderSpeakers(){
     </tr>
     <tr class="sp-detail-row" id="sp-detail-${ri}">
       <td colspan="15" style="background:#080808;border:1px solid #222;padding:16px">
-        ${s.bio?`<div style="margin-bottom:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border-left:3px solid #333;border-radius:4px"><span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px">Bio</span><div style="font-size:13px;color:#aaa;margin-top:4px;white-space:pre-wrap;line-height:1.6">${esc(s.bio)}</div></div>`:''}
+        ${s.bio?`<div style="margin-bottom:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border-left:3px solid #333;border-radius:4px"><span style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px">Bio</span><div style="font-size:13px;color:var(--dim);margin-top:4px;white-space:pre-wrap;line-height:1.6">${esc(s.bio)}</div></div>`:''}
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
           <div>
             <div class="sp-detail-sec-title">Datos</div>
@@ -2428,7 +2428,7 @@ function renderLanding(){
       });
       return allBlocks.join('');
     })();
-    const temas=(s._temas||[]).filter(t=>t.estado==='confirmado').map(t=>`<span style="background:#e2e6ec;border:1px solid #cbd1da;border-radius:4px;padding:2px 7px;font-size:11px;color:#ccc">${esc(t.titulo||'')}</span>`).join(' ');
+    const temas=(s._temas||[]).filter(t=>t.estado==='confirmado').map(t=>`<span style="background:#e2e6ec;border:1px solid #cbd1da;border-radius:4px;padding:2px 7px;font-size:11px;color:var(--dim)">${esc(t.titulo||'')}</span>`).join(' ');
     return `<div style="background:#f0f2f6;border:1px solid #cbd1da;border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px">
       <div style="display:flex;align-items:center;gap:10px">
         ${s.foto?`<img src="${esc(s.foto)}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #333" onerror="this.style.display='none'">`:`<div style="width:52px;height:52px;border-radius:50%;background:#e2e6ec;border:2px solid #cbd1da;flex-shrink:0"></div>`}
