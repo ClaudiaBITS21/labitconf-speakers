@@ -1034,13 +1034,13 @@ function makeAgendaRow(row,realIdx,sk){
   // Tema (clic abre modal)
   const tdTema=document.createElement('td');
   tdTema.style.cssText='padding:0;min-width:150px;max-width:220px;cursor:pointer';
-  tdTema.innerHTML=`<div id="tema-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','tema','Tema',state.agenda['${sk}'][${realIdx}]?.tema||'')" style="padding:5px 7px;font-size:13px;color:${row.tema?'#fff':'#666'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.tema||'— clic para editar —')}</div>`;
+  tdTema.innerHTML=`<div id="tema-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','tema','Tema',state.agenda['${sk}'][${realIdx}]?.tema||'')" style="padding:5px 7px;font-size:13px;color:${row.tema?'var(--text)':'#94a3b8'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.tema||'— clic para editar —')}</div>`;
   tr.appendChild(tdTema);
 
   // Descripción (clic abre modal)
   const tdDesc=document.createElement('td');
   tdDesc.style.cssText='padding:0;min-width:150px;max-width:220px;cursor:pointer';
-  tdDesc.innerHTML=`<div id="descripcion-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','descripcion','Descripción',state.agenda['${sk}'][${realIdx}]?.descripcion||'')" style="padding:5px 7px;font-size:13px;color:${row.descripcion?'#fff':'#666'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.descripcion||'— clic para editar —')}</div>`;
+  tdDesc.innerHTML=`<div id="descripcion-prev-${realIdx}-${sk}" onclick="openTextModal(${realIdx},'${sk}','descripcion','Descripción',state.agenda['${sk}'][${realIdx}]?.descripcion||'')" style="padding:5px 7px;font-size:13px;color:${row.descripcion?'var(--text)':'#94a3b8'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:28px" title="Clic para editar">${esc(row.descripcion||'— clic para editar —')}</div>`;
   tr.appendChild(tdDesc);
 
   // Speaker
@@ -1143,7 +1143,7 @@ function renderSpCell(idx,sk,selected){
     const tooltipSp=fullName?(alias?`${fullName} (${alias})`:fullName):'';
     const isAssigned=count>0;
     return `<div style="display:flex;align-items:center;gap:3px;background:var(--bg2);border-radius:4px;padding:2px 5px;margin:1px 0">
-      <span title="${esc(tooltipSp||name)}" style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
+      <span title="${esc(tooltipSp||name)}" style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'var(--text)'}">${esc(name)}${esc(apodo)}</span>
       ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
       <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
     </div>`;
@@ -1485,7 +1485,7 @@ function selectSpeakerWithTema(name,tema){
         const desc=tm.abstract||tm.descripcion||'';
         if(desc&&!row?.descripcion){updateAgendaField(idx,sk,'descripcion',desc);const el=document.getElementById(`descripcion-prev-${idx}-${sk}`);if(el)el.textContent=desc;}
       }
-      if(!prevTema&&tema){const el=document.getElementById(`tema-prev-${idx}-${sk}`);if(el){el.textContent=tema;el.style.color='#fff';}}
+      if(!prevTema&&tema){const el=document.getElementById(`tema-prev-${idx}-${sk}`);if(el){el.textContent=tema;el.style.color='var(--text)';}}
     }
   }
 
@@ -2012,7 +2012,7 @@ function renderSpeakers(){
     const paisInfo=getPaisInfo(s.pais||'');
     const idiomaHasEs=(s.idioma||'').includes('es');
     const idiomaHasEn=(s.idioma||'').includes('en');
-    const idiomaHtml=`<span style="color:${idiomaHasEs?'#fff':'#333'};font-weight:700;font-size:12px">SP</span><span style="color:#555;font-size:10px"> / </span><span style="color:${idiomaHasEn?'#60a5fa':'#333'};font-weight:700;font-size:12px">EN</span>`;
+    const idiomaHtml=`<span style="color:${idiomaHasEs?'#0284c7':'var(--dim)'};font-weight:700;font-size:12px">SP</span><span style="color:var(--dim);font-size:10px"> / </span><span style="color:${idiomaHasEn?'#2563eb':'var(--dim)'};font-weight:700;font-size:12px">EN</span>`;
 
     // Resumen compacto de temas (truncado con tooltip)
     const temasResumen=tArr.length
@@ -3065,7 +3065,7 @@ function openStageModal(sk,realIdx,mode,spRi,spTi){
   const isMove=mode==='move';
   document.getElementById('stagePickTitle').textContent=isSend?'🔀 Enviar a agenda':isMove?'↗️ Mover a otro stage':'🔁 Copiar a otro stage';
   const sub=document.getElementById('stagePickSubtitle');
-  sub.style.color='#fff';
+  sub.style.color='var(--dim)';
   sub.textContent=isSend
     ?'Se creará un bloque pendiente al inicio del día en el stage que selecciones.'
     :isMove
@@ -3099,7 +3099,7 @@ function openStageModal(sk,realIdx,mode,spRi,spTi){
     b.style.cssText=`flex:1;font-weight:700;${active?'background:#f7931a;color:#000;border-color:#f7931a':'background:#e2e6ec;color:var(--text);border-color:#cbd1da'}`;
     b.onclick=()=>{
       _stagePickCtx.destDay=day;
-      daysEl.querySelectorAll('button').forEach(x=>{x.style.background='#111';x.style.color='#fff';x.style.borderColor='#444';});
+      daysEl.querySelectorAll('button').forEach(x=>{x.style.background='var(--bg3)';x.style.color='var(--text)';x.style.borderColor='var(--border)';});
       b.style.background='#f7931a';b.style.color='#000';b.style.borderColor='#f7931a';
     };
     daysEl.appendChild(b);
