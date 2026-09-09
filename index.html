@@ -6,12 +6,12 @@
 <title>LABITCONF 2026 — Speakers v82</title>
 <style>
 :root {
-  --bg:#000000; --bg2:#0f0f0f; --bg3:#1a1a1a; --border:#2d2d2d;
-  --text:#ffffff; --muted:#ffffff; --dim:#cccccc;
-  --red:#E84010; --red-dim:rgba(232,64,16,.12);
+  --bg:#f5f7fa; --bg2:#eef0f4; --bg3:#e2e6ec; --border:#cbd1da;
+  --text:#111827; --muted:#374151; --dim:#6b7280;
+  --red:#c8370d; --red-dim:rgba(200,55,13,.10);
   --ama:#0e2a2a;    --ama-b:#2dd4bf;
   --apertura:#2a0000; --apertura-b:#dc2626;
-  --break:#1a1a1a;  --break-b:#888888;
+  --break:#dde2ea;  --break-b:#6b7280;
   --charla:#0a0a1a; --charla-b:#6366f1;
   --cierre:#2a0000; --cierre-b:#ef4444;
   --concurso:#1a0015; --concurso-b:#ec4899;
@@ -34,9 +34,9 @@
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;min-height:100vh;}
 
 /* NAV */
-.nav{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;height:50px;overflow-x:auto;}
-.nav-brand{font-weight:800;font-size:16px;color:#ffffff;padding:0 20px;white-space:nowrap;border-right:1px solid var(--border);}
-.tab-btn{padding:0 18px;height:50px;border:none;background:none;color:#ffffff;font-size:15px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;}
+.nav{position:sticky;top:0;z-index:200;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;height:50px;overflow-x:auto;}
+.nav-brand{font-weight:800;font-size:16px;color:var(--text);padding:0 20px;white-space:nowrap;border-right:1px solid var(--border);}
+.tab-btn{padding:0 18px;height:50px;border:none;background:none;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--red);border-bottom-color:var(--red);}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 16px;border-left:1px solid var(--border);}
@@ -78,16 +78,16 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 /* TABLE */
 .table-wrap{overflow:auto;max-height:calc(100vh - 165px);}
 table{border-collapse:collapse;table-layout:auto;}
-thead th{background:var(--bg3);border:1px solid var(--border);padding:5px 6px;text-align:left;font-size:14px;font-weight:700;color:#ffffff;position:sticky;top:0;z-index:10;white-space:nowrap;}
-thead th.stage-h{color:var(--red);background:#0d0d0d;}
-thead th.sub-h{color:#ffffff;background:#111;font-size:16px;font-weight:600;padding:3px 5px;}
+thead th{background:var(--bg3);border:1px solid var(--border);padding:5px 6px;text-align:left;font-size:14px;font-weight:700;color:var(--text);position:sticky;top:0;z-index:10;white-space:nowrap;}
+thead th.stage-h{color:var(--red);background:#e8eaf0;}
+thead th.sub-h{color:var(--text);background:var(--bg2);font-size:16px;font-weight:600;padding:3px 5px;}
 .col-stk{position:sticky;z-index:3;background:var(--bg);}
 thead .col-stk{z-index:11;background:var(--bg3);}
 .col-stk-sep{box-shadow:3px 0 8px rgba(0,0,0,.5);}
 .stage-inp{background:transparent;border:none;color:var(--red);font-size:15px;font-weight:700;width:calc(100% - 22px);outline:none;padding:2px 4px;cursor:text;}
 .stage-inp:focus{background:var(--red-dim);border-radius:4px;}
 .stage-edit-btn{background:none;border:none;cursor:pointer;color:#666;font-size:13px;padding:1px 3px;border-radius:3px;line-height:1;vertical-align:middle;}
-.stage-edit-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
+.stage-edit-btn:hover{color:var(--text);background:var(--bg3);}
 tbody tr:hover{background:rgba(255,255,255,.015);}
 td{border:1px solid var(--border);padding:0;vertical-align:middle;}
 td.row-actions{width:52px;min-width:52px;text-align:center;padding:2px;}
@@ -101,7 +101,7 @@ td.row-actions{width:52px;min-width:52px;text-align:center;padding:2px;}
 /* CELLS */
 select.cell-sel,input.cell-inp{background:var(--bg2);color:#fff;border:1px solid var(--border);border-radius:3px;padding:2px 4px;width:100%;box-sizing:border-box;}
 select.cell-sel:focus,input.cell-inp:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);outline:none;}
-select.cell-sel option{background:#1a1a1a;color:#fff;}
+select.cell-sel option{background:#f5f7fa;color:var(--text);}
 
 /* TIPO */
 .tipo-col{min-width:80px;max-width:90px;}
@@ -151,7 +151,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 /* DUR CELL */
 .dur-sel{width:100%;border:none;background:transparent;font-size:14px;font-weight:700;padding:3px 2px;outline:none;font-family:inherit;cursor:pointer;text-align:center;color-scheme:dark;}
 .dur-sel:focus{background:var(--red-dim);}
-.dur-sel option{background:#1a1a1a;}
+.dur-sel option{background:#f5f7fa;}
 .dur-ext-inp{width:100%;background:transparent;border:none;border-top:1px solid #333;color:#eab308;font-size:16px;padding:2px 3px;text-align:center;outline:none;font-family:inherit;}
 .dur-ext-inp:focus{background:rgba(234,179,8,.1);}
 .dur-ext-active{outline:2px solid #eab308;outline-offset:-1px;}
@@ -191,9 +191,9 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-detail-val{font-size:13px;color:#ccc;}
 .sp-detail-val a{color:#60a5fa;text-decoration:none;}
 .sp-detail-val a:hover{text-decoration:underline;}
-.sp-tema-card{background:#111;border:1px solid #222;border-radius:6px;padding:10px 12px;margin-bottom:6px;}
+.sp-tema-card{background:#f0f2f6;border:1px solid #cbd1da;border-radius:6px;padding:10px 12px;margin-bottom:6px;}
 .sp-tema-card-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
-.sp-tema-tag{display:inline-block;background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:1px 7px;font-size:11px;color:#888;margin:1px;}
+.sp-tema-tag{display:inline-block;background:#e2e6ec;border:1px solid #cbd1da;border-radius:4px;padding:1px 7px;font-size:11px;color:#374151;margin:1px;}
 .sp-edit{display:block;width:100%;outline:none;background:transparent;font-family:inherit;font-size:inherit;color:inherit;border:none;padding:2px 3px;resize:none;min-width:60px;white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;overflow:hidden;}
 .sp-edit:focus{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red);border-radius:3px;}
 .sp-tipo-sel{background:transparent;border:none;color:inherit;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;outline:none;padding:0 2px;}
@@ -220,7 +220,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 /* Tooltip */
 .sp-tema-tooltip{position:relative;display:inline-block;}
 .sp-tema-tooltip:hover .sp-tooltip-txt{visibility:visible;opacity:1;}
-.sp-tooltip-txt{visibility:hidden;opacity:0;position:absolute;bottom:100%;left:0;z-index:999;background:#111;border:1px solid #333;color:#fff;font-size:12px;padding:5px 9px;border-radius:5px;white-space:nowrap;max-width:320px;white-space:normal;width:max-content;pointer-events:none;transition:opacity .15s;}
+.sp-tooltip-txt{visibility:hidden;opacity:0;position:absolute;bottom:100%;left:0;z-index:999;background:#f0f2f6;border:1px solid #cbd1da;color:#fff;font-size:12px;padding:5px 9px;border-radius:5px;white-space:nowrap;max-width:320px;white-space:normal;width:max-content;pointer-events:none;transition:opacity .15s;}
 /* Días de conferencia por tema */
 .day-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-size:11px;font-weight:700;cursor:pointer;margin:1px;transition:all .12s;}
 .day-chip.main{color:#ffffff;border-color:#555;}
@@ -306,7 +306,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 #claveConfirm{background:var(--red);color:#fff;border:none;padding:9px 22px;border-radius:7px;font-weight:700;cursor:pointer;font-size:14px;width:100%;}
 
 #lockSub{font-size:14px;color:#666;margin-bottom:24px;}
-#lockInput{width:100%;background:#1a1a1a;border:1px solid #2d2d2d;color:#fff;padding:11px 14px;border-radius:8px;font-size:16px;text-align:center;letter-spacing:.15em;margin-bottom:10px;outline:none;font-family:inherit;}
+#lockInput{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:8px;font-size:16px;text-align:center;letter-spacing:.15em;margin-bottom:10px;outline:none;font-family:inherit;}
 #lockInput:focus{border-color:var(--red);}
 #lockError{color:#ef4444;font-size:13px;margin-bottom:10px;min-height:16px;}
 #lockBtn{width:100%;background:var(--red);color:#fff;border:none;padding:11px;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;}
@@ -559,7 +559,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <!-- STAGE PICK MODAL -->
 <div id="stagePickModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;align-items:center;justify-content:center;" onclick="if(event.target===this)closeStageModal()">
-  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;width:360px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9)">
+  <div style="background:#e2e6ec;border:1px solid #cbd1da;border-radius:12px;width:360px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9)">
     <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px" id="stagePickTitle"></div>
     <div style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.5" id="stagePickSubtitle"></div>
     <div id="stagePickList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px"></div>
@@ -574,12 +574,12 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <!-- TEXT EDIT MODAL -->
 <div id="textEditModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeTextModal()">
-  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;width:600px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9);">
+  <div style="background:#e2e6ec;border:1px solid #cbd1da;border-radius:12px;width:600px;max-width:95vw;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.9);">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
       <span id="textModalLabel" style="font-size:14px;font-weight:700;color:#fff;flex:1"></span>
       <button onclick="closeTextModal()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;line-height:1">✕</button>
     </div>
-    <textarea id="textModalArea" rows="8" style="width:100%;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-family:inherit;font-size:14px;padding:10px;resize:vertical;outline:none;box-sizing:border-box" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+    <textarea id="textModalArea" rows="8" style="width:100%;background:#f0f2f6;border:1px solid #cbd1da;border-radius:6px;color:#fff;font-family:inherit;font-size:14px;padding:10px;resize:vertical;outline:none;box-sizing:border-box" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
       <button class="btn" onclick="closeTextModal()">Cancelar</button>
       <button class="btn save" onclick="saveTextModal()">Guardar</button>
@@ -589,8 +589,8 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <!-- COMMAND PALETTE -->
 <div id="cmdPalette" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:flex-start;justify-content:center;padding-top:80px;">
-  <div style="background:#1a1a1a;border:1px solid #dc2626;border-radius:12px;width:560px;max-width:95vw;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);">
-    <input id="cmdInput" type="text" placeholder="Buscar speaker, tema, horario…" style="width:100%;background:transparent;border:none;border-bottom:1px solid #2d2d2d;padding:16px 20px;font-size:16px;color:#fff;outline:none;" oninput="filterCmd(this.value)">
+  <div style="background:#fff;border:1px solid #dc2626;border-radius:12px;width:560px;max-width:95vw;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.25);">
+    <input id="cmdInput" type="text" placeholder="Buscar speaker, tema, horario…" style="width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);padding:16px 20px;font-size:16px;color:var(--text);outline:none;" oninput="filterCmd(this.value)">
     <div id="cmdResults" style="max-height:360px;overflow-y:auto;padding:8px 0;"></div>
   </div>
 </div>
@@ -921,7 +921,7 @@ function renderAgenda(){
 
     // Stage header
     const hdr=document.createElement('div');
-    hdr.style.cssText=`padding:7px 14px;background:#111;border-bottom:2px solid ${color};display:flex;align-items:center;gap:10px;`;
+    hdr.style.cssText=`padding:7px 14px;background:#eef0f4;border-bottom:2px solid ${color};display:flex;align-items:center;gap:10px;`;
     hdr.innerHTML=`<span style="font-size:15px;font-weight:800;color:${color}">${esc(name)}</span>
       <span style="font-size:13px;color:#fff;font-weight:700">${DAY_LABELS[currentDay]||''}</span>
       <span style="font-size:12px;color:var(--dim)">${rows.length} bloques</span>
@@ -2018,7 +2018,7 @@ function renderSpeakers(){
       ?tArr.map((t,ti)=>{const col=ESTADO_COLOR[estArr[ti]||'disponible']||'#888';const trunc=t.length>28?t.slice(0,26)+'…':t;return `<div style="display:flex;align-items:center;gap:5px;line-height:1.7"><span style="width:6px;height:6px;border-radius:50%;background:${col};flex-shrink:0"></span><span class="sp-tema-tooltip" style="font-size:12px;color:#ccc">${esc(trunc)}${t.length>28?`<span class="sp-tooltip-txt">${esc(t)}</span>`:''}</span></div>`;}).join('')
       :`<span style="color:#444;font-size:12px">—</span>`;
 
-    const tierHtml=(()=>{const tc={1:'#22c55e',2:'#eab308',3:'#ef4444'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#888'};background:#1a1a1a;border:1px solid ${tc[t]||'#333'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="" style="background:#1a1a1a;color:#888">—</option><option value="1"${t==='1'?' selected':''} style="background:#1a1a1a;color:#22c55e">N1</option><option value="2"${t==='2'?' selected':''} style="background:#1a1a1a;color:#eab308">N2</option><option value="3"${t==='3'?' selected':''} style="background:#1a1a1a;color:#ef4444">N3</option></select>`;})();
+    const tierHtml=(()=>{const tc={1:'#16a34a',2:'#b45309',3:'#dc2626'};const t=s.tier||'';return `<select class="sp-tipo-sel" style="color:${tc[t]||'#6b7280'};background:#f5f7fa;border:1px solid ${tc[t]||'#cbd1da'};border-radius:4px;padding:1px 3px;font-size:12px" onchange="updateSpeaker(${ri},'tier',this.value);markDirty('speakers');renderSpeakers()"><option value="" style="background:#f5f7fa;color:#6b7280">—</option><option value="1"${t==='1'?' selected':''} style="background:#f5f7fa;color:#16a34a">N1</option><option value="2"${t==='2'?' selected':''} style="background:#f5f7fa;color:#b45309">N2</option><option value="3"${t==='3'?' selected':''} style="background:#f5f7fa;color:#dc2626">N3</option></select>`;})();
     // Contacto: flechas de enlace
     function socialLink(url,label,color){if(!url)return'';return `<a href="${esc(url)}" target="_blank" class="sp-link-arrow" style="color:${color}">${label} ↗</a>`;}
     const contactHtml=[
@@ -2081,7 +2081,7 @@ function renderSpeakers(){
       <td style="text-align:center" onclick="event.stopPropagation()">${tierHtml}</td>
       <td style="font-weight:700;white-space:nowrap">
         <div style="display:flex;align-items:center;gap:7px">
-          ${s.foto?`<img src="${esc(s.foto)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid #333" onerror="this.style.display='none'">`:`<div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;border:1px solid #333;flex-shrink:0"></div>`}
+          ${s.foto?`<img src="${esc(s.foto)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid #333" onerror="this.style.display='none'">`:`<div style="width:28px;height:28px;border-radius:50%;background:#e2e6ec;border:1px solid #cbd1da;flex-shrink:0"></div>`}
           <div>
             <div title="${esc([[s.nombre,s.apellido].filter(Boolean).join(' '),s.confname||s.apodo].filter(Boolean).join(' | '))}" style="color:${(()=>{const e=s.estado||'disponible';return e==='confirmado'?'#22c55e':e==='rechazado'?'#ef4444':e==='revision'||e==='revisar'?'#eab308':e==='respaldo'?'#f97316':'var(--red)'})()};font-size:14px">${esc(s.displayName||s.nombre||'')}</div>
             ${(s.nombre||s.apellido)?`<div style="color:#555;font-weight:400;font-size:12px">${esc(s.nombre||'')} ${esc(s.apellido||'')}</div>`:''}
@@ -2173,7 +2173,7 @@ function renderSpeakers(){
 
   // Manual speakers section (only in 'all' view)
   if(spFilterVal==='all'&&state.speakersManual.length){
-    rows+=`<tr><td colspan="13" style="padding:6px 8px;background:#111;font-size:14px;color:#eab308;font-weight:700">⚠️ Speakers manuales (datos incompletos)</td></tr>`;
+    rows+=`<tr><td colspan="13" style="padding:6px 8px;background:#fef9c3;font-size:14px;color:#854d0e;font-weight:700">⚠️ Speakers manuales (datos incompletos)</td></tr>`;
     rows+=renderManualSpeakersRows();
   }
 
@@ -2428,10 +2428,10 @@ function renderLanding(){
       });
       return allBlocks.join('');
     })();
-    const temas=(s._temas||[]).filter(t=>t.estado==='confirmado').map(t=>`<span style="background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:2px 7px;font-size:11px;color:#ccc">${esc(t.titulo||'')}</span>`).join(' ');
-    return `<div style="background:#111;border:1px solid #222;border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px">
+    const temas=(s._temas||[]).filter(t=>t.estado==='confirmado').map(t=>`<span style="background:#e2e6ec;border:1px solid #cbd1da;border-radius:4px;padding:2px 7px;font-size:11px;color:#ccc">${esc(t.titulo||'')}</span>`).join(' ');
+    return `<div style="background:#f0f2f6;border:1px solid #cbd1da;border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px">
       <div style="display:flex;align-items:center;gap:10px">
-        ${s.foto?`<img src="${esc(s.foto)}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #333" onerror="this.style.display='none'">`:`<div style="width:52px;height:52px;border-radius:50%;background:#1a1a1a;border:2px solid #333;flex-shrink:0"></div>`}
+        ${s.foto?`<img src="${esc(s.foto)}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #333" onerror="this.style.display='none'">`:`<div style="width:52px;height:52px;border-radius:50%;background:#e2e6ec;border:2px solid #cbd1da;flex-shrink:0"></div>`}
         <div>
           <div style="font-weight:700;font-size:15px;color:#22c55e">${nm}</div>
           ${s.cargo?`<div style="font-size:12px;color:#888">${esc(s.cargo)}${s.empresa?` · ${esc(s.empresa)}`:''}</div>`:''}
@@ -3078,10 +3078,10 @@ function openStageModal(sk,realIdx,mode,spRi,spTi){
     const name=stageNames[i]||key;
     const color=STAGE_COLORS[i]||'#6366f1';
     const btn=document.createElement('button');
-    btn.style.cssText=`background:#111;border:1px solid ${color}44;border-radius:6px;padding:9px 13px;color:#fff;cursor:pointer;text-align:left;font-size:13px;width:100%;transition:background .15s`;
+    btn.style.cssText=`background:#f5f7fa;border:1px solid ${color}44;border-radius:6px;padding:9px 13px;color:var(--text);cursor:pointer;text-align:left;font-size:13px;width:100%;transition:background .15s`;
     btn.innerHTML=`<span style="color:${color};font-weight:700;margin-right:6px">●</span>${esc(name)}`;
     btn.onclick=()=>{
-      list.querySelectorAll('button').forEach(b=>b.style.cssText=b.style.cssText.replace(/background:[^;]+/,`background:#111`));
+      list.querySelectorAll('button').forEach(b=>b.style.cssText=b.style.cssText.replace(/background:[^;]+/,`background:#eef0f4`));
       btn.style.background=`${color}22`;
       _stagePickCtx.destSk=key;
     };
@@ -3095,7 +3095,7 @@ function openStageModal(sk,realIdx,mode,spRi,spTi){
     b.className='btn';
     b.textContent=label;
     const active=day===_stagePickCtx.destDay;
-    b.style.cssText=`flex:1;font-weight:700;${active?'background:#f7931a;color:#000;border-color:#f7931a':'background:#111;color:#fff;border-color:#444'}`;
+    b.style.cssText=`flex:1;font-weight:700;${active?'background:#f7931a;color:#000;border-color:#f7931a':'background:#e2e6ec;color:var(--text);border-color:#cbd1da'}`;
     b.onclick=()=>{
       _stagePickCtx.destDay=day;
       daysEl.querySelectorAll('button').forEach(x=>{x.style.background='#111';x.style.color='#fff';x.style.borderColor='#444';});
@@ -3344,7 +3344,7 @@ function renderKanban() {
       const assign = calcSpeakerAssignmentsText(s.nombre || '');
       return `<div draggable="true"
         ondragstart="kanbanDragStart(event,${i})"
-        style="background:#1a1a1a;border:1px solid ${color}44;border-radius:8px;padding:8px 10px;margin-bottom:6px;cursor:grab;user-select:none">
+        style="background:#f5f7fa;border:1px solid ${color}44;border-radius:8px;padding:8px 10px;margin-bottom:6px;cursor:grab;user-select:none">
         <div style="font-weight:700;color:#fff;font-size:13px;margin-bottom:2px">${esc(s.nombre || '')}${alias}</div>
         ${temas ? `<div style="margin:3px 0">${temas}</div>` : ''}
         ${assign ? `<div style="font-size:11px;color:#f97316;margin-top:3px">📍 ${esc(assign)}</div>` : ''}
@@ -3408,7 +3408,7 @@ function renderTiers() {
       const assign  = calcSpeakerAssignmentsText(s.nombre||'');
       return `<div draggable="true"
         ondragstart="tiersDragStart(event,${i})"
-        style="background:#1a1a1a;border:1px solid ${color}55;border-left:4px solid ${color};border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;user-select:none">
+        style="background:#f5f7fa;border:1px solid ${color}55;border-left:4px solid ${color};border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;user-select:none">
         <div style="font-weight:700;color:#fff;margin-bottom:3px">${esc(s.nombre||'')}</div>
         <div style="font-size:14px;color:${tipoCol};margin-bottom:4px;text-transform:capitalize">${esc(s.tipo||'speaker')}</div>
         ${s.empresa ? `<div style="font-size:14px;color:#94a3b8;margin-bottom:3px">🏢 ${esc(s.empresa)}</div>` : ''}
