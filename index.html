@@ -88,7 +88,7 @@ thead .col-stk{z-index:11;background:var(--bg3);}
 .stage-inp:focus{background:var(--red-dim);border-radius:4px;}
 .stage-edit-btn{background:none;border:none;cursor:pointer;color:#666;font-size:13px;padding:1px 3px;border-radius:3px;line-height:1;vertical-align:middle;}
 .stage-edit-btn:hover{color:var(--text);background:var(--bg3);}
-tbody tr:hover{background:rgba(255,255,255,.015);}
+tbody tr:hover{background:rgba(0,0,0,.03);}
 td{border:1px solid var(--border);padding:0;vertical-align:middle;}
 td.row-actions{width:52px;min-width:52px;text-align:center;padding:2px;}
 .row-act-wrap{display:flex;flex-direction:column;gap:1px;align-items:center;}
@@ -135,7 +135,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-drop-search input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:4px;font-size:15px;outline:none;}
 .sp-drop-search input:focus{border-color:var(--red);}
 .sp-drop-list{overflow-y:auto;flex:1;}
-.sp-section-lbl{padding:4px 8px;font-size:16px;font-weight:700;color:var(--text);background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);}
+.sp-section-lbl{padding:4px 8px;font-size:16px;font-weight:700;color:var(--text);background:var(--bg2);border-bottom:1px solid var(--border);}
 .sp-item{padding:6px 10px;cursor:pointer;border-bottom:1px solid var(--border);}
 .sp-item:last-child{border-bottom:none;}
 .sp-item:hover{background:var(--red-dim);}
@@ -182,7 +182,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 /* Fila de detalle expandida */
 .sp-detail-row{display:none;}
 .sp-detail-row.open{display:table-row;}
-.sp-detail-row td{background:#0a0a0a;border:1px solid #333;padding:14px 16px;white-space:normal;max-width:none;}
+.sp-detail-row td{background:var(--bg2);border:1px solid var(--border);padding:14px 16px;white-space:normal;max-width:none;}
 .sp-detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 20px;}
 .sp-detail-section{margin-bottom:12px;}
 .sp-detail-sec-title{font-size:11px;font-weight:800;color:var(--red);letter-spacing:.06em;margin-bottom:6px;border-bottom:1px solid #222;padding-bottom:3px;}
@@ -200,7 +200,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .sp-tipo-sel:focus{background:var(--red-dim);}
 .sp-estado-sel{border:none;border-radius:4px;font-size:14px;font-weight:700;padding:2px 4px;cursor:pointer;outline:none;font-family:inherit;width:100%;}
 .sp-estado-sel.est-empty{background:var(--bg3);color:var(--text);}
-.sp-estado-sel.est-disponible{background:rgba(255,255,255,.06);color:var(--text);border:1px solid #444;}
+.sp-estado-sel.est-disponible{background:var(--bg2);color:var(--text);border:1px solid var(--border);}
 .sp-estado-sel.est-confirmado{background:rgba(34,197,94,.2);color:#22c55e;}
 .sp-estado-sel.est-revision{background:rgba(234,179,8,.2);color:#eab308;}
 .sp-estado-sel.est-respaldo{background:rgba(249,115,22,.2);color:#f97316;}
@@ -225,11 +225,11 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .day-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-size:11px;font-weight:700;cursor:pointer;margin:1px;transition:all .12s;}
 .day-chip.main{color:var(--text);border-color:#555;}
 .day-chip.side{color:#444;border-color:#333;}
-.day-chip.active.main{background:rgba(255,255,255,.15);border-color:var(--text);color:var(--text);}
+.day-chip.active.main{background:var(--bg3);border-color:var(--text);color:var(--text);}
 .day-chip.active.side{background:rgba(100,100,100,.2);border-color:#666;color:#888;}
 /* Enlace social arrow */
 .sp-link-arrow{display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:700;text-decoration:none;padding:2px 6px;border-radius:4px;border:1px solid transparent;transition:all .12s;}
-.sp-link-arrow:hover{border-color:currentColor;background:rgba(255,255,255,.05);}
+.sp-link-arrow:hover{border-color:currentColor;background:var(--bg3);}
 .sp-manual-row{background:rgba(234,179,8,.04);}
 .sp-manual-badge{display:inline-block;background:rgba(234,179,8,.2);color:#eab308;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;}
 .sp-fuzzy-row td{background:rgba(59,130,246,.04);border-top:none;padding:4px 8px;font-size:14px;color:#3b82f6;cursor:pointer;}
@@ -271,7 +271,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 .ideas-table{border-collapse:collapse;width:100%;}
 .ideas-table thead th{background:var(--bg3);border:1px solid var(--border);padding:7px 10px;text-align:left;font-size:15px;font-weight:700;color:var(--text);position:sticky;top:0;z-index:10;}
 .ideas-table tbody td{border:1px solid var(--border);padding:6px 8px;vertical-align:top;font-size:14px;}
-.ideas-table tbody tr:hover{background:rgba(255,255,255,.025);}
+.ideas-table tbody tr:hover{background:rgba(0,0,0,.03);}
 .idea-del{background:none;border:none;color:var(--dim);cursor:pointer;font-size:16px;padding:3px;}
 .idea-del:hover{color:#ef4444;}
 .idea-cat-chip{display:inline-block;border-radius:4px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap;}
@@ -972,8 +972,8 @@ function makeAgendaRow(row,realIdx,sk){
   const hasData=!!(row.speaker||row.tema||row.descripcion||row.moderador);
   const hasTime=!!(row.inicio&&row.inicio.trim());
   if(hasData&&!hasTime) tr.style.background='rgba(56,189,248,0.09)';
-  else if(hasData) tr.style.background='rgba(255,255,255,0.05)';
-  else tr.style.background='rgba(255,255,255,0.055)';
+  else if(hasData) tr.style.background='rgba(0,0,0,0.02)';
+  else tr.style.background='';
 
   // Actions
   const tdAct=document.createElement('td');
@@ -1142,7 +1142,7 @@ function renderSpCell(idx,sk,selected){
     const alias=sp?.confname||sp?.apodo||'';
     const tooltipSp=fullName?(alias?`${fullName} (${alias})`:fullName):'';
     const isAssigned=count>0;
-    return `<div style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.06);border-radius:4px;padding:2px 5px;margin:1px 0">
+    return `<div style="display:flex;align-items:center;gap:3px;background:var(--bg2);border-radius:4px;padding:2px 5px;margin:1px 0">
       <span title="${esc(tooltipSp||name)}" style="font-size:12px;font-weight:700;color:${isAssigned?'#22c55e':'#fff'}">${esc(name)}${esc(apodo)}</span>
       ${count>0?`<span style="font-size:10px;font-weight:700;color:${countColor};margin-left:2px">${count}</span>`:''}
       <button onclick="removeSpeakerFromCell(${idx},'${sk}','${name.replace(/'/g,"\\'")}',event)" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:0 1px;line-height:1" title="Quitar">✕</button>
@@ -3299,8 +3299,8 @@ function buildStageSemaphore() {
     const bgColor = isActive ? bg : 'transparent';
     const opacity = isInactive ? 'opacity:0.35;' : '';
     return `<div onclick="selectStage('${sk}',event)" style="flex:1;min-width:70px;max-width:130px;padding:5px 8px;border-radius:6px;border:${border};background:${bgColor};text-align:center;cursor:pointer;transition:all .15s;${opacity}" title="${pct}% ocupado — Clic para ver, Shift+clic para comparar${isInactive?' (inactivo)':''}">
-      <div style="font-size:12px;font-weight:700;color:${isInactive?'#555':'#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
-      <div style="font-size:13px;font-weight:800;color:${isInactive?'#444':color}">${pct}%</div>
+      <div style="font-size:12px;font-weight:700;color:${isInactive?'#94a3b8':color};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
+      <div style="font-size:13px;font-weight:800;color:${isInactive?'#94a3b8':color}">${pct}%</div>
       ${isCompare?`<div style="font-size:9px;color:${color};margin-top:1px">⇄ comp.</div>`:''}
     </div>`;
   }).join('');
@@ -3358,7 +3358,7 @@ function renderKanban() {
       <div style="font-weight:700;font-size:16px;color:${color};margin-bottom:10px;padding:6px 10px;background:${color}18;border-radius:8px;border:1px solid ${color}44">
         ${KANBAN_LABELS[col]} <span style="float:right;opacity:.7">${(groups[col]||[]).length}</span>
       </div>
-      <div style="flex:1;min-height:80px;padding:4px;background:#0a0a0a;border-radius:8px;border:1px dashed #2d2d2d">
+      <div style="flex:1;min-height:80px;padding:4px;background:var(--bg2);border-radius:8px;border:1px dashed var(--border)">
         ${cards || '<div style="color:#444;font-size:15px;text-align:center;padding:20px">Vacío</div>'}
       </div>
     </div>`;
@@ -3486,7 +3486,7 @@ function renderCanvas(){
     let bgLines='';
     for(let m=RANGE_START;m<=RANGE_END;m+=30){
       const top=(m-RANGE_START)*PX_MIN;
-      bgLines+=`<div style="position:absolute;left:0;right:0;top:${top}px;border-top:1px solid ${m%60===0?'#1f2937':'#111827'};pointer-events:none"></div>`;
+      bgLines+=`<div style="position:absolute;left:0;right:0;top:${top}px;border-top:1px solid ${m%60===0?'#d1d5db':'#e5e7eb'};pointer-events:none"></div>`;
     }
     let blocks='';
     rows.forEach(({row})=>{
@@ -3497,18 +3497,19 @@ function renderCanvas(){
       const top=(s-RANGE_START)*PX_MIN;
       const h=Math.max(dur*PX_MIN-2,12);
       const isPending=(row.notas||'').includes('[pendiente]');
-      const bg=isPending?'#78350f':(TIPO_COLOR[row.tipo]||'#1e3a8a');
-      const border=isPending?'1px solid #fbbf24':'1px solid rgba(255,255,255,.1)';
+      const bg=isPending?'#fef3c7':(TIPO_COLOR[row.tipo]||'#dbeafe');
+      const border=isPending?'1px solid #f59e0b':'1px solid rgba(0,0,0,.1)';
+      const textCol=isPending?'#92400e':'#1e3a8a';
       const spNames=(row.speaker||'').split('|').filter(Boolean).join(', ');
       const tooltip=`${row.tipo} · ${dur}min\n${row.tema||''}\n${spNames}${isPending?' · [pendiente]':''}`;
       blocks+=`<div title="${tooltip.trim()}" style="position:absolute;left:2px;right:2px;top:${top}px;height:${h}px;background:${bg};border-radius:3px;padding:2px 4px;overflow:hidden;border:${border};box-sizing:border-box">
-        <div style="font-size:10px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3">${row.tema||row.tipo}</div>
-        ${h>22&&spNames?`<div style="font-size:9px;color:rgba(255,255,255,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${spNames}</div>`:''}
+        <div style="font-size:10px;font-weight:700;color:${textCol};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3">${row.tema||row.tipo}</div>
+        ${h>22&&spNames?`<div style="font-size:9px;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${spNames}</div>`:''}
       </div>`;
     });
     const name=stageNames[i]||`Stage ${i+1}`;
-    return `<div style="flex:1;min-width:140px;border-left:1px solid #1f2937">
-      <div style="padding:5px 6px;font-size:11px;font-weight:700;color:#f7931a;background:#0a0a0a;position:sticky;top:50px;z-index:2;border-bottom:1px solid #1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${name}">${name}</div>
+    return `<div style="flex:1;min-width:140px;border-left:1px solid var(--border)">
+      <div style="padding:5px 6px;font-size:11px;font-weight:700;color:var(--text);background:var(--bg2);position:sticky;top:50px;z-index:2;border-bottom:1px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${name}">${name}</div>
       <div style="position:relative;height:${H}px">${bgLines}${blocks}</div>
     </div>`;
   }).join('');
