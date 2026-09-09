@@ -2516,6 +2516,7 @@ async function loadSpeakers(){
         landing:isV3?String(r[36]||''):'',
         mail_ok:isV3?String(r[37]||''):'',
         landing_ok:isV3?String(r[38]||''):'',
+        tier:isV3?String(r[39]||''):'',
         get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
         get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
         get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
@@ -2571,7 +2572,8 @@ async function saveSpeakers(){
     s.oct29||'',s.oct30||'',s.oct31||'',s.nov1||'', // [32-35]
     s.landing||'',                                   // [36]
     s.mail_ok||'',                                   // [37]
-    s.landing_ok||''                                 // [38]
+    s.landing_ok||'',                                // [38]
+    s.tier||''                                       // [39]
   ]);
   await gasPost('Speakers','replace_all',data);
   // Also save manual if dirty
