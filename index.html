@@ -330,7 +330,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
   <button class="tab-btn" data-tab="resumen" onclick="switchTab('resumen')">📊 Resumen</button>
   <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">❓ Ideas</button>
   <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
-  <button class="tab-btn" data-tab="canvas" onclick="switchTab('canvas')">🗓️ Kanban</button>
+  <button class="tab-btn" data-tab="planning" onclick="switchTab('planning')">🗺️ Planning</button>
   <button class="tab-btn" data-tab="landing" onclick="switchTab('landing')">🌐 Landing</button>
   <div class="nav-right">
     <span style="font-size:14px;color:#ffffff;font-weight:700;margin-right:2px">Día:</span>
@@ -511,6 +511,32 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB CANVAS -->
+<div class="tab-content" id="tab-planning">
+  <!-- Planning toolbar -->
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 18px;background:#f0f2f5;border-bottom:1px solid #d1d5db;flex-wrap:wrap">
+    <span style="font-size:15px;font-weight:700;color:#111">🗺️ Planning</span>
+    <div style="width:1px;height:22px;background:#d1d5db"></div>
+    <button id="planDayBtn2" onclick="planSetDay(2)" style="padding:4px 14px;border-radius:6px;border:1px solid #f97316;background:#fff7ed;color:#c2410c;font-weight:700;font-size:13px;cursor:pointer">Vie 30/Oct</button>
+    <button id="planDayBtn3" onclick="planSetDay(3)" style="padding:4px 14px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#6b7280;font-weight:700;font-size:13px;cursor:pointer">Sáb 31/Oct</button>
+    <div style="width:1px;height:22px;background:#d1d5db"></div>
+    <label style="font-size:13px;color:#374151;display:flex;align-items:center;gap:5px;cursor:pointer">
+      <input type="checkbox" id="planMergeCheck" onchange="renderPlanning()" style="width:15px;height:15px">
+      Unir Pastilla + Visión (Main Stage)
+    </label>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+      <span style="font-size:11px;color:#6b7280">Leyenda:</span>
+      <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0">✓ Sin cambios</span>
+      <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe">✎ Editado</span>
+      <span style="font-size:11px;padding:2px 8px;border-radius:4px;background:#fef9c3;color:#854d0e;border:1px solid #fde68a">✦ Nuevo</span>
+      <button onclick="planConfirmAll()" style="padding:4px 14px;border-radius:6px;border:1px solid #16a34a;background:#dcfce7;color:#166534;font-weight:700;font-size:13px;cursor:pointer">✅ Confirmar todo</button>
+      <button onclick="planReset()" style="padding:4px 14px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#6b7280;font-size:13px;cursor:pointer">↺ Descartar</button>
+    </div>
+  </div>
+  <div style="overflow:auto;max-height:calc(100vh - 130px)">
+    <div id="planningGrid" style="min-width:900px"></div>
+  </div>
+</div>
+
 <div class="tab-content" id="tab-canvas">
   <div class="toolbar">
     <span style="font-size:13px;color:#aaa">Vista visual · Día <span id="canvasDayLabel" style="color:#f7931a;font-weight:700"></span></span>
@@ -695,6 +721,7 @@ function switchTab(name){
   if(name==='kanban') renderKanban();
   if(name==='tiers') renderTiers();
   if(name==='canvas') renderCanvas();
+  if(name==='planning') renderPlanning();
   if(name==='speakers') renderSpeakers();
   if(name==='landing') renderLanding();
 }
@@ -3549,6 +3576,223 @@ async function init(){
   await loadAll();
 }
 
+
+// ── PLANNING ──────────────────────────────────────────────────────────
+// planDraft[day][sk][inicio] = { text, speaker, state: 'original'|'edited'|'new' }
+let planDraft = {};
+let planDay = 2;
+
+function planSetDay(d) {
+  planDay = d;
+  document.getElementById('planDayBtn2').style.cssText = d===2
+    ? 'padding:4px 14px;border-radius:6px;border:1px solid #f97316;background:#fff7ed;color:#c2410c;font-weight:700;font-size:13px;cursor:pointer'
+    : 'padding:4px 14px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#6b7280;font-weight:700;font-size:13px;cursor:pointer';
+  document.getElementById('planDayBtn3').style.cssText = d===3
+    ? 'padding:4px 14px;border-radius:6px;border:1px solid #f97316;background:#fff7ed;color:#c2410c;font-weight:700;font-size:13px;cursor:pointer'
+    : 'padding:4px 14px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#6b7280;font-weight:700;font-size:13px;cursor:pointer';
+  renderPlanning();
+}
+
+function planKey(day, sk) { return day + '|' + sk; }
+
+function planInitDraft() {
+  // Build draft from current agenda if not yet initialized for this day
+  STAGE_KEYS.forEach(sk => {
+    const k = planKey(planDay, sk);
+    if (planDraft[k]) return; // already have draft
+    planDraft[k] = {};
+    getAgendaRows(sk, planDay).forEach(({row}) => {
+      if (!row.inicio) return;
+      const txt = [row.tema||'', row.speaker||''].filter(Boolean).join('\n');
+      planDraft[k][row.inicio] = { text: txt, speaker: row.speaker||'', tema: row.tema||'', dur: row.dur||30, state: 'original' };
+    });
+  });
+}
+
+function renderPlanning() {
+  planInitDraft();
+  const merge = document.getElementById('planMergeCheck')?.checked;
+  const grid = document.getElementById('planningGrid');
+  if (!grid) return;
+
+  // Collect all time slots from all stages for this day
+  const timeSet = new Set();
+  STAGE_KEYS.forEach(sk => {
+    getAgendaRows(sk, planDay).forEach(({row}) => { if(row.inicio) timeSet.add(row.inicio); });
+    // Also from draft (new slots)
+    const k = planKey(planDay, sk);
+    if (planDraft[k]) Object.keys(planDraft[k]).forEach(t => timeSet.add(t));
+  });
+
+  // Generate time slots 9:00–20:00 every 30min
+  const slots = [];
+  for (let m = 9*60; m <= 20*60; m += 30) slots.push(minToTime(m));
+
+  // Active stages (respecting stageOrder + inactiveStages filtering for planning — show first 6)
+  // Use stageOrder to pick which stages to show
+  const activeIdxs = stageOrder.filter(i => !inactiveStages.includes(i)).slice(0,6);
+  // If merge: treat idx 0 and 1 (Pastilla+Visión) as one column
+  let cols = activeIdxs.map(i => ({ idx: i, sk: STAGE_KEYS[i], name: stageNames[i]||('Stage '+(i+1)) }));
+
+  const PLAN_COLORS = ['#f97316','#8b5cf6','#0ea5e9','#10b981','#f59e0b','#ec4899','#6366f1','#14b8a6','#84cc16'];
+
+  // Build header
+  let colDefs = cols;
+  if (merge && cols.length >= 2) {
+    colDefs = [{ idx: -1, sk: '__merge__', name: cols[0].name + ' + ' + cols[1].name, merged: [cols[0], cols[1]] }, ...cols.slice(2)];
+  }
+
+  const totalCols = colDefs.length;
+  let html = `<table style="border-collapse:collapse;width:100%;background:#fff;font-family:system-ui,sans-serif">`;
+
+  // Header row
+  html += `<thead><tr>`;
+  html += `<th style="width:54px;padding:8px 6px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;color:#64748b;font-weight:600;position:sticky;left:0;z-index:2">Hora</th>`;
+  colDefs.forEach((col, ci) => {
+    const color = PLAN_COLORS[ci % PLAN_COLORS.length];
+    const span = col.merged ? 2 : 1;
+    html += `<th colspan="${span}" style="padding:10px 8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:13px;font-weight:700;color:${color};text-align:center;min-width:${col.merged?260:130}px">${esc(col.name)}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  // Time rows
+  slots.forEach(slot => {
+    html += `<tr>`;
+    html += `<td style="padding:4px 6px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;color:#64748b;font-weight:600;text-align:center;position:sticky;left:0;z-index:1;white-space:nowrap">${slot}</td>`;
+
+    colDefs.forEach((col, ci) => {
+      if (col.merged) {
+        // merged cell: combine data from both sub-cols
+        const cell0 = (planDraft[planKey(planDay, col.merged[0].sk)]||{})[slot];
+        const cell1 = (planDraft[planKey(planDay, col.merged[1].sk)]||{})[slot];
+        const cell = cell0 || cell1 || null;
+        const sk = cell0 ? col.merged[0].sk : col.merged[1].sk;
+        html += planCell(slot, sk, planDay, cell, 2, PLAN_COLORS[ci % PLAN_COLORS.length]);
+      } else {
+        const cell = (planDraft[planKey(planDay, col.sk)]||{})[slot] || null;
+        html += planCell(slot, col.sk, planDay, cell, 1, PLAN_COLORS[ci % PLAN_COLORS.length]);
+      }
+    });
+
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table>`;
+  grid.innerHTML = html;
+}
+
+function planCell(slot, sk, day, cell, colspan, accentColor) {
+  const k = planKey(day, sk);
+  const isEmpty = !cell || (!cell.text && !cell.speaker && !cell.tema);
+  const cellState = cell ? cell.state : 'empty';
+
+  let bg = '#fff', border = '1px solid #e2e8f0', textColor = '#374151';
+  let badge = '';
+  if (cellState === 'original' && !isEmpty) {
+    bg = '#f0fdf4'; border = '1px solid #bbf7d0'; badge = `<span style="font-size:9px;background:#dcfce7;color:#166534;border-radius:3px;padding:1px 4px;float:right">✓</span>`;
+  } else if (cellState === 'edited') {
+    bg = '#eff6ff'; border = '1px solid #bfdbfe'; badge = `<span style="font-size:9px;background:#dbeafe;color:#1e40af;border-radius:3px;padding:1px 4px;float:right">✎</span>`;
+  } else if (cellState === 'new') {
+    bg = '#fefce8'; border = '1px solid #fde68a'; badge = `<span style="font-size:9px;background:#fef9c3;color:#854d0e;border-radius:3px;padding:1px 4px;float:right">✦</span>`;
+  }
+
+  const tema = cell ? (cell.tema||'') : '';
+  const speaker = cell ? (cell.speaker||'') : '';
+  const displayTema = tema ? `<div style="font-size:12px;font-weight:600;color:#111;line-height:1.3;margin-bottom:2px">${esc(tema)}</div>` : '';
+  const displaySpeaker = speaker ? `<div style="font-size:11px;color:#6b7280;font-style:italic">${esc(speaker)}</div>` : '';
+  const placeholder = isEmpty ? `<span style="font-size:11px;color:#d1d5db">+ agregar</span>` : '';
+
+  const skSafe = sk.replace(/'/g,"\\'");
+  const slotSafe = slot.replace(/'/g,"\\'");
+
+  return `<td colspan="${colspan}" onclick="planOpenEdit('${slotSafe}','${skSafe}',${day})" style="padding:5px 7px;background:${bg};border:${border};vertical-align:top;cursor:pointer;min-width:${colspan>1?240:120}px;max-width:${colspan>1?300:180}px;transition:background .1s" onmouseenter="this.style.filter='brightness(0.96)'" onmouseleave="this.style.filter=''">
+    ${badge}
+    ${displayTema}${displaySpeaker}${placeholder}
+  </td>`;
+}
+
+function planOpenEdit(slot, sk, day) {
+  const k = planKey(day, sk);
+  const cell = (planDraft[k]||{})[slot] || { tema:'', speaker:'', dur:30, state:'new' };
+  const isNew = !planDraft[k]?.[slot];
+
+  const modalHtml = `
+  <div id="planEditModal" onclick="if(event.target===this)planCloseEdit()" style="position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:9999;display:flex;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:12px;padding:24px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2);font-family:system-ui,sans-serif">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <span style="font-size:15px;font-weight:700;color:#111">Editar slot ${slot} — ${stageNames[STAGE_KEYS.indexOf(sk)]||sk}</span>
+        <button onclick="planCloseEdit()" style="background:none;border:none;font-size:20px;color:#9ca3af;cursor:pointer">✕</button>
+      </div>
+      <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">Tema / Título</label>
+      <input id="planEditTema" value="${esc(cell.tema||'').replace(/"/g,'&quot;')}" placeholder="Título de la charla…"
+        style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;color:#111;margin-bottom:12px;outline:none">
+      <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">Speaker</label>
+      <input id="planEditSpeaker" value="${esc(cell.speaker||'').replace(/"/g,'&quot;')}" placeholder="Nombre del speaker…"
+        style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;color:#111;margin-bottom:12px;outline:none">
+      <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">Duración (min)</label>
+      <input id="planEditDur" type="number" value="${cell.dur||30}" min="15" max="180" step="15"
+        style="width:100px;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;color:#111;margin-bottom:20px;outline:none">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        ${!isNew && cell.state==='original' ? `<button onclick="planClearCell('${slotEsc(slot)}','${slotEsc(sk)}',${day})" style="padding:7px 14px;border-radius:6px;border:1px solid #fca5a5;background:#fff;color:#dc2626;font-size:13px;cursor:pointer">🗑 Limpiar</button>` : ''}
+        <button onclick="planCloseEdit()" style="padding:7px 16px;border-radius:6px;border:1px solid #d1d5db;background:#f9fafb;color:#374151;font-size:13px;cursor:pointer">Cancelar</button>
+        <button onclick="planSaveCell('${slotEsc(slot)}','${slotEsc(sk)}',${day})" style="padding:7px 16px;border-radius:6px;border:none;background:#0ea5e9;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Guardar borrador</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  document.getElementById('planEditTema').focus();
+}
+
+function slotEsc(s){ return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function planCloseEdit() {
+  document.getElementById('planEditModal')?.remove();
+}
+
+function planSaveCell(slot, sk, day) {
+  const tema = document.getElementById('planEditTema').value.trim();
+  const speaker = document.getElementById('planEditSpeaker').value.trim();
+  const dur = parseInt(document.getElementById('planEditDur').value)||30;
+  const k = planKey(day, sk);
+  if (!planDraft[k]) planDraft[k] = {};
+  const wasOriginal = planDraft[k][slot]?.state === 'original';
+  const isEmpty = !tema && !speaker;
+  if (isEmpty) {
+    delete planDraft[k][slot];
+  } else {
+    planDraft[k][slot] = {
+      tema, speaker, dur,
+      text: [tema, speaker].filter(Boolean).join('\n'),
+      state: wasOriginal ? 'edited' : 'new'
+    };
+  }
+  planCloseEdit();
+  renderPlanning();
+}
+
+function planClearCell(slot, sk, day) {
+  const k = planKey(day, sk);
+  if (planDraft[k]) delete planDraft[k][slot];
+  planCloseEdit();
+  renderPlanning();
+}
+
+function planConfirmAll() {
+  // Mark all edited/new cells as original (confirmed)
+  Object.keys(planDraft).forEach(k => {
+    Object.keys(planDraft[k]).forEach(slot => {
+      if (planDraft[k][slot].state !== 'original') planDraft[k][slot].state = 'original';
+    });
+  });
+  renderPlanning();
+  toast('✅ Planning confirmado');
+}
+
+function planReset() {
+  // Clear draft for current day — reloads from agenda
+  STAGE_KEYS.forEach(sk => { delete planDraft[planKey(planDay, sk)]; });
+  renderPlanning();
+}
 
 // Arranque directo — la app es pública de leer; la clave de escritura se pide al guardar
 init();
