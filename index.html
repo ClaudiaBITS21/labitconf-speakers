@@ -2471,8 +2471,14 @@ async function loadSpeakers(){
     // Schema medio (v2): [0]nombre [1]apellido [2]tipo [3]apodo [4]cargo [5]pais [6]idioma
     // [7]mail ... [24]temas JSON [25]temas_estado [26]estado [27]oct29...[30]nov1
     state.speakers=rows.map(r=>{
-      // Detectar versión del schema: si r[0] es número → v3 (con postulacion_num)
-      const isV3 = !isNaN(parseInt(r[0])) && String(r[0]).trim()!=='';
+      // Detectar versión del schema:
+      // v3: r[0]=postulacion_num (número), r[29]=temas JSON
+      // v2: r[0]=nombre (texto), r[24]=temas JSON
+      // Si r[0] es número → v3. Si r[0] está vacío pero r[29] tiene JSON → también v3.
+      const r0num = !isNaN(parseInt(r[0])) && String(r[0]).trim()!=='';
+      const r29json = String(r[29]||'').trim().startsWith('[');
+      const r4tipo = ['speaker','moderador','empresa','sponsor','panelista'].includes(String(r[4]||'').toLowerCase());
+      const isV3 = r0num || ((!r0num) && (r29json || r4tipo));
       let base, temaCol, estadoCol, oct29Col;
       if(isV3){
         base={

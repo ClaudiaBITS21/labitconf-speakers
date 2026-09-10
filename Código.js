@@ -671,6 +671,41 @@ function handleFormSubmit(ss, d) {
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
 }
 
+// ── FIX POSTULACION_NUM VACÍOS ──────────────────────────────────────
+// Asigna postulacion_num correlativo a filas de Speakers que lo tienen vacío
+// Ejecutar desde el editor de GAS para limpiar filas sin número
+function fixMissingPostulacionNum() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('Speakers');
+  if (!sheet) { Logger.log('❌ No se encontró la hoja Speakers'); return; }
+
+  const data = sheet.getDataRange().getValues();
+  // Encontrar el máximo postulacion_num actual
+  let maxNum = 0;
+  for (let i = 1; i < data.length; i++) {
+    const n = parseInt(data[i][0]);
+    if (!isNaN(n) && n > maxNum) maxNum = n;
+  }
+  Logger.log('Máximo postulacion_num actual: ' + maxNum);
+
+  let fixed = 0;
+  for (let i = 1; i < data.length; i++) {
+    const r = data[i];
+    const num = String(r[0]||'').trim();
+    const nombre = String(r[1]||'').trim();
+    if (!num && nombre) {
+      maxNum++;
+      sheet.getRange(i+1, 1).setValue(maxNum);
+      fixed++;
+      Logger.log('Fila ' + (i+1) + ' (' + nombre + ') → asignado #' + maxNum);
+    }
+  }
+  // Actualizar el counter de Script Properties
+  PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(maxNum));
+  PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+  Logger.log('✅ ' + fixed + ' filas corregidas. Nuevo máximo: ' + maxNum);
+}
+
 // ── FIX SPEAKER HEADERS ─────────────────────────────────────────────
 // Corrige el header de la hoja Speakers para incluir las columnas 37-40
 // Ejecutar UNA VEZ desde el editor de GAS si los tiers no persisten
