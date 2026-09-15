@@ -123,25 +123,26 @@ function notificarTelegram(d, counter, idioma) {
       method: 'POST',
       contentType: 'application/json',
       payload: payload,
-      muteHttpExceptions: true
+      muteHttpExceptions: true,
+      deadline: 10
     });
   } catch(e) { Logger.log('Telegram error: ' + e.message); }
 }
 
 // Sube una foto (base64 data URL) a Drive via REST API y devuelve URL de miniatura
-function savePhotoToDrive(base64DataUrl, counter, confname) {
+// Sube foto con nombre temporal y devuelve {url, fileId} — el nombre final se asigna después del lock
+function savePhotoToDriveTemp(base64DataUrl, confname) {
   try {
     const match = base64DataUrl.match(/^data:([^;]+);base64,(.+)$/);
-    if (!match) return '';
+    if (!match) return { url: '', fileId: '' };
     const mimeType = match[1];
     const b64Data  = match[2];
-    const ext      = mimeType.includes('png') ? 'png' : 'jpg';
     const safeName = String(confname||'speaker').replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
-    const filename = String(counter).padStart(4,'0') + '-' + safeName + '.' + ext;
+    const tempName = 'tmp-' + safeName + '-' + Date.now() + '.jpg';
     const token    = ScriptApp.getOAuthToken();
     const bytes    = Utilities.base64Decode(b64Data);
 
-    // 1. Subir contenido del archivo
+    // 1. Subir contenido
     const uploadRes = UrlFetchApp.fetch(
       'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&fields=id',
       {
@@ -149,23 +150,25 @@ function savePhotoToDrive(base64DataUrl, counter, confname) {
         contentType: mimeType,
         payload: bytes,
         headers: { Authorization: 'Bearer ' + token },
-        muteHttpExceptions: true
+        muteHttpExceptions: true,
+        deadline: 20
       }
     );
     const uploadJson = JSON.parse(uploadRes.getContentText());
-    if (!uploadJson.id) { Logger.log('Upload error: ' + uploadRes.getContentText()); return ''; }
+    if (!uploadJson.id) { Logger.log('Upload error: ' + uploadRes.getContentText()); return { url: '', fileId: '' }; }
     const fileId = uploadJson.id;
 
-    // 2. Actualizar nombre y mover a la carpeta
+    // 2. Mover a carpeta con nombre temporal
     UrlFetchApp.fetch(
       'https://www.googleapis.com/drive/v3/files/' + fileId +
       '?addParents=' + PHOTO_FOLDER_ID + '&fields=id',
       {
         method: 'PATCH',
         contentType: 'application/json',
-        payload: JSON.stringify({ name: filename }),
+        payload: JSON.stringify({ name: tempName }),
         headers: { Authorization: 'Bearer ' + token },
-        muteHttpExceptions: true
+        muteHttpExceptions: true,
+        deadline: 10
       }
     );
 
@@ -177,15 +180,31 @@ function savePhotoToDrive(base64DataUrl, counter, confname) {
         contentType: 'application/json',
         payload: JSON.stringify({ role: 'reader', type: 'anyone' }),
         headers: { Authorization: 'Bearer ' + token },
-        muteHttpExceptions: true
+        muteHttpExceptions: true,
+        deadline: 10
       }
     );
 
-    return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
+    return { url: 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400', fileId: fileId };
   } catch(e) {
     Logger.log('Error saving photo: ' + e.message);
-    return '';
+    return { url: '', fileId: '' };
   }
+}
+
+// Renombra un archivo en Drive (usado por renumerarDuplicados)
+function renombrarFotoEnDrive(fileId, newName) {
+  try {
+    const token = ScriptApp.getOAuthToken();
+    UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?fields=id', {
+      method: 'PATCH',
+      contentType: 'application/json',
+      payload: JSON.stringify({ name: newName }),
+      headers: { Authorization: 'Bearer ' + token },
+      muteHttpExceptions: true,
+      deadline: 10
+    });
+  } catch(e) { Logger.log('Rename error ' + fileId + ': ' + e.message); }
 }
 
 // ── GET ─────────────────────────────────────────────────────────────
@@ -202,7 +221,30 @@ function doGet(e) {
 
     // ── LANDING API (público, sin clave) ──────────────────────────
     if (e.parameter.action === 'landing') {
-      return respondCors(buildLandingPayload());
+      return respond(buildLandingPayload());
+    }
+
+    // ── get_data: endpoint liviano para mkt.html — solo columnas necesarias ──
+    if (e.parameter.action === 'get_data') {
+      const ws2 = SpreadsheetApp.openById(SHEET_ID).getSheetByName(sheet);
+      if (!ws2) return respond({ error: 'hoja no encontrada: ' + sheet });
+      if (sheet === 'Speakers') {
+        const rows = ws2.getDataRange().getValues();
+        // Vaciar bio/eventos, mantener temas solo con campos esenciales (sin abstract/descripcion)
+        const slim = rows.map((r, ri) => {
+          if (ri === 0) return r;
+          const row = r.slice();
+          row[21] = ''; row[22] = '';
+          try {
+            const t = JSON.parse(String(row[29]||'[]'));
+            row[29] = JSON.stringify(t.map(x=>({titulo:x.titulo,estado:x.estado,day:x.day,stage:x.stage,formatos:x.formatos,duracion:x.duracion,nivel:x.nivel,panel:x.panel})));
+          } catch(e2) {}
+          return row;
+        });
+        return respond({ ok:true, sheet, data: slim });
+      }
+      // Para MKT y otras hojas, devolver completo (son chicas)
+      return respond({ ok:true, sheet, data: ws2.getDataRange().getValues() });
     }
 
     if (e.parameter.action === 'get_version') {
@@ -236,7 +278,23 @@ function doGet(e) {
       return respond({ error:'Hoja no encontrada: '+sheet }, 404);
     }
     const props = PropertiesService.getScriptProperties();
-    return respond({ ok:true, sheet, data: ws.getDataRange().getValues(), version: props.getProperty('version_'+sheet)||'0' });
+    const allData = ws.getDataRange().getValues();
+    // slim=true: liviano para admin/mkt — bio truncada a 300 chars, temas solo titulo+estado+day
+    if (e.parameter.slim === 'true' && sheet === 'Speakers') {
+      const slimData = allData.map((row, ri) => {
+        if (ri === 0) return row;
+        const r = row.slice();
+        r[21] = String(r[21]||'').slice(0, 300); // bio truncada
+        r[22] = ''; // eventos_anteriores no necesario en lista
+        try {
+          const temas = JSON.parse(String(r[29]||'[]'));
+          r[29] = JSON.stringify(temas.map(t => ({ titulo:t.titulo, estado:t.estado, day:t.day, stage:t.stage, formatos:t.formatos, duracion:t.duracion })));
+        } catch(e2) { /* dejarlo como está */ }
+        return r;
+      });
+      return respond({ ok:true, sheet, data: slimData, version: props.getProperty('version_'+sheet)||'0' });
+    }
+    return respond({ ok:true, sheet, data: allData, version: props.getProperty('version_'+sheet)||'0' });
   } catch(err) { return respond({ error:err.message }, 500); }
 }
 
@@ -342,12 +400,6 @@ function buildLandingPayload() {
     generated_at: new Date().toISOString(),
     speakers: confirmed
   };
-}
-
-function respondCors(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ── BOT TELEGRAM POLLING ─────────────────────────────────────────────
@@ -468,6 +520,72 @@ function doPost(e) {
 
     if (action === 'speaker_form_submit') return handleFormSubmit(ss, payload.data || {});
 
+    if (action === 'listar_fotos_drive') {
+      const token = ScriptApp.getOAuthToken();
+      const res = UrlFetchApp.fetch(
+        'https://www.googleapis.com/drive/v3/files?q=' + encodeURIComponent('"' + PHOTO_FOLDER_ID + '" in parents and trashed=false') +
+        '&fields=files(id,name,createdTime,modifiedTime)&orderBy=modifiedTime+desc&pageSize=50',
+        { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, deadline: 15 }
+      );
+      const files = JSON.parse(res.getContentText()).files || [];
+      return respond({ ok: true, files: files });
+    }
+
+    if (action === 'vincular_foto') {
+      const num     = parseInt((data||{}).num || 0);
+      const fileId  = String((data||{}).fileId || '').trim();
+      const newName = String((data||{}).newName || '').trim();
+      if (!num || !fileId) return respond({ error: 'num y fileId requeridos' });
+      const token = ScriptApp.getOAuthToken();
+      // Hacer público
+      UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions', {
+        method: 'POST', contentType: 'application/json',
+        payload: JSON.stringify({ role: 'reader', type: 'anyone' }),
+        headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, deadline: 10
+      });
+      // Renombrar si se pasa newName
+      if (newName) {
+        UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?fields=id', {
+          method: 'PATCH', contentType: 'application/json',
+          payload: JSON.stringify({ name: newName }),
+          headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, deadline: 10
+        });
+      }
+      const url = 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w400';
+      // Actualizar sheet
+      const ws = ss.getSheetByName('Speakers');
+      const rows = ws.getDataRange().getValues();
+      let rowIdx = -1;
+      for (let i = 1; i < rows.length; i++) { if (parseInt(rows[i][0]) === num) { rowIdx = i+1; break; } }
+      if (rowIdx > 0) ws.getRange(rowIdx, 11).setValue(url);
+      return respond({ ok: true, url: url, rowIdx: rowIdx });
+    }
+
+    if (action === 'upload_foto') {
+      const num       = parseInt((data||{}).num || 0);
+      const confname  = String((data||{}).confname || 'speaker').trim();
+      const base64Url = String((data||{}).foto || '').trim();
+      if (!num || !base64Url.startsWith('data:')) return respond({ error: 'num y foto requeridos' });
+      const ws = ss.getSheetByName('Speakers');
+      const rows = ws.getDataRange().getValues();
+      let rowIdx = -1;
+      for (let i = 1; i < rows.length; i++) { if (parseInt(rows[i][0]) === num) { rowIdx = i+1; break; } }
+      if (rowIdx < 0) return respond({ error: 'speaker num ' + num + ' no encontrado' });
+      const token = ScriptApp.getOAuthToken();
+      const safeName = confname.replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+      const finalName = String(num).padStart(3,'0') + '-' + safeName + '.jpg';
+      const result = savePhotoToDriveTemp(base64Url, confname);
+      if (!result.fileId) return respond({ error: 'error subiendo foto' });
+      UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + result.fileId + '?fields=id', {
+        method: 'PATCH', contentType: 'application/json',
+        payload: JSON.stringify({ name: finalName }),
+        headers: { Authorization: 'Bearer ' + token },
+        muteHttpExceptions: true, deadline: 10
+      });
+      ws.getRange(rowIdx, 11).setValue(result.url);
+      return respond({ ok: true, url: result.url, fileId: result.fileId, name: finalName });
+    }
+
     if (action === 'confirmar_speaker') {
       const mail    = String((data||{}).mail    || '').trim();
       const nombre  = String((data||{}).nombre  || '').trim();
@@ -527,6 +645,20 @@ function doPost(e) {
     else if (action === 'update')      { ws.getRange(rowIndex,1,1,data.length).setValues([data]); }
     else if (action === 'delete')      { ws.deleteRow(rowIndex); }
     else if (action === 'replace_all') {
+      // Para Speakers: preservar tiers existentes si el nuevo dato los trae vacíos
+      if (sheet === 'Speakers' && data && data.length > 0) {
+        const lastRow = ws.getLastRow();
+        const tierMap = {};
+        if (lastRow > 1) {
+          const existing = ws.getRange(2, 1, lastRow - 1, 40).getValues();
+          existing.forEach(r => { if (r[0]) tierMap[String(r[0])] = String(r[39] || ''); });
+        }
+        // Aplicar tiers guardados a filas nuevas donde tier esté vacío
+        data.forEach(r => {
+          const num = String(r[0] || '');
+          if (num && !String(r[39] || '').trim() && tierMap[num]) r[39] = tierMap[num];
+        });
+      }
       const last = ws.getLastRow();
       if (last > 1) ws.deleteRows(2, last-1);
       if (data && data.length > 0) ws.getRange(2,1,data.length,data[0].length).setValues(data);
@@ -561,33 +693,26 @@ function handleFormSubmit(ss, d) {
   })));
   const temasEstado = Array(temasArr.length || 1).fill('disponible').join(',');
 
-  // ── 2. Número correlativo ──
-  const counter = parseInt(PropertiesService.getScriptProperties().getProperty('postulacion_counter')||'0') + 1;
-  PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(counter));
-
-  // ── 3. Días ──
+  // ── 2. Días ──
   const diasArr = String(d.dias||'').split(',').map(x=>x.trim());
   const hasDia = key => diasArr.includes(key) ? 'si' : '';
 
-  // ── 4. Flodesk + Telegram PRIMERO — antes de cualquier operación lenta (foto/Drive) ──
-  if (mail) {
-    const textoDetectar = [
-      String(d.bio || ''),
-      String(d.temas && d.temas[0] ? d.temas[0].abstract || d.temas[0].titulo : '')
-    ].join(' ').trim();
-    const idioma = detectarIdioma(textoDetectar);
-    llamarFlodesk(mail, nombre, String(d.apellido || '').trim(), idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
-    notificarTelegram(d, counter, idioma);
-  }
-
-  // ── 5. Foto a Drive (puede ser lenta — va después de Flodesk) ──
+  // ── 3. Foto a Drive con nombre temporal (número real se asigna después del lock) ──
   const fotoRaw = String(d.foto||'').trim();
   const confnameForFile = String(d.confname||d.nombre||'speaker').trim();
-  const fotoUrl = fotoRaw.startsWith('data:') ? savePhotoToDrive(fotoRaw, counter, confnameForFile) : fotoRaw;
+  let fotoUrl = '';
+  let fotoFileId = '';
+  if (fotoRaw.startsWith('data:')) {
+    const result = savePhotoToDriveTemp(fotoRaw, confnameForFile);
+    fotoUrl   = result.url;
+    fotoFileId = result.fileId;
+  } else {
+    fotoUrl = fotoRaw;
+  }
 
-  // ── 6. Row completo ──
+  // ── 4. Row completo (número se confirma en el lock, paso 7) ──
   const row = [
-    counter,                                                                              // [0]  postulacion_num
+    0,                                                                                    // [0]  postulacion_num (se reemplaza con counter real)
     nombre,                                                                               // [1]  nombre
     String(d.apellido          ||'').trim(),                                              // [2]  apellido
     (String(d.confname||'').trim() || (nombre+' '+String(d.apellido||'').trim()).trim()), // [3]  confname
@@ -625,7 +750,7 @@ function handleFormSubmit(ss, d) {
     hasDia('nov1'),                                                                       // [35]
   ];
 
-  // ── 7. Anti-duplicado por mail: fusionar si ya existe ──
+  // ── 6. Anti-duplicado por mail: fusionar si ya existe (sin consumir contador) ──
   if (mail) {
     const allData = spSheet.getDataRange().getValues();
     for (let i = 1; i < allData.length; i++) {
@@ -641,9 +766,10 @@ function handleFormSubmit(ss, d) {
         let temasEstadoArr = String(existing[30]||'').split(',').map(x=>x.trim()).filter(Boolean);
         while (temasEstadoArr.length < existingTemas.length) temasEstadoArr.push('disponible');
         const merged = [...existing];
-        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28].forEach(col => {
+        [1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28].forEach(col => {
           if (!String(merged[col]||'').trim() && String(row[col]||'').trim()) merged[col] = row[col];
         });
+        if (fotoUrl && !String(merged[10]||'').trim()) merged[10] = fotoUrl;
         merged[29] = JSON.stringify(existingTemas);
         merged[30] = temasEstadoArr.join(',');
         spSheet.getRange(i+1, 1, 1, merged.length).setValues([merged]);
@@ -653,7 +779,40 @@ function handleFormSubmit(ss, d) {
     }
   }
 
-  // ── 8. Nuevo speaker ──
+  // ── 7. Nuevo speaker: lock → número real → renombrar foto → notificar → guardar ──
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  const counter = parseInt(PropertiesService.getScriptProperties().getProperty('postulacion_counter')||'0') + 1;
+  PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(counter));
+  row[0] = counter;
+
+  // Renombrar foto en Drive con el número real
+  if (fotoFileId) {
+    try {
+      const token = ScriptApp.getOAuthToken();
+      const safeName = confnameForFile.replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+      const finalName = String(counter).padStart(3,'0') + '-' + safeName + '.jpg';
+      UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + fotoFileId + '?fields=id', {
+        method: 'PATCH',
+        contentType: 'application/json',
+        payload: JSON.stringify({ name: finalName }),
+        headers: { Authorization: 'Bearer ' + token },
+        muteHttpExceptions: true,
+        deadline: 10
+      });
+    } catch(e) { Logger.log('Rename photo error: ' + e.message); }
+  }
+
+  if (mail) {
+    const textoDetectar = [
+      String(d.bio || ''),
+      String(d.temas && d.temas[0] ? d.temas[0].abstract || d.temas[0].titulo : '')
+    ].join(' ').trim();
+    const idioma = detectarIdioma(textoDetectar);
+    llamarFlodesk(mail, nombre, String(d.apellido || '').trim(), idioma === 'en' ? FLODESK_SEGMENT_EN : FLODESK_SEGMENT_ES);
+    notificarTelegram(d, counter, idioma);
+  }
+
   if (spSheet.getLastRow() === 0) {
     spSheet.appendRow([
       'postulacion_num','nombre','apellido','confname','tipo','cargo','pais','idioma','mail',
@@ -666,20 +825,129 @@ function handleFormSubmit(ss, d) {
   }
   spSheet.appendRow(row);
   PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+  lock.releaseLock();
 
   return respond({ ok:true, msg:'Speaker registrado. ¡Gracias por inscribirte!' });
 }
 
-// ── TEST DRIVE ──────────────────────────────────────────────────────
-function testDriveAccess() {
-  const fotoTest = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAARC' +
-    'AACAAQMBEQACEQEDEQH/xABIAAEAAAAAAAAAAAAAAAAAAAAHEAEAAAAAAAAAAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k=';
-  const url = savePhotoToDrive(fotoTest, 9999, 'test-drive');
-  if (url) {
-    Logger.log('✅ Foto subida OK: ' + url);
-  } else {
-    Logger.log('❌ savePhotoToDrive devolvió vacío — revisar logs anteriores');
+// ── SINCRONIZAR NOMBRES DE FOTOS EN DRIVE ───────────────────────────
+// Lee el sheet y renombra TODAS las fotos en Drive para que coincidan:
+// formato: 001-Confname.jpg según el número actual del speaker
+// Ejecutar desde el editor GAS después de renumerarTodo
+function sincronizarNombresFotos() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ws = ss.getSheetByName('Speakers');
+  const rows = ws.getDataRange().getValues().slice(1);
+  let renombrados = 0;
+  let sinFoto = 0;
+
+  rows.forEach((row, i) => {
+    const num = parseInt(row[0]);
+    if (isNaN(num)) return;
+    const fotoUrl = String(row[10] || '');
+    const fileIdMatch = fotoUrl.match(/[?&]id=([a-zA-Z0-9_\-]+)/);
+    if (!fileIdMatch) { sinFoto++; return; }
+    const fileId = fileIdMatch[1];
+    const confname = String(row[3] || row[1] || 'speaker').replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+    const newName = String(num).padStart(3,'0') + '-' + confname + '.jpg';
+    renombrarFotoEnDrive(fileId, newName);
+    Logger.log('#' + num + ' → ' + newName);
+    renombrados++;
+  });
+
+  Logger.log('════ ' + renombrados + ' fotos renombradas. ' + sinFoto + ' sin foto. ════');
+}
+
+// ── RENUMERAR TODO SECUENCIALMENTE ──────────────────────────────────
+// Asigna 1, 2, 3... sin saltos según el orden de filas en el sheet
+// Renombra fotos en Drive para que coincidan con el nuevo número
+// Ejecutar UNA VEZ desde el editor GAS
+function renumerarTodo() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ws = ss.getSheetByName('Speakers');
+  const data = ws.getDataRange().getValues();
+  const rows = data.slice(1); // sin header
+  const total = rows.length;
+
+  let cambios = 0;
+  for (let i = 0; i < rows.length; i++) {
+    const newNum = i + 1;
+    const oldNum = parseInt(rows[i][0]);
+    if (oldNum === newNum) continue; // ya es correcto
+
+    // Actualizar número en el sheet
+    ws.getRange(i + 2, 1).setValue(newNum); // +2: header + 0-indexed
+
+    // Renombrar foto en Drive si tiene URL con fileId
+    const fotoUrl = String(rows[i][10] || '');
+    const fileIdMatch = fotoUrl.match(/[?&]id=([a-zA-Z0-9_\-]+)/);
+    if (fileIdMatch) {
+      const fileId = fileIdMatch[1];
+      const confname = String(rows[i][3] || rows[i][1] || 'speaker').replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+      const newName = String(newNum).padStart(3,'0') + '-' + confname + '.jpg';
+      renombrarFotoEnDrive(fileId, newName);
+    }
+
+    Logger.log('#' + oldNum + ' → #' + newNum + ' ' + rows[i][1] + ' ' + rows[i][2]);
+    cambios++;
   }
+
+  PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(total));
+  PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+  Logger.log('════ ' + cambios + ' filas renumeradas. Total speakers: ' + total + '. Contador → ' + total + ' ════');
+}
+
+// ── RENUMERAR DUPLICADOS ─────────────────────────────────────────────
+// Ejecutar UNA VEZ desde el editor GAS para corregir números repetidos
+// También renombra las fotos en Drive para que coincidan con el nuevo número
+function renumerarDuplicados() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ws = ss.getSheetByName('Speakers');
+  const data = ws.getDataRange().getValues();
+
+  let maxNum = 0;
+  const seen = {};
+  data.slice(1).forEach(r => {
+    const n = parseInt(r[0]);
+    if (!isNaN(n) && n > maxNum) maxNum = n;
+    if (!isNaN(n)) seen[n] = (seen[n] || 0) + 1;
+  });
+
+  let nextNum = maxNum + 1;
+  let cambios = 0;
+  const seenNow = {};
+
+  for (let i = 1; i < data.length; i++) {
+    const num = parseInt(data[i][0]);
+    if (isNaN(num)) continue;
+
+    if (!seenNow[num]) {
+      seenNow[num] = true;
+      continue; // primer speaker con este número → ok
+    }
+
+    // Duplicado: asignar número nuevo
+    const newNum = nextNum++;
+    ws.getRange(i + 1, 1).setValue(newNum);
+
+    // Renombrar foto en Drive si tiene una URL con fileId
+    const fotoUrl = String(data[i][10] || '');
+    const fileIdMatch = fotoUrl.match(/[?&]id=([a-zA-Z0-9_\-]+)/);
+    if (fileIdMatch) {
+      const fileId = fileIdMatch[1];
+      const confname = String(data[i][3] || data[i][1] || 'speaker').replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+      const newName = String(newNum).padStart(3,'0') + '-' + confname + '.jpg';
+      renombrarFotoEnDrive(fileId, newName);
+      Logger.log('Foto renombrada: ' + newName);
+    }
+
+    Logger.log('Renumerado fila ' + (i+1) + ': #' + num + ' → #' + newNum + ' (' + data[i][1] + ' ' + data[i][2] + ')');
+    cambios++;
+  }
+
+  PropertiesService.getScriptProperties().setProperty('postulacion_counter', String(nextNum - 1));
+  PropertiesService.getScriptProperties().setProperty('version_Speakers', Date.now().toString());
+  Logger.log('════ ' + cambios + ' duplicados renumerados. Contador → ' + (nextNum - 1) + ' ════');
 }
 
 // ── BACKUP DIARIO ───────────────────────────────────────────────────
@@ -718,7 +986,8 @@ function llamarFlodesk(email, nombre, apellido, segmentoId) {
       method: 'POST',
       headers: headers,
       payload: JSON.stringify({ segment_ids: [segmentoId] }),
-      muteHttpExceptions: true
+      muteHttpExceptions: true,
+      deadline: 10
     });
 
     // Upsert subscriber + agregar al segmento (dispara el workflow)
@@ -726,7 +995,8 @@ function llamarFlodesk(email, nombre, apellido, segmentoId) {
       method: 'POST',
       headers: headers,
       payload: JSON.stringify({ email: email, first_name: nombre || '', last_name: apellido || '', segment_ids: [segmentoId] }),
-      muteHttpExceptions: true
+      muteHttpExceptions: true,
+      deadline: 10
     });
 
     Logger.log('Flodesk OK: ' + email + ' → ' + segmentoId);
@@ -827,6 +1097,25 @@ function rellenarFotosDesdePerfil() {
 
     if (foto) { Logger.log('#' + num + ' ' + nombre + ' — ya tiene foto ✓'); continue; }
 
+    // Chequear si ya existe archivo en Drive con este num (evita duplicados si se re-ejecuta)
+    const safeName0 = String(nombre).replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
+    const prefix0   = String(num).padStart(3,'0') + '-';
+    const folder0   = DriveApp.getFolderById(PHOTO_FOLDER_ID);
+    const existing0 = folder0.getFiles();
+    let existingUrl = '';
+    while (existing0.hasNext()) {
+      const ef = existing0.next();
+      if (ef.getName().startsWith(prefix0)) {
+        existingUrl = 'https://drive.google.com/thumbnail?id=' + ef.getId() + '&sz=w400';
+        break;
+      }
+    }
+    if (existingUrl) {
+      ws.getRange(i + 1, 11).setValue(existingUrl);
+      Logger.log('#' + num + ' ' + nombre + ' — ya existe en Drive, URL actualizada ✓');
+      continue;
+    }
+
     // Extraer handles/slugs de cada red
     const xRaw  = String(row[15] || '').trim();
     const liRaw = String(row[14] || '').trim();
@@ -871,7 +1160,7 @@ function rellenarFotosDesdePerfil() {
         const bytes    = imgRes.getContent();
         const ext      = contentType.includes('png') ? 'png' : 'jpg';
         const safeName = String(nombre).replace(/[^a-zA-Z0-9\-_]/g,'_').slice(0,40);
-        const filename = String(num).padStart(4,'0') + '-' + safeName + '.' + ext;
+        const filename = String(num).padStart(3,'0') + '-' + safeName + '.' + ext;
 
         // Subir a Drive
         const uploadRes = UrlFetchApp.fetch(
@@ -978,4 +1267,112 @@ function probarEmailConfirmacion() {
   Logger.log('Enviando confirmación de prueba a: ' + MAIL_PRUEBA);
   llamarFlodesk(MAIL_PRUEBA, NOMBRE, APELLIDO, SEGMENTO_ID);
   Logger.log('✅ Listo. Revisá la bandeja de ' + MAIL_PRUEBA);
+}
+
+// ── RESTAURAR TIERS DESDE COPIA (ejecutar UNA SOLA VEZ desde el editor) ─
+function restoreTiersFromCopia() {
+  const COPIA_ID = '1AtgND97xo--YkMXBKza7mHDS2pr3cGO5gx4pjvXLbKY';
+
+  // Leer copia
+  const copiaSheet = SpreadsheetApp.openById(COPIA_ID).getSheetByName('Speakers');
+  if (!copiaSheet) { Logger.log('❌ No se encontró la hoja Speakers en la copia'); return; }
+  const copiaData = copiaSheet.getDataRange().getValues();
+
+  // Buscar columna postulacion_num (A=0) y tier (AN=39) en la copia
+  // Asumir header en fila 0
+  const copiaHeader = copiaData[0];
+  Logger.log('Copia — columnas: ' + copiaHeader.length + ' | header[0]: ' + copiaHeader[0] + ' | header[39]: ' + copiaHeader[39]);
+
+  // Construir mapa num→tier desde la copia (saltear header)
+  const tierMap = {};
+  for (let i = 1; i < copiaData.length; i++) {
+    const num  = String(copiaData[i][0] || '').trim();
+    const tier = String(copiaData[i][39] || '').trim();
+    if (num && tier) tierMap[num] = tier;
+  }
+  Logger.log('Tiers encontrados en copia: ' + Object.keys(tierMap).length);
+  Logger.log('Mapa: ' + JSON.stringify(tierMap));
+
+  // Leer sheet principal
+  const mainSheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Speakers');
+  const mainData  = mainSheet.getDataRange().getValues();
+  const mainRows  = mainData.length;
+
+  let updated = 0;
+  for (let i = 1; i < mainRows; i++) {
+    const num = String(mainData[i][0] || '').trim();
+    if (num && tierMap[num] !== undefined) {
+      // Columna AN = índice 39 = columna 40 → getRange(row, col) es 1-indexed
+      mainSheet.getRange(i + 1, 40).setValue(tierMap[num]);
+      updated++;
+    }
+  }
+
+  Logger.log('✅ Tiers restaurados: ' + updated + ' speakers actualizados');
+}
+
+// ── LIMPIAR FOTOS DUPLICADAS EN DRIVE (ejecutar UNA SOLA VEZ desde el editor) ─
+// - Agrupa archivos por prefijo numérico (postulacion_num)
+// - Para cada num con duplicados: conserva el más reciente, borra los viejos
+// - Actualiza el sheet: cualquier foto que no apunte al archivo correcto se corrige
+function cleanDuplicatePhotos() {
+  const folder = DriveApp.getFolderById(PHOTO_FOLDER_ID);
+  const ws     = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Speakers');
+  const data   = ws.getDataRange().getValues(); // fila 0 = header
+
+  // Construir mapa num→rowIndex (1-indexed, fila 1 = header)
+  const sheetMap = {}; // num → { rowIndex, currentFoto }
+  for (let i = 1; i < data.length; i++) {
+    const num = String(data[i][0] || '').trim();
+    if (num) sheetMap[num] = { rowIndex: i + 1, currentFoto: String(data[i][10] || '') };
+  }
+
+  // Listar todos los archivos de la carpeta
+  const files = folder.getFiles();
+  const byNum = {}; // num → [{ file, name, date }]
+  while (files.hasNext()) {
+    const f    = files.next();
+    const name = f.getName();
+    const match = name.match(/^0*(\d+)-/); // extrae el num (soporta 3 y 4 dígitos)
+    if (!match) continue;
+    const num = match[1]; // sin ceros al frente
+    if (!byNum[num]) byNum[num] = [];
+    byNum[num].push({ file: f, name: name, date: f.getDateCreated().getTime() });
+  }
+
+  let deleted = 0, updated = 0;
+
+  for (const num of Object.keys(byNum)) {
+    const arr = byNum[num];
+
+    // Ordenar de más reciente a más antiguo
+    arr.sort((a, b) => b.date - a.date);
+    const keeper = arr[0]; // más reciente = el correcto
+    const dupes  = arr.slice(1);
+
+    // Borrar los más viejos
+    for (const d of dupes) {
+      Logger.log('🗑️ Borrando duplicado: ' + d.name + ' (más viejo que ' + keeper.name + ')');
+      d.file.setTrashed(true);
+      deleted++;
+    }
+
+    // URL correcta del archivo keeper
+    const correctUrl = 'https://drive.google.com/thumbnail?id=' + keeper.file.getId() + '&sz=w400';
+
+    // Actualizar sheet si la foto no apunta a este archivo
+    if (sheetMap[num]) {
+      const { rowIndex, currentFoto } = sheetMap[num];
+      if (currentFoto !== correctUrl) {
+        ws.getRange(rowIndex, 11).setValue(correctUrl);
+        Logger.log('📝 #' + num + ' foto actualizada: ' + keeper.name);
+        updated++;
+      }
+    }
+  }
+
+  Logger.log('════ Resultado ════');
+  Logger.log('🗑️ Duplicados borrados: ' + deleted);
+  Logger.log('📝 Fotos actualizadas en sheet: ' + updated);
+  Logger.log('✅ Listo');
 }

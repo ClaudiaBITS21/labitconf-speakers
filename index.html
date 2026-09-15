@@ -2458,7 +2458,16 @@ async function importarDelForm(){
 
 async function loadSpeakers(){
   try{
-    const raw=await gasGet('Speakers');
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),30000);
+    let raw;
+    try{
+      const r=await fetch(`${GAS_URL}?action=get_data&sheet=Speakers`,{signal:ctrl.signal});
+      const j=await r.json();
+      if(j.version)versions['Speakers']=j.version;
+      raw=j.data;
+    }finally{clearTimeout(tid);}
+    if(!raw)raw=[];
     if(!raw||raw.length<2){state.speakers=[];renderSpeakers();return;}
     const[,...rows]=raw.filter((r,i)=>i===0||String(r[0]||'').trim()!==''||String(r[1]||'').trim()!=='');
     // Schema nuevo (GAS v3): [0]postulacion_num [1]nombre [2]apellido [3]confname [4]tipo [5]cargo
