@@ -755,7 +755,7 @@ function markClean(s, sk){
 // ── GAS ───────────────────────────────────────────────────────────────
 async function gasGet(sheet){
   const ctrl=new AbortController();
-  const tid=setTimeout(()=>ctrl.abort(),20000);
+  const tid=setTimeout(()=>ctrl.abort(),sheet==='Speakers'?90000:20000);
   try{
     const r=await fetch(`${GAS_URL}?sheet=${sheet}`,{signal:ctrl.signal});
     const j=await r.json();
