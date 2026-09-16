@@ -2138,6 +2138,10 @@ function renderSpeakers(){
             <div class="sp-detail-field"><span class="sp-detail-lbl">País · Idioma</span><br><span class="sp-detail-val">${esc(s.pais||'')} · ${esc(s.idioma||'')}</span></div>
             <div class="sp-detail-field"><span class="sp-detail-lbl">Empresa</span><br><span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'empresa',this.innerText.trim());markDirty('speakers')">${esc(s.empresa||'')}</span></div>
             ${s.website?`<div class="sp-detail-field"><span class="sp-detail-lbl">Website</span><br><a href="${esc(s.website)}" target="_blank" class="sp-detail-val">${esc(s.website)}</a></div>`:''}
+            <div class="sp-detail-field"><span class="sp-detail-lbl">Borrador</span><br>
+              <span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'landing',this.innerText.trim());markDirty('speakers')" style="display:inline-block;min-width:120px">${esc(s.landing||'')}</span>
+              ${s.landing?`<a href="${esc(s.landing)}" target="_blank" style="margin-left:8px;font-size:12px;color:var(--red);font-weight:700;text-decoration:none">→ Ver</a>`:''}
+            </div>
             <div class="sp-detail-sec-title" style="margin-top:10px">Participación</div>
             <div class="sp-detail-field"><span class="sp-detail-lbl">Disponible</span> ${getDispBadges(s)}<br><span style="font-size:11px;color:#555">${esc(s.disponible_desde||'')}${s.disponible_desde&&s.disponible_hasta?' → ':''}${esc(s.disponible_hasta||'')}</span></div>
             <div class="sp-detail-field"><span class="sp-detail-lbl">1ra vez</span> <span class="sp-detail-val">${s.primera_vez||'—'}</span> · <span class="sp-detail-lbl">Podcast</span> <span class="sp-detail-val">${s.disponible_podcast||'—'}</span> · <span class="sp-detail-lbl">Empresa</span> <span class="sp-detail-val">${s.trae_empresa||'—'}</span></div>
