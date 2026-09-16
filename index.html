@@ -2552,8 +2552,8 @@ function applySpeakersRows(rows){
   });
 }
 
-const SP_CACHE_KEY='labitconf_speakers_cache';
-const SP_VER_KEY='labitconf_speakers_ver';
+const SP_CACHE_KEY='labitconf_speakers_cache_v2';
+const SP_VER_KEY='labitconf_speakers_ver_v2';
 
 function saveSpeakersCache(rawData, version){
   try{localStorage.setItem(SP_CACHE_KEY,JSON.stringify(rawData));localStorage.setItem(SP_VER_KEY,version||'');}catch(e){}
