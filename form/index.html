@@ -8,8 +8,8 @@
 <!-- Open Graph / miniatura al compartir -->
 <meta property="og:type"        content="website">
 <meta property="og:url"         content="https://app-labitconf.github.io/LABITCONF-speakers/form/">
-<meta property="og:title"       content="LABITCONF 2026 — Convocatoria Speakers">
-<meta property="og:description" content="Queremos escucharte. Postulate como speaker para la conferencia Bitcoin más importante de Latinoamérica. Buenos Aires, 30–31 OCT.">
+<meta property="og:title"       content="LABITCONF 2026 — Inscripción de Speakers cerrada">
+<meta property="og:description" content="El período de inscripción ha finalizado. Hemos superado nuestras expectativas. Gracias a todos los que se postularon. Buenos Aires, 30–31 OCT.">
 <meta property="og:image"       content="https://app-labitconf.github.io/LABITCONF-speakers/form/og-image.jpg">
 <meta property="og:image:width"  content="1456">
 <meta property="og:image:height" content="816">
@@ -17,8 +17,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card"        content="summary_large_image">
-<meta name="twitter:title"       content="LABITCONF 2026 — Convocatoria Speakers">
-<meta name="twitter:description" content="Queremos escucharte. Postulate como speaker para la conferencia Bitcoin más importante de Latinoamérica. Buenos Aires, 30–31 OCT.">
+<meta name="twitter:title"       content="LABITCONF 2026 — Inscripción de Speakers cerrada">
+<meta name="twitter:description" content="El período de inscripción ha finalizado. Hemos superado nuestras expectativas. Gracias a todos los que se postularon. Buenos Aires, 30–31 OCT.">
 <meta name="twitter:image"       content="https://app-labitconf.github.io/LABITCONF-speakers/form/og-image.jpg">
 <style>
 :root{
@@ -134,6 +134,18 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 /* TOAST */
 #toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--error);color:var(--error);padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;}
 #toast.show{opacity:1;}
+
+/* ── INSCRIPCION CERRADA ── */
+#formWrap,#successScreen,.lang-toggle{display:none!important;}
+.closed-screen{text-align:center;padding:60px 20px 80px;max-width:620px;margin:0 auto;}
+.closed-btc{font-size:80px;font-weight:900;color:var(--orange);font-family:Georgia,serif;letter-spacing:-3px;line-height:1;margin-bottom:24px;}
+.closed-title{font-size:28px;font-weight:900;color:var(--text);margin-bottom:14px;line-height:1.2;}
+.closed-sub{font-size:16px;color:var(--dim);line-height:1.75;margin-bottom:36px;}
+.closed-pill{display:inline-block;background:var(--orange-dim);border:1px solid var(--orange);color:var(--orange);font-size:13px;font-weight:800;padding:6px 18px;border-radius:100px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:32px;}
+.closed-divider{height:1px;background:var(--border);margin:36px 0;}
+.closed-footer{font-size:14px;color:var(--dim2);line-height:1.7;}
+.closed-footer a{color:var(--orange);text-decoration:none;font-weight:700;}
+.closed-footer a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -153,7 +165,25 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     <div class="success-sub" id="successSub"></div>
   </div>
 
-  <!-- FORM -->
+  <!-- INSCRIPCION CERRADA -->
+  <div class="closed-screen">
+    <div class="closed-btc">₿</div>
+    <div class="closed-pill">Convocatoria cerrada · 2026</div>
+    <div class="closed-title" id="closedTitle">El período de inscripción ha finalizado</div>
+    <div class="closed-sub" id="closedSub">
+      Gracias por el interés en ser parte de LABITCONF 2026.<br>
+      Hemos superado ampliamente nuestras expectativas de inscripciones<br>
+      y el equipo se encuentra revisando todas las propuestas recibidas.
+    </div>
+    <div class="closed-divider"></div>
+    <div class="closed-footer" id="closedFooter">
+      Seguinos en <a href="https://x.com/labitconf" target="_blank" rel="noopener">@labitconf</a> para enterarte de todas las novedades<br>
+      de la conferencia Bitcoin más importante de Latinoamérica.<br><br>
+      <strong>LABITCONF 2026 · Buenos Aires · 30–31 OCT</strong>
+    </div>
+  </div>
+
+  <!-- FORM (oculto — reservado para próxima edición) -->
   <div id="formWrap">
     <div class="page-title" id="pageTitle"></div>
     <div class="page-sub" id="pageSub"></div>
