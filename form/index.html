@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<script>if(new URLSearchParams(location.search).get('key')==='labit2026')document.documentElement.classList.add('form-open');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LABITCONF 2026 — Inscripción de Speakers</title>
 
@@ -512,11 +513,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
 <script>
 'use strict';
-// Modo privado: ?key=labit2026 abre el formulario aunque esté cerrado
-(function(){
-  const p=new URLSearchParams(location.search);
-  if(p.get('key')==='labit2026') document.documentElement.classList.add('form-open');
-})();
 const GAS_URL='https://script.google.com/macros/s/AKfycbwqQHn5o9xxS-wmMGgJews--w_1lstRRiDiBgnlicTchskyjaixflKKfb_JPayR96p3/exec';
 
 // ── PAÍSES ────────────────────────────────────────────────────────────
