@@ -2143,6 +2143,9 @@ function renderSpeakers(){
               <span class="sp-edit sp-detail-val" contenteditable="true" onblur="updateSpeaker(${ri},'landing',this.innerText.trim());markDirty('speakers')" style="display:inline-block;min-width:120px">${esc(s.landing||'')}</span>
               ${s.landing?`<a href="${esc(s.landing)}" target="_blank" style="margin-left:8px;font-size:12px;color:var(--red);font-weight:700;text-decoration:none">→ Ver</a>`:''}
             </div>
+            <div class="sp-detail-field"><span class="sp-detail-lbl">#WEB (orden)</span><br>
+              <input type="number" min="1" max="999" value="${esc(s.web_order||'')}" placeholder="—" style="width:64px;background:#f0f2f6;border:1px solid #cbd1da;border-radius:4px;padding:2px 6px;font-size:13px;color:var(--text)" oninput="updateSpeaker(${ri},'web_order',this.value.trim());markDirty('speakers')">
+            </div>
             <div class="sp-detail-sec-title" style="margin-top:10px">Participación</div>
             <div class="sp-detail-field"><span class="sp-detail-lbl">Disponible</span> ${getDispBadges(s)}<br><span style="font-size:11px;color:#555">${esc(s.disponible_desde||'')}${s.disponible_desde&&s.disponible_hasta?' → ':''}${esc(s.disponible_hasta||'')}</span></div>
             <div class="sp-detail-field"><span class="sp-detail-lbl">1ra vez</span> <span class="sp-detail-val">${s.primera_vez||'—'}</span> · <span class="sp-detail-lbl">Podcast</span> <span class="sp-detail-val">${s.disponible_podcast||'—'}</span> · <span class="sp-detail-lbl">Empresa</span> <span class="sp-detail-val">${s.trae_empresa||'—'}</span></div>
@@ -2289,7 +2292,7 @@ function addSpeaker(){
     empresa:g('sp-empresa'), notas:g('sp-notas'), bio:'', eventos_anteriores:'',
     primera_vez:'', disponible_podcast:'', trae_empresa:'', dias_asiste:'',
     disponible_desde:'', disponible_hasta:'',
-    referido:g('sp-referido'), tier:document.getElementById('sp-tier').value,
+    referido:g('sp-referido'), tier:document.getElementById('sp-tier').value, web_order:'',
     _temas, temas_estado, estado:'disponible',
     oct30:'', oct31:'', postulacion_num:0,
     get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
@@ -2538,6 +2541,7 @@ function applySpeakersRows(rows){
       mail_ok:isV3?String(r[37]||''):'',
       landing_ok:isV3?String(r[38]||''):'',
       tier:isV3?String(r[39]||''):'',
+      web_order:isV3?String(r[40]||''):'',
       get temasArr(){return this._temas.map(t=>t.titulo).filter(Boolean);},
       get detallesArr(){return this._temas.map(t=>t.descripcion||'');},
       get abstractsArr(){return this._temas.map(t=>t.abstract||'');},
@@ -2630,7 +2634,8 @@ function speakerToRow(s){
     s.landing||'',
     s.mail_ok||'',
     s.landing_ok||'',
-    s.tier||''
+    s.tier||'',
+    s.web_order||''
   ];
 }
 
