@@ -561,6 +561,23 @@ function doPost(e) {
       return respond({ ok: true, url: url, rowIdx: rowIdx });
     }
 
+    if (action === 'patch_speaker') {
+      // Actualizar campos específicos de un speaker por num (sin write_key)
+      // data: { num, fields: { col_index: value, ... } }
+      const num    = parseInt((data||{}).num || 0);
+      const fields = (data||{}).fields || {};
+      if (!num || !Object.keys(fields).length) return respond({ error: 'num y fields requeridos' });
+      const ws = ss.getSheetByName('Speakers');
+      const rows = ws.getDataRange().getValues();
+      let rowIdx = -1;
+      for (let i = 1; i < rows.length; i++) { if (parseInt(rows[i][0]) === num) { rowIdx = i+1; break; } }
+      if (rowIdx < 0) return respond({ error: 'speaker num ' + num + ' no encontrado' });
+      Object.entries(fields).forEach(([col, val]) => {
+        ws.getRange(rowIdx, parseInt(col)+1).setValue(val);
+      });
+      return respond({ ok: true, rowIdx: rowIdx });
+    }
+
     if (action === 'upload_foto') {
       const num       = parseInt((data||{}).num || 0);
       const confname  = String((data||{}).confname || 'speaker').trim();

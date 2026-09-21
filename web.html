@@ -42,8 +42,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .card:hover{border-color:#2a2a2a;transform:translateY(-2px);}
 .card.incompleto{border-color:#3a1f00;}
 
-.card-foto-wrap{position:relative;width:100%;padding-top:75%;overflow:hidden;background:#151515;}
-.card-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
+.card-foto-wrap{position:relative;width:100%;padding-top:100%;overflow:hidden;background:#151515;border-radius:0;}
+.card-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
 .card-foto-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#2a2a2a;font-size:56px;}
 
 .card-body{padding:14px;flex:1;display:flex;flex-direction:column;}
@@ -98,7 +98,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="nav-brand">LABITCONF <span>'26</span></div>
   <button class="tab-btn active" id="btnSp" onclick="showTab('speakers')">Speakers para web</button>
   <button class="tab-btn" id="btnDev" onclick="showTab('dev')">Para el desarrollador</button>
+  <button class="tab-btn" id="btnInstr" onclick="showTab('instr')">Instrucciones</button>
   <div class="nav-right">
+    <button id="btnStaff" onclick="toggleStaff()" style="background:none;border:1px solid #2a2a2a;color:#666;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit">🔒 Modo staff</button>
     <span class="stats-txt" id="stats">Cargando…</span>
   </div>
 </div>
@@ -114,9 +116,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="pill" onclick="setFiltro('incompleto')" id="pill-incompleto">⚠️ Incompletos</button>
     <button class="pill" onclick="setFiltro('sin-foto')" id="pill-sin-foto">Sin foto</button>
     <button class="pill" onclick="setFiltro('sin-bio')" id="pill-sin-bio">Sin bio</button>
+    <button class="pill" onclick="setFiltro('publicados')" id="pill-publicados">✅ Publicados</button>
     <input class="search" type="text" placeholder="Buscar…" oninput="render()" id="q">
   </div>
   <div class="grid" id="grid"><div class="loading">Cargando speakers…</div></div>
+</div>
+
+<!-- TAB INSTRUCCIONES -->
+<div id="tabInstr" style="display:none;max-width:760px;margin:40px auto;padding:0 20px 60px">
+  <h2 style="color:#fff;font-size:22px;margin-bottom:8px">Cómo usar esta página</h2>
+  <p style="color:#888;font-size:14px;margin-bottom:32px">Para el equipo de LABITCONF. Esta pantalla permite revisar y publicar los speakers de la web.</p>
+
+  <div style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:24px;margin-bottom:16px">
+    <div style="color:#f97316;font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:10px">PASO 1 — ACTIVAR MODO STAFF</div>
+    <p style="color:#aaa;font-size:14px;line-height:1.7">Hacé clic en el botón <strong style="color:#fff">🔒 Modo staff</strong> en la esquina superior derecha. Cuando está activo, aparece un toggle verde <strong style="color:#4ade80">Publicar / Publicado</strong> en cada card de speaker.</p>
+  </div>
+
+  <div style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:24px;margin-bottom:16px">
+    <div style="color:#f97316;font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:10px">PASO 2 — MARCAR SPEAKERS COMO PUBLICADOS</div>
+    <p style="color:#aaa;font-size:14px;line-height:1.7">Activá el checkbox de cada speaker que debe aparecer en la web pública. El cambio se guarda automáticamente en Google Sheets en tiempo real. No hace falta recargar la página.</p>
+    <p style="color:#555;font-size:13px;margin-top:8px">El estado se guarda en la columna <code style="background:#1a1a1a;padding:1px 6px;border-radius:3px;color:#f97316">landing</code> del sheet (columna AK). Valor <code style="background:#1a1a1a;padding:1px 6px;border-radius:3px;color:#4ade80">si</code> = publicado, vacío = no publicado.</p>
+  </div>
+
+  <div style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:24px;margin-bottom:16px">
+    <div style="color:#f97316;font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:10px">PASO 3 — VER SOLO LOS PUBLICADOS</div>
+    <p style="color:#aaa;font-size:14px;line-height:1.7">Usá el filtro <strong style="color:#fff">✅ Publicados</strong> en la barra de filtros para ver únicamente los speakers que ya están marcados para la web. Esto te da una vista previa de lo que verá el desarrollador.</p>
+  </div>
+
+  <div style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:24px">
+    <div style="color:#f97316;font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:10px">PARA EL DESARROLLADOR</div>
+    <p style="color:#aaa;font-size:14px;line-height:1.7">El endpoint público filtra por <code style="background:#1a1a1a;padding:1px 6px;border-radius:3px;color:#f97316">landing=si</code> automáticamente. Ver tab <strong style="color:#fff">Para el desarrollador</strong> para el detalle técnico.</p>
+  </div>
 </div>
 
 <!-- TAB DEV -->
@@ -283,13 +313,32 @@ cd LABITCONF-speakers
 <script>
 const GAS='https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSng2rgzbRSroALHOra43wK2QhlJZ_s-1xKHyv9An_g1ZA/exec';
 const KEY='BTC/2026';
-let speakers=[], filtro='todos';
+let speakers=[], filtro='todos', staffMode=false;
 
 function showTab(t){
   document.getElementById('tabSpeakers').style.display=t==='speakers'?'':'none';
   document.getElementById('tabDev').style.display=t==='dev'?'':'none';
+  document.getElementById('tabInstr').style.display=t==='instr'?'':'none';
   document.getElementById('btnSp').classList.toggle('active',t==='speakers');
   document.getElementById('btnDev').classList.toggle('active',t==='dev');
+  document.getElementById('btnInstr').classList.toggle('active',t==='instr');
+}
+
+function toggleStaff(){
+  staffMode=!staffMode;
+  const btn=document.getElementById('btnStaff');
+  btn.textContent=staffMode?'👁 Modo staff ON':'🔒 Modo staff';
+  btn.style.color=staffMode?'#f97316':'#666';
+  render();
+}
+
+async function togglePublicado(num, publicado){
+  const val=publicado?'si':'';
+  try{
+    await fetch(GAS,{method:'POST',body:JSON.stringify({action:'patch_speaker',data:{num,fields:{36:val}}}),headers:{'Content-Type':'application/json'}});
+    const s=speakers.find(x=>String(x.num)===String(num));
+    if(s){s.landing=val; render();}
+  }catch(e){alert('Error al guardar: '+e.message);}
 }
 
 // Orden definido por el equipo LABITCONF — mapeado por postulacion_num real del sheet
@@ -322,6 +371,7 @@ async function init(){
           x:String(row[15]||'').replace(/^@/,'').trim(),
           instagram:String(row[16]||'').replace(/^@/,'').trim(),
           empresa:String(row[19]||'').trim(), bio:String(row[21]||'').trim(),
+          landing:String(row[36]||'').trim(),
           web_order:row[40]?parseInt(row[40],10):(WEB_ORDER[Number(row[0])]||null)
         };
       }).filter(s=>s.nombre)
@@ -386,6 +436,7 @@ function render(){
     if(filtro==='incompleto') return faltantes(s).length>0;
     if(filtro==='sin-foto')   return !s.foto;
     if(filtro==='sin-bio')    return !s.bio;
+    if(filtro==='publicados') return s.landing==='si';
     if(filtro==='cat1')       return catOf(s)===1;
     if(filtro==='cat2')       return catOf(s)===2;
     if(filtro==='cat3')       return catOf(s)===3;
@@ -469,7 +520,10 @@ function cardHTML(s){
 
   const flag=flagOf(s.pais);
 
-  return `<div class="card${incompleto?' incompleto':''}">
+  const pubToggle=staffMode?`<label style="position:absolute;top:8px;right:8px;z-index:10;display:flex;align-items:center;gap:5px;cursor:pointer;background:rgba(0,0,0,.7);border-radius:20px;padding:4px 10px;font-size:12px;color:${s.landing==='si'?'#4ade80':'#666'}"><input type="checkbox" ${s.landing==='si'?'checked':''} onchange="togglePublicado(${s.num},this.checked)" style="accent-color:#4ade80;cursor:pointer"> ${s.landing==='si'?'Publicado':'Publicar'}</label>`:'';
+
+  return `<div class="card${incompleto?' incompleto':''}" style="position:relative">
+  ${pubToggle}
   ${fotoEl}
   <div class="card-body">
     <div class="card-num">#${String(s.num).padStart(3,'0')} ${s.idioma==='en'?'🇺🇸':''}</div>
