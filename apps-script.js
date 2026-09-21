@@ -230,11 +230,11 @@ function doGet(e) {
       if (!ws2) return respond({ error: 'hoja no encontrada: ' + sheet });
       if (sheet === 'Speakers') {
         const rows = ws2.getDataRange().getValues();
-        // Vaciar bio/eventos, mantener temas solo con campos esenciales (sin abstract/descripcion)
+        // Vaciar eventos_anteriores, mantener bio; temas solo con campos esenciales (sin abstract/descripcion)
         const slim = rows.map((r, ri) => {
           if (ri === 0) return r;
           const row = r.slice();
-          row[21] = ''; row[22] = '';
+          row[22] = '';
           try {
             const t = JSON.parse(String(row[29]||'[]'));
             row[29] = JSON.stringify(t.map(x=>({titulo:x.titulo,estado:x.estado,day:x.day,stage:x.stage,formatos:x.formatos,duracion:x.duracion,nivel:x.nivel,panel:x.panel})));
@@ -1375,4 +1375,57 @@ function cleanDuplicatePhotos() {
   Logger.log('🗑️ Duplicados borrados: ' + deleted);
   Logger.log('📝 Fotos actualizadas en sheet: ' + updated);
   Logger.log('✅ Listo');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LIMPIEZA DE DUPLICADOS EN SHEET SPEAKERS
+// Correr UNA sola vez desde el editor GAS:
+//   Editor → seleccionar función cleanDuplicateSpeakers → ▶ Ejecutar
+// Borra todas las filas duplicadas manteniendo la PRIMERA ocurrencia
+// de cada postulacion_num (columna A). Borra de abajo hacia arriba.
+// ═══════════════════════════════════════════════════════════════════
+function cleanDuplicateSpeakers() {
+  const ss = SpreadsheetApp.openById('1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY');
+  const ws = ss.getSheetByName('Speakers');
+  const data = ws.getDataRange().getValues();
+
+  const seen = new Set();
+  const toDelete = []; // filas a borrar (1-indexed), las juntamos y borramos de abajo a arriba
+
+  for (let i = 1; i < data.length; i++) { // i=0 es header
+    const num = String(data[i][0]).trim();
+    if (!num) continue;
+    if (seen.has(num)) {
+      toDelete.push(i + 1); // sheet rows son 1-indexed, header es fila 1
+    } else {
+      seen.add(num);
+    }
+  }
+
+  // Borrar de abajo hacia arriba para no desplazar índices
+  toDelete.sort((a, b) => b - a);
+  Logger.log('Filas a borrar (' + toDelete.length + '): ' + toDelete.join(', '));
+
+  for (const row of toDelete) {
+    ws.deleteRow(row);
+    Logger.log('Borrada fila ' + row);
+  }
+
+  Logger.log('✅ Limpieza completa. ' + toDelete.length + ' duplicados eliminados.');
+}
+
+// Ordenar sheet Speakers por postulacion_num (columna A) de menor a mayor.
+// Correr DESPUÉS de cleanDuplicateSpeakers.
+// Editor → seleccionar sortSpeakersByNum → ▶ Ejecutar
+function sortSpeakersByNum() {
+  const ss = SpreadsheetApp.openById('1QkhngaOt2rnh1r4KrERrPI1163COxrxFWK-BM7REWEY');
+  const ws = ss.getSheetByName('Speakers');
+  const lastRow = ws.getLastRow();
+  const lastCol = ws.getLastColumn();
+
+  // Ordenar filas 2 en adelante (fila 1 = header) por col A numérico
+  const range = ws.getRange(2, 1, lastRow - 1, lastCol);
+  range.sort({ column: 1, ascending: true });
+
+  Logger.log('✅ Sheet ordenado por postulacion_num. Filas de datos: ' + (lastRow - 1));
 }
