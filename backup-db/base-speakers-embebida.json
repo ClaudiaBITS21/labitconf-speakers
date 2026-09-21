@@ -9878,12 +9878,14 @@
     "Why and How do we HODL (panel de cierre)",
     "Panel con Saifedean Ammous y otros (sábado)"
    ],
-   "no": "No está en la app ni en el excel de postulaciones: invitado directo, agregado desde la grilla del sheet el 11/9 para que tenga ficha y estado. Peso estimado sin investigar. Ver contexto-general.md y criterios-y-flow.md (programado ~11:00 para no quemarlo en la apertura). → Confirmado @saifedean (16/9/2026): 423,5 mil seguidores en X. Autor de \"The Bitcoin Standard\" -- referente global del espacio.",
-   "f": [],
+   "no": "No está en la app ni en el excel de postulaciones: invitado directo, agregado desde la grilla del sheet el 11/9 para que tenga ficha y estado. Peso estimado sin investigar. Ver contexto-general.md y criterios-y-flow.md (programado ~11:00 para no quemarlo en la apertura). → Confirmado @saifedean (16/9/2026): 423,5 mil seguidores en X. Autor de \"The Bitcoin Standard\" -- referente global del espacio. · Idioma corregido a mano el 21/9 (Rodolfo): solo inglés. La app lo tenía en \"es\" por default.",
+   "f": [
+    "EN"
+   ],
    "xf": 423500,
    "yt": null,
    "alc": 5,
-   "lang": "es",
+   "lang": "en",
    "wa": null,
    "tg": null,
    "sg": null,
@@ -12937,14 +12939,15 @@
    "x": "mikegermano",
    "w": "",
    "t": [],
-   "no": "Bajado de la app el 21/9/2026. Perfil y alcance todavía no investigados. Bio (según el formulario): Ejecutivo Bitcoin con roles como presidente de Bitcoin Magazine y The Bitcoin Conference. Reconocido por promover la adopción de Bitcoin en Hollywood y la industria del entretenimiento. · X verificado el 21/9/2026: Mike Germano — President Simply Bitcoin, ex President Bitcoin Magazine",
+   "no": "Bajado de la app el 21/9/2026. Perfil y alcance todavía no investigados. Bio (según el formulario): Ejecutivo Bitcoin con roles como presidente de Bitcoin Magazine y The Bitcoin Conference. Reconocido por promover la adopción de Bitcoin en Hollywood y la industria del entretenimiento. · X verificado el 21/9/2026: Mike Germano — President Simply Bitcoin, ex President Bitcoin Magazine · Idioma: solo inglés (Simply Bitcoin, EE.UU.; la app lo tenía en \"es\" por default — confirmar).",
    "f": [
-    "NUEVO"
+    "NUEVO",
+    "EN"
    ],
    "xf": 15800,
    "yt": null,
    "alc": 4,
-   "lang": "es",
+   "lang": "en",
    "wa": null,
    "tg": null,
    "sg": null,
