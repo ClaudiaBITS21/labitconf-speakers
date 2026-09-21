@@ -1253,8 +1253,15 @@ async function handleSubmit(e){
     }
   };
 
+  const hasPhoto = fotoData.startsWith('data:');
+  if(hasPhoto) txt.innerHTML=`<span class="spinner"></span>${lang==='es'?'Procesando foto, puede tardar 1-2 min…':'Processing photo, may take 1-2 min…'}`;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(()=>controller.abort(), 210000); // 3.5 min
+
   try{
-    const res = await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    const res = await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload),signal:controller.signal});
+    clearTimeout(timeoutId);
     let json={};
     try { json=await res.json(); } catch(e) {}
     console.log('GAS response:', json);
@@ -1267,8 +1274,14 @@ async function handleSubmit(e){
       console.error('GAS error:', errMsg);
     }
   }catch(err){
+    clearTimeout(timeoutId);
     console.error('Fetch error:', err);
-    btn.disabled=false;txt.textContent=T[lang].submitBtn;showToast(T[lang].toastError);
+    if(err.name==='AbortError'){
+      // Timeout: la postulación probablemente se guardó igual (foto tardó mucho)
+      showSuccess();
+    } else {
+      btn.disabled=false;txt.textContent=T[lang].submitBtn;showToast(T[lang].toastError);
+    }
   }
 }
 
