@@ -38,25 +38,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cat-div-badge{font-size:11px;color:#444;background:#111;border:1px solid #1e1e1e;padding:2px 8px;border-radius:8px;}
 
 /* CARD */
-.card{background:#111;border:1px solid #1e1e1e;border-radius:10px;overflow:hidden;transition:border-color .15s,transform .15s;position:relative;}
+.card{background:#111;border:1px solid #1e1e1e;border-radius:10px;overflow:hidden;transition:border-color .15s,transform .15s;position:relative;display:flex;flex-direction:column;}
 .card:hover{border-color:#2a2a2a;transform:translateY(-2px);}
 .card.incompleto{border-color:#3a1f00;}
 
-.card-foto{width:100%;height:190px;object-fit:cover;object-position:top center;background:#1a1a1a;display:block;}
-.card-foto-ph{width:100%;height:190px;background:#151515;display:flex;align-items:center;justify-content:center;color:#333;font-size:44px;}
+.card-foto-wrap{position:relative;width:100%;padding-top:75%;overflow:hidden;background:#151515;}
+.card-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
+.card-foto-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#2a2a2a;font-size:56px;}
 
-.card-body{padding:14px;}
+.card-body{padding:14px;flex:1;display:flex;flex-direction:column;}
 .card-num{font-size:10px;color:#444;font-weight:700;letter-spacing:.5px;margin-bottom:4px;}
 .card-nombre{font-size:16px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:2px;}
 .card-cargo{font-size:12px;color:#f97316;margin-bottom:2px;}
 .card-empresa{font-size:12px;color:#555;margin-bottom:6px;}
-.card-pais{font-size:12px;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:4px;}
-.card-bio{font-size:12px;color:#777;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
+.card-pais{font-size:13px;color:#666;margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.card-bio{font-size:12px;color:#888;line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .card-bio.expanded{-webkit-line-clamp:unset;overflow:visible;}
-.bio-toggle{font-size:11px;color:#f97316;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;margin-bottom:10px;display:block;}
+.bio-toggle{font-size:11px;color:#f97316;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;margin-bottom:10px;display:block;text-align:left;}
 
-.redes{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.red{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:14px;border:1px solid #2a2a2a;color:#666;text-decoration:none;font-size:11px;font-weight:600;transition:all .15s;}
+.redes{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;margin-top:auto;padding-top:6px;}
+.red{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:14px;border:1px solid #2a2a2a;color:#666;text-decoration:none;font-size:11px;font-weight:600;transition:all .15s;}
 .red:hover{color:#fff;}
 .red.x:hover{border-color:#1d9bf0;color:#1d9bf0;}
 .red.li:hover{border-color:#0077b5;color:#0077b5;}
@@ -306,15 +307,24 @@ async function init(){
       const r=await fetch(`${GAS}?action=get_data&sheet=Speakers&key=${KEY}`,{signal:ctrl.signal});
       clearTimeout(timer);
       const j=await r.json();
-      speakers=(j.data||[]).slice(1).map(row=>({
-        num:row[0], nombre:row[1], apellido:row[2], confname:row[3],
-        cargo:row[5], pais:row[6], idioma:row[7],
-        web:row[9], foto:row[10],
-        linkedin:row[14], x:String(row[15]||'').replace(/^@/,''),
-        instagram:String(row[16]||'').replace(/^@/,''),
-        empresa:row[19], bio:row[21],
-        web_order:row[40]?parseInt(row[40],10):(WEB_ORDER[Number(row[0])]||null)
-      })).filter(s=>s.nombre)
+      speakers=(j.data||[]).slice(1).map(row=>{
+        const confname=String(row[3]||'').trim();
+        const nombre=String(row[1]||'').trim();
+        const apellido=String(row[2]||'').trim();
+        const displayName=confname||`${nombre} ${apellido}`.trim();
+        const fotoSheet=String(row[10]||'').trim();
+        const foto=fotoSheet||(FOTO_OVERRIDE[displayName]||FOTO_OVERRIDE[confname]||FOTO_OVERRIDE[nombre]||'');
+        return {
+          num:row[0], nombre, apellido, confname,
+          cargo:String(row[5]||'').trim(), pais:String(row[6]||'').trim(), idioma:String(row[7]||'').trim(),
+          web:String(row[9]||'').trim(), foto,
+          linkedin:String(row[14]||'').trim(),
+          x:String(row[15]||'').replace(/^@/,'').trim(),
+          instagram:String(row[16]||'').replace(/^@/,'').trim(),
+          empresa:String(row[19]||'').trim(), bio:String(row[21]||'').trim(),
+          web_order:row[40]?parseInt(row[40],10):(WEB_ORDER[Number(row[0])]||null)
+        };
+      }).filter(s=>s.nombre)
       .sort((a,b)=>{
         const an=a.web_order, bn=b.web_order;
         if(an&&bn) return an-bn;
@@ -334,6 +344,15 @@ async function init(){
     }
   }
 }
+
+// Fotos públicas para speakers sin foto en el sheet (keyed por confname o nombre)
+const FOTO_OVERRIDE={
+  'Saifedean Ammous':'https://saifedean.com/wp-content/uploads/2023/09/saifedean-ammous-2023.jpg',
+  'Lunaticoin':'https://pbs.twimg.com/profile_images/1640820556785639424/xFYBgXAG_400x400.jpg',
+  'Alberto Mera':'https://pbs.twimg.com/profile_images/1600939804553146369/7h6xq5hX_400x400.jpg',
+  'Yayi Morales':'https://pbs.twimg.com/profile_images/1686742073960534016/q3oK_F6n_400x400.jpg',
+  'Norbert':'https://pbs.twimg.com/profile_images/1612916036148133889/WDj0r0SL_400x400.jpg',
+};
 
 function faltantes(s){
   const f=[];
@@ -406,40 +425,60 @@ function render(){
   document.getElementById('grid').innerHTML=lista.map(cardHTML).join('');
 }
 
+const FLAGS={
+  'argentina':'🇦🇷','españa':'🇪🇸','spain':'🇪🇸','colombia':'🇨🇴','mexico':'🇲🇽','méxico':'🇲🇽',
+  'venezuela':'🇻🇪','chile':'🇨🇱','peru':'🇵🇪','perú':'🇵🇪','bolivia':'🇧🇴','uruguay':'🇺🇾',
+  'paraguay':'🇵🇾','ecuador':'🇪🇨','costa rica':'🇨🇷','el salvador':'🇸🇻','guatemala':'🇬🇹',
+  'honduras':'🇭🇳','nicaragua':'🇳🇮','panamá':'🇵🇦','panama':'🇵🇦','cuba':'🇨🇦',
+  'república dominicana':'🇩🇴','brasil':'🇧🇷','brazil':'🇧🇷','portugal':'🇵🇹',
+  'estados unidos':'🇺🇸','usa':'🇺🇸','united states':'🇺🇸','uk':'🇬🇧','reino unido':'🇬🇧',
+  'alemania':'🇩🇪','germany':'🇩🇪','francia':'🇫🇷','france':'🇫🇷','italia':'🇮🇹',
+  'suiza':'🇨🇭','switzerland':'🇨🇭','países bajos':'🇳🇱','holanda':'🇳🇱','australia':'🇦🇺',
+  'canadá':'🇨🇦','canada':'🇨🇦','japón':'🇯🇵','japan':'🇯🇵','china':'🇨🇳',
+  'el salvador':'🇸🇻','nigeria':'🇳🇬','ghana':'🇬🇭','south africa':'🇿🇦','sudáfrica':'🇿🇦'
+};
+function flagOf(pais){
+  if(!pais) return '';
+  return FLAGS[pais.toLowerCase().trim()]||'🌍';
+}
+
 function cardHTML(s){
   const nombre=s.confname||`${s.nombre} ${s.apellido}`.trim();
   const ft=faltantes(s);
   const incompleto=ft.length>0;
 
   const fotoEl=s.foto
-    ?`<img class="card-foto" src="${s.foto}" alt="${nombre}" onerror="this.outerHTML='<div class=\\'card-foto-ph\\'>👤</div>'">`
-    :`<div class="card-foto-ph">👤</div>`;
+    ?`<div class="card-foto-wrap"><img class="card-foto" src="${s.foto}" alt="${nombre}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-foto-ph\\'>👤</div>'"></div>`
+    :`<div class="card-foto-wrap"><div class="card-foto-ph">👤</div></div>`;
 
   const redesHtml=[
-    s.x        ?`<a class="red x"  href="https://x.com/${s.x}"              target="_blank">𝕏 @${s.x}</a>`:'',
-    s.linkedin ?`<a class="red li" href="${s.linkedin.startsWith('http')?s.linkedin:'https://'+s.linkedin}" target="_blank">💼 LinkedIn</a>`:'',
-    s.instagram?`<a class="red ig" href="https://instagram.com/${s.instagram}" target="_blank">📸 IG</a>`:'',
-    s.web      ?`<a class="red web" href="${s.web.startsWith('http')?s.web:'https://'+s.web}" target="_blank">🌐 Web</a>`:'',
+    s.x        ?`<a class="red x"  href="https://x.com/${s.x}"              target="_blank">𝕏 ${s.x}</a>`:'',
+    s.linkedin ?`<a class="red li" href="${s.linkedin.startsWith('http')?s.linkedin:'https://'+s.linkedin}" target="_blank">in</a>`:'',
+    s.instagram?`<a class="red ig" href="https://instagram.com/${s.instagram}" target="_blank">IG</a>`:'',
+    s.web      ?`<a class="red web" href="${s.web.startsWith('http')?s.web:'https://'+s.web}" target="_blank">🌐</a>`:'',
   ].filter(Boolean).join('');
 
   const faltantesHtml=incompleto
     ?`<div class="faltantes"><span class="faltantes-label">Falta:</span>${ft.map(f=>`<span class="faltante-tag">${f}</span>`).join('')}</div>`
     :'';
 
-  const bioHtml=s.bio
-    ?`<div class="card-bio" id="bio-${s.num}">${s.bio}</div><button class="bio-toggle" onclick="toggleBio(${s.num})">Ver más</button>`
+  const bio=s.bio?String(s.bio).trim():'';
+  const bioHtml=bio
+    ?`<div class="card-bio" id="bio-${s.num}">${bio}</div><button class="bio-toggle" onclick="toggleBio(${s.num})">Ver más ↓</button>`
     :'';
+
+  const flag=flagOf(s.pais);
 
   return `<div class="card${incompleto?' incompleto':''}">
   ${fotoEl}
   <div class="card-body">
-    <div class="card-num">#${String(s.num).padStart(3,'0')} ${s.idioma==='en'?'🇺🇸':'🇦🇷'}</div>
+    <div class="card-num">#${String(s.num).padStart(3,'0')} ${s.idioma==='en'?'🇺🇸':''}</div>
     <div class="card-nombre">${nombre}</div>
     ${s.cargo   ?`<div class="card-cargo">${s.cargo}</div>`:''}
     ${s.empresa ?`<div class="card-empresa">${s.empresa}</div>`:''}
-    ${s.pais    ?`<div class="card-pais">📍 ${s.pais}</div>`:'<div class="card-pais" style="color:#3a2200">⚠ Sin país</div>'}
+    ${s.pais    ?`<div class="card-pais">${flag} ${s.pais}</div>`:''}
     ${bioHtml}
-    ${redesHtml ?`<div class="redes">${redesHtml}</div>`:`<div style="font-size:11px;color:#3a2200;margin-bottom:8px">⚠ Sin redes cargadas</div>`}
+    ${redesHtml ?`<div class="redes">${redesHtml}</div>`:''}
     ${faltantesHtml}
   </div>
 </div>`;
