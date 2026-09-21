@@ -3,6 +3,10 @@
     "done": true,
     "nota": "Es de Mex, confirmar si sigue interesado"
   },
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
   "talks": {
     "0": {
       "done": true,

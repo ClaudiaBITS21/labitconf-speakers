@@ -2,7 +2,11 @@
   "revisar": {
     "done": true
   },
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
   "talks": {},
   "tier": "N1",
-  "web": 6
+  "web": 7
 }

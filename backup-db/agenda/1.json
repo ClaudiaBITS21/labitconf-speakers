@@ -1,9 +1,13 @@
 {
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
   "talks": {
     "1": {
       "done": true,
       "tipo": "charla"
     }
   },
-  "web": 200
+  "web": 44
 }

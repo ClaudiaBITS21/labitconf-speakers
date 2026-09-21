@@ -3,6 +3,10 @@
     "done": true,
     "nota": "Ver si esta aun dispuesto a venirse"
   },
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
   "talks": {
     "0": {
       "done": true,

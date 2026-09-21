@@ -6,6 +6,10 @@
   "revisar": {
     "done": true
   },
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
   "talks": {},
-  "web": 8
+  "web": 10
 }

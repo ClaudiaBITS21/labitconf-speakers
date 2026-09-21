@@ -180,9 +180,11 @@ tr.r.done:hover td{background:var(--ok-bg)}
 tr.r.disc td{background:var(--bad-bg)}
 tr.r.disc:hover td{background:var(--bad-bg)}
 tr.r.disc td:first-child{box-shadow:inset 3px 0 0 var(--bad)}
-tr.r.review td{background:var(--review-bg)}
+tr.r.review td,tr.r.contact td{background:var(--review-bg)}
 tr.r.review:hover td{background:var(--review-bg)}
 tr.r.review td:first-child{box-shadow:inset 3px 0 0 var(--review)}
+tr.r.contact td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+tr.r.contact:hover td{background:var(--review-bg)}
 .xmark{color:var(--bad)}
 .revmark{color:var(--review)}
 .copybtn{background:none;border:none;padding:0;margin:0 0 0 5px;cursor:pointer;color:var(--dim);display:inline-flex;align-items:center;vertical-align:middle;border-radius:4px}
@@ -714,14 +716,14 @@ function initDb(){
         if(incoming===pw.body){delete pendingAgendaWrites[si];return;}
         a[si]=JSON.parse(pw.body);
       });
-      AGENDA=a;render();renderCl();renderDest();renderFalt();renderGrid();if(typeof renderPM==="function")renderPM();
+      AGENDA=a;agendaLoaded=true;render();renderCl();renderDest();renderFalt();renderGrid();if(typeof renderPM==="function")renderPM();scheduleReconcile();
     },function(e){console.warn("db onSnapshot error",e);});
     ns.doc("grid/current").onSnapshot(function(d){
       var x=d&&d.exists?d.data():null;
       if(x&&typeof x._seq==="number"&&x._seq<gridSeq)return; // snapshot viejo llegado tarde: ya tenemos (o mandamos) algo más nuevo, no lo pisamos
       if(x&&typeof x._seq==="number")gridSeq=Math.max(gridSeq,x._seq);
       // copia plana: lo que devuelve la base puede venir congelado, y editar un objeto congelado falla en silencio
-      GRIDLIVE=(x&&x.days)?JSON.parse(JSON.stringify(x)):null;if(GRIDLIVE)ensureDaysV2(GRIDLIVE);renderGrid();renderDest();if(state.modal!=null)fillModal(state.modal);
+      GRIDLIVE=(x&&x.days)?JSON.parse(JSON.stringify(x)):null;if(GRIDLIVE)ensureDaysV2(GRIDLIVE);gridLoaded=true;renderGrid();renderDest();if(state.modal!=null)fillModal(state.modal);scheduleReconcile();
     },function(e){console.warn("grid doc",e);});
     ns.collection("extras").onSnapshot(function(qs){
       var changed=false;qs.docs.forEach(function(d){if(!d.exists)return;var x=d.data()||{};if(mergeExtraRow(parseInt(d.id,10),x))changed=true;});
@@ -1535,7 +1537,7 @@ function render(){
     var disc=isDiscarded(r);
     var rev=isReviewing(r);
     var cta=needsContact(r);
-    var tr=document.createElement("tr");tr.className="r"+(done?" done":"")+(disc?" disc":"")+(rev?" review":"");tr.dataset.i=r.i;
+    var tr=document.createElement("tr");tr.className="r"+(done?" done":"")+(disc?" disc":"")+(rev?" review":"")+(cta?" contact":"");tr.dataset.i=r.i;
     var tierCell=tierCellHtml(r);
     tr.innerHTML='<td>'+tierCell+'</td>'+
       '<td>'+redesHtml(r)+'</td>'+
@@ -2192,12 +2194,23 @@ function talkIndexFor(r,title){
   if(!r||!title)return -1;var items=(r.td&&r.td.length)?r.td:(r.t||[]).map(function(t){return {t:t};});
   var n=nrm(title).trim();for(var i=0;i<items.length;i++){if(nrm(items[i].t||"").trim()===n)return i;}return -1;
 }
+// ---- regla de Rodolfo (21/9): "Ya pasé a este speaker a mi agenda" ES el atributo. Toda persona en la grilla (o en la zona para reordenar) lo tiene tildado.
+var agendaLoaded=false,gridLoaded=false,_recT=null;
+function scheduleReconcile(){clearTimeout(_recT);_recT=setTimeout(reconcileAgendaWithGrid,900);}
+function reconcileAgendaWithGrid(){
+  if(!agendaLoaded||!gridLoaded||!claudeDb)return;
+  var set=gridSet(),n=0;
+  Object.keys(set).forEach(function(k){var si=Number(k);var r=byI[si];if(!r)return;
+    if(!agendaSpeaker(r).done){var multi=speakerCards(si).length>1;saveAgendaSpeaker(String(si),true,"charla");n++;}
+  });
+  if(n)setSt("gredst",n+" speaker"+(n>1?"s":"")+" de la grilla sin el tilde \u201cya pas\u00e9 a este speaker\u201d: tildado"+(n>1?"s":"")+" autom\u00e1ticamente.","ok");
+}
 function agendaAfterAdd(sis,card){
   var tipo=(card.si||[]).length>1?"panel":"charla";var ttl=cardTitle(card)||card.t||"";
   (sis||[]).forEach(function(si){var r=byI[si];if(!r)return;
     var ti=talkIndexFor(r,ttl);if(ti<0)ti=talkIndexFor(r,card.t);
     if(ti>=0){var ag=agendaTalks(r);if(!(ag[ti]&&ag[ti].done))saveAgenda(String(si),String(ti),true,tipo);}
-    else if(!speakerDone(r))saveAgendaSpeaker(String(si),true,tipo);
+    if(!agendaSpeaker(r).done)saveAgendaSpeaker(String(si),true,tipo);
   });
 }
 function agendaAfterRemove(sis,card){

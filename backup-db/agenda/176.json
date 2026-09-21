@@ -1,4 +1,8 @@
 {
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
   "talks": {
     "0": {
       "done": true,
@@ -6,5 +10,5 @@
     }
   },
   "tier": "N1",
-  "web": 10
+  "web": 11
 }
