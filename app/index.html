@@ -586,6 +586,7 @@ body.mdopen{overflow:hidden}
     <button type="button" class="chipbtn3" id="grsyncbtn">&#8635; Actualizar con la grilla de mi Excel</button>
     <span class="syncst" id="grsyncst"></span>
     <button type="button" class="chipbtn3" id="gredcopy">&#8689; Copiar grilla como tabla (para pegar en el sheet)</button>
+    <button type="button" class="chipbtn3" id="grspcopy" title="Una fila por speaker que está en la grilla o en la zona para reordenar, con su número en la app, para cruzar con el sistema viejo">&#8689; Copiar speakers de la grilla (con nº de la app)</button>
   </div>
   <p class="rl" style="margin:-4px 0 10px">Toc&aacute; el <b>+</b> de una franja vac&iacute;a para crear una tarjeta ah&iacute;; arrastr&aacute; una tarjeta a otra franja libre (o tocala y despu&eacute;s toc&aacute; el destino); &#10005; para quitarla. Se guarda solo. <b>Vista compacta</b> achica el texto, colorea las franjas vac&iacute;as vs. ocupadas y pinta de rojo (&#9888;) las que tienen alguna alerta, para ver el d&iacute;a entero de un vistazo. <b>Elegir columnas</b> te deja ocultar los escenarios que no est&aacute;s mirando ahora, para que los que quedan se vean m&aacute;s anchos. Pas&aacute; el mouse sobre una tarjeta para ver su ficha completa en un popup, y toc&aacute; el &#9201; para cambiarle la duraci&oacute;n.</p>
   <div class="gpoolwrap" id="gpoolwrap">
@@ -646,7 +647,7 @@ var byI={};D.rows.forEach(function(r){byI[r.i]=r;r.tn=(r.td&&r.td.length)?r.td.l
 var state={q:"",pais:"",est:"",flt:"",sort:"alc",dir:-1,expanded:{},modal:null};
 var currentList=[];
 var lastStatusClick=0;
-var FL=[["","Todos"],["N1","\u2713 Comprometidos (N1)"],["N2","Deseables (N2)"],["N3","Por definir (N3)"],["SINTIER","\u26a0 Sin tier asignado"],["GEN_M","\u2642 Hombres"],["GEN_F","\u2640 Mujeres"],["GEN_O","\u26a7 Otro / no binario"],["GEN_N","? Sin g\u00e9nero asignado"],["GEN_AUTO","G\u00e9nero inferido (revisar)"],["WEB","\ud83c\udf10 Con # WEB asignado"],["SINWEB","\ud83c\udf10 Sin # WEB"],["WEBP","\ud83c\udf10 # WEB principales (1, 2, 3\u2026)"],["WEBDUP","\ud83c\udf10 # WEB principal repetido"],["AGENDADO","\u2605 Ya en mi agenda"],["FALTA","Falta pasar a agenda"],["ALCANCE","\ud83d\udcf1 +10k seguidores"],["ALERTA","\u26a0 Con alerta"],["NO-ID","Sin identificar"],["ONG","ONG / organizaci\u00f3n"],["NOTEMA","Sin tema cargado"],["NUEVO","\u2726 Nuevo postulante"],["AUSENTE","Ya no aparece en la app"],["EXTERNO","Invitados fuera de la app"],["MANUAL","\u270e Creados a mano desde la grilla"],["EN","Solo en ingl\u00e9s"],["ES","Solo en espa\u00f1ol"],["PREF","Formato distinto (duraci\u00f3n / sin panel / taller)"],["UNDIA","Solo un d\u00eda"],["GONE","Charlas que ya no est\u00e1n en la app"],["DESCARTADO","\u2715 Descartados"],["NODESCARTADO","En carrera (no descartados)"],["REVISAR","\u25d0 Revisé, falta profundizar"],["TALK_CONSIDERAR","\ud83e\udd14 Con charla a considerar"],["TALK_PANEL","\ud83c\udfa4 Con charla posible panel"],["TALK_IGNORAR","\u2298 Con charla ignorada"],["CONTACTAR","\u260e A contactar"],["TALK_PENDIENTE","\u26aa Perfiles sin revisar"]];
+var FL=[["","Todos"],["N1","\u2713 Comprometidos (N1)"],["N2","Deseables (N2)"],["N3","Por definir (N3)"],["SINTIER","\u26a0 Sin tier asignado"],["GEN_M","\u2642 Hombres"],["GEN_F","\u2640 Mujeres"],["GEN_O","\u26a7 Otro / no binario"],["GEN_N","? Sin g\u00e9nero asignado"],["GEN_AUTO","G\u00e9nero inferido (revisar)"],["WEB","\ud83c\udf10 Con # WEB asignado"],["SINWEB","\ud83c\udf10 Sin # WEB"],["WEBP","\ud83c\udf10 # WEB principales (1, 2, 3\u2026)"],["WEBDUP","\ud83c\udf10 # WEB principal repetido"],["AGENDADO","\u2605 En la grilla o marcado en agenda"],["ENGRILLA","\u25a6 En la grilla (cualquier escenario o zona para reordenar)"],["MARCADO_SINGRILLA","\u2605 Marcado en agenda pero NO en la grilla"],["FALTA","Ni en la grilla ni marcado"],["ALCANCE","\ud83d\udcf1 +10k seguidores"],["ALERTA","\u26a0 Con alerta"],["NO-ID","Sin identificar"],["ONG","ONG / organizaci\u00f3n"],["NOTEMA","Sin tema cargado"],["NUEVO","\u2726 Nuevo postulante"],["AUSENTE","Ya no aparece en la app"],["EXTERNO","Invitados fuera de la app"],["MANUAL","\u270e Creados a mano desde la grilla"],["EN","Solo en ingl\u00e9s"],["ES","Solo en espa\u00f1ol"],["PREF","Formato distinto (duraci\u00f3n / sin panel / taller)"],["UNDIA","Solo un d\u00eda"],["GONE","Charlas que ya no est\u00e1n en la app"],["DESCARTADO","\u2715 Descartados"],["NODESCARTADO","En carrera (no descartados)"],["REVISAR","\u25d0 Revisé, falta profundizar"],["TALK_CONSIDERAR","\ud83e\udd14 Con charla a considerar"],["TALK_PANEL","\ud83c\udfa4 Con charla posible panel"],["TALK_IGNORAR","\u2298 Con charla ignorada"],["CONTACTAR","\u260e A contactar"],["TALK_PENDIENTE","\u26aa Perfiles sin revisar"]];
 var ESCLBL={orange:"Orange Pill",vision:"Visi\u00f3n",workshop:"Workshop + Coders",abc:"ABC",business:"Business",autocustodia:"La Crypta / Bitcoineta",offtopic:"Fuera de escenario"};
 
 // ---- agenda (db capability): marcar charlas ya pasadas a la agenda de Rodolfo ----
@@ -655,7 +656,22 @@ var claudeDb=null;
 var dbState="conectando"; // conectando | ok | sin-datos
 function agendaTalks(r){var a=AGENDA[String(r.i)];return (a&&a.talks)||{};}
 function agendaSpeaker(r){var a=AGENDA[String(r.i)];return (a&&a.speaker)||{};}
+var _gridSetCache={key:null,set:null};
+function gridSet(){
+  var g=gridBase();var key=(g&&g._seq!=null?g._seq:"base")+"|"+(g&&g.pool?g.pool.length:0)+"|"+(GRIDLIVE?"L":"B");
+  if(_gridSetCache.key===key&&_gridSetCache.set)return _gridSetCache.set;
+  var set={};
+  (g.days||[]).forEach(function(d){(d.rows||[]).forEach(function(row){(row.c||[]).forEach(function(c){if(c.span||c.vspan||c.x)return;(c.si||[]).forEach(function(i){set[i]=true;});});});});
+  (g.pool||[]).forEach(function(card){(card.si||[]).forEach(function(i){set[i]=true;});});
+  _gridSetCache={key:key,set:set};return set;
+}
+function inGrid(r){return !!gridSet()[r.i];}
+function markedManually(r){
+  if(agendaSpeaker(r).done)return true;
+  var t=agendaTalks(r);return Object.keys(t).some(function(k){return t[k]&&t[k].done;});
+}
 function speakerDone(r){
+  if(inGrid(r))return true;
   if(agendaSpeaker(r).done)return true;
   var t=agendaTalks(r);return Object.keys(t).some(function(k){return t[k]&&t[k].done;});
 }
@@ -1179,6 +1195,8 @@ function fltMatch(r,flt){
   if(flt==="WEBP")return webCat(webOf(r))==="P";
   if(flt==="WEBDUP"){var wv=webOf(r);return wv!=null&&wv<200&&!!webDups()[wv];}
   if(flt==="AGENDADO")return speakerDone(r);
+  if(flt==="ENGRILLA")return inGrid(r);
+  if(flt==="MARCADO_SINGRILLA")return markedManually(r)&&!inGrid(r);
   if(flt==="FALTA")return !speakerDone(r);
   if(flt==="DESCARTADO")return isDiscarded(r);
   if(flt==="NODESCARTADO")return !isDiscarded(r);
@@ -1521,7 +1539,7 @@ function render(){
     var tierCell=tierCellHtml(r);
     tr.innerHTML='<td>'+tierCell+'</td>'+
       '<td>'+redesHtml(r)+'</td>'+
-      '<td>'+avaHtml(r,"ava")+'<div class="nm">'+(done?'<span class="star" title="Ya está en tu agenda">\u2605</span> ':'')+(disc?'<span class="xmark" title="Marcado: no va como speaker">\u2715</span> ':'')+(rev?'<span class="revmark" title="Revisado, falta profundizar">\u25d0</span> ':'')+(cta?'<span class="ctamark" title="Pendiente contactar">\u260e</span> ':'')+esc(r.n)+genderMark(r)+appNumHtml(r)+(agc.tn?'<span class="agcount" title="Charlas pasadas a tu agenda sobre el total propuesto">['+agc.filled+'/'+agc.tn+']</span>':'')+'<button type="button" class="copybtn nmcopy" title="Copiar nombre">'+COPYICON+'</button></div><div class="rl">'+esc(r.c||"—")+(r.e?' · '+esc(r.e):'')+'</div>'+tags(r)+'</td>'+
+      '<td>'+avaHtml(r,"ava")+'<div class="nm">'+(done?'<span class="star" title="'+(inGrid(r)?"Está en la grilla":"Marcado en agenda a mano, pero NO está en la grilla")+'">'+(inGrid(r)?"\u25a6":"\u2605")+'</span> ':'')+(disc?'<span class="xmark" title="Marcado: no va como speaker">\u2715</span> ':'')+(rev?'<span class="revmark" title="Revisado, falta profundizar">\u25d0</span> ':'')+(cta?'<span class="ctamark" title="Pendiente contactar">\u260e</span> ':'')+esc(r.n)+genderMark(r)+appNumHtml(r)+(agc.tn?'<span class="agcount" title="Charlas pasadas a tu agenda sobre el total propuesto">['+agc.filled+'/'+agc.tn+']</span>':'')+'<button type="button" class="copybtn nmcopy" title="Copiar nombre">'+COPYICON+'</button></div><div class="rl">'+esc(r.c||"—")+(r.e?' · '+esc(r.e):'')+'</div>'+tags(r)+'</td>'+
       '<td>'+esc(r.q)+'</td><td class="rl">'+esc(r.pa)+'</td>'+
       '<td class="rl">'+(r.tn?r.tn:'—')+'</td>'+
       '<td>'+webCellHtml(r)+'</td>';
@@ -2256,6 +2274,13 @@ function ensureNamesDatalist(refresh){
   if(!dl){dl=document.createElement("datalist");dl.id="grnames";document.body.appendChild(dl);}
   dl.innerHTML=D.rows.map(function(r){return '<option value="'+esc(r.n)+'">';}).join("");
 }
+function gridSpeakersTSV(){
+  var set=gridSet(),out=["nº app\tid artefacto\tnombre\ttier\testado en la app\tdónde está en la grilla"];
+  var ids=Object.keys(set).map(Number).sort(function(a,b){var ra=byI[a],rb=byI[b];var na=(ra&&ra.an&&ra.an[0])||9999,nb=(rb&&rb.an&&rb.an[0])||9999;return na-nb||a-b;});
+  ids.forEach(function(i){var r=byI[i];if(!r)return;var cards=speakerCards(i).map(function(x){return x.where+" — "+x.title;}).join(" | ");
+    out.push([(r.an&&r.an.length?r.an.join("/"):"—"),i,r.n,effTier(r)||"",r.es||"",cards].join("\t"));});
+  return out.join("\n");
+}
 function gridToTSV(){
   var g=gridBase(),out=[];
   g.days.forEach(function(d){
@@ -2556,6 +2581,7 @@ function initGridEdit(){
   var t=document.getElementById("gredtoggle");if(t)t.remove();
   var ge=document.getElementById("gredesc");if(ge)ge.onclick=function(){openScenarioEditor(null);};
   ensureNamesDatalist();
+  var sc=document.getElementById("grspcopy");if(sc)sc.onclick=function(){copyText(gridSpeakersTSV(),sc);setSt("gredst","Lista de speakers de la grilla copiada (TSV: nº app, id, nombre, dónde está).","ok");};
   var c=document.getElementById("gredcopy");if(c)c.onclick=function(){copyText(gridToTSV(),c);setSt("gredst","Grilla copiada como tabla: pegala en el sheet (Ctrl+V) y volvé a combinar las celdas de main stage.","ok");};
   var gc=document.getElementById("grcompact");if(gc)gc.onclick=function(){GRIDCOMPACT=!GRIDCOMPACT;gc.classList.toggle("on",GRIDCOMPACT);renderGrid();};
   var gcb=document.getElementById("grcols");
