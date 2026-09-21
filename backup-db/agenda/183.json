@@ -10,6 +10,7 @@
   "talks": {
     "0": {
       "done": true,
+      "matchOk": true,
       "tipo": "charla"
     },
     "1": {

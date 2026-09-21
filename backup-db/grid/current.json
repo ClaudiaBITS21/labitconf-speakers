@@ -1,6 +1,6 @@
 {
   "_gv": 2,
-  "_seq": 386,
+  "_seq": 390,
   "by": "edicion",
   "days": [
     {
@@ -3581,9 +3581,9 @@
               "manual": true,
               "rows": 6,
               "si": [
-                505
+                124
               ],
-              "t": "Selling Bitcoiners to Brands",
+              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
               "tm": true,
               "x": false
             },
@@ -3654,9 +3654,9 @@
             {
               "m": true,
               "si": [
-                505
+                124
               ],
-              "t": "Selling Bitcoiners to Brands",
+              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3716,9 +3716,9 @@
             {
               "m": true,
               "si": [
-                505
+                124
               ],
-              "t": "Selling Bitcoiners to Brands",
+              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3778,9 +3778,9 @@
             {
               "m": true,
               "si": [
-                505
+                124
               ],
-              "t": "Selling Bitcoiners to Brands",
+              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3840,9 +3840,9 @@
             {
               "m": true,
               "si": [
-                505
+                124
               ],
-              "t": "Selling Bitcoiners to Brands",
+              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3902,9 +3902,9 @@
             {
               "m": true,
               "si": [
-                505
+                124
               ],
-              "t": "Selling Bitcoiners to Brands",
+              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -6468,10 +6468,14 @@
             },
             {
               "cols": 1,
-              "m": false,
+              "m": true,
+              "manual": true,
               "rows": 6,
-              "si": [],
-              "t": "",
+              "si": [
+                3
+              ],
+              "t": "Ganadores Concurso IFEB",
+              "tm": true,
               "x": false
             },
             {
@@ -6534,9 +6538,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                3
+              ],
+              "t": "Ganadores Concurso IFEB",
               "vspan": true,
               "x": false
             },
@@ -6595,9 +6601,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                3
+              ],
+              "t": "Ganadores Concurso IFEB",
               "vspan": true,
               "x": false
             },
@@ -6656,9 +6664,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                3
+              ],
+              "t": "Ganadores Concurso IFEB",
               "vspan": true,
               "x": false
             },
@@ -6717,9 +6727,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                3
+              ],
+              "t": "Ganadores Concurso IFEB",
               "vspan": true,
               "x": false
             },
@@ -6778,9 +6790,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                3
+              ],
+              "t": "Ganadores Concurso IFEB",
               "vspan": true,
               "x": false
             },
@@ -8200,15 +8214,9 @@
         {
           "c": [
             {
-              "cols": 1,
-              "m": true,
-              "manual": true,
-              "rows": 6,
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tm": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -8258,12 +8266,9 @@
         {
           "c": [
             {
-              "m": true,
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -8310,12 +8315,9 @@
         {
           "c": [
             {
-              "m": true,
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -8362,12 +8364,9 @@
         {
           "c": [
             {
-              "m": true,
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -8414,12 +8413,9 @@
         {
           "c": [
             {
-              "m": true,
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -8466,12 +8462,9 @@
         {
           "c": [
             {
-              "m": true,
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -13453,7 +13446,17 @@
       ],
       "t": "Agentes de IA en serio: cómo delegar procesos reales a empleados digitales",
       "tm": true
+    },
+    {
+      "cols": 1,
+      "manual": true,
+      "rows": 6,
+      "si": [
+        505
+      ],
+      "t": "Selling Bitcoiners to Brands",
+      "tm": true
     }
   ],
-  "synced": "20/9/2026, 11:00:59"
+  "synced": "21/9/2026, 09:47:28"
 }

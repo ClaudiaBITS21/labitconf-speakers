@@ -1,12 +1,12 @@
 {
-  "at": "11/9/2026 (bajada del pipeline, 181 registros)",
+  "at": "21/9/2026 (bajada por Claude, 267 registros, 240 únicos)",
   "list": [
     {
       "apellido": "Andragnes",
       "cargo": "CEO LABITCONF",
       "confname": "Rodo",
       "empresa": "FBI (Bitcoin)",
-      "estado": "confirmado",
+      "estado": "disponible",
       "nombre": "Rodolfo",
       "num": 1,
       "pais": "Argentina",
@@ -30,7 +30,7 @@
       "empresa": "Ram the culturist",
       "estado": "disponible",
       "nombre": "Ramiro",
-      "num": 5,
+      "num": 3,
       "pais": "Argentina",
       "temas": "Meaning Is the First Blockchain / El Significado Es la Primera Cadena de Bloques"
     },
@@ -41,7 +41,7 @@
       "empresa": "La revolucion Africana de Bitcoin",
       "estado": "disponible",
       "nombre": "Gabriel",
-      "num": 6,
+      "num": 4,
       "pais": "Argentina",
       "temas": "La revolucion Africana de Bitcoin"
     },
@@ -52,7 +52,7 @@
       "empresa": "Bitcoin4Humanity",
       "estado": "disponible",
       "nombre": "delfina",
-      "num": 7,
+      "num": 5,
       "pais": "Argentina",
       "temas": "Mujeres y Bitcoin en África / Economías Circulares de Bitcoin"
     },
@@ -61,9 +61,9 @@
       "cargo": "Head of Strategy",
       "confname": "GraemeMoore",
       "empresa": "Project Eleven",
-      "estado": "confirmado",
+      "estado": "disponible",
       "nombre": "Graeme",
-      "num": 8,
+      "num": 6,
       "pais": "Estados Unidos",
       "temas": "The Quantum Threat to Crypto"
     },
@@ -72,9 +72,9 @@
       "cargo": "Socio",
       "confname": "Juan Manuel Campos",
       "empresa": "SYLS",
-      "estado": "confirmado",
+      "estado": "disponible",
       "nombre": "Juan Manuel",
-      "num": 9,
+      "num": 7,
       "pais": "Argentina",
       "temas": "Prediction Markets, DAOS en Argentina"
     },
@@ -85,7 +85,7 @@
       "empresa": "PatagonEcoEnergy",
       "estado": "respaldo",
       "nombre": "Sebastian",
-      "num": 10,
+      "num": 8,
       "pais": "Argentina",
       "temas": "La Blockchain puede acelerar la transición energética."
     },
@@ -96,7 +96,7 @@
       "empresa": "OneSafe",
       "estado": "disponible",
       "nombre": "Christopher",
-      "num": 11,
+      "num": 9,
       "pais": "United States",
       "temas": "Building a Crypto Neobank in 2026"
     },
@@ -107,7 +107,7 @@
       "empresa": "Bitcoin 4 Humanity",
       "estado": "disponible",
       "nombre": "ivan",
-      "num": 12,
+      "num": 10,
       "pais": "Uruguay",
       "temas": "Cómo constriur una economía circular de BItcoin"
     },
@@ -116,9 +116,9 @@
       "cargo": "Maintainer",
       "confname": "Wasabi Wallet",
       "empresa": "Wasabi",
-      "estado": "confirmado",
+      "estado": "disponible",
       "nombre": "Lucas",
-      "num": 13,
+      "num": 11,
       "pais": "Argentina",
       "temas": "Transformando la privacidad onchain"
     },
@@ -129,7 +129,7 @@
       "empresa": "JXLabs",
       "estado": "revision",
       "nombre": "Jonathan",
-      "num": 14,
+      "num": 12,
       "pais": "Argentina",
       "temas": "De HODL a continuidad: smart contracts y Capas 2 sobre Bitcoin, Bitcoin para todos: por qué importa aunque no seas trader"
     },
@@ -140,7 +140,7 @@
       "empresa": "Bodega Bitcoin Corp",
       "estado": "revision",
       "nombre": "Marco",
-      "num": 15,
+      "num": 13,
       "pais": "Perú",
       "temas": "Boveda Frìa Cripto"
     },
@@ -151,7 +151,7 @@
       "empresa": "Propia",
       "estado": "disponible",
       "nombre": "Melisa",
-      "num": 16,
+      "num": 14,
       "pais": "Costa Rica",
       "temas": "Centroamérica: el laboratorio mundial de Bitcoin"
     },
@@ -162,7 +162,7 @@
       "empresa": "Clases de Bitcoin",
       "estado": "revision",
       "nombre": "Diego",
-      "num": 17,
+      "num": 15,
       "pais": "Argentina",
       "temas": "8, 18, 80: Un Bitcoin para cada edad"
     },
@@ -171,9 +171,9 @@
       "cargo": "Legislador de la Ciudad de Buenos Aires",
       "confname": "@DaroNieto",
       "empresa": "Legislatura de la Ciudad de Buenos Aires",
-      "estado": "confirmado",
+      "estado": "disponible",
       "nombre": "Dario",
-      "num": 19,
+      "num": 16,
       "pais": "Argentina",
       "temas": "Gobiernos Agénticos: más inteligencia, menos impuestos"
     },
@@ -184,7 +184,7 @@
       "empresa": "Satoshilemu",
       "estado": "disponible",
       "nombre": "Miguel",
-      "num": 20,
+      "num": 17,
       "pais": "Chile",
       "temas": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto?"
     },
@@ -195,7 +195,7 @@
       "empresa": "RGB Protocol Association",
       "estado": "disponible",
       "nombre": "Birkan",
-      "num": 21,
+      "num": 18,
       "pais": "Italy",
       "temas": "Privacy for Stablecoins: RGB on Bitcoin"
     },
@@ -206,7 +206,7 @@
       "empresa": "Escuela Bitcoin Brasil",
       "estado": "revision",
       "nombre": "Yuri",
-      "num": 22,
+      "num": 19,
       "pais": "Brasil",
       "temas": "Educación del bitcoin para niños y su impacto en la familia"
     },
@@ -217,7 +217,7 @@
       "empresa": "ONG {(₿)} Bitcoin.ar",
       "estado": "confirmado",
       "nombre": "MATIAS",
-      "num": 23,
+      "num": 20,
       "pais": "Argentina",
       "temas": "Herencias en Bitcoin ¿Que pasa con tus bitcoin si mañana no estás?, DCA en bitcoin ¿Cuándo es buen momento de comprar?, Passphrase BIP39: Una nivel de seguridad para blindar tus bitcoin"
     },
@@ -228,7 +228,7 @@
       "empresa": "Prieto Legal",
       "estado": "disponible",
       "nombre": "Bianca",
-      "num": 24,
+      "num": 21,
       "pais": "Paraguay",
       "temas": "Holdeando la neurociencia del Bitcoin"
     },
@@ -239,9 +239,20 @@
       "empresa": "Paystand",
       "estado": "rechazado",
       "nombre": "Jeremy",
-      "num": 25,
+      "num": 22,
       "pais": "EE.UU.",
       "temas": ""
+    },
+    {
+      "apellido": "Tomé",
+      "cargo": "",
+      "confname": "Samuel Tomé",
+      "empresa": "",
+      "estado": "revision",
+      "nombre": "Samuel",
+      "num": 23,
+      "pais": "Argentina",
+      "temas": "Ciclos de Bitcoin"
     },
     {
       "apellido": "Jilch",
@@ -250,7 +261,7 @@
       "empresa": "",
       "estado": "revision",
       "nombre": "Niko",
-      "num": 27,
+      "num": 24,
       "pais": "Austria",
       "temas": ""
     },
@@ -261,7 +272,7 @@
       "empresa": "Deepwave Technologies",
       "estado": "revision",
       "nombre": "Giovanni",
-      "num": 28,
+      "num": 25,
       "pais": "EE.UU.",
       "temas": ""
     },
@@ -272,7 +283,7 @@
       "empresa": "Amity Age",
       "estado": "revision",
       "nombre": "Dušan",
-      "num": 29,
+      "num": 26,
       "pais": "Eslovaquia",
       "temas": ""
     },
@@ -283,7 +294,7 @@
       "empresa": "HTGF",
       "estado": "disponible",
       "nombre": "Alex",
-      "num": 30,
+      "num": 27,
       "pais": "Alemania",
       "temas": ""
     },
@@ -294,7 +305,7 @@
       "empresa": "Fedi / Forbes Crypto",
       "estado": "revision",
       "nombre": "Lorena",
-      "num": 31,
+      "num": 28,
       "pais": "México",
       "temas": ""
     },
@@ -305,7 +316,7 @@
       "empresa": "Bull Bitcoin España",
       "estado": "disponible",
       "nombre": "Andrés",
-      "num": 32,
+      "num": 29,
       "pais": "Colombia",
       "temas": ""
     },
@@ -316,7 +327,7 @@
       "empresa": "Bitfinex / Tether Latam",
       "estado": "revision",
       "nombre": "Javier",
-      "num": 33,
+      "num": 30,
       "pais": "Venezuela",
       "temas": ""
     },
@@ -327,7 +338,7 @@
       "empresa": "Relai",
       "estado": "revision",
       "nombre": "Julian",
-      "num": 34,
+      "num": 31,
       "pais": "Suiza",
       "temas": ""
     },
@@ -338,7 +349,7 @@
       "empresa": "",
       "estado": "revision",
       "nombre": "Chris",
-      "num": 35,
+      "num": 32,
       "pais": "EE.UU.",
       "temas": ""
     },
@@ -349,7 +360,7 @@
       "empresa": "Unblock Computing",
       "estado": "revision",
       "nombre": "Tomas",
-      "num": 36,
+      "num": 33,
       "pais": "Argentina",
       "temas": ""
     },
@@ -360,7 +371,7 @@
       "empresa": "SyzCapital Digital / Advisor JAN3",
       "estado": "revision",
       "nombre": "Richard",
-      "num": 37,
+      "num": 34,
       "pais": "Suiza",
       "temas": ""
     },
@@ -371,7 +382,7 @@
       "empresa": "Brave New Coin / Techemy Capital",
       "estado": "disponible",
       "nombre": "Fran",
-      "num": 38,
+      "num": 35,
       "pais": "Australia",
       "temas": ""
     },
@@ -382,7 +393,7 @@
       "empresa": "Bitcoin Policy Institute",
       "estado": "revision",
       "nombre": "David",
-      "num": 39,
+      "num": 36,
       "pais": "EE.UU.",
       "temas": ""
     },
@@ -393,7 +404,7 @@
       "empresa": "Plan B Network",
       "estado": "revision",
       "nombre": "Giacomo",
-      "num": 40,
+      "num": 37,
       "pais": "Italia",
       "temas": ""
     },
@@ -404,7 +415,7 @@
       "empresa": "Paystand",
       "estado": "rechazado",
       "nombre": "Alexandra",
-      "num": 41,
+      "num": 38,
       "pais": "Colombia / EE.UU.",
       "temas": ""
     },
@@ -415,185 +426,9 @@
       "empresa": "Fulgur Ventures / Blox Space",
       "estado": "revision",
       "nombre": "Filippo",
-      "num": 42,
+      "num": 39,
       "pais": "Italia",
       "temas": ""
-    },
-    {
-      "apellido": "Vaccotti",
-      "cargo": "Educador",
-      "confname": "Bruno",
-      "empresa": "Acelerando Bitcoin",
-      "estado": "confirmado",
-      "nombre": "Bruno",
-      "num": 25,
-      "pais": "Paraguay",
-      "temas": "Dinero duro invertido en activos duros: liquidez predecible y programable, Halving 2028: ¿Muerte de la Minería Privada?, Home Mining"
-    },
-    {
-      "apellido": "Tomé",
-      "cargo": "",
-      "confname": "Samuel Tomé",
-      "empresa": "",
-      "estado": "revision",
-      "nombre": "Samuel",
-      "num": 26,
-      "pais": "Argentina",
-      "temas": "Ciclos de Bitcoin"
-    },
-    {
-      "apellido": "Poveda",
-      "cargo": "",
-      "confname": "El Bull",
-      "empresa": "",
-      "estado": "confirmado",
-      "nombre": "Facundo",
-      "num": 27,
-      "pais": "Argentina",
-      "temas": "Del prompt al backtest: un agente de IA que investiga estrategias sin engañarte, Agente trader bajo control: de la señal a la ejecución sin entregar las llaves"
-    },
-    {
-      "apellido": "Robles",
-      "cargo": "Educadora en criptomonedas y creadora de contenido",
-      "confname": "@Bitacora",
-      "empresa": "Bitácora",
-      "estado": "revision",
-      "nombre": "Noelia",
-      "num": 28,
-      "pais": "Argentina",
-      "temas": "Cripto para gente normal: de cero a usarla y entender por qué HODLear, Te regalo tu primer bitcoin: cripto para gente normal"
-    },
-    {
-      "apellido": "Castañeda",
-      "cargo": "CEO",
-      "confname": "Roderich",
-      "empresa": "Roderich’s Crypto House",
-      "estado": "revision",
-      "nombre": "Rodrigo",
-      "num": 29,
-      "pais": "Uruguay",
-      "temas": "Que está pasando en la región a nivel adopcion"
-    },
-    {
-      "apellido": "Klug",
-      "cargo": "CLO",
-      "confname": "Leoklug",
-      "empresa": "Menter",
-      "estado": "disponible",
-      "nombre": "Leonardo German",
-      "num": 30,
-      "pais": "Argentina",
-      "temas": "El cine, la mente y Bitcoin: Navegando las paradojas del HODL, De las tablillas al bloque: La verdad inmutable"
-    },
-    {
-      "apellido": "Zocaro",
-      "cargo": "Comisión Directiva",
-      "confname": "Marcos Zocaro",
-      "empresa": "ONG Bitcoin Argentina",
-      "estado": "disponible",
-      "nombre": "Marcos",
-      "num": 31,
-      "pais": "Argentina",
-      "temas": "Tributación de las Finanzas Descentralizadas en Bitcoin y criptoactivos"
-    },
-    {
-      "apellido": "martin",
-      "cargo": "CEO",
-      "confname": "male martin",
-      "empresa": "fardo",
-      "estado": "confirmado",
-      "nombre": "malena",
-      "num": 32,
-      "pais": "Argentina",
-      "temas": "La nueva guerra por la atención: cómo posicionar una marca dentro de la inteligencia artificial"
-    },
-    {
-      "apellido": "Martel Seward",
-      "cargo": "CEO",
-      "confname": "@borja",
-      "empresa": "Roxom",
-      "estado": "confirmado",
-      "nombre": "Borja",
-      "num": 33,
-      "pais": "Argentina",
-      "temas": "Los Mercados del Bitcoin"
-    },
-    {
-      "apellido": "Durán",
-      "cargo": "Fundador",
-      "confname": "Felipe Durán",
-      "empresa": "Isla El Descanso, UXart y XReal",
-      "estado": "confirmado",
-      "nombre": "Felipe",
-      "num": 34,
-      "pais": "Colombia",
-      "temas": "Seed: La Propiedad Intelectual Programable en la Era de la IA"
-    },
-    {
-      "apellido": "Seguro",
-      "cargo": "CTO",
-      "confname": "@NikoSeguro",
-      "empresa": "FARDO",
-      "estado": "confirmado",
-      "nombre": "Niko",
-      "num": 37,
-      "pais": "Argentina",
-      "temas": "Posicionamiento de marcas en las respuestas de la IA"
-    },
-    {
-      "apellido": "Bianchi",
-      "cargo": "CEO",
-      "confname": "@hahsrate",
-      "empresa": "Hashrate",
-      "estado": "disponible",
-      "nombre": "Fabrizio",
-      "num": 38,
-      "pais": "Uruguay",
-      "temas": "El Futuro de la Minería"
-    },
-    {
-      "apellido": "Ondarra",
-      "cargo": "Gerente General",
-      "confname": "Andrés Ondarra",
-      "empresa": "Nexo",
-      "estado": "disponible",
-      "nombre": "Andrés",
-      "num": 39,
-      "pais": "Argentina",
-      "temas": "HODL con rendimiento"
-    },
-    {
-      "apellido": "Acosta",
-      "cargo": "Founder",
-      "confname": "leonacostaok",
-      "empresa": "QuantaKrypto",
-      "estado": "disponible",
-      "nombre": "Leon",
-      "num": 40,
-      "pais": "Argentina",
-      "temas": "Una Curva Para Perderlo Todo: La Indecisión Quantum, Bitcoin Post-Cuántico en la Práctica: Agentes, Lightning y Nostr, Bitcoin Post-Cuántico en 60 Minutos, del Cero a un Demo"
-    },
-    {
-      "apellido": "Maffoni",
-      "cargo": "Asesor Financiero Matriculado (CNV AP 2782)",
-      "confname": "Franco Maffoni",
-      "empresa": "Inversor Estratega",
-      "estado": "disponible",
-      "nombre": "Franco",
-      "num": 41,
-      "pais": "Argentina",
-      "temas": "Asesor financiero matriculado, fan de bitcoin: por qué mi propia industria no habla de esto"
-    },
-    {
-      "apellido": "Serkin",
-      "cargo": "socia, fundadora",
-      "confname": "Gabriela Serkin",
-      "empresa": "Triarsa, Hashtag",
-      "estado": "disponible",
-      "nombre": "Gabriela",
-      "num": 42,
-      "pais": "Argentina",
-      "temas": "Headless"
     },
     {
       "apellido": "Goldberg",
@@ -602,7 +437,7 @@
       "empresa": "Manteca",
       "estado": "disponible",
       "nombre": "Federico",
-      "num": 43,
+      "num": 40,
       "pais": "Argentina",
       "temas": "Pagos Crossborder con Stablecoins (QRs, Transferencias)"
     },
@@ -613,7 +448,7 @@
       "empresa": "Tropykus",
       "estado": "disponible",
       "nombre": "Damián",
-      "num": 44,
+      "num": 41,
       "pais": "Argentina",
       "temas": "(Panel DeFi o de usos de bitcoin)"
     },
@@ -624,7 +459,7 @@
       "empresa": "Blend",
       "estado": "disponible",
       "nombre": "Ana",
-      "num": 45,
+      "num": 42,
       "pais": "Venezuela",
       "temas": "Tu agente ya tiene wallet. ¿Quién responde por él?"
     },
@@ -635,7 +470,7 @@
       "empresa": "Diiirect",
       "estado": "disponible",
       "nombre": "Ary",
-      "num": 46,
+      "num": 43,
       "pais": "Argentina",
       "temas": "El futuro del trabajo en la era IA: empresas, talento y contratación, Minería de Bitcoin en LATAM, LATAM no es un mercado: cómo instalar y escalar una empresa B2B en la región, El nuevo mapa de la minería Bitcoin en LATAM: energía, poder y geopolítica"
     },
@@ -644,9 +479,9 @@
       "cargo": "Consultant",
       "confname": "@wilder",
       "empresa": "Liberation.Travel",
-      "estado": "confirmado",
+      "estado": "disponible",
       "nombre": "Pavol",
-      "num": 47,
+      "num": 44,
       "pais": "Slovakia",
       "temas": "Technologies of Freedom 2026: Disruptive Crypto & AI"
     },
@@ -657,7 +492,7 @@
       "empresa": "Satlantis",
       "estado": "disponible",
       "nombre": "Jordi",
-      "num": 48,
+      "num": 45,
       "pais": "España",
       "temas": "De comunidad a proyecto sostenible, Convierte tu comunidad en un proyecto sostenible"
     },
@@ -668,7 +503,7 @@
       "empresa": "Infuy",
       "estado": "disponible",
       "nombre": "Alejandro",
-      "num": 49,
+      "num": 46,
       "pais": "Uruguay",
       "temas": "Adoptar AI con retorno: El framework que separa al 5%, Identidad digital en la era Agentica: Que pasa con la identidad de los agentes de IA?"
     },
@@ -679,7 +514,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Carmen",
-      "num": 50,
+      "num": 47,
       "pais": "Argentina",
       "temas": "QUIÉN SE QUEDA CON EL VALOR"
     },
@@ -690,7 +525,7 @@
       "empresa": "Misión 21",
       "estado": "disponible",
       "nombre": "Jorge Luis",
-      "num": 52,
+      "num": 48,
       "pais": "El Salvador",
       "temas": "BITCOIN UNA REVOLUCIÓN EN LA COMUNIDAD"
     },
@@ -701,7 +536,7 @@
       "empresa": "Libreria de satoshi",
       "estado": "disponible",
       "nombre": "Guille",
-      "num": 54,
+      "num": 49,
       "pais": "Argentina",
       "temas": "Vamos a mirar Bitcoin desde dentro de un nodo"
     },
@@ -712,7 +547,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Jan",
-      "num": 55,
+      "num": 50,
       "pais": "Republica Checa",
       "temas": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente"
     },
@@ -723,7 +558,7 @@
       "empresa": "Trading Different",
       "estado": "disponible",
       "nombre": "Ivan",
-      "num": 57,
+      "num": 51,
       "pais": "Argentina",
       "temas": "Liquidez en los mercados: el combustible que mueve el precio"
     },
@@ -734,7 +569,7 @@
       "empresa": "Notbank-TusCursos.tech",
       "estado": "disponible",
       "nombre": "GUILLERMO",
-      "num": 58,
+      "num": 52,
       "pais": "Argentina",
       "temas": "Tasas de Intereses y ETF de Bitcoin"
     },
@@ -745,7 +580,7 @@
       "empresa": "RecoverCoins",
       "estado": "disponible",
       "nombre": "Nicolas",
-      "num": 59,
+      "num": 53,
       "pais": "Argentina",
       "temas": "Cuando lo seguro falla: Historia de vulnerabilidades y hacks, No todo está perdido: recuperación de seeds, passphrases y billeteras de Bitcoin"
     },
@@ -756,7 +591,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Aldana Celeste",
-      "num": 60,
+      "num": 54,
       "pais": "Argentina",
       "temas": "El Estado y tu Bitcoin"
     },
@@ -767,7 +602,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Gonzalo",
-      "num": 61,
+      "num": 55,
       "pais": "Argentina",
       "temas": "Nadie hackea Bitcoin: así roban tus criptos."
     },
@@ -778,7 +613,7 @@
       "empresa": "camilojdl.com",
       "estado": "disponible",
       "nombre": "Camilo",
-      "num": 62,
+      "num": 56,
       "pais": "Argentina",
       "temas": "Bitcoin: la llave de acceso al segundo reino"
     },
@@ -789,7 +624,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Camilo",
-      "num": 63,
+      "num": 57,
       "pais": "Argentina",
       "temas": "Propiedad Intelectual: ¿Vestigio del pasado o necesidad esencial para el desarrollo tecnológico?"
     },
@@ -800,7 +635,7 @@
       "empresa": "La Crypta",
       "estado": "disponible",
       "nombre": "Fierillo",
-      "num": 64,
+      "num": 58,
       "pais": "Argentina",
       "temas": "¿Por qué Bitcoin?"
     },
@@ -811,7 +646,7 @@
       "empresa": "Bitcoinismo",
       "estado": "disponible",
       "nombre": "Adrián",
-      "num": 65,
+      "num": 59,
       "pais": "España",
       "temas": "El arte de Bitcoin como colateral para financiar tu vida sin vender y hacer crecer tu patrimonio., Cómo impacta Bitcoin en el futuro de la humanidad, Libros Bitcoin"
     },
@@ -822,7 +657,7 @@
       "empresa": "ROCK N LAW",
       "estado": "disponible",
       "nombre": "AGUS",
-      "num": 66,
+      "num": 60,
       "pais": "Argentina",
       "temas": "Propiedad Intelectual: ¿Vestigio arcaico del pasado o necesidad esencial para el desarrollo de nueva, Tokenizar la obra, no al autor: financiamiento blockchain de proyectos artísticos en Argentina, El eslabón perdido: blockchain como capa de procedencia y consentimiento en la IA generativa."
     },
@@ -833,7 +668,7 @@
       "empresa": "Veintiuno.Lat / La Crypta",
       "estado": "disponible",
       "nombre": "Jaqui",
-      "num": 67,
+      "num": 61,
       "pais": "Argentina",
       "temas": "Nostr: rompé el algoritmo"
     },
@@ -844,7 +679,7 @@
       "empresa": "Plugin.uy",
       "estado": "disponible",
       "nombre": "Maximiliano",
-      "num": 69,
+      "num": 62,
       "pais": "Uruguay",
       "temas": "Descubriendo Bitcoin: un modelo abierto de educación Bitcoin"
     },
@@ -855,7 +690,7 @@
       "empresa": "Cipherlaw",
       "estado": "disponible",
       "nombre": "Camila",
-      "num": 70,
+      "num": 63,
       "pais": "Argentina",
       "temas": "RWA sin sorpresas: un framework legal en cuatro pasos, Stablecoins y proyectos web2.5 en LATAM: el patchwork regulatorio que nadie te explicó, El día en que dejar de guardar datos se volvió una ventaja legal"
     },
@@ -866,7 +701,7 @@
       "empresa": "La Crypta",
       "estado": "disponible",
       "nombre": "Santiago Nehuen",
-      "num": 72,
+      "num": 64,
       "pais": "Argentina",
       "temas": "Bitcoin es Peronista: La Tercera Posición Monetaria del Siglo XXI., Bitcoin es del pueblo: Bajar del balcón de oro"
     },
@@ -877,7 +712,7 @@
       "empresa": "BULL BITCOIN",
       "estado": "disponible",
       "nombre": "Micael",
-      "num": 73,
+      "num": 65,
       "pais": "Australia",
       "temas": "LA MUERTE DEL DÓLAR"
     },
@@ -888,7 +723,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Julián",
-      "num": 74,
+      "num": 66,
       "pais": "Argentina",
       "temas": "Propiedad Intelectual: ¿Vestigio arcaico del pasado o necesidad esencial para el desarrollo de nueva, Bitcoin y los poderes naturales"
     },
@@ -899,7 +734,7 @@
       "empresa": "LA Crypta",
       "estado": "disponible",
       "nombre": "Richard",
-      "num": 75,
+      "num": 67,
       "pais": "Argentina",
       "temas": "Problemas y laberintos del ser bitcoiner"
     },
@@ -910,7 +745,7 @@
       "empresa": "Molotov",
       "estado": "disponible",
       "nombre": "Jania",
-      "num": 76,
+      "num": 68,
       "pais": "Argentina",
       "temas": "EL ARTE FUE EL EXPERIMENTO. De las galerías a los NFT y el fin de la especulación"
     },
@@ -921,7 +756,7 @@
       "empresa": "CriptoNoticias",
       "estado": "disponible",
       "nombre": "Leopoldo",
-      "num": 77,
+      "num": 69,
       "pais": "Argentina",
       "temas": "Bitcoin y stablecoins como herramientas de negocio: oportunidades e implementaciones"
     },
@@ -932,7 +767,7 @@
       "empresa": "Gretha Streaming",
       "estado": "disponible",
       "nombre": "Adolfo",
-      "num": 78,
+      "num": 70,
       "pais": "Argentina",
       "temas": "Mineria Bitcoin - Recursos y desafios"
     },
@@ -943,7 +778,7 @@
       "empresa": "La Crypta",
       "estado": "disponible",
       "nombre": "Andy",
-      "num": 80,
+      "num": 71,
       "pais": "Argentina",
       "temas": "Bitcoin como derecho humano"
     },
@@ -954,7 +789,7 @@
       "empresa": "Vaquita",
       "estado": "disponible",
       "nombre": "Leandro",
-      "num": 81,
+      "num": 72,
       "pais": "Argentina",
       "temas": "Como dejar de ser NPC"
     },
@@ -965,7 +800,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Walter",
-      "num": 82,
+      "num": 73,
       "pais": "Venezuela",
       "temas": "Bitcoin y Dopamina"
     },
@@ -976,7 +811,7 @@
       "empresa": "Mindatia",
       "estado": "disponible",
       "nombre": "Juan Manuel",
-      "num": 83,
+      "num": 74,
       "pais": "Argentina",
       "temas": "Mineria y la guerra contra la IA por la energia"
     },
@@ -987,7 +822,7 @@
       "empresa": "Bitcoin Bolivia",
       "estado": "disponible",
       "nombre": "Alfredo",
-      "num": 84,
+      "num": 75,
       "pais": "Bolivia",
       "temas": "Bitcoin para todos: Construye adopción real en Bolivia 🇧🇴"
     },
@@ -998,7 +833,7 @@
       "empresa": "MozaikPay",
       "estado": "disponible",
       "nombre": "Milos",
-      "num": 85,
+      "num": 76,
       "pais": "Serbia",
       "temas": "The Custody Trilemma"
     },
@@ -1009,7 +844,7 @@
       "empresa": "Trustoken",
       "estado": "disponible",
       "nombre": "Valentino",
-      "num": 86,
+      "num": 77,
       "pais": "Argentina",
       "temas": "RWA: blockchain frente a la banca y el futuro de los mercados financieros"
     },
@@ -1020,7 +855,7 @@
       "empresa": "Bitwriters",
       "estado": "disponible",
       "nombre": "Pedro",
-      "num": 87,
+      "num": 78,
       "pais": "Chile",
       "temas": "¿Quién se quedó con la prima? Juicio a las tesorerías corporativas de Bitcoin, Don't trust, verify: el lema que casi nadie cumple"
     },
@@ -1031,7 +866,7 @@
       "empresa": "Squant desk",
       "estado": "disponible",
       "nombre": "Alonso",
-      "num": 88,
+      "num": 79,
       "pais": "Chile",
       "temas": "Mitos de la computación cuántica y el mito de un Bitcoin indestructible"
     },
@@ -1042,7 +877,7 @@
       "empresa": "Universidad Nacional de Mar del Plata",
       "estado": "disponible",
       "nombre": "Ariel",
-      "num": 89,
+      "num": 80,
       "pais": "Argentina",
       "temas": "Que es la descentralización?"
     },
@@ -1053,7 +888,7 @@
       "empresa": "Richi Espinosa SA de CV",
       "estado": "disponible",
       "nombre": "Ricardo",
-      "num": 90,
+      "num": 81,
       "pais": "México",
       "temas": "Cómo ganar un torneo de trading"
     },
@@ -1064,7 +899,7 @@
       "empresa": "Bitso",
       "estado": "disponible",
       "nombre": "Julian",
-      "num": 91,
+      "num": 82,
       "pais": "Argentina",
       "temas": "El futuro de los Exchanges Centralizados"
     },
@@ -1075,7 +910,7 @@
       "empresa": "Criptoconferencia.net",
       "estado": "disponible",
       "nombre": "Pedro Rey",
-      "num": 92,
+      "num": 83,
       "pais": "Bolivia",
       "temas": "Adopción sin precedentes de BTC y cripto en Bolivia gracias a la experiencia Argentina"
     },
@@ -1086,7 +921,7 @@
       "empresa": "Finanfoco",
       "estado": "disponible",
       "nombre": "Marisa",
-      "num": 93,
+      "num": 84,
       "pais": "Argentina",
       "temas": "HODL de tus finanzas: cómo construir libertad financiera en la nueva economía"
     },
@@ -1097,7 +932,7 @@
       "empresa": "Criptocafecito",
       "estado": "disponible",
       "nombre": "Emily",
-      "num": 94,
+      "num": 85,
       "pais": "Venezuela",
       "temas": "Bitcoin, adopción, inteligencia artificial, finanzas con Bitcoin."
     },
@@ -1108,7 +943,7 @@
       "empresa": "Liberty club",
       "estado": "disponible",
       "nombre": "Pauli",
-      "num": 95,
+      "num": 86,
       "pais": "Argentina",
       "temas": "DESCENTRALIZAR la economía"
     },
@@ -1119,7 +954,7 @@
       "empresa": "MB Capital",
       "estado": "disponible",
       "nombre": "Sergio",
-      "num": 97,
+      "num": 87,
       "pais": "México",
       "temas": "Criptos para no criptos"
     },
@@ -1130,7 +965,7 @@
       "empresa": "Ruptive AI",
       "estado": "disponible",
       "nombre": "Sebastián",
-      "num": 98,
+      "num": 88,
       "pais": "Argentina",
       "temas": "Agentes de IA en serio: cómo delegar procesos reales a empleados digitales"
     },
@@ -1141,7 +976,7 @@
       "empresa": "?",
       "estado": "disponible",
       "nombre": "Jhon",
-      "num": 99,
+      "num": 89,
       "pais": "Venezuela",
       "temas": "De indocumentado a Community Builder: Cómo Bitcoin me dio soberanía cuando el sistema me cerró las p"
     },
@@ -1152,7 +987,7 @@
       "empresa": "Torablockchain",
       "estado": "disponible",
       "nombre": "Carla",
-      "num": 100,
+      "num": 90,
       "pais": "Argentina",
       "temas": "Dominar lo inevitable"
     },
@@ -1163,7 +998,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Matias",
-      "num": 101,
+      "num": 91,
       "pais": "Argentina",
       "temas": "Hacking the Human: de tu identidad a lo que hay en tu wallet"
     },
@@ -1174,7 +1009,7 @@
       "empresa": "Blackbot",
       "estado": "disponible",
       "nombre": "Fernanda",
-      "num": 102,
+      "num": 92,
       "pais": "México",
       "temas": "¿Quién decide por ti? IA, billeteras y autonomía en la economía descentralizada"
     },
@@ -1185,7 +1020,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Agustina",
-      "num": 103,
+      "num": 93,
       "pais": "Argentina",
       "temas": "Cambio y Futuro / Perfiles del Futuro"
     },
@@ -1196,7 +1031,7 @@
       "empresa": "Pharos Chess Academy",
       "estado": "disponible",
       "nombre": "Jeremias",
-      "num": 104,
+      "num": 94,
       "pais": "Argentina",
       "temas": "Transferencias P2P en Ethereum: Tu primer Smart Contract en Solidity"
     },
@@ -1207,7 +1042,7 @@
       "empresa": "LiteDir",
       "estado": "disponible",
       "nombre": "Emmanuel David",
-      "num": 105,
+      "num": 95,
       "pais": "Argentina",
       "temas": "Desarrollando Una Blockchain desde Cero"
     },
@@ -1218,7 +1053,7 @@
       "empresa": "Bitclusion",
       "estado": "disponible",
       "nombre": "José",
-      "num": 106,
+      "num": 96,
       "pais": "Venezuela",
       "temas": "Bitcoin, Inclusión y Autonomía Descentralizada"
     },
@@ -1229,7 +1064,7 @@
       "empresa": "Vibedesk",
       "estado": "disponible",
       "nombre": "Luis",
-      "num": 107,
+      "num": 97,
       "pais": "Argentina",
       "temas": "Identidad soberana y Criptografía Cuántica."
     },
@@ -1240,7 +1075,7 @@
       "empresa": "Mente De Hackers",
       "estado": "disponible",
       "nombre": "Angel",
-      "num": 108,
+      "num": 98,
       "pais": "República Dominicana",
       "temas": "IA OFENSIVA : Cómo los ataques inteligentes están superando las defensas tradicionales"
     },
@@ -1251,7 +1086,7 @@
       "empresa": "React Now",
       "estado": "disponible",
       "nombre": "Christian",
-      "num": 109,
+      "num": 99,
       "pais": "Perú",
       "temas": "Expansion de Apps"
     },
@@ -1262,7 +1097,7 @@
       "empresa": "Nexo",
       "estado": "disponible",
       "nombre": "Juan",
-      "num": 110,
+      "num": 100,
       "pais": "Argentina",
       "temas": "Tu mayor activo no está en tu Wallet"
     },
@@ -1273,7 +1108,7 @@
       "empresa": "Avicola Sofia",
       "estado": "disponible",
       "nombre": "Diana Gardene",
-      "num": 111,
+      "num": 101,
       "pais": "Bolivia",
       "temas": "Cloud, IA y Comunidad: Tecnología que Impulsa Personas y Transforma Futuros"
     },
@@ -1284,7 +1119,7 @@
       "empresa": "Coconut & Law",
       "estado": "disponible",
       "nombre": "Camila",
-      "num": 112,
+      "num": 102,
       "pais": "Argentina",
       "temas": "Del contenido al activo digital: monetización de creadores en la Web2 y la Web3, Del CRS al CARF: la nueva transparencia fiscal de los criptoactivos, Criptoactivos sin fronteras: planificación de sucesiones multijurisdiccionales"
     },
@@ -1295,7 +1130,7 @@
       "empresa": "AWS",
       "estado": "disponible",
       "nombre": "Lorena",
-      "num": 113,
+      "num": 103,
       "pais": "Argentina",
       "temas": "DEL HYPE AL P&L, Liderar cuando la IA también forma parte del equipo"
     },
@@ -1306,7 +1141,7 @@
       "empresa": "Spherepay",
       "estado": "disponible",
       "nombre": "Benjamin",
-      "num": 114,
+      "num": 104,
       "pais": "Brasil",
       "temas": "Pagos Crossborder Latam - USA"
     },
@@ -1317,7 +1152,7 @@
       "empresa": "NapsixB2B",
       "estado": "disponible",
       "nombre": "German",
-      "num": 115,
+      "num": 105,
       "pais": "Argentina",
       "temas": "Agentes de IA en equipos multidisciplinarios: del chatbot al compañero de trabajo, El modelo justo por tarea: por qué ruteo todo a Claude te quiebra el presupuesto"
     },
@@ -1328,7 +1163,7 @@
       "empresa": "Accenture",
       "estado": "disponible",
       "nombre": "Cinthya",
-      "num": 117,
+      "num": 106,
       "pais": "Argentina",
       "temas": "El trabajo de mis sueños nunca es un trabajo"
     },
@@ -1339,7 +1174,7 @@
       "empresa": "Maigotex",
       "estado": "disponible",
       "nombre": "Veronica",
-      "num": 118,
+      "num": 107,
       "pais": "Paraguay",
       "temas": "Desarrollo de biomateriales apartir de residuos Agricolas"
     },
@@ -1350,7 +1185,7 @@
       "empresa": "ADI Foundation",
       "estado": "disponible",
       "nombre": "Anna",
-      "num": 119,
+      "num": 108,
       "pais": "Ukraine",
       "temas": "What Happens When Governments Go Onchain? Lessons from Building Blockchain Infrastructure in Abu Dha"
     },
@@ -1361,7 +1196,7 @@
       "empresa": "FUTRUX",
       "estado": "disponible",
       "nombre": "Nicolas",
-      "num": 120,
+      "num": 109,
       "pais": "Argentina",
       "temas": "Del estereo a la musica liquida"
     },
@@ -1372,7 +1207,7 @@
       "empresa": "NetX Gen",
       "estado": "disponible",
       "nombre": "Franz",
-      "num": 121,
+      "num": 110,
       "pais": "Argentina",
       "temas": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa"
     },
@@ -1383,7 +1218,7 @@
       "empresa": "Búho Digital",
       "estado": "disponible",
       "nombre": "Alfa",
-      "num": 123,
+      "num": 111,
       "pais": "México",
       "temas": "El mercado no te quita el dinero: te muestra quién eres."
     },
@@ -1394,7 +1229,7 @@
       "empresa": "Arellano Arbitraje",
       "estado": "disponible",
       "nombre": "AXEL",
-      "num": 124,
+      "num": 112,
       "pais": "Argentina",
       "temas": "Bitcoin nació P2P: del whitepaper al mercado real, Arbitraje P2P: una nueva profesión financiera, El precio de Bitcoin no es uno solo: ¿error u oportunidad?"
     },
@@ -1405,7 +1240,7 @@
       "empresa": "PlataMT",
       "estado": "disponible",
       "nombre": "Agostina",
-      "num": 125,
+      "num": 113,
       "pais": "Argentina",
       "temas": "IA lingüística para cripto en Argentina: precisión, localización y compliance"
     },
@@ -1416,7 +1251,7 @@
       "empresa": "UCEMA",
       "estado": "disponible",
       "nombre": "Sara",
-      "num": 126,
+      "num": 114,
       "pais": "Argentina",
       "temas": "Bitcoin desde una perspectiva austríaca"
     },
@@ -1427,7 +1262,7 @@
       "empresa": "Reto Bitcoin 365 App",
       "estado": "disponible",
       "nombre": "Daniel Andres",
-      "num": 127,
+      "num": 115,
       "pais": "Venezuela",
       "temas": "HODL no es esperar: construir una economía circular desde el #RetoBitcoin365, El último kilómetro del dinero digital: cómo el P2P de stablecoins mueve a Latinoamérica"
     },
@@ -1438,7 +1273,7 @@
       "empresa": "Germinal RH",
       "estado": "disponible",
       "nombre": "Eugenia",
-      "num": 129,
+      "num": 116,
       "pais": "Argentina",
       "temas": "Liderazgo vulnerable en tiempos de IA"
     },
@@ -1449,7 +1284,7 @@
       "empresa": "NextGen - Pioneras Digitales",
       "estado": "disponible",
       "nombre": "Tracy Estefania",
-      "num": 130,
+      "num": 117,
       "pais": "Estados Unidos",
       "temas": "De una idea a la acción: lo que aprendí construyendo NextGen, Tu próxima oportunidad debería encontrarte: crea tu Opportunity Agent con IA"
     },
@@ -1460,7 +1295,7 @@
       "empresa": "FBI - Fundacion Bitcoin Iberoamerica",
       "estado": "disponible",
       "nombre": "Luis J.",
-      "num": 132,
+      "num": 118,
       "pais": "Estados Unidos",
       "temas": "LABIF: Impulsando el Impacto Real y la Adopción de Bitcoin en América Latina, Economías Circulares de Bitcoin con LABIF en LATAM, Proyectos LABIF: Transformando Latinoamérica con Bitcoin, Universidades y Bitcoin: La Red UniBlock en LATAM <<[Un Panel el Viernes y otro el Sabado]>>"
     },
@@ -1471,7 +1306,7 @@
       "empresa": "Elbi",
       "estado": "disponible",
       "nombre": "Joaquin",
-      "num": 135,
+      "num": 119,
       "pais": "Argentina",
       "temas": "From Internet to IRL: cómo IA y las comunidades están cambiando dónde nacen las startups"
     },
@@ -1482,7 +1317,7 @@
       "empresa": "Bitcoin en español Podcast.",
       "estado": "disponible",
       "nombre": "JUAN SEBASTIAN",
-      "num": 137,
+      "num": 120,
       "pais": "Ecuador",
       "temas": "¿Por qué LATAM necesita BITCOIN?, Construyendo rieles físicos: Retos y lecciones de operar cajeros Bitcoin en una economía dolarizada"
     },
@@ -1493,7 +1328,7 @@
       "empresa": "behacked",
       "estado": "disponible",
       "nombre": "Leandro",
-      "num": 138,
+      "num": 121,
       "pais": "Argentina",
       "temas": "Bitcoin, stablecoins y blockchain en la pyme argentina. La adopción que nadie está vendiendo"
     },
@@ -1504,7 +1339,7 @@
       "empresa": "Blockvoz",
       "estado": "disponible",
       "nombre": "Lina",
-      "num": 140,
+      "num": 122,
       "pais": "Colombia",
       "temas": "¿Quién está contando la historia de la adopción cripto en Latinoamérica? de la gente común?, De la burbuja a la vida real: ¿qué tan lejos está la industria cripto de la gente común?, La mente detrás del mercado: psicología, emociones y decisiones en el mundo cripto"
     },
@@ -1515,7 +1350,7 @@
       "empresa": "Enlace IA",
       "estado": "disponible",
       "nombre": "Carla",
-      "num": 142,
+      "num": 123,
       "pais": "Argentina",
       "temas": "Hechos, artefactos y relatos: cómo se construye socialmente la IA"
     },
@@ -1526,7 +1361,7 @@
       "empresa": "Meta-Sentinel Consulting",
       "estado": "disponible",
       "nombre": "Jessica Soledad",
-      "num": 143,
+      "num": 124,
       "pais": "Argentina",
       "temas": "Gobernanza y Cripto-IA: Estándares de Compliance para el Ecosistema Descentralizado"
     },
@@ -1537,7 +1372,7 @@
       "empresa": "Fairgate Labs",
       "estado": "disponible",
       "nombre": "Sergio Demian",
-      "num": 144,
+      "num": 125,
       "pais": "Argentina",
       "temas": "Bit2, una nuevo layer 2 de Bitcoin para comercio entre agentes"
     },
@@ -1548,7 +1383,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Paola andrea",
-      "num": 145,
+      "num": 126,
       "pais": "Bolivia",
       "temas": "La próxima adopción será humana: Bitcoin, IA y la generación que no heredará bancos"
     },
@@ -1559,7 +1394,7 @@
       "empresa": "Urpe Ai lab",
       "estado": "disponible",
       "nombre": "Salome",
-      "num": 146,
+      "num": 127,
       "pais": "Colombia",
       "temas": "El cruce cuántico: cuatro años de historia de Bitcoin"
     },
@@ -1570,7 +1405,7 @@
       "empresa": "The crypto school",
       "estado": "disponible",
       "nombre": "Wesley",
-      "num": 147,
+      "num": 128,
       "pais": "Brasil",
       "temas": "De la especulación a la adopción: lecciones de construir comunidades cripto en LATAM"
     },
@@ -1581,7 +1416,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Jonathan",
-      "num": 148,
+      "num": 129,
       "pais": "Ecuador",
       "temas": "Invertir en Bitcoin o esclavitud"
     },
@@ -1592,7 +1427,7 @@
       "empresa": "HALLOS Y BID CAPITAL",
       "estado": "disponible",
       "nombre": "MAURICIO",
-      "num": 150,
+      "num": 130,
       "pais": "Colombia",
       "temas": "Hallos: La capa de confianza del Ticketing con Blockchain, Bitcoin sin FOMO: Entendiendo los ciclos para construir el portafolio correcto"
     },
@@ -1603,7 +1438,7 @@
       "empresa": "33677278",
       "estado": "disponible",
       "nombre": "Ezequiel",
-      "num": 151,
+      "num": 131,
       "pais": "Argentina",
       "temas": "Estafas: como reconocerlas y evitarlas"
     },
@@ -1614,7 +1449,7 @@
       "empresa": "MoonQuant.capital / UCEMA",
       "estado": "disponible",
       "nombre": "Alfredo",
-      "num": 152,
+      "num": 132,
       "pais": "Argentina",
       "temas": "Dont Trust the AI.  Verify: cómo usar IA para HODL, DCA, trading y research en Bitcoin"
     },
@@ -1625,7 +1460,7 @@
       "empresa": "Rootstock",
       "estado": "disponible",
       "nombre": "Jose",
-      "num": 153,
+      "num": 133,
       "pais": "Argentina",
       "temas": "Cómo crear Bitcoiners desde cero: métodos reales para explicar Bitcoin sin perder a la audiencia"
     },
@@ -1636,7 +1471,7 @@
       "empresa": "Tendencia Crypto",
       "estado": "disponible",
       "nombre": "German",
-      "num": 154,
+      "num": 134,
       "pais": "Argentina",
       "temas": "Análisis técnico para principiantes"
     },
@@ -1647,7 +1482,7 @@
       "empresa": "Yaccel Soto psicología",
       "estado": "disponible",
       "nombre": "Yaccel Alexander",
-      "num": 155,
+      "num": 135,
       "pais": "México",
       "temas": "Estás loco, rompiendo tabúes"
     },
@@ -1658,7 +1493,7 @@
       "empresa": "Autonomo",
       "estado": "disponible",
       "nombre": "Claudia",
-      "num": 156,
+      "num": 136,
       "pais": "Argentina",
       "temas": "Uso responsable de la IA"
     },
@@ -1669,7 +1504,7 @@
       "empresa": "JM SOFT / UNMDP",
       "estado": "disponible",
       "nombre": "Javier",
-      "num": 158,
+      "num": 137,
       "pais": "Argentina",
       "temas": "Pagos sin humanos: microservicios, agentes y el rol de Bitcoin en la era de las máquinas, ¿Nadie sabe cuántos nodos tiene Bitcoin? Telemetría y BIP-110"
     },
@@ -1680,7 +1515,7 @@
       "empresa": "Welu",
       "estado": "disponible",
       "nombre": "Juan Carlos",
-      "num": 159,
+      "num": 138,
       "pais": "España",
       "temas": "HODL rocks: la filosofía de no soltar lo que creés, El emprendimiento es tu verdadero Wallet"
     },
@@ -1691,7 +1526,7 @@
       "empresa": "SAIA",
       "estado": "disponible",
       "nombre": "Elisandro",
-      "num": 160,
+      "num": 139,
       "pais": "Argentina",
       "temas": "De cero a negocio con IA: creá y lanzá un emprendimiento en tiempo récord, ¿Qué pasa cuando los bots sean más que los humanos? IA, crypto y mercados autónomos, La IA ya tiene dinero: agentes autónomos, crypto y una economía sin humanos"
     },
@@ -1702,7 +1537,7 @@
       "empresa": "AlDía",
       "estado": "disponible",
       "nombre": "Sofía Soledad",
-      "num": 161,
+      "num": 140,
       "pais": "Argentina",
       "temas": "Suerte loca"
     },
@@ -1713,7 +1548,7 @@
       "empresa": "E4C (Education For Culture)",
       "estado": "disponible",
       "nombre": "Pablo Sebastian",
-      "num": 162,
+      "num": 141,
       "pais": "Argentina",
       "temas": "Tokenizar el Aula + IA para Docentes y Juicio Crítico Frente al Copiar/Pegar"
     },
@@ -1724,7 +1559,7 @@
       "empresa": "Master crypto S.A",
       "estado": "disponible",
       "nombre": "leandro",
-      "num": 163,
+      "num": 142,
       "pais": "Argentina",
       "temas": "Bitcoin y el derecho a elegir el dinero: una alternativa al monopolio monetario"
     },
@@ -1735,7 +1570,7 @@
       "empresa": "Luxor Technology",
       "estado": "disponible",
       "nombre": "Alessandro",
-      "num": 164,
+      "num": 143,
       "pais": "Venezuela",
       "temas": "Cómo puede Venezuela replicar el modelo Paraguay y monetizar energía varada con minería de Bitcoin"
     },
@@ -1746,7 +1581,7 @@
       "empresa": "IAE Business School",
       "estado": "disponible",
       "nombre": "Javier",
-      "num": 165,
+      "num": 144,
       "pais": "Argentina",
       "temas": "HODL, ¿con todo tu sueldo? Repensando el riesgo más allá de la volatilidad"
     },
@@ -1757,7 +1592,7 @@
       "empresa": "FIA",
       "estado": "disponible",
       "nombre": "Axel",
-      "num": 166,
+      "num": 145,
       "pais": "Argentina",
       "temas": "La segunda ola de la IA: de los chats a los equipos híbridos"
     },
@@ -1768,7 +1603,7 @@
       "empresa": "Fundacion Gran Chaco",
       "estado": "disponible",
       "nombre": "Martin",
-      "num": 167,
+      "num": 146,
       "pais": "Argentina",
       "temas": "Identidad descentralizada en entornos sin conectividad"
     },
@@ -1779,7 +1614,7 @@
       "empresa": "Estudio Vazquez Caceres Abogados",
       "estado": "disponible",
       "nombre": "juan manuel",
-      "num": 168,
+      "num": 147,
       "pais": "Argentina",
       "temas": "Lanzando proyectos Bitcoin y Crypto desde Argentina al mundo en 2026, El Estado y tu Bitcoin: pasado, presente y futuro, Riesgos jurídicos y penales en Crypto y Web3"
     },
@@ -1790,7 +1625,7 @@
       "empresa": "Perú Blockchain Conference",
       "estado": "disponible",
       "nombre": "Kristopher",
-      "num": 169,
+      "num": 148,
       "pais": "Perú",
       "temas": "Perú y LATAM: 5 años de evolución cripto, adopción, regulación y construcción de ecosistema"
     },
@@ -1801,7 +1636,7 @@
       "empresa": "Agilmind SRL, Mamut Records",
       "estado": "disponible",
       "nombre": "Nahuel",
-      "num": 170,
+      "num": 149,
       "pais": "Argentina",
       "temas": "De vibecoder a founder"
     },
@@ -1812,7 +1647,7 @@
       "empresa": "Perú Blockchain Conference & Latam Blockchain Events",
       "estado": "disponible",
       "nombre": "Bryan",
-      "num": 171,
+      "num": 150,
       "pais": "Perú",
       "temas": "Latinoamérica conectada: de ecosistemas aislados a una red regional blockchain"
     },
@@ -1823,7 +1658,7 @@
       "empresa": "ONG BITCOIN ARGENTINA",
       "estado": "disponible",
       "nombre": "GABRIELA",
-      "num": 172,
+      "num": 151,
       "pais": "Argentina",
       "temas": "Mitos y verdades de la tokenización, ¿De dónde vienen tus bitcoins? Seguí el rastro on-chain, Del código a la ley: Bitcoin no pide permiso, ¿puede regularse?"
     },
@@ -1834,7 +1669,7 @@
       "empresa": "Money On Chain",
       "estado": "disponible",
       "nombre": "Manuel",
-      "num": 173,
+      "num": 152,
       "pais": "Argentina",
       "temas": "Finanzas con Bitcoin: introducción práctica a DeFi"
     },
@@ -1845,9 +1680,75 @@
       "empresa": "TRU Web3",
       "estado": "disponible",
       "nombre": "Mauricio",
-      "num": 174,
+      "num": 153,
       "pais": "Colombia",
       "temas": "Cinco años construyendo Tropykus: aprendizajes para la próxima generación de finanzas abiertas, ¿Puede la IA ser la respuesta a los problemas de seguridad que genera en el mundo descentralizado?"
+    },
+    {
+      "apellido": "Cohen",
+      "cargo": "Director latam Partnership",
+      "confname": "@thorfx",
+      "empresa": "PuPrime",
+      "estado": "disponible",
+      "nombre": "Michel",
+      "num": 154,
+      "pais": "Uruguay",
+      "temas": "Trading 3.0: Copy Trading, Algoritmos y Automatización"
+    },
+    {
+      "apellido": "Nuñez",
+      "cargo": "Directora",
+      "confname": "Karina",
+      "empresa": "Integra Consultora",
+      "estado": "disponible",
+      "nombre": "Karina",
+      "num": 155,
+      "pais": "Argentina",
+      "temas": "Automatizar el caos: por qué la IA fracasa sin diagnóstico organizacional"
+    },
+    {
+      "apellido": "Camargo",
+      "cargo": "",
+      "confname": "Axel Camargo",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Axel",
+      "num": 156,
+      "pais": "Argentina",
+      "temas": "De la especulación a las decisiones informadas"
+    },
+    {
+      "apellido": "Gurpegui",
+      "cargo": "",
+      "confname": "Diego Gurpegui",
+      "empresa": "ONG Bitcoin Argentina",
+      "estado": "disponible",
+      "nombre": "Diego",
+      "num": 157,
+      "pais": "Argentina",
+      "temas": "Vos también tenés algo que ocultar"
+    },
+    {
+      "apellido": "Socorro",
+      "cargo": "CEO",
+      "confname": "@islassem",
+      "empresa": "ISLAS SEM",
+      "estado": "disponible",
+      "nombre": "Julia",
+      "num": 158,
+      "pais": "España",
+      "temas": "Artificial Inteligencia Emocional"
+    },
+    {
+      "apellido": "Carnicer Souble",
+      "cargo": "Software Engineer",
+      "confname": "Rama Dev",
+      "empresa": "Mercado Libre",
+      "estado": "disponible",
+      "nombre": "Ramiro",
+      "num": 159,
+      "pais": "Argentina",
+      "temas": "Read the code! La nueva vagancia cognitiva de los devs"
     },
     {
       "apellido": "Sánchez Ordóñez",
@@ -1856,7 +1757,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Pilar",
-      "num": 191,
+      "num": 160,
       "pais": "Argentina",
       "temas": "Ciberfeminismo: diálogos colectivos para repensar el circuito web3 desde una mirada feminista., Ciberfeminismo: diálogos colectivos para repensar el circuito web3 desde una mirada feminista."
     },
@@ -1867,7 +1768,7 @@
       "empresa": "Método R-Evolución Interna.",
       "estado": "disponible",
       "nombre": "Miguel",
-      "num": 192,
+      "num": 161,
       "pais": "Argentina",
       "temas": "Bitcoin y el terraplanismo: lo que nuestras creencias no nos dejan ver"
     },
@@ -1878,7 +1779,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "stephie",
-      "num": 193,
+      "num": 162,
       "pais": "Argentina",
       "temas": "Qué HODLear de vos (y qué soltar) en la era de la IA"
     },
@@ -1889,7 +1790,7 @@
       "empresa": "Instituto de Análisis Económico del Derecho de la Universidad de Palermo (IAED–UP)",
       "estado": "disponible",
       "nombre": "Gonzalo",
-      "num": 194,
+      "num": 163,
       "pais": "Argentina",
       "temas": "PI:¿Vestigio arcaico del pasado o necesidad esencial para el desarrollo de nuevas tecnologías?"
     },
@@ -1900,7 +1801,7 @@
       "empresa": "ONG Bitcoin Argentina",
       "estado": "disponible",
       "nombre": "Jimena",
-      "num": 195,
+      "num": 164,
       "pais": "Argentina",
       "temas": "Educación"
     },
@@ -1911,9 +1812,317 @@
       "empresa": "Decrypto",
       "estado": "disponible",
       "nombre": "Jose Luis",
-      "num": 196,
+      "num": 165,
       "pais": "Argentina",
       "temas": "El uso invisible de las criptomonedas"
+    },
+    {
+      "apellido": "Vaccotti",
+      "cargo": "Educador",
+      "confname": "Bruno",
+      "empresa": "Acelerando Bitcoin",
+      "estado": "disponible",
+      "nombre": "Bruno",
+      "num": 166,
+      "pais": "Paraguay",
+      "temas": "Dinero duro invertido en activos duros: liquidez predecible y programable, Halving 2028: ¿Muerte de la Minería Privada?, Home Mining"
+    },
+    {
+      "apellido": "Poveda",
+      "cargo": "",
+      "confname": "El Bull",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Facundo",
+      "num": 167,
+      "pais": "Argentina",
+      "temas": "Del prompt al backtest: un agente de IA que investiga estrategias sin engañarte, Agente trader bajo control: de la señal a la ejecución sin entregar las llaves"
+    },
+    {
+      "apellido": "Robles",
+      "cargo": "Educadora en criptomonedas y creadora de contenido",
+      "confname": "@Bitacora",
+      "empresa": "Bitácora",
+      "estado": "revision",
+      "nombre": "Noelia",
+      "num": 168,
+      "pais": "Argentina",
+      "temas": "Cripto para gente normal: de cero a usarla y entender por qué HODLear, Te regalo tu primer bitcoin: cripto para gente normal"
+    },
+    {
+      "apellido": "Castañeda",
+      "cargo": "CEO",
+      "confname": "Roderich",
+      "empresa": "Roderich’s Crypto House",
+      "estado": "revision",
+      "nombre": "Rodrigo",
+      "num": 169,
+      "pais": "Uruguay",
+      "temas": "Que está pasando en la región a nivel adopcion"
+    },
+    {
+      "apellido": "Klug",
+      "cargo": "CLO",
+      "confname": "Leoklug",
+      "empresa": "Menter",
+      "estado": "disponible",
+      "nombre": "Leonardo German",
+      "num": 170,
+      "pais": "Argentina",
+      "temas": "El cine, la mente y Bitcoin: Navegando las paradojas del HODL, De las tablillas al bloque: La verdad inmutable"
+    },
+    {
+      "apellido": "Zocaro",
+      "cargo": "Comisión Directiva",
+      "confname": "Marcos Zocaro",
+      "empresa": "ONG Bitcoin Argentina",
+      "estado": "disponible",
+      "nombre": "Marcos",
+      "num": 171,
+      "pais": "Argentina",
+      "temas": "Tributación de las Finanzas Descentralizadas en Bitcoin y criptoactivos"
+    },
+    {
+      "apellido": "martin",
+      "cargo": "CEO",
+      "confname": "male martin",
+      "empresa": "fardo",
+      "estado": "disponible",
+      "nombre": "malena",
+      "num": 172,
+      "pais": "Argentina",
+      "temas": "La nueva guerra por la atención: cómo posicionar una marca dentro de la inteligencia artificial"
+    },
+    {
+      "apellido": "Martel Seward",
+      "cargo": "CEO",
+      "confname": "@borja",
+      "empresa": "Roxom",
+      "estado": "disponible",
+      "nombre": "Borja",
+      "num": 173,
+      "pais": "Argentina",
+      "temas": "Los Mercados del Bitcoin"
+    },
+    {
+      "apellido": "Durán",
+      "cargo": "Fundador",
+      "confname": "Felipe Durán",
+      "empresa": "Isla El Descanso, UXart y XReal",
+      "estado": "disponible",
+      "nombre": "Felipe",
+      "num": 174,
+      "pais": "Colombia",
+      "temas": "Seed: La Propiedad Intelectual Programable en la Era de la IA"
+    },
+    {
+      "apellido": "Seguro",
+      "cargo": "CTO",
+      "confname": "@NikoSeguro",
+      "empresa": "FARDO",
+      "estado": "disponible",
+      "nombre": "Niko",
+      "num": 175,
+      "pais": "Argentina",
+      "temas": "Posicionamiento de marcas en las respuestas de la IA"
+    },
+    {
+      "apellido": "Bianchi",
+      "cargo": "CEO",
+      "confname": "@hahsrate",
+      "empresa": "Hashrate",
+      "estado": "disponible",
+      "nombre": "Fabrizio",
+      "num": 176,
+      "pais": "Uruguay",
+      "temas": "El Futuro de la Minería"
+    },
+    {
+      "apellido": "Ondarra",
+      "cargo": "Gerente General",
+      "confname": "Andrés Ondarra",
+      "empresa": "Nexo",
+      "estado": "disponible",
+      "nombre": "Andrés",
+      "num": 177,
+      "pais": "Argentina",
+      "temas": "HODL con rendimiento"
+    },
+    {
+      "apellido": "Acosta",
+      "cargo": "Founder",
+      "confname": "leonacostaok",
+      "empresa": "QuantaKrypto",
+      "estado": "disponible",
+      "nombre": "Leon",
+      "num": 178,
+      "pais": "Argentina",
+      "temas": "Una Curva Para Perderlo Todo: La Indecisión Quantum, Bitcoin Post-Cuántico en la Práctica: Agentes, Lightning y Nostr, Bitcoin Post-Cuántico en 60 Minutos, del Cero a un Demo"
+    },
+    {
+      "apellido": "Maffoni",
+      "cargo": "Asesor Financiero Matriculado (CNV AP 2782)",
+      "confname": "Franco Maffoni",
+      "empresa": "Inversor Estratega",
+      "estado": "disponible",
+      "nombre": "Franco",
+      "num": 179,
+      "pais": "Argentina",
+      "temas": "Asesor financiero matriculado, fan de bitcoin: por qué mi propia industria no habla de esto"
+    },
+    {
+      "apellido": "Serkin",
+      "cargo": "socia, fundadora",
+      "confname": "Gabriela Serkin",
+      "empresa": "Triarsa, Hashtag",
+      "estado": "disponible",
+      "nombre": "Gabriela",
+      "num": 180,
+      "pais": "Argentina",
+      "temas": "Headless"
+    },
+    {
+      "apellido": "Herrera",
+      "cargo": "",
+      "confname": "Luis Herrera",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Luis Eduardo",
+      "num": 181,
+      "pais": "Argentina",
+      "temas": "Enseñar Bitcoin sin vender Bitcoin"
+    },
+    {
+      "apellido": "Abihaggle",
+      "cargo": "Founder",
+      "confname": "@lucasabi",
+      "empresa": "LABI Wines & Agrum",
+      "estado": "disponible",
+      "nombre": "Lucas",
+      "num": 182,
+      "pais": "Argentina",
+      "temas": "Hodling Agribusiness RWA (Disintermediation & Low Time Preference Wine Tasting)"
+    },
+    {
+      "apellido": "Cordero",
+      "cargo": "Bitcoiner",
+      "confname": "Seba Cordero",
+      "empresa": "Bitcoin",
+      "estado": "disponible",
+      "nombre": "Sebastián Ignacio",
+      "num": 183,
+      "pais": "Argentina",
+      "temas": "Más allá de Lightning: la próxima capa de los pagos con Bitcoin, Cuando las capas fallan: seguridad, confianza y riesgo alrededor de Bitcoin, Bitcoin Capital Markets: Tokenization Without the Blockchain Hype"
+    },
+    {
+      "apellido": "Aguilar",
+      "cargo": "Autor de Profecía Bitcoin",
+      "confname": "Ariel Aguilar",
+      "empresa": "Co-fundador de la Bitcoineta Europea",
+      "estado": "disponible",
+      "nombre": "Ariel",
+      "num": 184,
+      "pais": "Argentina",
+      "temas": "Bitcoin en un mundo IA"
+    },
+    {
+      "apellido": "Brom",
+      "cargo": "CEO | Founder",
+      "confname": "@fede",
+      "empresa": "Exatech",
+      "estado": "disponible",
+      "nombre": "Federico",
+      "num": 185,
+      "pais": "Argentina",
+      "temas": "BTC Mining con Gas de Venteo"
+    },
+    {
+      "apellido": "Peyrano",
+      "cargo": "",
+      "confname": "@guille",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Guillermo",
+      "num": 186,
+      "pais": "Argentina",
+      "temas": "On-chain, en público, sin abogados. ¿Y cuando eso no alcanza?"
+    },
+    {
+      "apellido": "Lizarraga",
+      "cargo": "Contador público nacional , educador , tallerista",
+      "confname": "@juan",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Juan José",
+      "num": 187,
+      "pais": "Argentina",
+      "temas": "Educación financiera para decidir mejor"
+    },
+    {
+      "apellido": "Drangosch",
+      "cargo": "Head of Thread hunting team",
+      "confname": "Julian Drangosch",
+      "empresa": "Phishfort",
+      "estado": "disponible",
+      "nombre": "Julian",
+      "num": 188,
+      "pais": "Argentina",
+      "temas": "Abuso de Infraestructura IA: Phishing, Cryptofakes y Envenenamiento de LLM"
+    },
+    {
+      "apellido": "Fuente",
+      "cargo": "Coordinadora de Comunicación",
+      "confname": "Aylu Fuente",
+      "empresa": "ONG Bitcoin Argentina",
+      "estado": "disponible",
+      "nombre": "Aylén",
+      "num": 189,
+      "pais": "Argentina",
+      "temas": "Economías circulares, Comunicación y Marketing en el ecosistema Bitcoin & Crypto"
+    },
+    {
+      "apellido": "Popescu",
+      "cargo": "CEO and Community leader",
+      "confname": "Valentin",
+      "empresa": "Motiv Peru",
+      "estado": "disponible",
+      "nombre": "Valentin",
+      "num": 190,
+      "pais": "Perú",
+      "temas": "Motiv Peru en comunidades y economias circulares de Bitcoin"
+    },
+    {
+      "apellido": "Catrya",
+      "cargo": "Mostro Dev",
+      "confname": "Catrya",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Catrya",
+      "num": 191,
+      "pais": "Cuba",
+      "temas": "Mostro: intercambis Bitcoin P2P en Nostr"
+    },
+    {
+      "apellido": "Forte",
+      "cargo": "Dev. Cofundador de CubaBitcoin",
+      "confname": "Forte11",
+      "empresa": "Cuba Bitcoin",
+      "estado": "disponible",
+      "nombre": "Javier",
+      "num": 192,
+      "pais": "Cuba",
+      "temas": "Bitcoin donde más se necesita, Cashu: Bitcoin privado, simple y accesible"
+    },
+    {
+      "apellido": "Ortiz",
+      "cargo": "Head of Marketing",
+      "confname": "@LoreBitcoin",
+      "empresa": "Librería de Satoshi",
+      "estado": "disponible",
+      "nombre": "Lorena",
+      "num": 193,
+      "pais": "México",
+      "temas": "Latam no es el mercado, es el maestro."
     },
     {
       "apellido": "cristini",
@@ -1922,7 +2131,7 @@
       "empresa": "SØD Ecosystem Global",
       "estado": "disponible",
       "nombre": "ivan",
-      "num": 197,
+      "num": 194,
       "pais": "Argentina",
       "temas": "La próxima revolución no es la IA: es lo que la IA hará con nuestra conciencia"
     },
@@ -1933,7 +2142,7 @@
       "empresa": "Algo Labs",
       "estado": "disponible",
       "nombre": "Francisco Jose",
-      "num": 198,
+      "num": 195,
       "pais": "Argentina",
       "temas": "From HODL to MOVE: When Bitcoin Meets Physical AI and Robotics"
     },
@@ -1944,7 +2153,7 @@
       "empresa": "",
       "estado": "disponible",
       "nombre": "Jeronimo",
-      "num": 199,
+      "num": 196,
       "pais": "Argentina",
       "temas": "Bitcoin Walking Tour: Como enseñar bitcoin en el mundo real."
     },
@@ -1955,7 +2164,7 @@
       "empresa": "/MGFV",
       "estado": "disponible",
       "nombre": "juan",
-      "num": 200,
+      "num": 197,
       "pais": "Argentina",
       "temas": "Tendencias y novedades en materia tributaria"
     },
@@ -1966,31 +2175,471 @@
       "empresa": "OKx",
       "estado": "disponible",
       "nombre": "Pedro E.",
-      "num": 201,
+      "num": 198,
       "pais": "Colombia",
       "temas": "Tokenizacion"
     },
     {
-      "apellido": "Alfredo Perotti",
+      "apellido": "Mora",
       "cargo": "",
-      "confname": "Fredhy",
+      "confname": "Santiago Mora",
       "empresa": "",
       "estado": "disponible",
-      "nombre": "Alfredo Perotti",
-      "num": 197,
+      "nombre": "Santiago",
+      "num": 199,
       "pais": "Argentina",
-      "temas": "Conecta: cómo comunicar cuando la IA también decide qué vemos"
+      "temas": "Regulación Cripto"
+    },
+    {
+      "apellido": "Noriega",
+      "cargo": "Trader",
+      "confname": "MasterLcripto",
+      "empresa": "Exness",
+      "estado": "disponible",
+      "nombre": "Jose",
+      "num": 200,
+      "pais": "Venezuela",
+      "temas": "Introducción al mundo cripto, trading de futuros y trading de apalancamiento"
+    },
+    {
+      "apellido": "Dugarte",
+      "cargo": "Founder",
+      "confname": "@LaZuricata",
+      "empresa": "Travelsats",
+      "estado": "disponible",
+      "nombre": "Carlos",
+      "num": 201,
+      "pais": "Argentina",
+      "temas": "Travelsats y el turismo soberano: la economía circular empieza en un viaje"
+    },
+    {
+      "apellido": "Guzman",
+      "cargo": "CEO Fundador",
+      "confname": "@elcriptoparcero",
+      "empresa": "Digital Latin Fest/Cripto Latín Fest",
+      "estado": "disponible",
+      "nombre": "Santiago",
+      "num": 202,
+      "pais": "Colombia",
+      "temas": "Bitcoin, comunidades, prevención de estafas, Blockchain"
+    },
+    {
+      "apellido": "AHARONIAN",
+      "cargo": "Educadora",
+      "confname": "Privacy Mami",
+      "empresa": "Free lance",
+      "estado": "disponible",
+      "nombre": "ANAHIT",
+      "num": 203,
+      "pais": "Uruguay",
+      "temas": "Somos Generación ₿"
+    },
+    {
+      "apellido": "Moreira",
+      "cargo": "Digital Content Creator",
+      "confname": "TechSavvy Frank",
+      "empresa": "Bitcoin4Humanity",
+      "estado": "disponible",
+      "nombre": "Frank",
+      "num": 204,
+      "pais": "Venezuela",
+      "temas": "Impacto de las redes sociales en las Economías Circulares de Bitcoin"
+    },
+    {
+      "apellido": "Barreto",
+      "cargo": "Directora de institucionales",
+      "confname": "Lucia Victoria",
+      "empresa": "ONG Bitcoin argentina",
+      "estado": "disponible",
+      "nombre": "Lucia",
+      "num": 205,
+      "pais": "Argentina",
+      "temas": "Moderadora de panel inicial"
+    },
+    {
+      "apellido": "Brito",
+      "cargo": "",
+      "confname": "xyzconstant",
+      "empresa": "Librería Satoshi",
+      "estado": "disponible",
+      "nombre": "Diego",
+      "num": 206,
+      "pais": "Venezuela",
+      "temas": "libmultiprocess: Cómo bitcoind se está dividiendo en varios procesos"
+    },
+    {
+      "apellido": "Marsero",
+      "cargo": "Creative | AI Producer | AI Alignment",
+      "confname": "Damian Marsero",
+      "empresa": "BROTHER AD SCHOOL",
+      "estado": "disponible",
+      "nombre": "Damián",
+      "num": 207,
+      "pais": "Argentina",
+      "temas": "AI Generative"
+    },
+    {
+      "apellido": "Lozano",
+      "cargo": "CEO",
+      "confname": "@vakanoBTC",
+      "empresa": "Horeb Digital MINING",
+      "estado": "disponible",
+      "nombre": "Arley",
+      "num": 208,
+      "pais": "Colombia",
+      "temas": "Mineria de Bitcoin con Basura."
+    },
+    {
+      "apellido": "Gervasio D’Ambra",
+      "cargo": "Abogada",
+      "confname": "Jazmín Gervasio D’Ambra",
+      "empresa": "Profesión liberal",
+      "estado": "disponible",
+      "nombre": "María Jazmín",
+      "num": 209,
+      "pais": "Argentina",
+      "temas": "La tecnología Blockchain es segura. Entonces, ¿Por qué seguimos perdiendo criptomonedas?"
+    },
+    {
+      "apellido": "Meinberg Fadida",
+      "cargo": "Fundador",
+      "confname": "Pedro Fadida",
+      "empresa": "Bitcoin amantikir",
+      "estado": "disponible",
+      "nombre": "Pedro",
+      "num": 210,
+      "pais": "Brasil",
+      "temas": "Bitcoin como herramienta para la educación de los jóvenes"
+    },
+    {
+      "apellido": "Rigon",
+      "cargo": "Growth Manager",
+      "confname": "Eduardo Rigon",
+      "empresa": "Yellow",
+      "estado": "disponible",
+      "nombre": "Eduardo",
+      "num": 211,
+      "pais": "Brasil",
+      "temas": "Agentic AI doesn't start on the trading desk"
+    },
+    {
+      "apellido": "Gorbatik",
+      "cargo": "CoFounder",
+      "confname": "@egorbatik",
+      "empresa": "Zerem Finance",
+      "estado": "disponible",
+      "nombre": "Ezequiel",
+      "num": 212,
+      "pais": "Argentina",
+      "temas": "Real Estate Tokenization"
+    },
+    {
+      "apellido": "Ruhay Ferrari",
+      "cargo": "CEO & Founder",
+      "confname": "Jazmín Ruhay F",
+      "empresa": "RF Global Consulting - Novasür",
+      "estado": "disponible",
+      "nombre": "Jazmín",
+      "num": 213,
+      "pais": "Argentina",
+      "temas": "Code is law… ¿hasta que algo sale mal?, Innovar primero, regular después: ¿qué hacemos mientras tanto?"
+    },
+    {
+      "apellido": "Villabona",
+      "cargo": "",
+      "confname": "Fraan",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Franco",
+      "num": 214,
+      "pais": "Argentina",
+      "temas": "La perspectiva del mercado"
+    },
+    {
+      "apellido": "Becker",
+      "cargo": "Fundador TMG",
+      "confname": "Axel Becker",
+      "empresa": "TMG",
+      "estado": "disponible",
+      "nombre": "Axel",
+      "num": 215,
+      "pais": "Argentina",
+      "temas": "Esto no fue lo que Satoshi imaginó"
+    },
+    {
+      "apellido": "Ammous",
+      "cargo": "Autor",
+      "confname": "Saifedean Ammous",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Saifedean",
+      "num": 216,
+      "pais": "Jordania / Líbano",
+      "temas": ""
+    },
+    {
+      "apellido": "",
+      "cargo": "Podcaster",
+      "confname": "Lunaticoin",
+      "empresa": "Lunaticoin",
+      "estado": "disponible",
+      "nombre": "Lunaticoin",
+      "num": 217,
+      "pais": "España",
+      "temas": ""
+    },
+    {
+      "apellido": "Mera",
+      "cargo": "Divulgador",
+      "confname": "Alberto Mera",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Alberto",
+      "num": 218,
+      "pais": "España",
+      "temas": ""
+    },
+    {
+      "apellido": "",
+      "cargo": "",
+      "confname": "Yayi",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Yayi",
+      "num": 220,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "Marra",
+      "cargo": "",
+      "confname": "Ramiro Marra",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Ramiro",
+      "num": 221,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "",
+      "cargo": "",
+      "confname": "Norbert",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Norbert",
+      "num": 223,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "",
+      "cargo": "Creador de contenido",
+      "confname": "Joven Inversor",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Joven Inversor",
+      "num": 224,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Siri",
+      "cargo": "Founder",
+      "confname": "Santi Siri",
+      "empresa": "Democracy Earth / Proof of Humanity",
+      "estado": "disponible",
+      "nombre": "Santi",
+      "num": 225,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Firtman",
+      "cargo": "",
+      "confname": "Maximiliano Firtman",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Maximiliano",
+      "num": 226,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "",
+      "cargo": "Creador de contenido",
+      "confname": "Papa Bitcoin",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Papa Bitcoin",
+      "num": 227,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "Beaudroit",
+      "cargo": "CEO",
+      "confname": "Manuel Beaudroit",
+      "empresa": "Belo",
+      "estado": "disponible",
+      "nombre": "Manuel",
+      "num": 228,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Benzaquén",
+      "cargo": "",
+      "confname": "Rodrigo Benzaquén",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Rodrigo",
+      "num": 229,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Martínez",
+      "cargo": "Community lead",
+      "confname": "Román Martínez",
+      "empresa": "Bitcoin Beach",
+      "estado": "disponible",
+      "nombre": "Román",
+      "num": 230,
+      "pais": "El Salvador",
+      "temas": ""
+    },
+    {
+      "apellido": "Kassis",
+      "cargo": "",
+      "confname": "Agustín Kassis",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Agustín",
+      "num": 231,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "Germano",
+      "cargo": "",
+      "confname": "Mike Germano",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Mike",
+      "num": 232,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "Narancio",
+      "cargo": "",
+      "confname": "Alejandro Narancio",
+      "empresa": "Infuy",
+      "estado": "disponible",
+      "nombre": "Alejandro",
+      "num": 233,
+      "pais": "Uruguay",
+      "temas": ""
+    },
+    {
+      "apellido": "Perelmann",
+      "cargo": "",
+      "confname": "Ariel Perelmann",
+      "empresa": "BigSouth",
+      "estado": "disponible",
+      "nombre": "Ariel",
+      "num": 234,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Ferrer",
+      "cargo": "",
+      "confname": "Jeronimo Ferrer",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Jeronimo",
+      "num": 235,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Carjuzaa",
+      "cargo": "",
+      "confname": "Maximiliano Carjuzaa",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Maximiliano",
+      "num": 236,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "Raed",
+      "cargo": "Periodista / Moderador",
+      "confname": "Adolfo Raed",
+      "empresa": "Gretha Streaming",
+      "estado": "disponible",
+      "nombre": "Adolfo",
+      "num": 237,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Palantzas",
+      "cargo": "",
+      "confname": "Alejandro Palantzas",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Alejandro",
+      "num": 238,
+      "pais": "Argentina",
+      "temas": ""
+    },
+    {
+      "apellido": "Kaleja",
+      "cargo": "Cofundador",
+      "confname": "Iván Kaleja",
+      "empresa": "Bitcoin 4 Humanity",
+      "estado": "disponible",
+      "nombre": "Iván",
+      "num": 239,
+      "pais": "Uruguay",
+      "temas": ""
+    },
+    {
+      "apellido": "Guajardo",
+      "cargo": "",
+      "confname": "Alejandra Guajardo",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Alejandra",
+      "num": 219,
+      "pais": "",
+      "temas": ""
+    },
+    {
+      "apellido": "Maslatón",
+      "cargo": "",
+      "confname": "Carlos Maslatón",
+      "empresa": "",
+      "estado": "disponible",
+      "nombre": "Carlos",
+      "num": 222,
+      "pais": "Argentina",
+      "temas": ""
     },
     {
       "apellido": "Hornus",
-      "cargo": "JefeComercial/Formador de IA",
-      "confname": "RH+",
+      "cargo": "Jefe Comercial / Formador de IA",
+      "confname": "Rodolfo Hornus",
       "empresa": "",
       "estado": "disponible",
       "nombre": "Rodolfo",
-      "num": 198,
+      "num": 241,
       "pais": "Argentina",
-      "temas": "IE vs IA, Presentacion de libro \"No era por Acá\""
+      "temas": ""
     }
   ]
 }

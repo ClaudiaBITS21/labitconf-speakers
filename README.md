@@ -1,37 +1,18 @@
-# LABITCONF 2026 — curaduría de speakers y grilla
+# labitconf-speakers — respaldo del trabajo de curaduría de speakers LABITCONF 2026
 
-Repositorio de trabajo de la curaduría de speakers y armado de la grilla de LABITCONF 2026 ("Edición HODL", 30 y 31 de octubre de 2026, BAFerial, Buenos Aires).
+Repo **privado**: `app/index.html` y `backup-db/` contienen teléfonos, handles y notas internas de evaluación de speakers.
 
-> **Repo privado.** `app/index.html` embebe la base completa de speakers, incluidos datos de contacto (WhatsApp, Telegram, Signal) y notas internas de evaluación. No hacerlo público ni copiar ese archivo a un sitio abierto.
+## Qué hay
 
-## Estructura
+- `docs/` — copia de los documentos del proyecto "LABITCONF" de Claude (el proyecto es el master; esto es respaldo versionado). Empezar por `contexto-general.md`, `escenarios-2026.md`, `criterios-y-flow.md`; lo operativo del artefacto está en `grilla-funcionalidades.md`; el último update en `sync-21-9-2026.md`.
+- `app/index.html` — el artefacto "Speakers LABITCONF 2026" tal como está publicado (https://claude.ai/artifact/6XaNDbYwq74JW3mNDxZ8Cb). Es una página autocontenida: embebe la base de speakers (`var D`) y las fotos como data URI. Abrirlo en local funciona en modo lectura; la base viva (agenda, grilla, tiers, # WEB) vive en la base de datos del artefacto y solo carga dentro de claude.ai.
+- `backup-db/` — export de esa base viva: `agenda/<id>.json` (por speaker: tier, charlas en agenda, descartado, contactar, género, # WEB), `grid/current.json` (la grilla completa + pool), `config/hidden.json` (ítems minimizados), `appsync/last.json` (última bajada de la app de postulaciones), `extras/<id>.json` (speakers creados a mano desde la grilla, ids 500+), `base-speakers-embebida.json` (el `var D` en JSON) y `grilla-legible.md` (la grilla en tablas por día y escenario, para leer sin abrir nada).
 
-```
-docs/   Documentación de criterio y contexto (Markdown)
-app/    HTML publicado del artefacto "Speakers LABITCONF 2026"
-```
+## Cómo se actualiza
 
-### `docs/`
+Skill `labitconf-update` (Claude): exporta la base con `ArtifactData`, arma `labitconf-update-AAAA-MM-DD.zip`, lo deja en `~/Desktop/AGENTES/LABITCONF/zips/` en la Mac de Rodolfo y hace commit + push desde la VM local de la Mac (el contenedor en la nube no llega a GitHub). Procedimiento y aprendizajes en `docs/repo-github.md`.
 
-| Archivo | Qué es |
-|---|---|
-| `contexto-general.md` | Dimensionamiento del evento, edición 2026, condicionantes |
-| `escenarios-2026.md` | Los 6 escenarios ("4 + 2"), layout y capacidades |
-| `criterios-y-flow.md` | Tiers, lógica de flow entre escenarios, grilla horaria |
-| `temas-en-debate-2026.md` | Mapa de temas en debate en el ecosistema (research web) |
-| `speakers-y-temas.md` | Tracker en bruto: speakers mencionados, temas sin speaker, pendientes, sincronizaciones con la app |
-| `primera-pasada-relevancia.md` | Primera evaluación de las postulaciones (peso, alcance, alertas, clusters) |
-| `criterio-alcance-vs-peso.md` | Método para separar alcance en redes de peso de cartel |
-| `charlas-destacadas-y-temas-faltantes.md` | Ranking de charlas y huecos temáticos con referencias |
-| `herramienta-speakers-app.md` | Cómo se lee la app de postulaciones (GitHub Pages + Apps Script) |
-| `compromiso-y-escenarios.md` | Bitácora de sincronizaciones y cambios (solo secciones 12–13; las anteriores no sobrevivieron en el proyecto) |
-| `estructura-de-autoridad-en-vivo.md` | Cadena de mando en vivo durante el evento |
-| `grilla-funcionalidades.md` | Referencia técnica del artefacto (solapas, helpers, persistencia) |
+## Fuentes de datos
 
-### `app/`
-
-`index.html` es el HTML tal como está publicado en el artefacto (https://claude.ai/artifact/6XaNDbYwq74JW3mNDxZ8Cb). Es una página de un solo archivo con la base de speakers embebida (`var D`) y persistencia en la base del artefacto vía `window.claude` (capacidades `db`, `mcp` para Google Drive y `sample`). Fuera del entorno de artefactos de Claude la página carga pero no persiste cambios.
-
-El pipeline que generaba este HTML (`build.py`, `grilla.py`, `escenarios.py`, `contacto.py`, `grid_edit.js`, `data.txt`, etc.) vivía en un contenedor de sesión que ya no existe; los últimos cambios (v97–v101) se hicieron parcheando el HTML publicado directamente. Si aparece el zip del pipeline, va en `pipeline/`.
-
-Los documentos de `docs/` son la copia del proyecto de Claude al 21/9/2026; el proyecto sigue siendo el master de la documentación.
+- App de postulaciones (otro repo): https://app-labitconf.github.io/LABITCONF-speakers/ — se baja desde el navegador (`localStorage.labitconf_state_cache`), ver `docs/herramienta-speakers-app.md`.
+- Grilla: el artefacto es el master desde el 11/9 (antes, un Google Sheet).
