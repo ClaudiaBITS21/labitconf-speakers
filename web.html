@@ -262,7 +262,7 @@ async function init(){
       if(an) return -1;
       if(bn) return 1;
       return (Number(a.num)||0)-(Number(b.num)||0);
-    });
+    }).filter((s,i,arr)=>arr.findIndex(x=>String(x.num)===String(s.num))===i);
     render();
   }catch(e){
     document.getElementById('grid').innerHTML='<div class="loading">Error al cargar. Recargá la página.</div>';
