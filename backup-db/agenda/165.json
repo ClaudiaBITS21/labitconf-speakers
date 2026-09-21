@@ -1,0 +1,16 @@
+{
+  "genero": "F",
+  "talks": {
+    "0": {
+      "status": "ignorar"
+    },
+    "1": {
+      "done": true,
+      "tipo": "charla"
+    },
+    "2": {
+      "status": "ignorar"
+    }
+  },
+  "web": 300
+}

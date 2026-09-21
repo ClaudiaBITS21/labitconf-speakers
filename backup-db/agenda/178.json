@@ -1,0 +1,13 @@
+{
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "considerar"
+    }
+  },
+  "tier": "N1",
+  "web": 47
+}

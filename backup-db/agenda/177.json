@@ -1,0 +1,10 @@
+{
+  "talks": {
+    "0": {
+      "done": true,
+      "tipo": "charla"
+    }
+  },
+  "tier": "N3",
+  "web": 200
+}

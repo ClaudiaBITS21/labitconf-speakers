@@ -1,0 +1,13 @@
+{
+  "contactar": {
+    "done": true,
+    "nota": "Ver si esta aun dispuesto a venirse"
+  },
+  "talks": {
+    "0": {
+      "done": true,
+      "tipo": "charla"
+    }
+  },
+  "web": 300
+}

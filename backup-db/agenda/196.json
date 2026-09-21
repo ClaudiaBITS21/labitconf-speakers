@@ -1,0 +1,15 @@
+{
+  "talks": {
+    "0": {
+      "done": true,
+      "tipo": "charla"
+    },
+    "1": {
+      "done": true,
+      "matchOk": true,
+      "tipo": "charla"
+    }
+  },
+  "tier": "N1",
+  "web": 37
+}

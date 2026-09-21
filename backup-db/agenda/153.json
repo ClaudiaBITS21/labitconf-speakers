@@ -1,0 +1,16 @@
+{
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "done": true,
+      "tipo": "charla"
+    },
+    "1": {
+      "status": "panel"
+    }
+  },
+  "web": 200
+}

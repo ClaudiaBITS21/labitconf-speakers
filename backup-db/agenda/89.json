@@ -1,0 +1,13 @@
+{
+  "genero": "M",
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "panel"
+    }
+  },
+  "web": 300
+}

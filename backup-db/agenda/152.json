@@ -1,0 +1,15 @@
+{
+  "contactar": {
+    "done": true,
+    "nota": "Ver si sigue disponible"
+  },
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "considerar"
+    }
+  }
+}

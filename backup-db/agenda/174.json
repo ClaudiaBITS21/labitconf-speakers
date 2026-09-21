@@ -1,0 +1,13 @@
+{
+  "revisar": {
+    "done": true
+  },
+  "talks": {
+    "1": {
+      "done": true,
+      "tipo": "charla"
+    }
+  },
+  "tier": "N3",
+  "web": 200
+}

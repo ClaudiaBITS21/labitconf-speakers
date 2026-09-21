@@ -1,0 +1,10 @@
+{
+  "genero": "M",
+  "talks": {
+    "0": {
+      "done": true,
+      "tipo": "charla"
+    }
+  },
+  "web": 200
+}

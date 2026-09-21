@@ -1,0 +1,12 @@
+{
+  "contactar": {
+    "done": true,
+    "nota": "Tiene que reconfirmar su presencia... Ver por donde le escribimos."
+  },
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
+  "talks": {},
+  "web": 4
+}
