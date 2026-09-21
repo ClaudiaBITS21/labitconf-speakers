@@ -29,6 +29,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* GRID */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:20px;}
+@media(min-width:1200px){.grid{grid-template-columns:repeat(4,1fr);}}
+
+/* CATEGORY DIVIDER */
+.cat-div{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:12px 0 4px;margin-top:4px;}
+.cat-div-line{flex:1;height:1px;background:#1e1e1e;}
+.cat-div-label{font-size:12px;font-weight:800;letter-spacing:.06em;color:#f97316;white-space:nowrap;}
+.cat-div-badge{font-size:11px;color:#444;background:#111;border:1px solid #1e1e1e;padding:2px 8px;border-radius:8px;}
 
 /* CARD */
 .card{background:#111;border:1px solid #1e1e1e;border-radius:10px;overflow:hidden;transition:border-color .15s,transform .15s;position:relative;}
@@ -99,6 +106,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="tabSpeakers">
   <div class="filters">
     <button class="pill active" onclick="setFiltro('todos')" id="pill-todos">Todos</button>
+    <button class="pill" onclick="setFiltro('cat1')" id="pill-cat1">⭐ N1</button>
+    <button class="pill" onclick="setFiltro('cat2')" id="pill-cat2">Cat. 2</button>
+    <button class="pill" onclick="setFiltro('cat3')" id="pill-cat3">Cat. 3</button>
     <button class="pill" onclick="setFiltro('completo')" id="pill-completo">✅ Completos</button>
     <button class="pill" onclick="setFiltro('incompleto')" id="pill-incompleto">⚠️ Incompletos</button>
     <button class="pill" onclick="setFiltro('sin-foto')" id="pill-sin-foto">Sin foto</button>
@@ -201,9 +211,52 @@ getSpeakers().then(speakers => {
   </div>
 
   <div class="dev-section">
+    <div class="dev-h2">ESTRUCTURA DE CATEGORÍAS</div>
+    <div class="dev-p">Los speakers están organizados en 3 categorías según el campo <code style="background:#1a1a1a;padding:1px 5px;border-radius:3px;color:#f97316">web_order</code> (columna <code style="background:#1a1a1a;padding:1px 5px;border-radius:3px;color:#f97316">r[40]</code> o el mapa <code style="background:#1a1a1a;padding:1px 5px;border-radius:3px;color:#f97316">WEB_ORDER</code> hardcodeado):</div>
+    <table class="dev-table">
+      <thead><tr><th>Categoría</th><th>web_order</th><th>Orden de presentación</th><th>Speakers</th></tr></thead>
+      <tbody>
+        <tr><td><b style="color:#f97316">★ Destacados N1</b></td><td>1 – 48</td><td>Numérico (definido por LABITCONF)</td><td>~48</td></tr>
+        <tr><td><b>Categoría 2</b></td><td>49 – 84</td><td>Alfabético por nombre</td><td>~36</td></tr>
+        <tr><td><b>Categoría 3</b></td><td>85+</td><td>Alfabético por nombre</td><td>~43</td></tr>
+      </tbody>
+    </table>
+    <div class="dev-p">Para implementar esta lógica en tu frontend:</div>
+    <div class="dev-code">function catOf(webOrder) {
+  if (!webOrder) return 3;
+  if (webOrder <= 48) return 1;
+  if (webOrder <= 84) return 2;
+  return 3;
+}
+
+const cat1 = speakers.filter(s => catOf(s.web_order) === 1);
+const cat2 = speakers.filter(s => catOf(s.web_order) === 2)
+  .sort((a,b) => a.nombre.localeCompare(b.nombre, 'es'));
+const cat3 = speakers.filter(s => catOf(s.web_order) === 3)
+  .sort((a,b) => a.nombre.localeCompare(b.nombre, 'es'));</div>
+  </div>
+
+  <div class="dev-section">
+    <div class="dev-h2">SETUP — CÓMO CONECTAR DESDE CERO</div>
+    <div class="dev-p">El endpoint es público y no requiere auth. Solo hace falta hacer el GET y usar los datos. Para clonar esta misma página de referencia:</div>
+    <div class="dev-code" id="cloneCode">git clone https://github.com/app-LABITCONF/LABITCONF-speakers.git
+cd LABITCONF-speakers
+
+# Abrir web.html directamente en el browser
+# (no requiere servidor — carga datos vía fetch al GAS)</div>
+    <button class="copy-btn" onclick="copyEl('cloneCode',this)">Copiar</button>
+    <div class="dev-p" style="margin-top:12px">Para importar el listado completo como JSON estático (útil para SSG / cachear en servidor):</div>
+    <div class="dev-code" id="curlCode">curl "https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSng2rgzbRSroALHOra43wK2QhlJZ_s-1xKHyv9An_g1ZA/exec?action=get_data&sheet=Speakers&key=BTC/2026" \
+  -L -o speakers.json
+
+# -L es necesario: GAS redirige una vez antes de responder el JSON</div>
+    <button class="copy-btn" onclick="copyEl('curlCode',this)">Copiar</button>
+  </div>
+
+  <div class="dev-section">
     <div class="dev-h2">NOTAS IMPORTANTES</div>
     <div class="dev-note">
-      <b>Orden en web:</b> Cada speaker tiene un campo <b>#WEB (orden)</b> en el panel admin (columna 40 del sheet). Los speakers con ese número asignado aparecen primero, ordenados de menor a mayor. Los que no tienen número asignado van al final, ordenados por su número de postulación.
+      <b>Orden en web:</b> Categoría 1 (posiciones 1-48) tiene orden definido por LABITCONF. Categorías 2 y 3 van en orden alfabético. El campo <code style="background:#1a1a1a;padding:1px 5px;border-radius:3px;color:#f97316">r[40]</code> (web_order) tiene precedencia sobre el mapa hardcodeado.
     </div>
     <div class="dev-note">
       <b>Fotos:</b> Las URLs de foto son de Google Drive. Funcionan directamente en <code style="background:#1a1a1a;padding:1px 5px;border-radius:3px;color:#f97316">&lt;img src="..."&gt;</code>. Para mejor rendimiento, recomendamos descargarlas y servir desde el CDN propio en producción.
@@ -278,6 +331,14 @@ function faltantes(s){
   return f;
 }
 
+function catOf(s){
+  const o=s.web_order;
+  if(!o) return 3;
+  if(o<=48) return 1;
+  if(o<=84) return 2;
+  return 3;
+}
+
 function setFiltro(f){
   filtro=f;
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
@@ -287,14 +348,17 @@ function setFiltro(f){
 
 function render(){
   const q=(document.getElementById('q')?.value||'').toLowerCase();
-  let lista=speakers.filter(s=>{
-    if(q&&!`${s.nombre} ${s.apellido} ${s.empresa} ${s.cargo} ${s.pais}`.toLowerCase().includes(q)) return false;
+  const baseFilter=s=>{
+    if(q&&!`${s.nombre} ${s.apellido} ${s.empresa} ${s.cargo} ${s.pais} ${s.confname||''}`.toLowerCase().includes(q)) return false;
     if(filtro==='completo')   return faltantes(s).length===0;
     if(filtro==='incompleto') return faltantes(s).length>0;
     if(filtro==='sin-foto')   return !s.foto;
     if(filtro==='sin-bio')    return !s.bio;
+    if(filtro==='cat1')       return catOf(s)===1;
+    if(filtro==='cat2')       return catOf(s)===2;
+    if(filtro==='cat3')       return catOf(s)===3;
     return true;
-  });
+  };
 
   const total=speakers.length;
   const sinFoto=speakers.filter(s=>!s.foto).length;
@@ -303,6 +367,25 @@ function render(){
   document.getElementById('stats').innerHTML=
     `<b>${total}</b> speakers &nbsp;·&nbsp; sin foto <b>${sinFoto}</b> &nbsp;·&nbsp; sin bio <b>${sinBio}</b> &nbsp;·&nbsp; incompletos <b>${incompletos}</b>`;
 
+  // Agrupar en categorías cuando filtro='todos'
+  if(filtro==='todos' && !q){
+    const cat1=speakers.filter(s=>catOf(s)===1);
+    const cat2=speakers.filter(s=>catOf(s)===2).sort((a,b)=>(a.confname||`${a.nombre} ${a.apellido}`).localeCompare(b.confname||`${b.nombre} ${b.apellido}`,'es'));
+    const cat3=speakers.filter(s=>catOf(s)===3).sort((a,b)=>(a.confname||`${a.nombre} ${a.apellido}`).localeCompare(b.confname||`${b.nombre} ${b.apellido}`,'es'));
+
+    const divider=(label,count)=>`<div class="cat-div"><div class="cat-div-line"></div><span class="cat-div-label">${label}</span><span class="cat-div-badge">${count}</span><div class="cat-div-line"></div></div>`;
+
+    const parts=[];
+    if(cat1.length){ parts.push(divider('★ DESTACADOS — N1',cat1.length)); parts.push(...cat1.map(cardHTML)); }
+    if(cat2.length){ parts.push(divider('CATEGORÍA 2',cat2.length)); parts.push(...cat2.map(cardHTML)); }
+    if(cat3.length){ parts.push(divider('CATEGORÍA 3',cat3.length)); parts.push(...cat3.map(cardHTML)); }
+
+    document.getElementById('grid').innerHTML=parts.join('') || '<div class="loading">Sin resultados.</div>';
+    return;
+  }
+
+  // Filtro específico: lista plana
+  const lista=speakers.filter(baseFilter);
   if(!lista.length){
     document.getElementById('grid').innerHTML='<div class="loading">Sin resultados.</div>';
     return;
