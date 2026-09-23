@@ -1,14 +1,15 @@
-# LABITCONF 2026 — update 2026-09-23
+# LABITCONF 2026 — update 2026-09-23 (b)
 
 Contenido:
 
-- `app/index.html` — HTML publicado del artefacto "Speakers LABITCONF 2026" (v133).
+- `app/index.html` — HTML publicado del artefacto "Speakers LABITCONF 2026" (v134).
 - `backup-db/` — copia de la base viva del artefacto: `agenda/`, `grid/`, `config/`, `appsync/`, `extras/`,
   más `base-speakers-embebida.json` (el `var D` del HTML) y `grilla-legible.md`.
-- `docs/` — docs del proyecto que cambiaron en este update.
 
-Cambio de esta versión: se sumó al listado de speakers el estado de **mail** tomado de la planilla
-LABITCONF-speakers (columna `mail_ok`) y los filtros **✉ Mail OK / sin OK / en la lista / fuera de la lista**.
-60 speakers de la planilla, 41 con OK. Detalle y avisos en `docs/filtro-mail-speakers.md`.
+Cambio de esta versión: se **revirtió** el filtro de MAIL agregado más temprano el mismo día (v133).
+El artefacto vuelve al estado previo, sin marca ✉, sin filtros de mail y sin los mapas
+`MAILLISTA` / `MAILOK` / `MAILADDR`. La base (`agenda/`) nunca llegó a guardar overrides `mailok`.
+Los hallazgos sobre la planilla LABITCONF-speakers quedan en el doc del proyecto
+`claude/filtro-mail-speakers.md`.
 
 Repo privado: lleva mails, teléfonos y notas internas de speakers.
