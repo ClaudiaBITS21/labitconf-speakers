@@ -1,7 +1,7 @@
 {
-  "revisar": {
-    "auto": true,
-    "done": true
+  "speaker": {
+    "done": true,
+    "tipo": "panel"
   },
   "talks": {
     "0": {

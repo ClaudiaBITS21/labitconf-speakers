@@ -1,0 +1,59 @@
+{
+  "list": [
+    {
+      "emoji": "🟠",
+      "id": "X",
+      "label": "Bitcoin"
+    },
+    {
+      "emoji": "🧠",
+      "id": "F",
+      "label": "Filosofía & HODL"
+    },
+    {
+      "emoji": "🤖",
+      "id": "A",
+      "label": "IA & Agentes"
+    },
+    {
+      "emoji": "🔐",
+      "id": "C",
+      "label": "Autocustodia & Seguridad"
+    },
+    {
+      "emoji": "🕵️",
+      "id": "P",
+      "label": "Privacidad & Soberanía"
+    },
+    {
+      "emoji": "⚙️",
+      "id": "D",
+      "label": "Protocolo & Desarrollo"
+    },
+    {
+      "emoji": "⛏️",
+      "id": "M",
+      "label": "Minería & Energía"
+    },
+    {
+      "emoji": "🌎",
+      "id": "L",
+      "label": "Adopción & Comunidades"
+    },
+    {
+      "emoji": "📈",
+      "id": "T",
+      "label": "Mercados & Trading"
+    },
+    {
+      "emoji": "⚖️",
+      "id": "R",
+      "label": "Legal & Regulación"
+    },
+    {
+      "emoji": "💼",
+      "id": "B",
+      "label": "Negocios & Tokenización"
+    }
+  ]
+}

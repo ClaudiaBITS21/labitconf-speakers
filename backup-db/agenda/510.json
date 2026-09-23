@@ -1,8 +1,9 @@
 {
-  "genero": "O",
+  "genero": "M",
   "speaker": {
     "done": true,
     "tipo": "charla"
   },
-  "talks": {}
+  "talks": {},
+  "tier": "N1"
 }

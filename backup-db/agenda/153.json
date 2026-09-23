@@ -14,6 +14,10 @@
     },
     "1": {
       "status": "panel"
+    },
+    "2": {
+      "done": true,
+      "tipo": "charla"
     }
   },
   "web": 200

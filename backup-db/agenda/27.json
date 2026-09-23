@@ -1,11 +1,4 @@
 {
-  "contactar": {
-    "done": true,
-    "nota": "Que topic en particulaer quiere traer?"
-  },
-  "revisar": {
-    "done": true
-  },
   "speaker": {
     "done": true,
     "tipo": "charla"
