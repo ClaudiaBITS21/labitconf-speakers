@@ -1253,16 +1253,11 @@ async function handleSubmit(e){
     }
   };
 
-  const hasPhoto = fotoData.startsWith('data:');
-  if(hasPhoto) txt.innerHTML=`<span class="spinner"></span>${lang==='es'?'Procesando foto, puede tardar 1-2 min…':'Processing photo, may take 1-2 min…'}`;
-
   // Enviar sin esperar respuesta — el GAS siempre guarda (Telegram lo confirma).
-  // Mostramos éxito inmediatamente después de despachar el request.
   fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
     .catch(err=>console.warn('GAS fetch error (ignorado, datos ya guardados):', err));
 
-  // Pequeña pausa para que el usuario vea "Procesando..." y luego éxito
-  await new Promise(r=>setTimeout(r, hasPhoto ? 2000 : 800));
+  // Mostrar éxito inmediatamente — sin setTimeout que se congela en móvil.
   showSuccess();
 }
 
