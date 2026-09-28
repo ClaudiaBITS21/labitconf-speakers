@@ -1,8 +1,12 @@
 {
-  "speaker": {
-    "done": true,
-    "tipo": "charla"
+  "revisar": {
+    "auto": true,
+    "done": true
   },
-  "talks": {},
+  "talks": {
+    "1": {
+      "status": "considerar"
+    }
+  },
   "web": 300
 }

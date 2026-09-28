@@ -1,9 +1,10 @@
 {
-  "genero": "M",
+  "revisar": {
+    "done": true
+  },
   "speaker": {
     "done": true,
     "tipo": "panel"
   },
-  "talks": {},
-  "tier": "N1"
+  "talks": {}
 }

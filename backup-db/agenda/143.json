@@ -1,9 +1,8 @@
 {
-  "empresa": "Influencer y Escritor",
-  "speaker": {
-    "done": true,
-    "tipo": "charla"
+  "descartado": {
+    "done": true
   },
+  "empresa": "Influencer y Escritor",
   "talks": {
     "0": {
       "done": true,

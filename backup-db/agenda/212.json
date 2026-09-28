@@ -1,8 +1,4 @@
 {
-  "speaker": {
-    "done": true,
-    "tipo": "charla"
-  },
   "talks": {
     "0": {
       "done": true,
