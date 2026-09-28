@@ -520,6 +520,34 @@ function doPost(e) {
 
     if (action === 'speaker_form_submit') return handleFormSubmit(ss, payload.data || {});
 
+    if (action === 'fix_photo_permissions') {
+      const token = ScriptApp.getOAuthToken();
+      let pageToken = '';
+      let fixed = 0; let errors = 0;
+      do {
+        const qUrl = 'https://www.googleapis.com/drive/v3/files?q=' +
+          encodeURIComponent('"' + PHOTO_FOLDER_ID + '" in parents and trashed=false') +
+          '&fields=files(id)&pageSize=100' + (pageToken ? '&pageToken=' + pageToken : '');
+        const listRes = UrlFetchApp.fetch(qUrl, {
+          headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, deadline: 30
+        });
+        const listJson = JSON.parse(listRes.getContentText());
+        const files = listJson.files || [];
+        pageToken = listJson.nextPageToken || '';
+        for (const f of files) {
+          const permRes = UrlFetchApp.fetch(
+            'https://www.googleapis.com/drive/v3/files/' + f.id + '/permissions',
+            { method: 'POST', contentType: 'application/json',
+              payload: JSON.stringify({ role: 'reader', type: 'anyone' }),
+              headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true, deadline: 10 }
+          );
+          if (permRes.getResponseCode() === 200 || permRes.getResponseCode() === 403) fixed++;
+          else errors++;
+        }
+      } while (pageToken);
+      return respond({ ok: true, fixed: fixed, errors: errors });
+    }
+
     if (action === 'listar_fotos_drive') {
       const token = ScriptApp.getOAuthToken();
       const res = UrlFetchApp.fetch(
@@ -564,14 +592,20 @@ function doPost(e) {
     if (action === 'patch_speaker') {
       // Actualizar campos específicos de un speaker por num (sin write_key)
       // data: { num, fields: { col_index: value, ... } }
-      const num    = parseInt((data||{}).num || 0);
+      // data: { row: 1, fields: { col_index: value, ... } } — para actualizar header
       const fields = (data||{}).fields || {};
-      if (!num || !Object.keys(fields).length) return respond({ error: 'num y fields requeridos' });
+      if (!Object.keys(fields).length) return respond({ error: 'fields requerido' });
       const ws = ss.getSheetByName('Speakers');
-      const rows = ws.getDataRange().getValues();
       let rowIdx = -1;
-      for (let i = 1; i < rows.length; i++) { if (parseInt(rows[i][0]) === num) { rowIdx = i+1; break; } }
-      if (rowIdx < 0) return respond({ error: 'speaker num ' + num + ' no encontrado' });
+      if ((data||{}).row === 1) {
+        rowIdx = 1; // header
+      } else {
+        const num = parseInt((data||{}).num || 0);
+        if (!num) return respond({ error: 'num o row:1 requerido' });
+        const rows = ws.getDataRange().getValues();
+        for (let i = 1; i < rows.length; i++) { if (parseInt(rows[i][0]) === num) { rowIdx = i+1; break; } }
+        if (rowIdx < 0) return respond({ error: 'speaker num ' + num + ' no encontrado' });
+      }
       Object.entries(fields).forEach(([col, val]) => {
         ws.getRange(rowIdx, parseInt(col)+1).setValue(val);
       });
