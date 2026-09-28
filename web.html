@@ -145,7 +145,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:24px">
     <div style="color:#f97316;font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:10px">PARA EL DESARROLLADOR</div>
-    <p style="color:#333;font-size:14px;line-height:1.7">El endpoint público filtra por <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;color:#f97316">landing=si</code> automáticamente. Ver tab <strong style="color:#111">Para el desarrollador</strong> para el detalle técnico.</p>
+    <p style="color:#333;font-size:14px;line-height:1.7">El endpoint devuelve todos los speakers. El desarrollador debe filtrar por <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;color:#f97316">r[36] === 'si'</code> (campo <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;color:#f97316">landing</code>) para mostrar solo los publicados. El campo <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;color:#999">estado</code> (r[31]) es uso interno de LABITCONF y no determina si el speaker aparece en la web. Ver tab <strong style="color:#111">Para el desarrollador</strong> para el detalle técnico.</p>
   </div>
 </div>
 
@@ -299,7 +299,7 @@ cd LABITCONF-speakers
       <b>Caché recomendada:</b> El endpoint puede tardar 5-15 segundos en responder (Google Sheets). Cachear el resultado por 10-30 minutos en el servidor o en el cliente con <code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;color:#f97316">localStorage</code>.
     </div>
     <div class="dev-note">
-      <b>Filtrar por estado:</b> Para mostrar solo los speakers confirmados en la web, filtrar por <code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;color:#f97316">r[31] === 'confirmado'</code> (o el valor que defina LABITCONF).
+      <b>Filtrar para la web pública:</b> Usar <code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;color:#f97316">r[36] === 'si'</code> (campo <b>landing</b>). Ese campo lo controla LABITCONF desde este panel. El campo <code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;color:#999">r[31]</code> (estado: confirmado/disponible) es uso interno y no debe usarse para filtrar la web.
     </div>
   </div>
 
