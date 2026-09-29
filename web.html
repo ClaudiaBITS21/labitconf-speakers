@@ -117,6 +117,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="pill" onclick="setFiltro('sin-foto')" id="pill-sin-foto">Sin foto</button>
     <button class="pill" onclick="setFiltro('sin-bio')" id="pill-sin-bio">Sin bio</button>
     <button class="pill" onclick="setFiltro('publicados')" id="pill-publicados">✅ Publicados</button>
+    <span style="color:#ccc;margin:0 2px">|</span>
+    <button class="pill" onclick="setFiltro('tag:Bitcoin')" id="pill-tag:Bitcoin">₿ Bitcoin</button>
+    <button class="pill" onclick="setFiltro('tag:Custodia')" id="pill-tag:Custodia">🔑 Custodia</button>
+    <button class="pill" onclick="setFiltro('tag:IA')" id="pill-tag:IA">🤖 IA</button>
+    <button class="pill" onclick="setFiltro('tag:Legal')" id="pill-tag:Legal">⚖️ Legal</button>
+    <button class="pill" onclick="setFiltro('tag:Finanzas')" id="pill-tag:Finanzas">💰 Finanzas</button>
+    <button class="pill" onclick="setFiltro('tag:Adopcion')" id="pill-tag:Adopcion">📈 Adopción</button>
+    <button class="pill" onclick="setFiltro('tag:Mining')" id="pill-tag:Mining">⛏ Mining</button>
+    <button class="pill" onclick="setFiltro('tag:Tecnico')" id="pill-tag:Tecnico">🔧 Técnico</button>
+    <button class="pill" onclick="setFiltro('tag:Privacidad')" id="pill-tag:Privacidad">🕵️ Privacidad</button>
+    <button class="pill" onclick="setFiltro('tag:Educacion')" id="pill-tag:Educacion">📚 Educación</button>
+    <button class="pill" onclick="setFiltro('tag:Institucional')" id="pill-tag:Institucional">🏛 Institucional</button>
+    <button class="pill" onclick="setFiltro('tag:Emprendimiento')" id="pill-tag:Emprendimiento">🚀 Emprendimiento</button>
     <input class="search" type="text" placeholder="Buscar…" oninput="render()" id="q">
   </div>
   <div class="grid" id="grid"><div class="loading">Cargando speakers…</div></div>
@@ -315,6 +328,8 @@ const GAS='https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSng2rgzb
 const KEY='BTC/2026';
 let speakers=[], filtro='todos', staffMode=false;
 
+const CLUSTERS=['Bitcoin','Custodia','IA','Legal','Finanzas','Adopcion','Mining','Tecnico','Privacidad','Educacion','Institucional','Emprendimiento'];
+
 function showTab(t){
   document.getElementById('tabSpeakers').style.display=t==='speakers'?'':'none';
   document.getElementById('tabDev').style.display=t==='dev'?'':'none';
@@ -356,6 +371,8 @@ async function init(){
       const r=await fetch(`${GAS}?action=get_data&sheet=Speakers&key=${KEY}`,{signal:ctrl.signal});
       clearTimeout(timer);
       const j=await r.json();
+      const headerRow=(j.data||[])[0]||[];
+      const tagIdx=headerRow.findIndex(h=>h&&['tags','ap','tag','cluster'].includes(String(h).toLowerCase().trim()));
       speakers=(j.data||[]).slice(1).map(row=>{
         const confname=String(row[3]||'').trim();
         const nombre=String(row[1]||'').trim();
@@ -372,7 +389,8 @@ async function init(){
           instagram:String(row[16]||'').replace(/^@/,'').trim(),
           empresa:String(row[19]||'').trim(), bio:String(row[21]||'').trim(),
           landing:String(row[36]||'').trim(),
-          web_order:row[40]?parseInt(row[40],10):(WEB_ORDER[Number(row[0])]||null)
+          web_order:row[40]?parseInt(row[40],10):(WEB_ORDER[Number(row[0])]||null),
+          tags:tagIdx>=0?String(row[tagIdx]||'').trim():''
         };
       }).filter(s=>s.nombre)
       .sort((a,b)=>{
@@ -440,6 +458,10 @@ function render(){
     if(filtro==='cat1')       return catOf(s)===1;
     if(filtro==='cat2')       return catOf(s)===2;
     if(filtro==='cat3')       return catOf(s)===3;
+    if(filtro.startsWith('tag:')){
+      const tag=filtro.slice(4);
+      return s.tags.split(',').map(t=>t.trim()).includes(tag);
+    }
     return true;
   };
 
@@ -533,6 +555,7 @@ function cardHTML(s){
     ${s.pais    ?`<div class="card-pais">${flag} ${s.pais}</div>`:''}
     ${bioHtml}
     ${redesHtml ?`<div class="redes">${redesHtml}</div>`:''}
+    ${s.tags?`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:6px">${s.tags.split(',').map(t=>t.trim()).filter(Boolean).map(t=>`<span style="background:#fff3e0;color:#e65100;border-radius:8px;padding:1px 7px;font-size:10px;font-weight:700">${t}</span>`).join('')}</div>`:''}
     ${faltantesHtml}
   </div>
 </div>`;
