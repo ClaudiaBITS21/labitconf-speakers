@@ -383,7 +383,7 @@ async function init(){
         const fullName=`${nombre} ${apellido}`.trim();
         const displayName=fullName||confname;
         const fotoSheet=String(row[10]||'').trim();
-        const foto=fotoSheet||(FOTO_OVERRIDE[displayName]||FOTO_OVERRIDE[confname]||FOTO_OVERRIDE[nombre]||'');
+        const foto=FOTO_OVERRIDE[displayName]||FOTO_OVERRIDE[confname]||FOTO_OVERRIDE[nombre]||fotoSheet||'';
         return {
           num:row[0], nombre, apellido, confname, displayName,
           cargo:String(row[5]||'').trim(), pais:String(row[6]||'').trim(), idioma:String(row[7]||'').trim(),
