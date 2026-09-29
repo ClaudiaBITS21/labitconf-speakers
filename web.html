@@ -380,7 +380,8 @@ async function init(){
         const confname=String(row[3]||'').trim();
         const nombre=String(row[1]||'').trim();
         const apellido=String(row[2]||'').trim();
-        const displayName=confname||`${nombre} ${apellido}`.trim();
+        const fullName=`${nombre} ${apellido}`.trim();
+        const displayName=fullName||confname;
         const fotoSheet=String(row[10]||'').trim();
         const foto=fotoSheet||(FOTO_OVERRIDE[displayName]||FOTO_OVERRIDE[confname]||FOTO_OVERRIDE[nombre]||'');
         return {
