@@ -381,8 +381,7 @@ async function init(){
         const nombre=String(row[1]||'').trim();
         const apellido=String(row[2]||'').trim();
         const fullName=`${nombre} ${apellido}`.trim();
-        const isAlias=s=>s&&(s.startsWith('@')||s.startsWith('#')||(/^[a-z0-9._]+$/.test(s)&&!s.includes(' ')));
-        const displayName=fullName?(isAlias(confname)?`${fullName} (${confname})`:fullName):confname;
+        const displayName=fullName||confname;
         const fotoSheet=String(row[10]||'').trim();
         const foto=fotoSheet||(FOTO_OVERRIDE[displayName]||FOTO_OVERRIDE[confname]||FOTO_OVERRIDE[nombre]||'');
         return {
