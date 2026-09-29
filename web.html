@@ -386,7 +386,7 @@ async function init(){
         const fotoSheet=String(row[10]||'').trim();
         const foto=fotoSheet||(FOTO_OVERRIDE[displayName]||FOTO_OVERRIDE[confname]||FOTO_OVERRIDE[nombre]||'');
         return {
-          num:row[0], nombre, apellido, confname,
+          num:row[0], nombre, apellido, confname, displayName,
           cargo:String(row[5]||'').trim(), pais:String(row[6]||'').trim(), idioma:String(row[7]||'').trim(),
           web:String(row[9]||'').trim(), foto,
           linkedin:String(row[14]||'').trim(),
@@ -480,8 +480,8 @@ function render(){
   // Agrupar en categorías cuando filtro='todos'
   if(filtro==='todos' && !q){
     const cat1=speakers.filter(s=>catOf(s)===1);
-    const cat2=speakers.filter(s=>catOf(s)===2).sort((a,b)=>(a.confname||`${a.nombre} ${a.apellido}`).localeCompare(b.confname||`${b.nombre} ${b.apellido}`,'es'));
-    const cat3=speakers.filter(s=>catOf(s)===3).sort((a,b)=>(a.confname||`${a.nombre} ${a.apellido}`).localeCompare(b.confname||`${b.nombre} ${b.apellido}`,'es'));
+    const cat2=speakers.filter(s=>catOf(s)===2).sort((a,b)=>(a.displayName||a.confname||`${a.nombre} ${a.apellido}`).localeCompare(b.displayName||b.confname||`${b.nombre} ${b.apellido}`,'es'));
+    const cat3=speakers.filter(s=>catOf(s)===3).sort((a,b)=>(a.displayName||a.confname||`${a.nombre} ${a.apellido}`).localeCompare(b.displayName||b.confname||`${b.nombre} ${b.apellido}`,'es'));
 
     const divider=(label,count)=>`<div class="cat-div"><div class="cat-div-line"></div><span class="cat-div-label">${label}</span><span class="cat-div-badge">${count}</span><div class="cat-div-line"></div></div>`;
 
@@ -521,7 +521,7 @@ function flagOf(pais){
 }
 
 function cardHTML(s){
-  const nombre=s.confname||`${s.nombre} ${s.apellido}`.trim();
+  const nombre=s.displayName||s.confname||`${s.nombre} ${s.apellido}`.trim();
   const ft=faltantes(s);
   const incompleto=ft.length>0;
 
