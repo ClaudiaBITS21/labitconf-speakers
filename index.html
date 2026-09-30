@@ -326,16 +326,8 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 <!-- NAV -->
 <div class="nav">
   <div class="nav-brand">LABITCONF 26'</div>
-  <button class="tab-btn active" data-tab="principal" onclick="switchTab('principal')">📋 Agenda</button>
-  <button class="tab-btn" data-tab="speakers" onclick="switchTab('speakers')">🎙️ Speakers</button>
-  <button class="tab-btn" data-tab="resumen" onclick="switchTab('resumen')">📊 Resumen</button>
-  <button class="tab-btn" data-tab="ideas" onclick="switchTab('ideas')">❓ Ideas</button>
-  <button class="tab-btn" data-tab="tiers" onclick="switchTab('tiers')">🎯 Tiers</button>
-  <button class="tab-btn" data-tab="planning" onclick="switchTab('planning')">🗺️ Planning</button>
+  <button class="tab-btn active" data-tab="speakers" onclick="switchTab('speakers')">🎙️ Speakers</button>
   <div class="nav-right">
-    <span style="font-size:14px;color:var(--text);font-weight:700;margin-right:2px">Día:</span>
-    <button id="dayBtn2" class="btn" style="padding:3px 10px;font-size:13px;background:var(--red-dim);border-color:var(--red);color:var(--red)" onclick="switchDay(2)" title="LABITCONF Day 1">Vie (30/Oct)</button>
-    <button id="dayBtn3" class="btn" style="padding:3px 10px;font-size:13px" onclick="switchDay(3)" title="LABITCONF Day 2">Sáb (31/Oct)</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
     <button class="btn" style="padding:3px 10px;font-size:15px" onclick="openCommandPalette()" title="Ctrl+K">🔍</button>
     <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
@@ -350,7 +342,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB AGENDA -->
-<div class="tab-content active" id="tab-principal">
+<div class="tab-content" id="tab-principal" style="display:none">
   <div class="config-bar">
     <span class="config-label">Apertura</span>
     <input type="text" class="time-input green" id="horaApertura" value="09:30" placeholder="HH:MM" oninput="recalcAgendaTimes(activeStage,currentDay);saveStageNames()">
@@ -386,7 +378,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB SPEAKERS -->
-<div class="tab-content" id="tab-speakers">
+<div class="tab-content active" id="tab-speakers">
   <div class="toolbar">
     <button class="btn save" id="saveBtnSpeakers" onclick="saveSpeakers()">💾 Guardar</button>
     <button class="btn" onclick="loadAll()">🔄 Actualizar</button>
@@ -455,7 +447,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB RESUMEN -->
-<div class="tab-content" id="tab-resumen">
+<div class="tab-content" id="tab-resumen" style="display:none">
   <div class="toolbar">
     <span style="font-size:16px;color:var(--text)">Vista derivada de Agenda + Speakers.</span>
     <button class="btn" style="margin-left:auto" onclick="buildResumen()">🔄 Recalcular</button>
@@ -466,7 +458,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB IDEAS -->
-<div class="tab-content" id="tab-ideas">
+<div class="tab-content" id="tab-ideas" style="display:none">
   <div class="toolbar">
     <button class="btn save" id="saveBtnIdeas" onclick="saveIdeas()">💾 Guardar</button>
     <button class="btn" onclick="loadIdeas()">🔄 Actualizar</button>
@@ -502,7 +494,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 
 <!-- TAB KANBAN -->
 
-<div class="tab-content" id="tab-tiers">
+<div class="tab-content" id="tab-tiers" style="display:none">
   <div class="toolbar">
     <span style="font-size:16px;color:var(--text)">Arrastrá los speakers para asignar su Tier. La columna gris muestra los sin asignar.</span>
     <button class="btn" style="margin-left:auto" onclick="renderTiers()">🔄 Recalcular</button>
@@ -511,7 +503,7 @@ td.tipo-td select.cell-sel{font-weight:700;font-size:14px;}
 </div>
 
 <!-- TAB PLANNING -->
-<div class="tab-content" id="tab-planning">
+<div class="tab-content" id="tab-planning" style="display:none">
   <div style="display:flex;align-items:center;gap:10px;padding:10px 18px;background:#f0f2f5;border-bottom:1px solid #d1d5db;flex-wrap:wrap">
     <span style="font-size:15px;font-weight:700;color:#111">🗺️ Planning</span>
     <div style="width:1px;height:22px;background:#d1d5db"></div>
