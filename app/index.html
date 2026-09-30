@@ -501,7 +501,28 @@ body.mdopen{overflow:hidden}
   #tb td:nth-child(3){overflow-wrap:normal;word-break:normal}
   #tb td:nth-child(3) .nm{overflow-wrap:break-word}
 }
-.mailsent{display:inline-block;margin-left:5px;font-size:12px;line-height:1;color:#2e7d4f;vertical-align:middle;cursor:help}</style>
+.mailsent{display:inline-block;margin-left:5px;font-size:12px;line-height:1;color:#2e7d4f;vertical-align:middle;cursor:help}
+#valModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;}
+#valModal.open{display:flex;}
+#valBox{background:#fff;border-radius:12px;padding:22px 24px;max-width:680px;width:95%;max-height:88vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.25);}
+#valBox h3{margin:0 0 4px;font-size:16px;}
+#valBox .valsub{font-size:12px;color:#888;margin-bottom:14px;}
+.valside{background:#f5f5f0;border-radius:8px;padding:12px 14px;margin-bottom:10px;}
+.valside h4{margin:0 0 5px;font-size:13px;color:#555;font-weight:600;}
+.valside p{margin:3px 0;font-size:13px;}
+.valtema{border:1px solid #e0e0d8;border-radius:8px;padding:10px 12px;margin-bottom:8px;position:relative;}
+.valtema .vpct{position:absolute;top:8px;right:10px;font-size:18px;font-weight:800;color:#f97316;}
+.valtema .vpct.hi{color:#16a34a;}
+.valtema .vpct.mid{color:#ca8a04;}
+.valtema h5{margin:0 0 4px;font-size:13px;font-weight:700;padding-right:50px;}
+.valtema p{margin:2px 0;font-size:12px;color:#555;}
+.valmail{margin-top:12px;padding:8px 12px;border-radius:6px;font-size:13px;font-weight:600;}
+.valmail.ok{background:#dcfce7;color:#15803d;}
+.valmail.no{background:#fef3c7;color:#92400e;}
+.valbtn{margin-top:14px;display:flex;gap:8px;}
+.valbtn button{padding:8px 18px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;}
+.valbtn .vbok{background:#f97316;color:#fff;}
+.valbtn .vbcancel{background:#e5e7eb;color:#333;}</style>
 
 <div class="wrap">
 <h1>Speakers LABITCONF 2026 &mdash; primera pasada</h1>
@@ -1083,6 +1104,7 @@ var FL=[["","Todos"],["MINI","\u2212 Minimizados"],["NOMINI","Sin los minimizado
 var ESCLBL={orange:"Orange Pill",vision:"Visi\u00f3n",workshop:"Workshop + Coders",abc:"ABC",business:"Business",autocustodia:"La Crypta / Bitcoineta",offtopic:"Fuera de escenario"};
 
 // ---- agenda (db capability): marcar charlas ya pasadas a la agenda de Rodolfo ----
+var GAS_URL='https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSng2rgzbRSroALHOra43wK2QhlJZ_s-1xKHyv9An_g1ZA/exec';
 var AGENDA={};
 var claudeDb=null;
 var dbState="conectando"; // conectando | ok | sin-datos
@@ -3790,7 +3812,7 @@ function renderExpanded(box,G){
     });
   });
   // edición inline: descripción (campo desc de la tarjeta) y empresa (agenda/<si>.empresa)
-  [].forEach.call(box.querySelectorAll(".xdval"),function(b){b.onclick=function(e){e.stopPropagation();var tr=b.closest("tr");var di=+tr.dataset.di,ri=+tr.dataset.ri,ci=+tr.dataset.ci;var c=cellAt(di,ri,ci);if(!c)return;setCardField(di,ri,ci,"desc",resolveDesc(c).text);gridPersist("Descripción validada");};});
+  [].forEach.call(box.querySelectorAll(".xdval"),function(b){b.onclick=function(e){e.stopPropagation();var tr=b.closest("tr");var di=+tr.dataset.di,ri=+tr.dataset.ri,ci=+tr.dataset.ci;var c=cellAt(di,ri,ci);if(!c)return;var r=D.rows.find(function(x){return x.i===c.si[0];});var pnums=r?(r.an||[]):[];var ag=AGENDA[c.si[0]]||{};openValModal(pnums,c.t||ag.titulo||'',resolveDesc(c).text,di,ri,ci);};});
   [].forEach.call(box.querySelectorAll("td.xdesc"),function(td){
     td.onclick=function(e){
       if(td.querySelector("textarea"))return;
@@ -4114,5 +4136,95 @@ function renderFalt(){
 }
 
 initFilters();initModal();initSync();initGridEdit();initBQ();render();renderCl();renderDest();renderFalt();renderGrid();renderPM();renderAppSync();initDb();
+</script>
+
+<!-- Modal de validación de charla -->
+<div id="valModal">
+  <div id="valBox">
+    <h3 id="valTitle"></h3>
+    <div class="valsub" id="valSub"></div>
+    <div class="valside" id="valRodo"></div>
+    <div id="valTemas"></div>
+    <div class="valmail" id="valMail"></div>
+    <div class="valbtn">
+      <button class="vbok" id="valOkBtn">✓ Validar descripción</button>
+      <button class="vbcancel" onclick="closeValModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var _valPending=null;
+function closeValModal(){document.getElementById('valModal').classList.remove('open');}
+document.getElementById('valModal').onclick=function(e){if(e.target===this)closeValModal();};
+
+function textScore(a,b){
+  var wa=new Set((a||'').toLowerCase().replace(/[^\wáéíóúüñ ]/gi,' ').split(/\s+/).filter(function(w){return w.length>3;}));
+  var wb=(b||'').toLowerCase().replace(/[^\wáéíóúüñ ]/gi,' ').split(/\s+/).filter(function(w){return w.length>3;});
+  if(!wa.size||!wb.length)return 0;
+  var hits=wb.filter(function(w){return wa.has(w);}).length;
+  return Math.round(100*hits/Math.max(wa.size,wb.length));
+}
+
+function openValModal(pnums, rodotitulo, rododesc, di, ri, ci){
+  var pnum=pnums&&pnums.length?pnums[0]:null;
+  if(!pnum){alert('Sin pnum');return;}
+  document.getElementById('valTitle').textContent='Validar charla — cargando…';
+  document.getElementById('valRodo').innerHTML='';
+  document.getElementById('valTemas').innerHTML='<p style="color:#888;font-size:13px">Consultando sheet…</p>';
+  document.getElementById('valMail').textContent='';
+  document.getElementById('valMail').className='valmail';
+  document.getElementById('valModal').classList.add('open');
+  _valPending={di:di,ri:ri,ci:ci,desc:rododesc};
+
+  var payload=JSON.stringify({action:'get_speaker',data:{num:pnum}});
+  fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:payload})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(!res.ok){document.getElementById('valTemas').innerHTML='<p style="color:red">Error: '+esc(res.error||'?')+'</p>';return;}
+      var nombre=res.confname||res.nombre+' '+res.apellido;
+      document.getElementById('valTitle').textContent='Validar charla — '+nombre;
+      document.getElementById('valSub').textContent='pnum='+pnum+' · app #'+pnum;
+      document.getElementById('valRodo').innerHTML=
+        '<h4>📋 Lo que tiene Rodo en agenda</h4>'+
+        '<p><b>Título:</b> '+esc(rodotitulo)+'</p>'+
+        (rododesc?'<p><b>Desc:</b> '+esc(rododesc)+'</p>':'<p style="color:#aaa">Sin descripción aún</p>');
+
+      var temas=res.temas||[];
+      var rodotxt=(rodotitulo||'')+' '+(rododesc||'');
+      if(!temas.length){
+        document.getElementById('valTemas').innerHTML='<p style="color:#aaa;font-size:13px">El speaker no propuso temas en el form.</p>';
+      } else {
+        var html='<h4 style="font-size:13px;color:#555;margin:10px 0 6px">🎯 Temas propuestos por el speaker</h4>';
+        temas.forEach(function(t){
+          var spkTxt=(t.titulo||'')+' '+(t.abstract||'')+' '+(t.descripcion||'');
+          var pct=textScore(rodotxt,spkTxt);
+          var cls=pct>=60?'hi':pct>=30?'mid':'';
+          html+='<div class="valtema">'+
+            '<span class="vpct '+cls+'">'+pct+'%</span>'+
+            '<h5>'+esc(t.titulo||'—')+'</h5>'+
+            (t.abstract?'<p><b>Abstract:</b> '+esc(t.abstract)+'</p>':'')+
+            (t.descripcion?'<p><b>Desc:</b> '+esc(t.descripcion)+'</p>':'')+
+            '<p style="color:#aaa;font-size:11px">Formato: '+(t.formatos||'?')+' · '+( t.duracion||'?')+'min · Nivel: '+(t.nivel||'?')+' · Estado: '+(t.estado||'disponible')+'</p>'+
+            '</div>';
+        });
+        document.getElementById('valTemas').innerHTML=html;
+      }
+
+      var mailOk=String(res.mail_ok||'').trim().toLowerCase()==='si';
+      var mailEl=document.getElementById('valMail');
+      mailEl.className='valmail '+(mailOk?'ok':'no');
+      mailEl.textContent=mailOk?'✅ Mail de confirmación enviado':'⚠️ Aún no se envió mail de confirmación';
+    })
+    .catch(function(e){document.getElementById('valTemas').innerHTML='<p style="color:red">Error de red: '+e.message+'</p>';});
+
+  document.getElementById('valOkBtn').onclick=function(){
+    if(!_valPending)return;
+    var p=_valPending;
+    setCardField(p.di,p.ri,p.ci,'desc',p.desc);
+    gridPersist('Descripción validada');
+    closeValModal();
+  };
+}
 </script>
 </body></html>
