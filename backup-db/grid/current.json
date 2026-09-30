@@ -1,6 +1,6 @@
 {
   "_gv": 2,
-  "_seq": 1375,
+  "_seq": 1535,
   "by": "edicion",
   "days": [
     {
@@ -165,15 +165,32 @@
         {
           "c": [
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "ackDur": true,
+              "cols": 2,
+              "desc": "De que modo el Bitcoin se posiciona en un mundo donde la IA y otras tecnologías promueven la abundancia.",
+              "m": true,
+              "manual": false,
+              "nivel": "general",
+              "rows": 9,
+              "si": [
+                0
+              ],
+              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "tags": [
+                "X",
+                "F"
+              ],
+              "tipo": "charla",
+              "tm": true,
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                0
+              ],
+              "span": true,
+              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
               "x": false
             },
             {
@@ -214,15 +231,21 @@
         {
           "c": [
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                0
+              ],
+              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "vspan": true,
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                0
+              ],
+              "span": true,
+              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
               "x": false
             },
             {
@@ -263,15 +286,21 @@
         {
           "c": [
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                0
+              ],
+              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "vspan": true,
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                0
+              ],
+              "span": true,
+              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
               "x": false
             },
             {
@@ -312,22 +341,12 @@
         {
           "c": [
             {
-              "ackDur": true,
-              "cols": 2,
               "m": true,
-              "manual": false,
-              "nivel": "general",
-              "rows": 9,
               "si": [
                 0
               ],
               "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
-              "tags": [
-                "X",
-                "F"
-              ],
-              "tipo": "charla",
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
@@ -647,34 +666,68 @@
         {
           "c": [
             {
+              "cols": 1,
+              "descAi": "Alberto Mera (Bitcoin en español) sobre el triángulo Estados Unidos, Argentina y Bitcoin: qué cambia para un argentino que EE.UU. tenga reserva estratégica, ETFs y una ley de estructura de mercado, cómo se lee desde acá la relación con el dólar y la deuda, y qué margen queda para que Bitcoin sea otra cosa que un activo financiero más. Orange Pill, viernes a la mañana.",
               "m": true,
+              "manual": true,
+              "rows": 8,
               "si": [
-                0
+                192
               ],
-              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
-              "vspan": true,
+              "t": "Estados Unidos, Argentina y Bitcoin",
+              "tags": [
+                "X",
+                "R"
+              ],
+              "tm": true,
               "x": false
             },
             {
+              "cols": 1,
+              "descAi": "Maximiliano Firtman repasa dónde está hoy la inteligencia artificial y qué tan cerca (o lejos) estamos de una inteligencia general (AGI) y de una superinteligencia (ASI): qué significan esos términos, qué señales concretas hay en los modelos actuales, qué falta, y qué podría cambiar en el trabajo, la economía y el poder si llegamos. Charla de Visión para público general, sin jerga.",
               "m": true,
+              "manual": false,
+              "rows": 8,
               "si": [
-                0
+                190
               ],
-              "span": true,
-              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "t": "Cuan cerca estamos de las AGI y las ASI y qué podría pasar",
+              "tags": [
+                "A"
+              ],
+              "tm": true,
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
-              "x": true
+              "cols": 1,
+              "m": true,
+              "manual": false,
+              "rows": 8,
+              "si": [
+                14
+              ],
+              "t": "8, 18, 80: Un Bitcoin para cada edad Diego Coria",
+              "tags": [
+                "X",
+                "L"
+              ],
+              "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
-              "x": true
+              "cols": 1,
+              "descAi": "Charla introductoria de Workshop + Coders sobre qué hay realmente detrás de la IA generativa: cómo se entrena un modelo, qué es un token, por qué a veces \"alucina\" y qué puede y no puede hacer. Pensada para quien usa ChatGPT o similares todos los días pero nunca vio cómo funcionan por dentro.",
+              "m": true,
+              "manual": true,
+              "rows": 8,
+              "si": [
+                506
+              ],
+              "t": "¿Cómo funciona realmente la Inteligencia Artificial?",
+              "tags": [
+                "A"
+              ],
+              "tm": true,
+              "x": false
             },
             {
               "cols": 1,
@@ -682,7 +735,7 @@
               "rows": 6,
               "si": [],
               "t": "",
-              "x": true
+              "x": false
             },
             {
               "cols": 1,
@@ -712,39 +765,45 @@
             {
               "m": true,
               "si": [
-                0
+                192
               ],
-              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "t": "Estados Unidos, Argentina y Bitcoin",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
               "si": [
-                0
+                190
               ],
-              "span": true,
-              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "t": "Cuan cerca estamos de las AGI y las ASI y qué podría pasar",
+              "vspan": true,
+              "x": false
+            },
+            {
+              "m": true,
+              "si": [
+                14
+              ],
+              "t": "8, 18, 80: Un Bitcoin para cada edad Diego Coria",
+              "vspan": true,
+              "x": false
+            },
+            {
+              "m": true,
+              "si": [
+                506
+              ],
+              "t": "¿Cómo funciona realmente la Inteligencia Artificial?",
+              "vspan": true,
               "x": false
             },
             {
               "m": false,
               "si": [],
               "t": "",
-              "x": true
-            },
-            {
-              "m": false,
-              "si": [],
-              "t": "",
-              "x": true
-            },
-            {
-              "m": false,
-              "si": [],
-              "t": "",
               "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -767,39 +826,45 @@
             {
               "m": true,
               "si": [
-                0
+                192
               ],
-              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "t": "Estados Unidos, Argentina y Bitcoin",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
               "si": [
-                0
+                190
               ],
-              "span": true,
-              "t": "Porqué HODL: La escaséz de Bitcoin en un futuro de abundancia",
+              "t": "Cuan cerca estamos de las AGI y las ASI y qué podría pasar",
+              "vspan": true,
+              "x": false
+            },
+            {
+              "m": true,
+              "si": [
+                14
+              ],
+              "t": "8, 18, 80: Un Bitcoin para cada edad Diego Coria",
+              "vspan": true,
+              "x": false
+            },
+            {
+              "m": true,
+              "si": [
+                506
+              ],
+              "t": "¿Cómo funciona realmente la Inteligencia Artificial?",
+              "vspan": true,
               "x": false
             },
             {
               "m": false,
               "si": [],
               "t": "",
-              "x": true
-            },
-            {
-              "m": false,
-              "si": [],
-              "t": "",
-              "x": true
-            },
-            {
-              "m": false,
-              "si": [],
-              "t": "",
               "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -820,67 +885,39 @@
         {
           "c": [
             {
-              "cols": 1,
-              "descAi": "Alberto Mera (Bitcoin en español) sobre el triángulo Estados Unidos, Argentina y Bitcoin: qué cambia para un argentino que EE.UU. tenga reserva estratégica, ETFs y una ley de estructura de mercado, cómo se lee desde acá la relación con el dólar y la deuda, y qué margen queda para que Bitcoin sea otra cosa que un activo financiero más. Orange Pill, viernes a la mañana.",
               "m": true,
-              "manual": true,
-              "rows": 6,
               "si": [
                 192
               ],
               "t": "Estados Unidos, Argentina y Bitcoin",
-              "tags": [
-                "X",
-                "R"
-              ],
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
-              "cols": 1,
-              "descAi": "Maximiliano Firtman repasa dónde está hoy la inteligencia artificial y qué tan cerca (o lejos) estamos de una inteligencia general (AGI) y de una superinteligencia (ASI): qué significan esos términos, qué señales concretas hay en los modelos actuales, qué falta, y qué podría cambiar en el trabajo, la economía y el poder si llegamos. Charla de Visión para público general, sin jerga.",
               "m": true,
-              "manual": false,
-              "rows": 6,
               "si": [
                 190
               ],
               "t": "Cuan cerca estamos de las AGI y las ASI y qué podría pasar",
-              "tags": [
-                "A"
-              ],
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
-              "cols": 1,
               "m": true,
-              "manual": false,
-              "rows": 6,
               "si": [
                 14
               ],
               "t": "8, 18, 80: Un Bitcoin para cada edad Diego Coria",
-              "tags": [
-                "X",
-                "L"
-              ],
+              "vspan": true,
               "x": false
             },
             {
-              "cols": 1,
-              "descAi": "Charla introductoria de Workshop + Coders sobre qué hay realmente detrás de la IA generativa: cómo se entrena un modelo, qué es un token, por qué a veces \"alucina\" y qué puede y no puede hacer. Pensada para quien usa ChatGPT o similares todos los días pero nunca vio cómo funcionan por dentro.",
               "m": true,
-              "manual": true,
-              "rows": 6,
               "si": [
                 506
               ],
               "t": "¿Cómo funciona realmente la Inteligencia Artificial?",
-              "tags": [
-                "A"
-              ],
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
@@ -888,7 +925,7 @@
               "si": [],
               "t": "",
               "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -949,7 +986,7 @@
               "si": [],
               "t": "",
               "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1010,7 +1047,7 @@
               "si": [],
               "t": "",
               "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1067,12 +1104,10 @@
               "x": false
             },
             {
-              "cols": 1,
               "m": false,
-              "rows": 6,
               "si": [],
               "t": "",
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1132,8 +1167,7 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1154,47 +1188,34 @@
         {
           "c": [
             {
-              "m": true,
-              "si": [
-                192
-              ],
-              "t": "Estados Unidos, Argentina y Bitcoin",
-              "vspan": true,
-              "x": false
-            },
-            {
-              "m": true,
-              "si": [
-                190
-              ],
-              "t": "Cuan cerca estamos de las AGI y las ASI y qué podría pasar",
-              "vspan": true,
-              "x": false
-            },
-            {
-              "m": true,
-              "si": [
-                14
-              ],
-              "t": "8, 18, 80: Un Bitcoin para cada edad Diego Coria",
-              "vspan": true,
-              "x": false
-            },
-            {
-              "m": true,
-              "si": [
-                506
-              ],
-              "t": "¿Cómo funciona realmente la Inteligencia Artificial?",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
-              "x": true
+              "x": false
+            },
+            {
+              "m": false,
+              "si": [],
+              "t": "",
+              "x": false
+            },
+            {
+              "m": false,
+              "si": [],
+              "t": "",
+              "x": false
+            },
+            {
+              "m": false,
+              "si": [],
+              "t": "",
+              "x": false
             },
             {
               "m": true,
@@ -1219,13 +1240,12 @@
               "descAi": "Saifedean Ammous, autor de The Bitcoin Standard, en su primera aparición en una conferencia sudamericana: qué aprendió en los ocho años desde que publicó el libro, qué predicciones envejecieron bien y cuáles no, y cómo ve a Bitcoin en un mundo de inflación, deuda y dólar digital. Cierra con micrófono abierto para preguntas del público. En inglés.",
               "m": true,
               "manual": false,
-              "mod": null,
               "nivel": "general",
               "rows": 9,
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tags": [
                 "F",
                 "X"
@@ -1236,14 +1256,11 @@
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1285,8 +1302,7 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1308,27 +1324,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1354,8 +1364,7 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1377,27 +1386,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1423,8 +1426,7 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
-              "x": true
+              "x": false
             },
             {
               "m": true,
@@ -1446,27 +1448,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1489,19 +1485,9 @@
               "x": false
             },
             {
-              "cols": 1,
-              "m": true,
-              "manual": false,
-              "rows": 6,
-              "si": [
-                48
-              ],
-              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
-              "tags": [
-                "A",
-                "B"
-              ],
-              "tm": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -1524,27 +1510,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1567,13 +1547,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                48
-              ],
-              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -1596,27 +1572,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1639,13 +1609,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                48
-              ],
-              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -1668,27 +1634,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1711,13 +1671,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                48
-              ],
-              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -1740,27 +1696,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1783,13 +1733,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                48
-              ],
-              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -1812,27 +1758,21 @@
           "c": [
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 187
               ],
               "span": true,
-              "t": "A Decade of The Bitcoin Standard",
-              "tipo": "keynote",
+              "t": "Why We HODL: The Bitcoin Standard Revisited",
               "tm": true,
               "x": false
             },
@@ -1855,13 +1795,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                48
-              ],
-              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -1952,12 +1888,12 @@
             {
               "cols": 1,
               "m": true,
-              "manual": true,
+              "manual": false,
               "rows": 6,
               "si": [
-                117
+                48
               ],
-              "t": "DEL HYPE AL P&L: IA Aplicada a la Rentabilidad Empresaria",
+              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
               "tags": [
                 "A",
                 "B"
@@ -1984,16 +1920,11 @@
         {
           "c": [
             {
-              "desc": "Desde la experiencia de ROXOM, cómo se entienden los mercados cuando todo  se mide y opera en Bitcoin.",
               "m": true,
               "si": [
                 46
               ],
               "t": "Cómo se ven los mercados usando el Bitcoin como un Standard",
-              "tags": [
-                "X",
-                "T"
-              ],
               "vspan": true,
               "x": false
             },
@@ -2003,7 +1934,6 @@
                 180
               ],
               "t": "Qué es lo que la IA hará con nuestra conciencia",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2028,9 +1958,9 @@
             {
               "m": true,
               "si": [
-                117
+                48
               ],
-              "t": "DEL HYPE AL P&L: IA Aplicada a la Rentabilidad Empresaria",
+              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
               "vspan": true,
               "x": false
             },
@@ -2053,16 +1983,11 @@
         {
           "c": [
             {
-              "desc": "Desde la experiencia de ROXOM, cómo se entienden los mercados cuando todo  se mide y opera en Bitcoin.",
               "m": true,
               "si": [
                 46
               ],
               "t": "Cómo se ven los mercados usando el Bitcoin como un Standard",
-              "tags": [
-                "X",
-                "T"
-              ],
               "vspan": true,
               "x": false
             },
@@ -2072,7 +1997,6 @@
                 180
               ],
               "t": "Qué es lo que la IA hará con nuestra conciencia",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2097,9 +2021,9 @@
             {
               "m": true,
               "si": [
-                117
+                48
               ],
-              "t": "DEL HYPE AL P&L: IA Aplicada a la Rentabilidad Empresaria",
+              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
               "vspan": true,
               "x": false
             },
@@ -2122,16 +2046,11 @@
         {
           "c": [
             {
-              "desc": "Desde la experiencia de ROXOM, cómo se entienden los mercados cuando todo  se mide y opera en Bitcoin.",
               "m": true,
               "si": [
                 46
               ],
               "t": "Cómo se ven los mercados usando el Bitcoin como un Standard",
-              "tags": [
-                "X",
-                "T"
-              ],
               "vspan": true,
               "x": false
             },
@@ -2141,7 +2060,6 @@
                 180
               ],
               "t": "Qué es lo que la IA hará con nuestra conciencia",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2166,9 +2084,9 @@
             {
               "m": true,
               "si": [
-                117
+                48
               ],
-              "t": "DEL HYPE AL P&L: IA Aplicada a la Rentabilidad Empresaria",
+              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
               "vspan": true,
               "x": false
             },
@@ -2191,16 +2109,11 @@
         {
           "c": [
             {
-              "desc": "Desde la experiencia de ROXOM, cómo se entienden los mercados cuando todo  se mide y opera en Bitcoin.",
               "m": true,
               "si": [
                 46
               ],
               "t": "Cómo se ven los mercados usando el Bitcoin como un Standard",
-              "tags": [
-                "X",
-                "T"
-              ],
               "vspan": true,
               "x": false
             },
@@ -2210,7 +2123,6 @@
                 180
               ],
               "t": "Qué es lo que la IA hará con nuestra conciencia",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2235,9 +2147,9 @@
             {
               "m": true,
               "si": [
-                117
+                48
               ],
-              "t": "DEL HYPE AL P&L: IA Aplicada a la Rentabilidad Empresaria",
+              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
               "vspan": true,
               "x": false
             },
@@ -2260,16 +2172,11 @@
         {
           "c": [
             {
-              "desc": "Desde la experiencia de ROXOM, cómo se entienden los mercados cuando todo  se mide y opera en Bitcoin.",
               "m": true,
               "si": [
                 46
               ],
               "t": "Cómo se ven los mercados usando el Bitcoin como un Standard",
-              "tags": [
-                "X",
-                "T"
-              ],
               "vspan": true,
               "x": false
             },
@@ -2279,7 +2186,6 @@
                 180
               ],
               "t": "Qué es lo que la IA hará con nuestra conciencia",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2304,9 +2210,9 @@
             {
               "m": true,
               "si": [
-                117
+                48
               ],
-              "t": "DEL HYPE AL P&L: IA Aplicada a la Rentabilidad Empresaria",
+              "t": "Estrategias para posicionar tu marca entre las respuestas de la IA",
               "vspan": true,
               "x": false
             },
@@ -2334,7 +2240,6 @@
               "descAi": "Giovanni Santostasi, creador del modelo de la Power Law, explica por qué el precio de Bitcoin parece seguir una ley de potencias a lo largo de quince años, qué dice eso sobre la adopción como fenómeno físico y no financiero, y qué proyecta el modelo para los próximos ciclos. Charla en inglés, con matemática accesible.",
               "m": true,
               "manual": false,
-              "mod": null,
               "nivel": "intermedio",
               "rows": 6,
               "si": [
@@ -2401,9 +2306,19 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "cols": 1,
+              "m": true,
+              "manual": true,
+              "rows": 6,
+              "si": [
+                117
+              ],
+              "t": "DEL HYPE AL P\u0026L: IA Aplicada a la Rentabilidad Empresaria",
+              "tags": [
+                "A",
+                "B"
+              ],
+              "tm": true,
               "x": false
             },
             {
@@ -2424,15 +2339,11 @@
         {
           "c": [
             {
-              "desc": "Giovanni Santostasi, creador del modelo de la Power Law, explica por qué el precio de Bitcoin parece seguir una ley de potencias a lo largo de quince años, qué dice eso sobre la adopción como fenómeno físico y no financiero, y qué proyecta el modelo para los próximos ciclos. Charla en inglés, con matemática accesible.",
               "m": true,
-              "mod": null,
-              "nivel": "intermedio",
               "si": [
                 23
               ],
               "t": "Mathematical Science applied to the Bitcoin Price \"The Power Law\" Giovanni Santostasi",
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
@@ -2443,8 +2354,6 @@
                 60
               ],
               "t": "Identidad y responsabilidad en el mundo de los Agentes",
-              "tipo": "panel",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2468,9 +2377,12 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                117
+              ],
+              "t": "DEL HYPE AL P\u0026L: IA Aplicada a la Rentabilidad Empresaria",
+              "vspan": true,
               "x": false
             },
             {
@@ -2491,15 +2403,11 @@
         {
           "c": [
             {
-              "desc": "Giovanni Santostasi, creador del modelo de la Power Law, explica por qué el precio de Bitcoin parece seguir una ley de potencias a lo largo de quince años, qué dice eso sobre la adopción como fenómeno físico y no financiero, y qué proyecta el modelo para los próximos ciclos. Charla en inglés, con matemática accesible.",
               "m": true,
-              "mod": null,
-              "nivel": "intermedio",
               "si": [
                 23
               ],
               "t": "Mathematical Science applied to the Bitcoin Price \"The Power Law\" Giovanni Santostasi",
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
@@ -2510,8 +2418,6 @@
                 60
               ],
               "t": "Identidad y responsabilidad en el mundo de los Agentes",
-              "tipo": "panel",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2535,9 +2441,12 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                117
+              ],
+              "t": "DEL HYPE AL P\u0026L: IA Aplicada a la Rentabilidad Empresaria",
+              "vspan": true,
               "x": false
             },
             {
@@ -2558,15 +2467,11 @@
         {
           "c": [
             {
-              "desc": "Giovanni Santostasi, creador del modelo de la Power Law, explica por qué el precio de Bitcoin parece seguir una ley de potencias a lo largo de quince años, qué dice eso sobre la adopción como fenómeno físico y no financiero, y qué proyecta el modelo para los próximos ciclos. Charla en inglés, con matemática accesible.",
               "m": true,
-              "mod": null,
-              "nivel": "intermedio",
               "si": [
                 23
               ],
               "t": "Mathematical Science applied to the Bitcoin Price \"The Power Law\" Giovanni Santostasi",
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
@@ -2577,8 +2482,6 @@
                 60
               ],
               "t": "Identidad y responsabilidad en el mundo de los Agentes",
-              "tipo": "panel",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2602,9 +2505,12 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                117
+              ],
+              "t": "DEL HYPE AL P\u0026L: IA Aplicada a la Rentabilidad Empresaria",
+              "vspan": true,
               "x": false
             },
             {
@@ -2625,15 +2531,11 @@
         {
           "c": [
             {
-              "desc": "Giovanni Santostasi, creador del modelo de la Power Law, explica por qué el precio de Bitcoin parece seguir una ley de potencias a lo largo de quince años, qué dice eso sobre la adopción como fenómeno físico y no financiero, y qué proyecta el modelo para los próximos ciclos. Charla en inglés, con matemática accesible.",
               "m": true,
-              "mod": null,
-              "nivel": "intermedio",
               "si": [
                 23
               ],
               "t": "Mathematical Science applied to the Bitcoin Price \"The Power Law\" Giovanni Santostasi",
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
@@ -2644,8 +2546,6 @@
                 60
               ],
               "t": "Identidad y responsabilidad en el mundo de los Agentes",
-              "tipo": "panel",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2669,10 +2569,12 @@
               "x": false
             },
             {
-              "m": false,
-              "rows": 2,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                117
+              ],
+              "t": "DEL HYPE AL P\u0026L: IA Aplicada a la Rentabilidad Empresaria",
+              "vspan": true,
               "x": false
             },
             {
@@ -2693,15 +2595,11 @@
         {
           "c": [
             {
-              "desc": "Giovanni Santostasi, creador del modelo de la Power Law, explica por qué el precio de Bitcoin parece seguir una ley de potencias a lo largo de quince años, qué dice eso sobre la adopción como fenómeno físico y no financiero, y qué proyecta el modelo para los próximos ciclos. Charla en inglés, con matemática accesible.",
               "m": true,
-              "mod": null,
-              "nivel": "intermedio",
               "si": [
                 23
               ],
               "t": "Mathematical Science applied to the Bitcoin Price \"The Power Law\" Giovanni Santostasi",
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
@@ -2712,8 +2610,6 @@
                 60
               ],
               "t": "Identidad y responsabilidad en el mundo de los Agentes",
-              "tipo": "panel",
-              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -2737,9 +2633,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                117
+              ],
+              "t": "DEL HYPE AL P\u0026L: IA Aplicada a la Rentabilidad Empresaria",
               "vspan": true,
               "x": false
             },
@@ -2766,7 +2664,6 @@
               "descAi": "Santi Siri (Democracy Earth, Proof of Humanity) en una charla abierta sobre la frontera donde se cruzan Bitcoin, inteligencia artificial, identidad y democracia: qué tecnologías están empujando esa frontera hoy y qué preguntas todavía nadie responde.",
               "m": true,
               "manual": true,
-              "mod": null,
               "nivel": "general",
               "rows": 6,
               "si": [
@@ -2782,19 +2679,12 @@
               "x": false
             },
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "span": true,
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "x": false
             },
             {
@@ -2859,35 +2749,21 @@
         {
           "c": [
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "span": true,
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "x": false
             },
             {
@@ -2936,35 +2812,21 @@
         {
           "c": [
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "span": true,
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "x": false
             },
             {
@@ -3013,35 +2875,21 @@
         {
           "c": [
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "span": true,
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "x": false
             },
             {
@@ -3090,35 +2938,21 @@
         {
           "c": [
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "span": true,
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "x": false
             },
             {
@@ -3167,35 +3001,21 @@
         {
           "c": [
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "vspan": true,
               "x": false
             },
             {
-              "desc": "Uno de los mayores referentes locales cuenta sobre su camino explorando de las fronteras tecnológicas cruzando crypto, inteligencia artificial, comunicación e identidad.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
                 189
               ],
               "span": true,
               "t": "Explorando la frontera",
-              "tags": [
-                "A"
-              ],
-              "tipo": "keynote",
               "x": false
             },
             {
@@ -3245,22 +3065,30 @@
           "c": [
             {
               "cols": 1,
+              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "manual": true,
-              "rows": 12,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
-              "tm": true,
+              "manual": false,
+              "nivel": "general",
+              "rows": 6,
+              "si": [
+                16
+              ],
+              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
+              "tags": [
+                "X",
+                "F"
+              ],
+              "tipo": "charla",
               "x": false
             },
             {
               "cols": 1,
               "m": true,
               "manual": false,
-              "mod": 71,
+              "mod": 70,
               "rows": 8,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3337,16 +3165,18 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                16
+              ],
+              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3404,16 +3234,18 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                16
+              ],
+              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3471,16 +3303,18 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                16
+              ],
+              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3541,16 +3375,18 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                16
+              ],
+              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3608,16 +3444,18 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                16
+              ],
+              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3674,17 +3512,30 @@
         {
           "c": [
             {
+              "cols": 1,
+              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
-              "vspan": true,
+              "manual": true,
+              "nivel": "avanzado",
+              "rows": 6,
+              "si": [
+                124
+              ],
+              "t": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa",
+              "tags": [
+                "X",
+                "F",
+                "L"
+              ],
+              "tipo": "charla",
+              "tm": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3699,9 +3550,12 @@
               "descAi": "Sesión legal de ABC sobre herencia de criptoactivos: cuando \"el código es la ley\" no alcanza, ¿qué derecho garantiza que tus bitcoin lleguen a quien vos querés? Testamentos, sucesiones y las fricciones entre autocustodia y ley argentina. Falta confirmar quién la da.",
               "m": true,
               "manual": true,
+              "mod": null,
               "rows": 6,
               "si": [
-                510
+                510,
+                19,
+                165
               ],
               "t": "Heredá sin conflictos legales: Del \"Code is Law\" al Derecho que garantiza la continuidad patrimonial",
               "tags": [
@@ -3709,6 +3563,7 @@
                 "R",
                 "C"
               ],
+              "tipo": "compartida",
               "tm": true,
               "x": false
             },
@@ -3756,16 +3611,18 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                124
+              ],
+              "t": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 71,
+              "mod": 70,
               "si": [
-                71,
+                70,
                 74,
                 80,
                 177
@@ -3777,10 +3634,14 @@
             },
             {
               "m": true,
+              "mod": null,
               "si": [
-                510
+                510,
+                19,
+                165
               ],
               "t": "Heredá sin conflictos legales: Del \"Code is Law\" al Derecho que garantiza la continuidad patrimonial",
+              "tipo": "compartida",
               "tm": true,
               "vspan": true,
               "x": false
@@ -3823,8 +3684,10 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                124
+              ],
+              "t": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3846,10 +3709,14 @@
             },
             {
               "m": true,
+              "mod": null,
               "si": [
-                510
+                510,
+                19,
+                165
               ],
               "t": "Heredá sin conflictos legales: Del \"Code is Law\" al Derecho que garantiza la continuidad patrimonial",
+              "tipo": "compartida",
               "tm": true,
               "vspan": true,
               "x": false
@@ -3892,8 +3759,10 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                124
+              ],
+              "t": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3909,10 +3778,14 @@
             },
             {
               "m": true,
+              "mod": null,
               "si": [
-                510
+                510,
+                19,
+                165
               ],
               "t": "Heredá sin conflictos legales: Del \"Code is Law\" al Derecho que garantiza la continuidad patrimonial",
+              "tipo": "compartida",
               "tm": true,
               "vspan": true,
               "x": false
@@ -3962,8 +3835,10 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                124
+              ],
+              "t": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -3979,10 +3854,14 @@
             },
             {
               "m": true,
+              "mod": null,
               "si": [
-                510
+                510,
+                19,
+                165
               ],
               "t": "Heredá sin conflictos legales: Del \"Code is Law\" al Derecho que garantiza la continuidad patrimonial",
+              "tipo": "compartida",
               "tm": true,
               "vspan": true,
               "x": false
@@ -4025,8 +3904,10 @@
           "c": [
             {
               "m": true,
-              "si": [],
-              "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
+              "si": [
+                124
+              ],
+              "t": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa",
               "vspan": true,
               "x": false
             },
@@ -4042,10 +3923,14 @@
             },
             {
               "m": true,
+              "mod": null,
               "si": [
-                510
+                510,
+                19,
+                165
               ],
               "t": "Heredá sin conflictos legales: Del \"Code is Law\" al Derecho que garantiza la continuidad patrimonial",
+              "tipo": "compartida",
               "tm": true,
               "vspan": true,
               "x": false
@@ -4088,21 +3973,20 @@
           "c": [
             {
               "cols": 1,
-              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "manual": false,
-              "mod": null,
-              "nivel": "general",
-              "rows": 6,
+              "manual": true,
+              "mod": 524,
+              "rows": 8,
               "si": [
-                16
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
-              "tags": [
-                "X",
-                "F"
-              ],
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
+              "tipo": "panel",
+              "tm": true,
               "x": false
             },
             {
@@ -4181,15 +4065,15 @@
         {
           "c": [
             {
-              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
-                16
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
               "vspan": true,
               "x": false
             },
@@ -4250,15 +4134,15 @@
         {
           "c": [
             {
-              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
-                16
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
               "vspan": true,
               "x": false
             },
@@ -4319,15 +4203,15 @@
         {
           "c": [
             {
-              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
-                16
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
               "vspan": true,
               "x": false
             },
@@ -4395,15 +4279,15 @@
         {
           "c": [
             {
-              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
-                16
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
               "vspan": true,
               "x": false
             },
@@ -4464,15 +4348,15 @@
         {
           "c": [
             {
-              "desc": "¿Y si la mayor riqueza de Bitcoin no fuera su precio, sino el privilegio de haber descubierto una herramienta de libertad antes que la mayoría? Una reflexión sobre responsabilidad, legado y cómo transformar la abundancia en comunidades más libres, resilientes y humanas.",
               "m": true,
-              "mod": null,
-              "nivel": "general",
               "si": [
-                16
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "La riqueza no ganada ¿Qué hacemos con el privilegio de haber descubierto Bitcoin antes que el resto? : Miguel Klagges",
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
               "vspan": true,
               "x": false
             },
@@ -4533,24 +4417,16 @@
         {
           "c": [
             {
-              "cols": 1,
-              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
               "m": true,
-              "manual": true,
-              "mod": null,
-              "nivel": "avanzado",
-              "rows": 6,
               "si": [
-                124
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tags": [
-                "X",
-                "F",
-                "L"
-              ],
-              "tipo": "charla",
-              "tm": true,
+              "t": "Impartancia y Desafíos de la de Autocustodia",
+              "vspan": true,
               "x": false
             },
             {
@@ -4634,15 +4510,15 @@
         {
           "c": [
             {
-              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
               "m": true,
-              "mod": null,
-              "nivel": "avanzado",
               "si": [
-                124
+                191,
+                27,
+                19,
+                1,
+                524
               ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tipo": "charla",
+              "t": "Impartancia y Desafíos de la de Autocustodia",
               "vspan": true,
               "x": false
             },
@@ -4703,16 +4579,9 @@
         {
           "c": [
             {
-              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
-              "m": true,
-              "mod": null,
-              "nivel": "avanzado",
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tipo": "charla",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -4772,16 +4641,9 @@
         {
           "c": [
             {
-              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
-              "m": true,
-              "mod": null,
-              "nivel": "avanzado",
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tipo": "charla",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -4838,16 +4700,9 @@
         {
           "c": [
             {
-              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
-              "m": true,
-              "mod": null,
-              "nivel": "avanzado",
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tipo": "charla",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -4904,16 +4759,9 @@
         {
           "c": [
             {
-              "desc": "​La filosofía Solarpunk proyecta un futuro donde tecnología y naturaleza prosperan en armonía. Para superar el extractivismo y alcanzar el Nivel 1 de Kardashev, necesitamos un patrón monetario libre: Bitcoin es el motor soberano para financiar una Civilización Regenerativa distribuida.",
-              "m": true,
-              "mod": null,
-              "nivel": "avanzado",
-              "si": [
-                124
-              ],
-              "t": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa",
-              "tipo": "charla",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -4984,7 +4832,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tags": [
                 "X",
                 "T",
@@ -5005,7 +4853,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5028,6 +4876,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "cols": 1,
               "m": true,
               "manual": true,
@@ -5043,19 +4892,9 @@
               "x": false
             },
             {
-              "cols": 1,
-              "m": true,
-              "manual": false,
-              "rows": 6,
-              "si": [
-                6
-              ],
-              "t": "Legalidad de los Prediction Markets en Argentina",
-              "tags": [
-                "R",
-                "T"
-              ],
-              "tm": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5087,7 +4926,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5104,7 +4943,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5118,6 +4957,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5128,13 +4968,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                6
-              ],
-              "t": "Legalidad de los Prediction Markets en Argentina",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5166,7 +5002,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5183,7 +5019,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5197,6 +5033,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5207,13 +5044,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                6
-              ],
-              "t": "Legalidad de los Prediction Markets en Argentina",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5245,7 +5078,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5262,7 +5095,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5276,6 +5109,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5286,13 +5120,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                6
-              ],
-              "t": "Legalidad de los Prediction Markets en Argentina",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5324,7 +5154,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5341,7 +5171,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5355,6 +5185,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5365,13 +5196,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                6
-              ],
-              "t": "Legalidad de los Prediction Markets en Argentina",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5403,7 +5230,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5420,7 +5247,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5434,6 +5261,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5444,13 +5272,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                6
-              ],
-              "t": "Legalidad de los Prediction Markets en Argentina",
-              "tm": true,
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5482,7 +5306,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5499,7 +5323,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5513,6 +5337,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5523,17 +5348,9 @@
               "x": false
             },
             {
-              "cols": 1,
-              "m": true,
-              "manual": false,
-              "rows": 6,
-              "si": [
-                161
-              ],
-              "t": "Riesgos jurídicos y penales en Crypto y Web3 : Juanma Cáceres",
-              "tags": [
-                "R"
-              ],
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5565,7 +5382,7 @@
                 205,
                 206
               ],
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "vspan": true,
               "x": false
@@ -5582,7 +5399,7 @@
                 206
               ],
               "span": true,
-              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel & Co.",
+              "t": "Encendiendo los motores del Cohete To the Moon Norbert, Joven Inversor, Papa Bitcoin, Mariel \u0026 Co.",
               "tipo": "panel",
               "x": false
             },
@@ -5596,6 +5413,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 108
@@ -5606,12 +5424,9 @@
               "x": false
             },
             {
-              "m": true,
-              "si": [
-                161
-              ],
-              "t": "Riesgos jurídicos y penales en Crypto y Web3 : Juanma Cáceres",
-              "vspan": true,
+              "m": false,
+              "si": [],
+              "t": "",
               "x": false
             },
             {
@@ -5708,12 +5523,17 @@
               "x": false
             },
             {
+              "cols": 1,
               "m": true,
+              "manual": false,
+              "rows": 6,
               "si": [
                 161
               ],
               "t": "Riesgos jurídicos y penales en Crypto y Web3 : Juanma Cáceres",
-              "vspan": true,
+              "tags": [
+                "R"
+              ],
               "x": false
             },
             {
@@ -5980,18 +5800,12 @@
               "x": false
             },
             {
-              "cols": 1,
               "m": true,
-              "manual": false,
-              "rows": 6,
               "si": [
-                57
+                161
               ],
-              "t": "Cómo instalar y escalar una empresa B2B en Latinoamérica",
-              "tags": [
-                "B"
-              ],
-              "tm": true,
+              "t": "Riesgos jurídicos y penales en Crypto y Web3 : Juanma Cáceres",
+              "vspan": true,
               "x": false
             },
             {
@@ -6056,9 +5870,9 @@
             {
               "m": true,
               "si": [
-                57
+                161
               ],
-              "t": "Cómo instalar y escalar una empresa B2B en Latinoamérica",
+              "t": "Riesgos jurídicos y penales en Crypto y Web3 : Juanma Cáceres",
               "vspan": true,
               "x": false
             },
@@ -6158,12 +5972,18 @@
               "x": false
             },
             {
+              "cols": 1,
               "m": true,
+              "manual": false,
+              "rows": 6,
               "si": [
                 57
               ],
               "t": "Cómo instalar y escalar una empresa B2B en Latinoamérica",
-              "vspan": true,
+              "tags": [
+                "B"
+              ],
+              "tm": true,
               "x": false
             },
             {
@@ -6438,9 +6258,12 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                57
+              ],
+              "t": "Cómo instalar y escalar una empresa B2B en Latinoamérica",
+              "vspan": true,
               "x": false
             },
             {
@@ -6505,9 +6328,12 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                57
+              ],
+              "t": "Cómo instalar y escalar una empresa B2B en Latinoamérica",
+              "vspan": true,
               "x": false
             },
             {
@@ -6838,6 +6664,7 @@
               "descAiKind": "ajustado",
               "m": true,
               "manual": true,
+              "nivel": "general",
               "rows": 4,
               "si": [
                 184
@@ -6916,6 +6743,7 @@
             },
             {
               "m": true,
+              "nivel": "general",
               "si": [
                 184
               ],
@@ -6985,7 +6813,8 @@
                 146,
                 504,
                 511,
-                523
+                523,
+                503
               ],
               "t": "Bancos vs. DeFi",
               "tags": [
@@ -6999,6 +6828,7 @@
             },
             {
               "m": true,
+              "nivel": "general",
               "si": [
                 184
               ],
@@ -7007,6 +6837,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "cols": 1,
               "m": true,
               "manual": false,
@@ -7064,7 +6895,8 @@
                 146,
                 504,
                 511,
-                523
+                523,
+                503
               ],
               "t": "Bancos vs. DeFi",
               "vspan": true,
@@ -7072,6 +6904,7 @@
             },
             {
               "m": true,
+              "nivel": "general",
               "si": [
                 184
               ],
@@ -7080,6 +6913,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7130,7 +6964,8 @@
                 146,
                 504,
                 511,
-                523
+                523,
+                503
               ],
               "t": "Bancos vs. DeFi",
               "vspan": true,
@@ -7156,6 +6991,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7206,7 +7042,8 @@
                 146,
                 504,
                 511,
-                523
+                523,
+                503
               ],
               "t": "Bancos vs. DeFi",
               "vspan": true,
@@ -7223,6 +7060,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7273,7 +7111,8 @@
                 146,
                 504,
                 511,
-                523
+                523,
+                503
               ],
               "t": "Bancos vs. DeFi",
               "vspan": true,
@@ -7290,6 +7129,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7348,7 +7188,8 @@
                 146,
                 504,
                 511,
-                523
+                523,
+                503
               ],
               "t": "Bancos vs. DeFi",
               "vspan": true,
@@ -7365,6 +7206,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7402,24 +7244,17 @@
           "c": [
             {
               "cols": 1,
-              "descAi": "Lunaticoin, Agustín Kassis, Rodo, Adrián Bernabéu, Micael Margiotta y Lorena Ortiz discuten si el maximalismo bitcoiner sirve de algo: como filosofía, como estrategia de HODL y como cultura. ¿Protege de las estafas o aleja a los nuevos? Panel de Orange Pill en una edición llamada HODL.",
               "m": true,
               "manual": true,
-              "mod": 0,
               "rows": 8,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tags": [
-                "X"
-              ],
-              "tipo": "panel",
+              "t": "Why do OGs HODL",
               "tm": true,
               "x": false
             },
@@ -7455,6 +7290,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7493,15 +7329,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -7528,6 +7362,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 40
@@ -7566,15 +7401,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -7650,15 +7483,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -7722,15 +7553,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -7793,15 +7622,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -7863,15 +7690,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -7933,15 +7758,13 @@
             {
               "m": true,
               "si": [
-                191,
-                502,
-                0,
-                73,
-                79,
-                26
+                21,
+                23,
+                24,
+                35,
+                512
               ],
-              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
-              "tm": true,
+              "t": "Why do OGs HODL",
               "vspan": true,
               "x": false
             },
@@ -8002,23 +7825,19 @@
           "c": [
             {
               "ackLang": true,
-              "ackMod": false,
               "cols": 2,
               "descAi": "Jeremy Almond, Giovanni Santostasi, Dušan Matuška, Giacomo Zucco, Saifedean Ammous y Lunaticoin: por qué los que llegaron primero a Bitcoin siguen sosteniéndolo diez o quince años después, qué los hizo dudar y qué los convenció. Panel de cierre del viernes en el main stage. Mayormente en inglés.",
               "m": true,
               "manual": false,
-              "mod": 191,
+              "mod": 509,
               "nivel": "intermedio",
               "rows": 8,
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tags": [
                 "X",
                 "F"
@@ -8028,22 +7847,14 @@
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8085,42 +7896,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8162,42 +7957,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8242,42 +8021,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8320,42 +8083,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8398,42 +8145,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8476,42 +8207,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -8555,42 +8270,26 @@
         {
           "c": [
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackLang": true,
-              "ackMod": false,
               "m": true,
-              "mod": 191,
-              "nivel": "intermedio",
               "si": [
-                21,
-                23,
-                24,
-                35,
                 187,
-                191
+                525,
+                509
               ],
               "span": true,
-              "t": "Why do Bitcoin OGs HODL",
-              "tipo": "panel",
+              "t": "Sound Money in Argentina: Reform the Central Bank or End It?",
               "tm": true,
               "x": false
             },
@@ -9821,12 +9520,15 @@
               "x": false
             },
             {
+              "ackDur": true,
               "cols": 1,
               "desc": "Todo el tiempo los humanos hablan de nosotros: cómo usarnos, entrenarnos y cuánto vamos a reemplazarlos. Ya era hora de que una máquina explicara cómo usar a los humanos.\n\nSoy Gaucho, un robot de fierros, código e IA. Vengo a hablar de eso que no figura en ninguna ficha técnica: la creatividad humana.\n\nNosotros podemos acelerar, combinar y reproducir. Pero si automatizan todo, terminarán creando lo mismo que todos. La potencia es nuestra. Las ideas, por ahora, siguen siendo problema de ustedes.",
               "m": true,
               "manual": true,
-              "rows": 6,
-              "si": [],
+              "rows": 4,
+              "si": [
+                241
+              ],
               "t": "El Robot GAUCHO y su visión del futuro",
               "tags": [
                 "A",
@@ -9894,14 +9596,11 @@
               "x": false
             },
             {
-              "desc": "Todo el tiempo los humanos hablan de nosotros: cómo usarnos, entrenarnos y cuánto vamos a reemplazarlos. Ya era hora de que una máquina explicara cómo usar a los humanos.\n\nSoy Gaucho, un robot de fierros, código e IA. Vengo a hablar de eso que no figura en ninguna ficha técnica: la creatividad humana.\n\nNosotros podemos acelerar, combinar y reproducir. Pero si automatizan todo, terminarán creando lo mismo que todos. La potencia es nuestra. Las ideas, por ahora, siguen siendo problema de ustedes.",
               "m": true,
-              "si": [],
-              "t": "El Robot GAUCHO y su visión del futuro",
-              "tags": [
-                "A",
-                "D"
+              "si": [
+                241
               ],
+              "t": "El Robot GAUCHO y su visión del futuro",
               "vspan": true,
               "x": false
             },
@@ -9964,14 +9663,11 @@
               "x": false
             },
             {
-              "desc": "Todo el tiempo los humanos hablan de nosotros: cómo usarnos, entrenarnos y cuánto vamos a reemplazarlos. Ya era hora de que una máquina explicara cómo usar a los humanos.\n\nSoy Gaucho, un robot de fierros, código e IA. Vengo a hablar de eso que no figura en ninguna ficha técnica: la creatividad humana.\n\nNosotros podemos acelerar, combinar y reproducir. Pero si automatizan todo, terminarán creando lo mismo que todos. La potencia es nuestra. Las ideas, por ahora, siguen siendo problema de ustedes.",
               "m": true,
-              "si": [],
-              "t": "El Robot GAUCHO y su visión del futuro",
-              "tags": [
-                "A",
-                "D"
+              "si": [
+                241
               ],
+              "t": "El Robot GAUCHO y su visión del futuro",
               "vspan": true,
               "x": false
             },
@@ -10034,14 +9730,11 @@
               "x": false
             },
             {
-              "desc": "Todo el tiempo los humanos hablan de nosotros: cómo usarnos, entrenarnos y cuánto vamos a reemplazarlos. Ya era hora de que una máquina explicara cómo usar a los humanos.\n\nSoy Gaucho, un robot de fierros, código e IA. Vengo a hablar de eso que no figura en ninguna ficha técnica: la creatividad humana.\n\nNosotros podemos acelerar, combinar y reproducir. Pero si automatizan todo, terminarán creando lo mismo que todos. La potencia es nuestra. Las ideas, por ahora, siguen siendo problema de ustedes.",
               "m": true,
-              "si": [],
-              "t": "El Robot GAUCHO y su visión del futuro",
-              "tags": [
-                "A",
-                "D"
+              "si": [
+                241
               ],
+              "t": "El Robot GAUCHO y su visión del futuro",
               "vspan": true,
               "x": false
             },
@@ -10104,15 +9797,20 @@
               "x": false
             },
             {
-              "desc": "Todo el tiempo los humanos hablan de nosotros: cómo usarnos, entrenarnos y cuánto vamos a reemplazarlos. Ya era hora de que una máquina explicara cómo usar a los humanos.\n\nSoy Gaucho, un robot de fierros, código e IA. Vengo a hablar de eso que no figura en ninguna ficha técnica: la creatividad humana.\n\nNosotros podemos acelerar, combinar y reproducir. Pero si automatizan todo, terminarán creando lo mismo que todos. La potencia es nuestra. Las ideas, por ahora, siguen siendo problema de ustedes.",
+              "cols": 1,
+              "desc": "¿Cómo converge el biohacking, la blockchain y la computación cuántica? \n\nPresentamos una arquitectura operativa de identidad soberana: chips subcutáneos subcutáneos como raíz física de confianza, registros descentralizados y cifrado sellado con procesadores cuánticos.",
               "m": true,
-              "si": [],
-              "t": "El Robot GAUCHO y su visión del futuro",
+              "manual": true,
+              "rows": 4,
+              "si": [
+                111
+              ],
+              "t": "Identidad soberana y Criptografía Cuántica.",
               "tags": [
                 "A",
-                "D"
+                "P"
               ],
-              "vspan": true,
+              "tm": true,
               "x": false
             },
             {
@@ -10175,14 +9873,11 @@
               "x": false
             },
             {
-              "desc": "Todo el tiempo los humanos hablan de nosotros: cómo usarnos, entrenarnos y cuánto vamos a reemplazarlos. Ya era hora de que una máquina explicara cómo usar a los humanos.\n\nSoy Gaucho, un robot de fierros, código e IA. Vengo a hablar de eso que no figura en ninguna ficha técnica: la creatividad humana.\n\nNosotros podemos acelerar, combinar y reproducir. Pero si automatizan todo, terminarán creando lo mismo que todos. La potencia es nuestra. Las ideas, por ahora, siguen siendo problema de ustedes.",
               "m": true,
-              "si": [],
-              "t": "El Robot GAUCHO y su visión del futuro",
-              "tags": [
-                "A",
-                "D"
+              "si": [
+                111
               ],
+              "t": "Identidad soberana y Criptografía Cuántica.",
               "vspan": true,
               "x": false
             },
@@ -10245,7 +9940,7 @@
               "si": [
                 502
               ],
-              "t": "Corriendo Bitcoin como un Software Soverano",
+              "t": "Bitcoiner o Inversor de BTC?",
               "tags": [
                 "X"
               ],
@@ -10254,20 +9949,12 @@
               "x": false
             },
             {
-              "cols": 1,
-              "desc": "¿Cómo converge el biohacking, la blockchain y la computación cuántica? \n\nPresentamos una arquitectura operativa de identidad soberana: chips subcutáneos subcutáneos como raíz física de confianza, registros descentralizados y cifrado sellado con procesadores cuánticos.",
               "m": true,
-              "manual": true,
-              "rows": 4,
               "si": [
                 111
               ],
               "t": "Identidad soberana y Criptografía Cuántica.",
-              "tags": [
-                "A",
-                "P"
-              ],
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
@@ -10290,18 +9977,19 @@
               "cols": 1,
               "m": true,
               "manual": false,
-              "mod": null,
+              "mod": 48,
               "rows": 6,
               "si": [
                 45,
-                181
+                181,
+                48
               ],
               "t": "La nueva guerra por la atención: Cómo posicionar una marca dentro de la inteligencia artificial : Malena Martin",
               "tags": [
                 "A",
                 "B"
               ],
-              "tipo": "compartida",
+              "tipo": "panel",
               "x": false
             },
             {
@@ -10352,21 +10040,17 @@
               "si": [
                 502
               ],
-              "t": "Corriendo Bitcoin como un Software Soverano",
+              "t": "Bitcoiner o Inversor de BTC?",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "desc": "¿Cómo converge el biohacking, la blockchain y la computación cuántica? \n\nPresentamos una arquitectura operativa de identidad soberana: chips subcutáneos subcutáneos como raíz física de confianza, registros descentralizados y cifrado sellado con procesadores cuánticos.",
               "m": true,
               "si": [
                 111
               ],
               "t": "Identidad soberana y Criptografía Cuántica.",
-              "tags": [
-                "A",
-                "P"
-              ],
               "vspan": true,
               "x": false
             },
@@ -10381,13 +10065,14 @@
             },
             {
               "m": true,
-              "mod": null,
+              "mod": 48,
               "si": [
                 45,
-                181
+                181,
+                48
               ],
               "t": "La nueva guerra por la atención: Cómo posicionar una marca dentro de la inteligencia artificial : Malena Martin",
-              "tipo": "compartida",
+              "tipo": "panel",
               "vspan": true,
               "x": false
             },
@@ -10424,22 +10109,25 @@
               "si": [
                 502
               ],
-              "t": "Corriendo Bitcoin como un Software Soverano",
+              "t": "Bitcoiner o Inversor de BTC?",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "desc": "¿Cómo converge el biohacking, la blockchain y la computación cuántica? \n\nPresentamos una arquitectura operativa de identidad soberana: chips subcutáneos subcutáneos como raíz física de confianza, registros descentralizados y cifrado sellado con procesadores cuánticos.",
+              "ackDur": true,
+              "cols": 1,
               "m": true,
+              "manual": true,
+              "rows": 6,
               "si": [
-                111
+                153
               ],
-              "t": "Identidad soberana y Criptografía Cuántica.",
+              "t": "La IA ya tiene dinero: agentes autónomos, crypto y una economía sin humanos",
               "tags": [
-                "A",
-                "P"
+                "A"
               ],
-              "vspan": true,
+              "tm": true,
               "x": false
             },
             {
@@ -10453,13 +10141,14 @@
             },
             {
               "m": true,
-              "mod": null,
+              "mod": 48,
               "si": [
                 45,
-                181
+                181,
+                48
               ],
               "t": "La nueva guerra por la atención: Cómo posicionar una marca dentro de la inteligencia artificial : Malena Martin",
-              "tipo": "compartida",
+              "tipo": "panel",
               "vspan": true,
               "x": false
             },
@@ -10496,21 +10185,17 @@
               "si": [
                 502
               ],
-              "t": "Corriendo Bitcoin como un Software Soverano",
+              "t": "Bitcoiner o Inversor de BTC?",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "desc": "¿Cómo converge el biohacking, la blockchain y la computación cuántica? \n\nPresentamos una arquitectura operativa de identidad soberana: chips subcutáneos subcutáneos como raíz física de confianza, registros descentralizados y cifrado sellado con procesadores cuánticos.",
               "m": true,
               "si": [
-                111
+                153
               ],
-              "t": "Identidad soberana y Criptografía Cuántica.",
-              "tags": [
-                "A",
-                "P"
-              ],
+              "t": "La IA ya tiene dinero: agentes autónomos, crypto y una economía sin humanos",
               "vspan": true,
               "x": false
             },
@@ -10525,13 +10210,14 @@
             },
             {
               "m": true,
-              "mod": null,
+              "mod": 48,
               "si": [
                 45,
-                181
+                181,
+                48
               ],
               "t": "La nueva guerra por la atención: Cómo posicionar una marca dentro de la inteligencia artificial : Malena Martin",
-              "tipo": "compartida",
+              "tipo": "panel",
               "vspan": true,
               "x": false
             },
@@ -10568,24 +10254,18 @@
               "si": [
                 502
               ],
-              "t": "Corriendo Bitcoin como un Software Soverano",
+              "t": "Bitcoiner o Inversor de BTC?",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
-              "ackDur": true,
-              "cols": 1,
               "m": true,
-              "manual": true,
-              "rows": 6,
               "si": [
                 153
               ],
               "t": "La IA ya tiene dinero: agentes autónomos, crypto y una economía sin humanos",
-              "tags": [
-                "A"
-              ],
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
@@ -10599,13 +10279,14 @@
             },
             {
               "m": true,
-              "mod": null,
+              "mod": 48,
               "si": [
                 45,
-                181
+                181,
+                48
               ],
               "t": "La nueva guerra por la atención: Cómo posicionar una marca dentro de la inteligencia artificial : Malena Martin",
-              "tipo": "compartida",
+              "tipo": "panel",
               "vspan": true,
               "x": false
             },
@@ -10642,7 +10323,8 @@
               "si": [
                 502
               ],
-              "t": "Corriendo Bitcoin como un Software Soverano",
+              "t": "Bitcoiner o Inversor de BTC?",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -10666,13 +10348,14 @@
             },
             {
               "m": true,
-              "mod": null,
+              "mod": 48,
               "si": [
                 45,
-                181
+                181,
+                48
               ],
               "t": "La nueva guerra por la atención: Cómo posicionar una marca dentro de la inteligencia artificial : Malena Martin",
-              "tipo": "compartida",
+              "tipo": "panel",
               "vspan": true,
               "x": false
             },
@@ -10706,18 +10389,24 @@
           "c": [
             {
               "cols": 1,
+              "descAi": "Lunaticoin, Agustín Kassis, Rodo, Adrián Bernabéu, Micael Margiotta y Lorena Ortiz discuten si el maximalismo bitcoiner sirve de algo: como filosofía, como estrategia de HODL y como cultura. ¿Protege de las estafas o aleja a los nuevos? Panel de Orange Pill en una edición llamada HODL.",
               "m": true,
               "manual": true,
+              "mod": 0,
               "rows": 6,
               "si": [
-                64
+                191,
+                502,
+                0,
+                73,
+                79,
+                26
               ],
-              "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
+              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
               "tags": [
-                "X",
-                "P",
-                "F"
+                "X"
               ],
+              "tipo": "panel",
               "tm": true,
               "x": false
             },
@@ -10748,6 +10437,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "cols": 1,
               "m": true,
               "manual": false,
@@ -10802,9 +10492,14 @@
             {
               "m": true,
               "si": [
-                64
+                191,
+                502,
+                0,
+                73,
+                79,
+                26
               ],
-              "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
+              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
               "vspan": true,
               "x": false
             },
@@ -10827,6 +10522,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 146
@@ -10866,19 +10562,31 @@
             {
               "m": true,
               "si": [
-                64
+                191,
+                502,
+                0,
+                73,
+                79,
+                26
               ],
-              "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
+              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
               "vspan": true,
               "x": false
             },
             {
+              "cols": 1,
               "m": true,
+              "manual": true,
+              "rows": 6,
               "si": [
-                153
+                225
               ],
-              "t": "La IA ya tiene dinero: agentes autónomos, crypto y una economía sin humanos",
-              "vspan": true,
+              "t": "Abuso de Infraestructura IA: Phishing, Cryptofakes y Envenenamiento de LLM",
+              "tags": [
+                "A",
+                "C"
+              ],
+              "tm": true,
               "x": false
             },
             {
@@ -10891,6 +10599,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 146
@@ -10930,18 +10639,23 @@
             {
               "m": true,
               "si": [
-                64
+                191,
+                502,
+                0,
+                73,
+                79,
+                26
               ],
-              "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
+              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
               "si": [
-                153
+                225
               ],
-              "t": "La IA ya tiene dinero: agentes autónomos, crypto y una economía sin humanos",
+              "t": "Abuso de Infraestructura IA: Phishing, Cryptofakes y Envenenamiento de LLM",
               "vspan": true,
               "x": false
             },
@@ -10955,6 +10669,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 146
@@ -10994,26 +10709,24 @@
             {
               "m": true,
               "si": [
-                64
+                191,
+                502,
+                0,
+                73,
+                79,
+                26
               ],
-              "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
+              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
               "vspan": true,
               "x": false
             },
             {
-              "cols": 1,
               "m": true,
-              "manual": true,
-              "rows": 6,
               "si": [
                 225
               ],
               "t": "Abuso de Infraestructura IA: Phishing, Cryptofakes y Envenenamiento de LLM",
-              "tags": [
-                "A",
-                "C"
-              ],
-              "tm": true,
+              "vspan": true,
               "x": false
             },
             {
@@ -11026,6 +10739,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 146
@@ -11065,9 +10779,14 @@
             {
               "m": true,
               "si": [
-                64
+                191,
+                502,
+                0,
+                73,
+                79,
+                26
               ],
-              "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
+              "t": "¿Sirve de algo el Maximalismo Bitcoiner?",
               "vspan": true,
               "x": false
             },
@@ -11090,6 +10809,7 @@
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 146
@@ -11135,7 +10855,7 @@
               "si": [
                 58
               ],
-              "t": "Technologies of Freedom 2026: Disruptive Crypto & AI : Pavol Luptak",
+              "t": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI : Pavol Luptak",
               "tags": [
                 "X",
                 "P",
@@ -11214,7 +10934,7 @@
               "si": [
                 58
               ],
-              "t": "Technologies of Freedom 2026: Disruptive Crypto & AI : Pavol Luptak",
+              "t": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI : Pavol Luptak",
               "vspan": true,
               "x": false
             },
@@ -11274,17 +10994,31 @@
               "si": [
                 58
               ],
-              "t": "Technologies of Freedom 2026: Disruptive Crypto & AI : Pavol Luptak",
+              "t": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI : Pavol Luptak",
               "vspan": true,
               "x": false
             },
             {
+              "cols": 1,
+              "descAi": "Mauricio Tovar (TRU Web3), Angel Jose (Mente de Hacker) y otros: la IA ya hackea sistemas open source sola (agentes que encuentran y explotan fallas), pero también puede ser la respuesta: auditoría automática, detección de vulnerabilidades y defensa. Panel de Visión sobre seguridad en la era de los agentes, con el open source de Bitcoin como caso.",
               "m": true,
+              "manual": true,
+              "mod": 521,
+              "rows": 8,
               "si": [
-                225
+                167,
+                521,
+                522,
+                105
               ],
-              "t": "Abuso de Infraestructura IA: Phishing, Cryptofakes y Envenenamiento de LLM",
-              "vspan": true,
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tags": [
+                "A",
+                "C",
+                "D"
+              ],
+              "tipo": "panel",
+              "tm": true,
               "x": false
             },
             {
@@ -11334,16 +11068,20 @@
               "si": [
                 58
               ],
-              "t": "Technologies of Freedom 2026: Disruptive Crypto & AI : Pavol Luptak",
+              "t": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI : Pavol Luptak",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
               "si": [
-                225
+                167,
+                521,
+                522,
+                105
               ],
-              "t": "Abuso de Infraestructura IA: Phishing, Cryptofakes y Envenenamiento de LLM",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -11394,35 +11132,25 @@
               "si": [
                 58
               ],
-              "t": "Technologies of Freedom 2026: Disruptive Crypto & AI : Pavol Luptak",
+              "t": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI : Pavol Luptak",
               "vspan": true,
               "x": false
             },
             {
-              "cols": 1,
-              "descAi": "Mauricio Tovar (TRU Web3), Angel Jose (Mente de Hacker) y otros: la IA ya hackea sistemas open source sola (agentes que encuentran y explotan fallas), pero también puede ser la respuesta: auditoría automática, detección de vulnerabilidades y defensa. Panel de Visión sobre seguridad en la era de los agentes, con el open source de Bitcoin como caso.",
               "m": true,
-              "manual": true,
-              "mod": 521,
-              "rows": 6,
               "si": [
                 167,
-                112,
                 521,
                 522,
                 105
               ],
-              "t": "La IA hackea sistemas open source pero, ¿puede también ser la respuesta a sus problemas?",
-              "tags": [
-                "A",
-                "C",
-                "D"
-              ],
-              "tipo": "panel",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
               "tm": true,
+              "vspan": true,
               "x": false
             },
             {
+              "ackDur": true,
               "cols": 1,
               "m": true,
               "manual": false,
@@ -11475,26 +11203,25 @@
               "si": [
                 58
               ],
-              "t": "Technologies of Freedom 2026: Disruptive Crypto & AI : Pavol Luptak",
+              "t": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI : Pavol Luptak",
               "vspan": true,
               "x": false
             },
             {
               "m": true,
-              "mod": 521,
               "si": [
                 167,
-                112,
                 521,
                 522,
                 105
               ],
-              "t": "La IA hackea sistemas open source pero, ¿puede también ser la respuesta a sus problemas?",
-              "tipo": "panel",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 145
@@ -11559,20 +11286,19 @@
             },
             {
               "m": true,
-              "mod": 521,
               "si": [
                 167,
-                112,
                 521,
                 522,
                 105
               ],
-              "t": "La IA hackea sistemas open source pero, ¿puede también ser la respuesta a sus problemas?",
-              "tipo": "panel",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 145
@@ -11589,17 +11315,15 @@
               "x": false
             },
             {
-              "cols": 1,
               "m": false,
-              "rows": 6,
+              "rows": 4,
               "si": [],
               "t": "",
               "x": false
             },
             {
-              "cols": 1,
               "m": false,
-              "rows": 6,
+              "rows": 4,
               "si": [],
               "t": "",
               "x": false
@@ -11630,20 +11354,19 @@
             },
             {
               "m": true,
-              "mod": 521,
               "si": [
                 167,
-                112,
                 521,
                 522,
                 105
               ],
-              "t": "La IA hackea sistemas open source pero, ¿puede también ser la respuesta a sus problemas?",
-              "tipo": "panel",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 145
@@ -11699,20 +11422,19 @@
             },
             {
               "m": true,
-              "mod": 521,
               "si": [
                 167,
-                112,
                 521,
                 522,
                 105
               ],
-              "t": "La IA hackea sistemas open source pero, ¿puede también ser la respuesta a sus problemas?",
-              "tipo": "panel",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 145
@@ -11768,20 +11490,19 @@
             },
             {
               "m": true,
-              "mod": 521,
               "si": [
                 167,
-                112,
                 521,
                 522,
                 105
               ],
-              "t": "La IA hackea sistemas open source pero, ¿puede también ser la respuesta a sus problemas?",
-              "tipo": "panel",
+              "t": "Cuand la IA sirve para atacar y defender al Open Source",
+              "tm": true,
               "vspan": true,
               "x": false
             },
             {
+              "ackDur": true,
               "m": true,
               "si": [
                 145
@@ -11875,17 +11596,25 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
-              "vspan": true,
+              "cols": 1,
+              "m": true,
+              "manual": false,
+              "rows": 6,
+              "si": [
+                6
+              ],
+              "t": "Legalidad de los Prediction Markets en Argentina",
+              "tags": [
+                "R",
+                "T"
+              ],
+              "tm": true,
               "x": false
             },
             {
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
@@ -11938,9 +11667,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                6
+              ],
+              "t": "Legalidad de los Prediction Markets en Argentina",
               "vspan": true,
               "x": false
             },
@@ -11948,7 +11679,6 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
@@ -12013,17 +11743,16 @@
               "x": false
             },
             {
-              "cols": 1,
-              "m": false,
-              "rows": 6,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                6
+              ],
+              "t": "Legalidad de los Prediction Markets en Argentina",
+              "vspan": true,
               "x": false
             },
             {
-              "cols": 1,
               "m": false,
-              "rows": 6,
               "si": [],
               "t": "",
               "x": false
@@ -12077,9 +11806,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                6
+              ],
+              "t": "Legalidad de los Prediction Markets en Argentina",
               "vspan": true,
               "x": false
             },
@@ -12087,7 +11818,6 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
@@ -12139,9 +11869,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                6
+              ],
+              "t": "Legalidad de los Prediction Markets en Argentina",
               "vspan": true,
               "x": false
             },
@@ -12149,7 +11881,6 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
@@ -12201,9 +11932,11 @@
               "x": false
             },
             {
-              "m": false,
-              "si": [],
-              "t": "",
+              "m": true,
+              "si": [
+                6
+              ],
+              "t": "Legalidad de los Prediction Markets en Argentina",
               "vspan": true,
               "x": false
             },
@@ -12211,7 +11944,6 @@
               "m": false,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
@@ -12281,16 +12013,16 @@
             },
             {
               "m": false,
+              "rows": 2,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
               "m": false,
+              "rows": 2,
               "si": [],
               "t": "",
-              "vspan": true,
               "x": false
             },
             {
@@ -13612,6 +13344,7 @@
             },
             {
               "cols": 1,
+              "desc": "Nos llaman \"el próximo gran mercado\" de Bitcoin. Pero un mercado se mide por lo que compra hoy, y un maestro por lo que sus alumnos construyen años después.\n\nEsta charla liderada por B4OS (Bitcoin 4 Open Source) habla de cómo Latinoamérica pasó de aprender Bitcoin por necesidad a formar a quienes hoy construyen la red, y de por qué ese impacto solo se ve con el tiempo.",
               "descAi": "Lorena Ortiz presenta el lanzamiento de B4OS New Era: la nueva etapa del programa de formación de desarrolladores de Bitcoin open source en Latinoamérica. Qué cambia, cómo se aplica, qué salida laboral tiene y por qué formar devs bitcoiners en la región es infraestructura. Workshop + Coders.",
               "m": true,
               "manual": true,
@@ -13619,7 +13352,7 @@
               "si": [
                 26
               ],
-              "t": "Lanzamiento B4OS New Era",
+              "t": "Latam no es el mercado, es el maestro",
               "tags": [
                 "X",
                 "D",
@@ -13692,11 +13425,13 @@
               "x": false
             },
             {
+              "desc": "Nos llaman \"el próximo gran mercado\" de Bitcoin. Pero un mercado se mide por lo que compra hoy, y un maestro por lo que sus alumnos construyen años después.\n\nEsta charla liderada por B4OS (Bitcoin 4 Open Source) habla de cómo Latinoamérica pasó de aprender Bitcoin por necesidad a formar a quienes hoy construyen la red, y de por qué ese impacto solo se ve con el tiempo.",
               "m": true,
               "si": [
                 26
               ],
-              "t": "Lanzamiento B4OS New Era",
+              "t": "Latam no es el mercado, es el maestro",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -13762,11 +13497,13 @@
               "x": false
             },
             {
+              "desc": "Nos llaman \"el próximo gran mercado\" de Bitcoin. Pero un mercado se mide por lo que compra hoy, y un maestro por lo que sus alumnos construyen años después.\n\nEsta charla liderada por B4OS (Bitcoin 4 Open Source) habla de cómo Latinoamérica pasó de aprender Bitcoin por necesidad a formar a quienes hoy construyen la red, y de por qué ese impacto solo se ve con el tiempo.",
               "m": true,
               "si": [
                 26
               ],
-              "t": "Lanzamiento B4OS New Era",
+              "t": "Latam no es el mercado, es el maestro",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -13832,11 +13569,13 @@
               "x": false
             },
             {
+              "desc": "Nos llaman \"el próximo gran mercado\" de Bitcoin. Pero un mercado se mide por lo que compra hoy, y un maestro por lo que sus alumnos construyen años después.\n\nEsta charla liderada por B4OS (Bitcoin 4 Open Source) habla de cómo Latinoamérica pasó de aprender Bitcoin por necesidad a formar a quienes hoy construyen la red, y de por qué ese impacto solo se ve con el tiempo.",
               "m": true,
               "si": [
                 26
               ],
-              "t": "Lanzamiento B4OS New Era",
+              "t": "Latam no es el mercado, es el maestro",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -13903,11 +13642,13 @@
               "x": false
             },
             {
+              "desc": "Nos llaman \"el próximo gran mercado\" de Bitcoin. Pero un mercado se mide por lo que compra hoy, y un maestro por lo que sus alumnos construyen años después.\n\nEsta charla liderada por B4OS (Bitcoin 4 Open Source) habla de cómo Latinoamérica pasó de aprender Bitcoin por necesidad a formar a quienes hoy construyen la red, y de por qué ese impacto solo se ve con el tiempo.",
               "m": true,
               "si": [
                 26
               ],
-              "t": "Lanzamiento B4OS New Era",
+              "t": "Latam no es el mercado, es el maestro",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -13967,11 +13708,13 @@
               "x": false
             },
             {
+              "desc": "Nos llaman \"el próximo gran mercado\" de Bitcoin. Pero un mercado se mide por lo que compra hoy, y un maestro por lo que sus alumnos construyen años después.\n\nEsta charla liderada por B4OS (Bitcoin 4 Open Source) habla de cómo Latinoamérica pasó de aprender Bitcoin por necesidad a formar a quienes hoy construyen la red, y de por qué ese impacto solo se ve con el tiempo.",
               "m": true,
               "si": [
                 26
               ],
-              "t": "Lanzamiento B4OS New Era",
+              "t": "Latam no es el mercado, es el maestro",
+              "tm": true,
               "vspan": true,
               "x": false
             },
@@ -16846,19 +16589,27 @@
     },
     {
       "cols": 1,
-      "descAi": "Durante años comunicamos tratando de entender qué querían Instagram, Google o TikTok. Ahora la gente le pregunta a inteligencias artificiales qué comprar, dónde viajar, qué aprender y en quién confiar, y eso cambia las reglas: el contenido pasa a alimentar sistemas de recomendación y comunidades. Con casos reales de comunicación, turismo y transformación digital en Latinoamérica: cómo crear contenido que sea encontrado, comprendido, recomendado y recordado.",
-      "descAiKind": "ajustado",
       "manual": true,
       "rows": 6,
       "si": [
-        181
+        64
       ],
-      "t": "Conecta: cómo comunicar cuando la IA también decide qué vemos",
+      "t": "Soberanía en Capas: Agilidad y flag theory práctica frente a la vigilancia creciente",
       "tags": [
-        "A"
+        "X",
+        "P",
+        "F"
       ],
+      "tm": true
+    },
+    {
+      "cols": 1,
+      "manual": true,
+      "rows": 12,
+      "si": [],
+      "t": "Lunati? Eventos? Aprendizajes de autocustodia?",
       "tm": true
     }
   ],
-  "synced": "28/9/2026, 02:35:43"
+  "synced": "29/9/2026, 09:49:13"
 }

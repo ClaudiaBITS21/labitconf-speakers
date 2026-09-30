@@ -234,7 +234,7 @@
     },
     {
       "apellido": "Almond",
-      "cargo": "CEO & Co-founder",
+      "cargo": "CEO \u0026 Co-founder",
       "confname": "Jeremy Almond",
       "empresa": "Paystand",
       "estado": "rechazado",
@@ -311,7 +311,7 @@
     },
     {
       "apellido": "BTC",
-      "cargo": "Community & Business Dev",
+      "cargo": "Community \u0026 Business Dev",
       "confname": "AndresBTC",
       "empresa": "Bull Bitcoin España",
       "estado": "disponible",
@@ -322,7 +322,7 @@
     },
     {
       "apellido": "Bastardo",
-      "cargo": "PR & Marketing / Investigador",
+      "cargo": "PR \u0026 Marketing / Investigador",
       "confname": "Javier Bastardo",
       "empresa": "Bitfinex / Tether Latam",
       "estado": "revision",
@@ -333,7 +333,7 @@
     },
     {
       "apellido": "Liniger",
-      "cargo": "CEO & Co-fundador",
+      "cargo": "CEO \u0026 Co-fundador",
       "confname": "Julian Liniger",
       "empresa": "Relai",
       "estado": "revision",
@@ -355,7 +355,7 @@
     },
     {
       "apellido": "Ocampo",
-      "cargo": "Founder & CEO",
+      "cargo": "Founder \u0026 CEO",
       "confname": "Tomas Ocampo",
       "empresa": "Unblock Computing",
       "estado": "revision",
@@ -388,7 +388,7 @@
     },
     {
       "apellido": "Zell",
-      "cargo": "Co-Founder & Co-President",
+      "cargo": "Co-Founder \u0026 Co-President",
       "confname": "David Zell",
       "empresa": "Bitcoin Policy Institute",
       "estado": "revision",
@@ -421,7 +421,7 @@
     },
     {
       "apellido": "Farenga",
-      "cargo": "Principal & Project Manager / Lead Blox Space",
+      "cargo": "Principal \u0026 Project Manager / Lead Blox Space",
       "confname": "Filippo Farenga",
       "empresa": "Fulgur Ventures / Blox Space",
       "estado": "revision",
@@ -465,7 +465,7 @@
     },
     {
       "apellido": "Frischman",
-      "cargo": "Co Founder & CBO",
+      "cargo": "Co Founder \u0026 CBO",
       "confname": "@AryFrisch",
       "empresa": "Diiirect",
       "estado": "disponible",
@@ -483,7 +483,7 @@
       "nombre": "Pavol",
       "num": 44,
       "pais": "Slovakia",
-      "temas": "Technologies of Freedom 2026: Disruptive Crypto & AI"
+      "temas": "Technologies of Freedom 2026: Disruptive Crypto \u0026 AI"
     },
     {
       "apellido": "Llonch Esteve",
@@ -553,7 +553,7 @@
     },
     {
       "apellido": "Paz Chain",
-      "cargo": "CEO & Founder",
+      "cargo": "CEO \u0026 Founder",
       "confname": "Ivan Paz Chain",
       "empresa": "Trading Different",
       "estado": "disponible",
@@ -575,7 +575,7 @@
     },
     {
       "apellido": "Schteinschraber",
-      "cargo": "Founder & CTO",
+      "cargo": "Founder \u0026 CTO",
       "confname": "Nicolas Schteinschraber",
       "empresa": "RecoverCoins",
       "estado": "disponible",
@@ -1116,7 +1116,7 @@
       "apellido": "Da Silva Tabares",
       "cargo": "Fundadora",
       "confname": "Camila Da Silva Tabares",
-      "empresa": "Coconut & Law",
+      "empresa": "Coconut \u0026 Law",
       "estado": "disponible",
       "nombre": "Camila",
       "num": 102,
@@ -1132,7 +1132,7 @@
       "nombre": "Lorena",
       "num": 103,
       "pais": "Argentina",
-      "temas": "DEL HYPE AL P&L, Liderar cuando la IA también forma parte del equipo"
+      "temas": "DEL HYPE AL P\u0026L, Liderar cuando la IA también forma parte del equipo"
     },
     {
       "apellido": "Barlow",
@@ -1202,14 +1202,14 @@
     },
     {
       "apellido": "Tuñez",
-      "cargo": "CSO & Cofounder",
+      "cargo": "CSO \u0026 Cofounder",
       "confname": "@Franz",
       "empresa": "NetX Gen",
       "estado": "disponible",
       "nombre": "Franz",
       "num": 110,
       "pais": "Argentina",
-      "temas": "Solarpunk & Bitcoin: Financiando la Civilización Regenerativa"
+      "temas": "Solarpunk \u0026 Bitcoin: Financiando la Civilización Regenerativa"
     },
     {
       "apellido": "Ley",
@@ -1235,7 +1235,7 @@
     },
     {
       "apellido": "Macagno",
-      "cargo": "Founder & Creator of PlataMT | Senior Localization Manager",
+      "cargo": "Founder \u0026 Creator of PlataMT | Senior Localization Manager",
       "confname": "Agostina",
       "empresa": "PlataMT",
       "estado": "disponible",
@@ -1297,7 +1297,7 @@
       "nombre": "Luis J.",
       "num": 118,
       "pais": "Estados Unidos",
-      "temas": "LABIF: Impulsando el Impacto Real y la Adopción de Bitcoin en América Latina, Economías Circulares de Bitcoin con LABIF en LATAM, Proyectos LABIF: Transformando Latinoamérica con Bitcoin, Universidades y Bitcoin: La Red UniBlock en LATAM <<[Un Panel el Viernes y otro el Sabado]>>"
+      "temas": "LABIF: Impulsando el Impacto Real y la Adopción de Bitcoin en América Latina, Economías Circulares de Bitcoin con LABIF en LATAM, Proyectos LABIF: Transformando Latinoamérica con Bitcoin, Universidades y Bitcoin: La Red UniBlock en LATAM \u003c\u003c[Un Panel el Viernes y otro el Sabado]\u003e\u003e"
     },
     {
       "apellido": "Giorgis",
@@ -1334,7 +1334,7 @@
     },
     {
       "apellido": "Escarraga",
-      "cargo": "Educadora & CEO",
+      "cargo": "Educadora \u0026 CEO",
       "confname": "CryptoGirl",
       "empresa": "Blockvoz",
       "estado": "disponible",
@@ -1642,9 +1642,9 @@
     },
     {
       "apellido": "Aguilar",
-      "cargo": "CEO & General Manager",
+      "cargo": "CEO \u0026 General Manager",
       "confname": "Bryan Aguilar",
-      "empresa": "Perú Blockchain Conference & Latam Blockchain Events",
+      "empresa": "Perú Blockchain Conference \u0026 Latam Blockchain Events",
       "estado": "disponible",
       "nombre": "Bryan",
       "num": 150,
@@ -1996,12 +1996,12 @@
       "apellido": "Abihaggle",
       "cargo": "Founder",
       "confname": "@lucasabi",
-      "empresa": "LABI Wines & Agrum",
+      "empresa": "LABI Wines \u0026 Agrum",
       "estado": "disponible",
       "nombre": "Lucas",
       "num": 182,
       "pais": "Argentina",
-      "temas": "Hodling Agribusiness RWA (Disintermediation & Low Time Preference Wine Tasting)"
+      "temas": "Hodling Agribusiness RWA (Disintermediation \u0026 Low Time Preference Wine Tasting)"
     },
     {
       "apellido": "Cordero",
@@ -2078,7 +2078,7 @@
       "nombre": "Aylén",
       "num": 189,
       "pais": "Argentina",
-      "temas": "Economías circulares, Comunicación y Marketing en el ecosistema Bitcoin & Crypto"
+      "temas": "Economías circulares, Comunicación y Marketing en el ecosistema Bitcoin \u0026 Crypto"
     },
     {
       "apellido": "Popescu",
@@ -2126,7 +2126,7 @@
     },
     {
       "apellido": "cristini",
-      "cargo": "Founder & CEO",
+      "cargo": "Founder \u0026 CEO",
       "confname": "@ivancristini14",
       "empresa": "SØD Ecosystem Global",
       "estado": "disponible",
@@ -2137,7 +2137,7 @@
     },
     {
       "apellido": "Coronel Calvet",
-      "cargo": "Co-Founder & Chairman",
+      "cargo": "Co-Founder \u0026 Chairman",
       "confname": "Fran Coronel",
       "empresa": "Algo Labs",
       "estado": "disponible",
@@ -2335,7 +2335,7 @@
     },
     {
       "apellido": "Ruhay Ferrari",
-      "cargo": "CEO & Founder",
+      "cargo": "CEO \u0026 Founder",
       "confname": "Jazmín Ruhay F",
       "empresa": "RF Global Consulting - Novasür",
       "estado": "disponible",

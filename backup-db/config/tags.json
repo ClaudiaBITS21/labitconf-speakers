@@ -8,52 +8,52 @@
     {
       "emoji": "🧠",
       "id": "F",
-      "label": "Filosofía & HODL"
+      "label": "Filosofía \u0026 HODL"
     },
     {
       "emoji": "🤖",
       "id": "A",
-      "label": "IA & Agentes"
+      "label": "IA \u0026 Agentes"
     },
     {
       "emoji": "🔐",
       "id": "C",
-      "label": "Autocustodia & Seguridad"
+      "label": "Autocustodia \u0026 Seguridad"
     },
     {
       "emoji": "🕵️",
       "id": "P",
-      "label": "Privacidad & Soberanía"
+      "label": "Privacidad \u0026 Soberanía"
     },
     {
       "emoji": "⚙️",
       "id": "D",
-      "label": "Protocolo & Desarrollo"
+      "label": "Protocolo \u0026 Desarrollo"
     },
     {
       "emoji": "⛏️",
       "id": "M",
-      "label": "Minería & Energía"
+      "label": "Minería \u0026 Energía"
     },
     {
       "emoji": "🌎",
       "id": "L",
-      "label": "Adopción & Comunidades"
+      "label": "Adopción \u0026 Comunidades"
     },
     {
       "emoji": "📈",
       "id": "T",
-      "label": "Mercados & Trading"
+      "label": "Mercados \u0026 Trading"
     },
     {
       "emoji": "⚖️",
       "id": "R",
-      "label": "Legal & Regulación"
+      "label": "Legal \u0026 Regulación"
     },
     {
       "emoji": "💼",
       "id": "B",
-      "label": "Negocios & Tokenización"
+      "label": "Negocios \u0026 Tokenización"
     }
   ]
 }
