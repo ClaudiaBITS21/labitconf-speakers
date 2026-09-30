@@ -1412,7 +1412,7 @@ function renderWO(){
     var d=document.createElement("div");d.className="worow"+(ng?" nogrid":"");d.dataset.i=r.i;
     d.innerHTML='<div class="wohandle" title="Arrastr\u00e1 para reordenar">\u2261</div>'+
       '<span class="wonum'+(dups[v]?' dup':'')+'" title="'+(dups[v]?'N\u00famero repetido \u2014 toc\u00e1 Renumerar':'# WEB')+'">'+v+'</span>'+
-      '<div class="woname"><div class="nm">'+esc(r.n)+(ng?'<span class="nogridb" title="No est\u00e1 ubicado en la grilla">\u26a0 no est\u00e1 en la grilla</span>':'')+'</div><div class="rl">'+esc(r.c||"\u2014")+(r.e?' \u00b7 '+esc(r.e):'')+' \u00b7 '+esc(r.pa||"")+(effTier(r)?' \u00b7 '+effTier(r):'')+'</div></div>'+
+      '<div class="woname"><div class="nm">'+esc(r.n)+appNumHtml(r)+(ng?'<span class="nogridb" title="No est\u00e1 ubicado en la grilla">\u26a0 no est\u00e1 en la grilla</span>':'')+'</div><div class="rl">'+esc(r.c||"\u2014")+(r.e?' \u00b7 '+esc(r.e):'')+' \u00b7 '+esc(r.pa||"")+(effTier(r)?' \u00b7 '+effTier(r):'')+'</div></div>'+
       '<div class="woacts"><button type="button" class="wobtn up" title="Subir"'+(idx===0?' disabled':'')+'>\u25b2</button><button type="button" class="wobtn dn" title="Bajar"'+(idx===list.length-1?' disabled':'')+'>\u25bc</button><button type="button" class="wobtn x" title="Sacar de principales (pasa a 200 \u00b7 cat. 2)">\u2715</button></div>';
     d.querySelector(".nm").onclick=function(){openSpeaker(r.i);};
     d.querySelector(".up").onclick=function(){woMove(r.i,-1);};
