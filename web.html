@@ -107,7 +107,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- TAB SPEAKERS -->
 <div id="tabSpeakers">
-  <div class="filters">
+  <div class="filters" style="flex-direction:column;align-items:stretch;gap:6px;padding:10px 16px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input class="search" type="text" placeholder="🔍 Buscar speaker por nombre, empresa, país…" oninput="render()" id="q" style="width:100%;max-width:480px;font-size:14px;padding:8px 16px;border-radius:8px;">
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
     <button class="pill active" onclick="setFiltro('todos')" id="pill-todos">Todos</button>
     <button class="pill" onclick="setFiltro('cat1')" id="pill-cat1">⭐ N1</button>
     <button class="pill" onclick="setFiltro('cat2')" id="pill-cat2">Cat. 2</button>
@@ -130,7 +134,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="pill" onclick="setFiltro('tag:Educacion')" id="pill-tag:Educacion">📚 Educación</button>
     <button class="pill" onclick="setFiltro('tag:Institucional')" id="pill-tag:Institucional">🏛 Institucional</button>
     <button class="pill" onclick="setFiltro('tag:Emprendimiento')" id="pill-tag:Emprendimiento">🚀 Emprendimiento</button>
-    <input class="search" type="text" placeholder="Buscar…" oninput="render()" id="q">
+    </div>
   </div>
   <div class="grid" id="grid"><div class="loading">Cargando speakers…</div></div>
 </div>
@@ -426,6 +430,7 @@ const FOTO_OVERRIDE={
   'Yayi Morales':'https://drive.google.com/thumbnail?id=1MSfnk0y45EUzeHhGpj39HZefV3Zf_j5H&sz=w400',
   'Ariel Perelmann':'https://drive.google.com/thumbnail?id=1O6ZGYz8xAQ48UvKXLqcC_1TojmeBkQjk&sz=w400',
   'Lorena Ortiz':'https://drive.google.com/thumbnail?id=1Sgz2KxvWyAbhLoKCaaGt-MLMf8W1MvT4&sz=w400',
+  'Alberto Mera':'https://drive.google.com/thumbnail?id=1avyaYqQ1wAD8HzC_6y6KRslwOLosqUGD&sz=w400',
 };
 
 function faltantes(s){
