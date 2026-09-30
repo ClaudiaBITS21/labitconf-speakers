@@ -1,0 +1,15 @@
+{
+  "contactar": {
+    "done": true,
+    "nota": "Ver si finalmente confirma"
+  },
+  "revisar": {
+    "done": true
+  },
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
+  "talks": {},
+  "web": 3
+}

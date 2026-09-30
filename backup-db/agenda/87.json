@@ -1,0 +1,11 @@
+{
+  "descartado": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "ignorar"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "contactar": {
+    "done": true,
+    "nota": "Ver si sigue interesado"
+  },
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "considerar"
+    }
+  },
+  "tier": "N3"
+}

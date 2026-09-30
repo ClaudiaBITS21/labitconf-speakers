@@ -1,0 +1,12 @@
+{
+  "speaker": {
+    "done": true,
+    "tipo": "charla"
+  },
+  "talks": {
+    "0": {
+      "status": "ignorar"
+    }
+  },
+  "web": 300
+}

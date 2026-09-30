@@ -1,0 +1,18 @@
+{
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "considerar"
+    },
+    "1": {
+      "status": "considerar"
+    },
+    "2": {
+      "status": "ignorar"
+    }
+  },
+  "tier": "N2"
+}

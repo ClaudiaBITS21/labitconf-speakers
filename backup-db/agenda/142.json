@@ -1,0 +1,11 @@
+{
+  "speaker": {
+    "done": true,
+    "tipo": "panel"
+  },
+  "talks": {
+    "0": {
+      "status": "panel"
+    }
+  }
+}

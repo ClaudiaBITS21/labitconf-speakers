@@ -1,0 +1,16 @@
+{
+  "contactar": {
+    "done": true,
+    "nota": "Que nos cuente mas por donde va su charla"
+  },
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "considerar"
+    }
+  },
+  "tier": "N3"
+}

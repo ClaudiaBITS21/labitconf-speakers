@@ -1,0 +1,17 @@
+{
+  "revisar": {
+    "auto": true,
+    "done": true
+  },
+  "talks": {
+    "0": {
+      "status": "panel"
+    },
+    "1": {
+      "status": "ignorar"
+    },
+    "2": {
+      "status": "panel"
+    }
+  }
+}

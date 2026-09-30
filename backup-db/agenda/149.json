@@ -1,0 +1,12 @@
+{
+  "descartado": {
+    "auto": true,
+    "done": true
+  },
+  "genero": "M",
+  "talks": {
+    "0": {
+      "status": "ignorar"
+    }
+  }
+}
