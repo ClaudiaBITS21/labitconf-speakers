@@ -1105,6 +1105,11 @@ var ESCLBL={orange:"Orange Pill",vision:"Visi\u00f3n",workshop:"Workshop + Coder
 
 // ---- agenda (db capability): marcar charlas ya pasadas a la agenda de Rodolfo ----
 var GAS_URL='https://script.google.com/macros/s/AKfycbwe2LgPxVzFFto-fsQl0gSng2rgzbRSroALHOra43wK2QhlJZ_s-1xKHyv9An_g1ZA/exec';
+var AGENDA_HARD={
+  "192":{desc:"Alberto Mera (Bitcoin en español) sobre el triángulo Estados Unidos, Argentina y Bitcoin: qué cambia para un argentino que EE.UU. tenga reserva estratégica, ETFs y una ley de estructura de mercado, cómo se lee desde acá la relación con el dólar y la deuda, y qué margen queda para que Bitcoin sea otra cosa que un activo financiero más. Orange Pill, viernes a la mañana."},
+  "97":{desc:"Cinco voces de terreno (Bolivia, El Salvador, Brasil, Costa Rica y Ecuador) sobre qué está impulsando de verdad la adopción de Bitcoin en la región: crisis, comunidades, educación, cajeros y comercio. Qué se repite en todos los países y qué es propio de cada uno. Panel de Orange Pill."},
+  "202":{desc:"Forte (Cuba), El Sultán (Venezuela), Jhon undercrypt0 y Catrya cuentan en primera persona cómo se usa Bitcoin cuando el sistema financiero te cierra la puerta: sanciones, bloqueos, controles de cambio y falta de bancos. Historias reales de adopción donde Bitcoin no es inversión sino salvavidas. Charla compartida en Orange Pill."}
+};
 var AGENDA={};
 var claudeDb=null;
 var dbState="conectando"; // conectando | ok | sin-datos
@@ -1175,7 +1180,7 @@ function initDb(){
         if(incoming===pw.body){delete pendingAgendaWrites[si];return;}
         a[si]=JSON.parse(pw.body);
       });
-      AGENDA=a;agendaLoaded=true;render();renderCl();renderDest();renderFalt();renderGrid();if(typeof renderPM==="function")renderPM();scheduleReconcile();
+      Object.keys(AGENDA_HARD).forEach(function(k){if(!a[k])a[k]={};if(!a[k].desc)a[k].desc=AGENDA_HARD[k].desc;});AGENDA=a;agendaLoaded=true;render();renderCl();renderDest();renderFalt();renderGrid();if(typeof renderPM==="function")renderPM();scheduleReconcile();
     },function(e){console.warn("db onSnapshot error",e);});
     ns.doc("grid/current").onSnapshot(function(d){
       var x=d&&d.exists?d.data():null;
