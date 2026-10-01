@@ -3964,7 +3964,7 @@ function renderExpanded(box,G){
     });
   });
   // edición inline: descripción (campo desc de la tarjeta) y empresa (agenda/<si>.empresa)
-  [].forEach.call(box.querySelectorAll(".xdval"),function(b){b.onclick=function(e){e.stopPropagation();var tr=b.closest("tr");var di=+tr.dataset.di,ri=+tr.dataset.ri,ci=+tr.dataset.ci;var c=cellAt(di,ri,ci);if(!c)return;var desc=resolveDesc(c).text;setCardField(di,ri,ci,"desc",desc);gridPersist("Descripción validada");var si=c.si&&c.si[0];if(si&&desc){if(!_sheetWriteKey){var wk=window.prompt('Clave de escritura para sincronizar con el Sheet:');if(wk)_sheetWriteKey=wk.trim();}if(_sheetWriteKey)saveDescToSheet(si,desc,_sheetWriteKey);}};});
+  [].forEach.call(box.querySelectorAll(".xdval"),function(b){b.onclick=function(e){e.stopPropagation();var tr=b.closest("tr");var di=+tr.dataset.di,ri=+tr.dataset.ri,ci=+tr.dataset.ci;var c=cellAt(di,ri,ci);if(!c)return;var desc=resolveDesc(c).text;setCardField(di,ri,ci,"desc",desc);gridPersist("Descripción validada");var si=c.si&&c.si[0];if(si&&desc&&_sheetWriteKey){saveDescToSheet(si,desc,_sheetWriteKey);}};});
   [].forEach.call(box.querySelectorAll("td.xdesc"),function(td){
     td.onclick=function(e){
       if(td.querySelector("textarea"))return;
