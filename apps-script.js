@@ -589,6 +589,53 @@ function doPost(e) {
       return respond({ ok: true, url: url, rowIdx: rowIdx });
     }
 
+    if (action === 'get_agenda_desc') {
+      // Devuelve todas las descripciones validadas de la hoja Agenda
+      // No requiere write_key — es lectura pública
+      let ws = ss.getSheetByName('Agenda');
+      if (!ws) return respond({ ok: true, items: [] });
+      const rows = ws.getDataRange().getValues();
+      const items = [];
+      for (let i = 1; i < rows.length; i++) {
+        const si = parseInt(rows[i][0] || 0);
+        if (!si) continue;
+        const desc = String(rows[i][1] || '').trim();
+        const estado = String(rows[i][2] || 'pendiente').trim();
+        if (estado !== 'eliminado') items.push({ si, desc, estado });
+      }
+      return respond({ ok: true, items });
+    }
+
+    if (action === 'set_agenda_desc') {
+      // Guarda o actualiza una descripción validada
+      // data: { si, desc, estado }  — si = speaker index (i)
+      // Requiere write_key
+      if (!data || !data.si) return respond({ error: 'si requerido' });
+      const wk = String((data||{}).write_key || '').trim();
+      const _wkey = PropertiesService.getScriptProperties().getProperty('write_key');
+      if (_wkey && wk !== _wkey) return respond({ error: 'Clave incorrecta', code: 401 });
+      let ws = ss.getSheetByName('Agenda');
+      if (!ws) {
+        ws = ss.insertSheet('Agenda');
+        ws.getRange(1,1,1,3).setValues([['si','desc','estado']]);
+      }
+      const si = parseInt(data.si);
+      const desc = String(data.desc || '').trim();
+      const estado = String(data.estado || 'validado').trim();
+      const rows = ws.getDataRange().getValues();
+      let rowIdx = -1;
+      for (let i = 1; i < rows.length; i++) {
+        if (parseInt(rows[i][0]) === si) { rowIdx = i + 1; break; }
+      }
+      if (rowIdx > 0) {
+        ws.getRange(rowIdx, 2).setValue(desc);
+        ws.getRange(rowIdx, 3).setValue(estado);
+      } else {
+        ws.appendRow([si, desc, estado]);
+      }
+      return respond({ ok: true, si, estado });
+    }
+
     if (action === 'patch_speaker') {
       // Actualizar campos específicos de un speaker por num (sin write_key)
       // data: { num, fields: { col_index: value, ... } }

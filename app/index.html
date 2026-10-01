@@ -620,6 +620,8 @@ body.mdopen{overflow:hidden}
     </span>
   </div>
   <div class="syncbar">
+    <button type="button" class="chipbtn3" id="sheetagendabtn">&#8635; Actualizar estados del Sheet</button>
+    <span class="syncst" id="sheetagendast"></span>
     <button type="button" class="chipbtn3" id="grsyncbtn">&#8635; Actualizar con la grilla de mi Excel</button>
     <span class="syncst" id="grsyncst"></span>
     <button type="button" class="chipbtn3" id="gredcopy">&#8689; Copiar grilla como tabla (para pegar en el sheet)</button>
@@ -1111,8 +1113,35 @@ var AGENDA_HARD={
   "202":{desc:"Forte (Cuba), El Sultán (Venezuela), Jhon undercrypt0 y Catrya cuentan en primera persona cómo se usa Bitcoin cuando el sistema financiero te cierra la puerta: sanciones, bloqueos, controles de cambio y falta de bancos. Historias reales de adopción donde Bitcoin no es inversión sino salvavidas. Charla compartida en Orange Pill."}
 };
 var AGENDA={};
+var AGENDA_SHEET={}; // descripciones validadas leídas del Sheet (fuente compartida)
 var claudeDb=null;
 var dbState="conectando"; // conectando | ok | sin-datos
+
+// ---- Sheet agenda: carga y guarda descripciones validadas via GAS ----
+function loadAgendaFromSheet(){
+  fetch(GAS_URL+'?action=get_agenda_desc')
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(!res.ok||!res.items)return;
+      res.items.forEach(function(it){
+        var k=String(it.si);
+        AGENDA_SHEET[k]=it;
+        // merge: si no hay desc en Claude DB, usar la del Sheet
+        if(!AGENDA[k])AGENDA[k]={};
+        if(!AGENDA[k].desc&&it.desc)AGENDA[k].desc=it.desc;
+      });
+      renderGrid();
+    })
+    .catch(function(e){console.warn('loadAgendaFromSheet error',e);});
+}
+function saveDescToSheet(si,desc,writeKey){
+  var body=JSON.stringify({action:'set_agenda_desc',data:{si:si,desc:desc,estado:'validado',write_key:writeKey||''}});
+  fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:body})
+    .then(function(r){return r.json();})
+    .then(function(res){if(!res.ok)console.warn('saveDescToSheet error',res);})
+    .catch(function(e){console.warn('saveDescToSheet fetch error',e);});
+}
+var _sheetWriteKey=''; // se pide al usuario la primera vez que valida
 function agendaTalks(r){var a=AGENDA[String(r.i)];return (a&&a.talks)||{};}
 function agendaSpeaker(r){var a=AGENDA[String(r.i)];return (a&&a.speaker)||{};}
 var _gridSetCache={key:null,set:null};
@@ -1166,6 +1195,7 @@ function setHidden(sec,key,val){
   if(sec==="sp"&&typeof render==="function")render();
 }
 function initDb(){
+  loadAgendaFromSheet(); // cargar descripciones compartidas del Sheet (independiente de Claude DB)
   if(!window.claude||!window.claude.use){dbState="sin-datos";render();return;}
   window.claude.use("db").then(function(ns){
     if(!ns){dbState="sin-datos";render();return;}
@@ -3487,6 +3517,12 @@ function syncApp(){
   }).catch(function(e){console.warn("app sync",e);setSt("appsyncst","No pude leer la app: "+(e&&e.message||e&&e.code||e),"err");}).then(function(){btn.disabled=false;});
 }
 function initSync(){
+  var bSheet=document.getElementById("sheetagendabtn");
+  if(bSheet)bSheet.onclick=function(){
+    setSt("sheetagendast","Cargando...","");
+    loadAgendaFromSheet();
+    setTimeout(function(){setSt("sheetagendast","Estados actualizados.","ok");},1500);
+  };
   var b1=document.getElementById("grsyncbtn");if(b1)b1.onclick=syncGridFromSheet;
   var b2=document.getElementById("appsyncbtn");if(b2)b2.onclick=syncApp;
   var b3=document.getElementById("appsynccfg");if(b3)b3.onclick=function(){APPCFG=Object.assign({},APPCFG||{},{showCfg:!(APPCFG&&APPCFG.showCfg)});renderAppSync();};
@@ -4180,7 +4216,8 @@ function openValModal(pnums, rodotitulo, rododesc, di, ri, ci){
   document.getElementById('valMail').textContent='';
   document.getElementById('valMail').className='valmail';
   document.getElementById('valModal').classList.add('open');
-  _valPending={di:di,ri:ri,ci:ci,desc:rododesc};
+  var _vm_c=cellAt(di,ri,ci);var _vm_si=_vm_c&&_vm_c.si&&_vm_c.si[0];
+  _valPending={di:di,ri:ri,ci:ci,desc:rododesc,si:_vm_si};
 
   var payload=JSON.stringify({action:'get_speaker',data:{num:pnum}});
   fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:payload})
@@ -4228,6 +4265,15 @@ function openValModal(pnums, rodotitulo, rododesc, di, ri, ci){
     var p=_valPending;
     setCardField(p.di,p.ri,p.ci,'desc',p.desc);
     gridPersist('Descripción validada');
+    // Guardar también en el Sheet compartido
+    var si=p.si||(_valPending&&_valPending.si);
+    if(si&&p.desc){
+      if(!_sheetWriteKey){
+        var wk=window.prompt('Ingresá la clave de escritura para sincronizar con el Sheet:');
+        if(wk)_sheetWriteKey=wk.trim();
+      }
+      if(_sheetWriteKey)saveDescToSheet(si,p.desc,_sheetWriteKey);
+    }
     closeValModal();
   };
 }
