@@ -1091,7 +1091,7 @@ var AGENDA_SHEET={}; // descripciones validadas leidas del Sheet (fuente compart
 
 // ---- Sheet agenda: carga y guarda descripciones validadas via GAS ----
 function loadAgendaFromSheet(){
-  fetch(GAS_URL+'?action=get_agenda_desc')
+  fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'get_agenda_desc'})})
     .then(function(r){return r.json();})
     .then(function(res){
       if(!res.ok||!res.items)return;
